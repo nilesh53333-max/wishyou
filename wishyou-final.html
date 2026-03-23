@@ -335,7 +335,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <button class="song-play-btn" id="playBtn" onclick="togglePlay()">▶</button>
       </div>
       <div id="spotifyWrap" style="display:none;margin-bottom:16px;border-radius:14px;overflow:hidden;">
-        <iframe id="spotifyFrame" style="border-radius:14px" src="" width="100%" height="100" frameBorder="0" allow="autoplay;clipboard-write;encrypted-media;fullscreen;picture-in-picture" loading="lazy"></iframe>
+        <iframe id="spotifyFrame" style="border-radius:14px" src="" width="100%" height="120" frameBorder="0" allow="autoplay;encrypted-media;fullscreen;picture-in-picture" loading="lazy" allowfullscreen></iframe>
         <div style="font-size:0.78rem;color:var(--mid);text-align:center;margin-top:5px;">▶ Tap play inside the player above</div>
       </div>
       <button class="btn btn-primary" onclick="ripple(event);pauseAudio();goTo('s-envelope')">Next ›</button>
@@ -545,12 +545,12 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 
     <!-- SPOTIFY -->
     <div class="field-group">
-      <label class="field-label">Spotify Song Link</label>
+      <label class="field-label">Song Link (Spotify or YouTube)</label>
       <div class="spotify-wrap">
         <span class="spotify-prefix">🎧</span>
-        <input type="text" id="cSpotify" placeholder="https://open.spotify.com/track/..." oninput="handleSpotify(this.value)">
+        <input type="text" id="cSpotify" placeholder="Paste Spotify or YouTube link..." oninput="handleSpotify(this.value)">
       </div>
-      <div class="field-hint">Embeds on song screen for recipient to play</div>
+      <div class="field-hint">Paste any Spotify track link or YouTube video link</div>
     </div>
 
     <div class="preview-bar">
@@ -1000,16 +1000,35 @@ function togglePhotoFx(cb){
 }
 
 function handleSpotify(val){
-  const match=val.match(/track\/([a-zA-Z0-9]+)/);
   const wrap=document.getElementById('spotifyWrap'),card=document.getElementById('songCardEl');
-  if(match){
-    spotifySrc=`https://open.spotify.com/embed/track/${match[1]}?utm_source=generator&theme=0`;
-    document.getElementById('spotifyFrame').src=spotifySrc;
-    wrap.style.display='block';card.style.display='none';
-  } else {
-    spotifySrc='';document.getElementById('spotifyFrame').src='';
-    wrap.style.display='none';card.style.display='block';
+  val = val.trim();
+  
+  // YouTube link
+  var ytMatch = val.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if(ytMatch){
+    var ytId = ytMatch[1];
+    spotifySrc = 'https://www.youtube.com/embed/' + ytId + '?autoplay=0&rel=0';
+    document.getElementById('spotifyFrame').src = spotifySrc;
+    if(wrap) wrap.style.display='block';
+    if(card) card.style.display='none';
+    return;
   }
+  
+  // Spotify link
+  var spMatch = val.match(/track\/([a-zA-Z0-9]+)/);
+  if(spMatch){
+    spotifySrc=`https://open.spotify.com/embed/track/${spMatch[1]}?utm_source=generator&theme=0`;
+    document.getElementById('spotifyFrame').src=spotifySrc;
+    if(wrap) wrap.style.display='block';
+    if(card) card.style.display='none';
+    return;
+  }
+  
+  // Nothing matched
+  spotifySrc='';
+  document.getElementById('spotifyFrame').src='';
+  if(wrap) wrap.style.display='none';
+  if(card) card.style.display='block';
 }
 
 function saveAndBack(){
@@ -1214,19 +1233,10 @@ function loadCardFromURL(){
       function sv(id,v){var e=document.getElementById(id);if(e&&v)e.value=v;}
       sv('cName',d.name);sv('cTitle',d.title);sv('cMsg',d.msg);
       sv('cSign',d.sign);sv('cSender',d.sender);sv('cSongSub',d.sub);
-      // Restore Spotify link
+      // Restore song link (Spotify or YouTube)
       if(d.spotify){
         sv('cSpotify',d.spotify);
-        var match=d.spotify.match(/track\/([a-zA-Z0-9]+)/);
-        if(match){
-          spotifySrc='https://open.spotify.com/embed/track/'+match[1]+'?utm_source=generator&theme=0';
-          var f=document.getElementById('spotifyFrame');
-          var wrap=document.getElementById('spotifyWrap');
-          var card=document.getElementById('songCardEl');
-          if(f)f.src=spotifySrc;
-          if(wrap)wrap.style.display='block';
-          if(card)card.style.display='none';
-        }
+        handleSpotify(d.spotify);
       }
     })
     .catch(function(){});
@@ -1240,7 +1250,30 @@ window.addEventListener('DOMContentLoaded', loadCardFromURL);
 
 var selectedRelationship = '';
 
-function updateSongMood() {
+function useYouTubeSong(encodedName, encodedArtist) {
+  var name   = decodeURIComponent(encodedName);
+  var artist = decodeURIComponent(encodedArtist);
+  // Set a YouTube search URL as the song link
+  var searchQuery = encodeURIComponent(name + ' ' + artist + ' official');
+  var ytUrl = 'https://www.youtube.com/results?search_query=' + searchQuery;
+  // Update song name display on card
+  var sn = document.getElementById('songName');
+  var sa = document.getElementById('songArtist');
+  if(sn) sn.textContent = name;
+  if(sa) sa.textContent = artist;
+  // Set in the link field and show hint
+  var inp = document.getElementById('cSpotify');
+  if(inp) inp.value = '';
+  // Show a message to user
+  var results = document.getElementById('aiSongResults');
+  var msg = document.createElement('div');
+  msg.style.cssText = 'font-size:0.78rem;color:var(--pink);font-weight:600;padding:8px 12px;background:var(--pink4);border-radius:10px;margin-top:8px;';
+  msg.innerHTML = '✅ <strong>' + name + '</strong> selected! Now tap ▶ Preview to get the YouTube link, copy it and paste below.';
+  results.appendChild(msg);
+  window.open(ytUrl, '_blank');
+}
+
+
   var lang  = document.getElementById('songLang').value;
   var vibe  = document.getElementById('songVibes').value;
   if(lang || vibe) {
@@ -1343,38 +1376,42 @@ async function runSongSuggestions() {
   results.innerHTML = '';
   try {
     var text = await callClaude(
-      'Suggest 4 real, well-known songs for a birthday card with this mood: "' + mood + '".\n' +
+      'Suggest 4 real, very well-known and popular songs for a birthday card with this mood: "' + mood + '".\n' +
       'Return ONLY a JSON array, no markdown, no explanation:\n' +
       '[{"name":"Song Name","artist":"Artist Name"}]\n' +
-      'Only suggest very popular, well-known songs that are easy to find on Spotify.'
+      'Only suggest famous songs people will recognise immediately.'
     );
     var clean = text.replace(/```json|```/g,'').trim();
     var songs = JSON.parse(clean);
-    // Header
+
     var header = document.createElement('div');
-    header.style.cssText = 'font-size:0.75rem;color:var(--mid);margin-bottom:8px;line-height:1.5;';
-    header.textContent = 'Tap "Search" to find the song on Spotify, copy its link and paste it below ↓';
+    header.style.cssText = 'font-size:0.74rem;color:var(--mid);margin-bottom:10px;line-height:1.5;';
+    header.textContent = 'Tap ▶ Preview to hear on YouTube. Tap ✓ Use to add to your card.';
     results.appendChild(header);
+
     songs.forEach(function(s) {
       var el = document.createElement('div');
       el.className = 'song-suggestion';
-      el.style.cssText = 'cursor:default;';
-      var searchQuery = encodeURIComponent(s.name + ' ' + s.artist);
-      var spotifySearchUrl = 'https://open.spotify.com/search/' + searchQuery;
+      var searchQuery = encodeURIComponent(s.name + ' ' + s.artist + ' official');
+      var ytSearchUrl = 'https://www.youtube.com/results?search_query=' + searchQuery;
       el.innerHTML =
-        '<span style="font-size:1.4rem">🎵</span>' +
+        '<span style="font-size:1.3rem">🎵</span>' +
         '<div class="song-suggestion-info">' +
           '<div class="song-suggestion-name">' + s.name + '</div>' +
           '<div class="song-suggestion-artist">' + s.artist + '</div>' +
         '</div>' +
-        '<a href="' + spotifySearchUrl + '" target="_blank" style="font-size:0.7rem;font-weight:700;color:white;background:#1DB954;padding:5px 10px;border-radius:20px;text-decoration:none;white-space:nowrap;">Search →</a>';
+        '<div style="display:flex;gap:6px;flex-shrink:0;">' +
+          '<a href="' + ytSearchUrl + '" target="_blank" style="font-size:0.68rem;font-weight:700;color:white;background:#FF0000;padding:5px 9px;border-radius:20px;text-decoration:none;white-space:nowrap;">▶ Preview</a>' +
+          '<button onclick="useYouTubeSong(\'' + encodeURIComponent(s.name) + '\',\'' + encodeURIComponent(s.artist) + '\')" style="font-size:0.68rem;font-weight:700;color:white;background:var(--pink);padding:5px 9px;border-radius:20px;border:none;cursor:pointer;white-space:nowrap;">✓ Use</button>' +
+        '</div>';
       results.appendChild(el);
     });
-    // Helpful note
+
     var note = document.createElement('div');
-    note.style.cssText = 'font-size:0.72rem;color:var(--mid);margin-top:8px;padding:10px 12px;background:var(--pink4);border-radius:10px;line-height:1.6;';
-    note.innerHTML = '💡 <strong>How to use:</strong> Tap Search → opens Spotify → find the song → tap the 3 dots ••• → Share → Copy Link → paste it in the Spotify link box below';
+    note.style.cssText = 'font-size:0.71rem;color:var(--mid);margin-top:8px;padding:10px 12px;background:var(--pink4);border-radius:10px;line-height:1.6;';
+    note.innerHTML = '💡 Tap <strong>▶ Preview</strong> to hear it on YouTube first. Tap <strong>✓ Use</strong> to set it as your card song. Or paste any YouTube/Spotify link below directly.';
     results.appendChild(note);
+
   } catch(e) {
     results.innerHTML = '<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Could not fetch suggestions. Try again.</div>';
   }
