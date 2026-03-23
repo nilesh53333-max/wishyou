@@ -423,15 +423,18 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <!-- ✨ FEATURE 3: AI CARD PERSONALISATION -->
     <div class="field-group">
       <label class="field-label">Relationship Type</label>
-      <div class="rel-chips" id="relChips">
-        <div class="rel-chip" onclick="selectRel(this,'Romantic Partner')">💕 Partner</div>
-        <div class="rel-chip" onclick="selectRel(this,'Best Friend')">🤝 Best Friend</div>
-        <div class="rel-chip" onclick="selectRel(this,'Mom')">🌸 Mom</div>
-        <div class="rel-chip" onclick="selectRel(this,'Dad')">👨 Dad</div>
-        <div class="rel-chip" onclick="selectRel(this,'Sibling')">👫 Sibling</div>
-        <div class="rel-chip" onclick="selectRel(this,'Colleague')">💼 Colleague</div>
-      </div>
-      <button class="btn-ai" id="aiPersonaliseBtn" onclick="runPersonalisation()" style="display:none;">🪄 Personalise Letter for this Relationship</button>
+      <select id="relSelect" onchange="onRelChange(this.value)" style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 15px center;">
+        <option value="">Select relationship...</option>
+        <option value="Romantic Partner">💕 Romantic Partner</option>
+        <option value="Best Friend">🤝 Best Friend</option>
+        <option value="Mom">🌸 Mom</option>
+        <option value="Dad">👨 Dad</option>
+        <option value="Sibling">👫 Sibling</option>
+        <option value="Colleague">💼 Colleague</option>
+        <option value="Childhood Friend">🧒 Childhood Friend</option>
+        <option value="Teacher">📚 Teacher</option>
+      </select>
+      <button class="btn-ai" id="aiPersonaliseBtn" onclick="runPersonalisation()" style="display:none;margin-top:8px;">🪄 Personalise Letter for this Relationship</button>
       <div class="ai-loading" id="aiPersonaliseLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Writing a personalised letter...</span></div>
     </div>
 
@@ -511,17 +514,30 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <!-- ✨ FEATURE 2: AI SONG RECOMMENDATION -->
     <div class="field-group">
       <label class="field-label">🎵 AI Song Suggestions</label>
-      <div class="rel-chips" id="songMoodChips" style="margin-bottom:8px;">
-        <div class="rel-chip" onclick="selectSongMood(this,'Hindi Romantic')">💕 Hindi Romantic</div>
-        <div class="rel-chip" onclick="selectSongMood(this,'English Romantic')">🌹 English Romantic</div>
-        <div class="rel-chip" onclick="selectSongMood(this,'Hindi Gazal')">🎶 Hindi Gazal</div>
-        <div class="rel-chip" onclick="selectSongMood(this,'Bollywood Happy')">🎉 Bollywood Happy</div>
-        <div class="rel-chip" onclick="selectSongMood(this,'English Pop Happy')">✨ English Pop</div>
-        <div class="rel-chip" onclick="selectSongMood(this,'Punjabi Party')">🔥 Punjabi Party</div>
-        <div class="rel-chip" onclick="selectSongMood(this,'Soft Instrumental')">🎹 Instrumental</div>
-        <div class="rel-chip" onclick="selectSongMood(this,'Tamil Romantic')">🌸 Tamil Romantic</div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;">
+        <select id="songLang" onchange="updateSongMood()" style="flex:1;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:12px 14px;font-size:0.88rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
+          <option value="">Language...</option>
+          <option value="Hindi">🇮🇳 Hindi</option>
+          <option value="English">🌍 English</option>
+          <option value="Punjabi">🎺 Punjabi</option>
+          <option value="Tamil">🌸 Tamil</option>
+          <option value="Telugu">🌺 Telugu</option>
+          <option value="Marathi">🟠 Marathi</option>
+          <option value="Bengali">🌼 Bengali</option>
+        </select>
+        <select id="songVibes" onchange="updateSongMood()" style="flex:1;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:12px 14px;font-size:0.88rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
+          <option value="">Vibe...</option>
+          <option value="Romantic">💕 Romantic</option>
+          <option value="Happy & Celebratory">🎉 Happy</option>
+          <option value="Gazal">🎶 Gazal</option>
+          <option value="Sad & Emotional">🥺 Emotional</option>
+          <option value="Party & Dance">🔥 Party</option>
+          <option value="Soft & Peaceful">🌙 Soft</option>
+          <option value="Devotional">🙏 Devotional</option>
+          <option value="Pop">✨ Pop</option>
+        </select>
       </div>
-      <input type="text" id="aiSongMood" placeholder="Or type your own mood e.g. Marathi romantic..." style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;" maxlength="100">
+      <input type="text" id="aiSongMood" placeholder="Or type your own e.g. Marathi romantic..." style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;" maxlength="100">
       <button class="btn-ai" onclick="runSongSuggestions()" id="aiSongBtn" style="margin-top:8px;">🎵 Suggest Songs with AI</button>
       <div class="ai-loading" id="aiSongLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Finding perfect songs...</span></div>
       <div id="aiSongResults" style="margin-top:10px;"></div>
@@ -1224,18 +1240,19 @@ window.addEventListener('DOMContentLoaded', loadCardFromURL);
 
 var selectedRelationship = '';
 
-function selectSongMood(el, mood) {
-  document.querySelectorAll('#songMoodChips .rel-chip').forEach(function(c){ c.classList.remove('selected'); });
-  el.classList.add('selected');
-  document.getElementById('aiSongMood').value = mood;
+function updateSongMood() {
+  var lang  = document.getElementById('songLang').value;
+  var vibe  = document.getElementById('songVibes').value;
+  if(lang || vibe) {
+    var mood = [lang, vibe].filter(Boolean).join(' ');
+    document.getElementById('aiSongMood').value = mood;
+  }
 }
 
-function selectRel(el, rel) {
-  document.querySelectorAll('.rel-chip').forEach(function(c){ c.classList.remove('selected'); });
-  el.classList.add('selected');
+function onRelChange(rel) {
   selectedRelationship = rel;
   var btn = document.getElementById('aiPersonaliseBtn');
-  if(btn) btn.style.display = 'flex';
+  if(btn) btn.style.display = rel ? 'flex' : 'none';
 }
 
 async function callClaude(prompt) {
