@@ -239,7 +239,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
     <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🌸</div>
     <div id="birthdayTodayBanner" style="display:none;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;font-weight:600;text-align:center;animation:fadeUp 0.5s both;">🎂 Today is the special day! Happy Birthday! 🎉</div>
-    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Preview Card ✨</button>
+    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Open Card ✨</button>
     <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize Card</button>
     <div id="demoNotice" style="font-size:0.72rem;color:var(--mid);text-align:center;margin-top:8px;opacity:0.8;">👆 Customize first to add your photos, letter &amp; song</div>
   </div></div>
@@ -404,7 +404,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div class="letter-sender-name" id="letterSenderName"></div>
       </div>
       <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
-      <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
+      <button class="btn btn-wa" style="margin-top:0" onclick="shareWhatsApp()">💬 Share on WhatsApp</button>
     </div>
   </div>
 </div>
@@ -1157,7 +1157,7 @@ function saveAndBack(){
   const sub=document.getElementById('cSongSub').value.trim();
   document.getElementById('welcomeTitle').textContent=title||"Happy Birthday!";
   document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
-  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Preview Card ✨';
+  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Open Card ✨';
   document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
   document.getElementById('letterBody').textContent=msg||'';
   document.getElementById('letterSign').textContent=sign||'Forever yours 💕';
@@ -1255,21 +1255,17 @@ function shareWhatsApp(){
 
       if(btn) btn.textContent = 'Shortening link...';
 
-      // Shorten URL via is.gd — no preview page, instant redirect
-      fetch('https://is.gd/create.php?format=simple&url=' + encodeURIComponent(shareUrl))
+      // Shorten URL via TinyURL free API
+      fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(shareUrl))
         .then(function(r){ return r.text(); })
         .catch(function(){ return shareUrl; })
         .then(function(shortUrl){
-          shortUrl = (shortUrl && shortUrl.trim().indexOf('http') === 0) ? shortUrl.trim() : shareUrl;
+          shortUrl = shortUrl.trim() || shareUrl;
 
           // Store globally for re-share
           window._lastShortUrl = shortUrl;
           window._lastShareName = name;
           window._lastShareSender = sender;
-
-          // Change button to Open Card now that card is created
-          var ob = document.getElementById('openCardBtn');
-          if(ob) ob.textContent = 'Open Card \u2728';
 
           // Show share confirmation modal
           document.getElementById('shareLinkText').textContent = shortUrl;
@@ -1300,33 +1296,19 @@ function openWhatsAppShare(){
   var shortUrl = window._lastShortUrl || '';
   var name = window._lastShareName || '';
   var sender = window._lastShareSender || '';
+  var emoji = '🎂';
   var greeting = name ? 'Happy Birthday, ' + name + '!' : 'Happy Birthday!';
   var fromLine = sender ? 'From ' + sender + ', with love 💕' : 'Someone special made this for you 💕';
-  var waMsg = '🎂 ' + greeting + '\n\n' +
+  var waMsg = emoji + ' ' + greeting + '\n\n' +
     fromLine + '\n\n' +
     '🎁 Open your birthday surprise:\n' +
     shortUrl + '\n\n' +
     '✨ Made with WishYou.ai';
-
-  // Try Web Share API first (best on mobile — opens native share sheet)
-  if(navigator.share){
-    navigator.share({ text: waMsg })
-      .catch(function(){});
-    return;
-  }
-
-  // Fallback: open WhatsApp via anchor without navigating away
   var isIphone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   var waUrl = isIphone
     ? 'whatsapp://send?text=' + encodeURIComponent(waMsg)
     : 'https://wa.me/?text=' + encodeURIComponent(waMsg);
-  var a = document.createElement('a');
-  a.href = waUrl;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function(){ if(a.parentNode) a.parentNode.removeChild(a); }, 300);
+  window.location.href = waUrl;
 }
 
 function shareInstagram(){
