@@ -13,7 +13,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100
 .hearts-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
 .heart-fly{position:absolute;animation:heartFly linear infinite;opacity:0;}
 @keyframes heartFly{0%{transform:translateY(110vh) scale(0.5) rotate(-15deg);opacity:0;}10%{opacity:0.75;}90%{opacity:0.6;}100%{transform:translateY(-10vh) scale(1.1) rotate(15deg);opacity:0;}}
-.app{position:relative;z-index:1;width:100%;max-width:430px;height:100vh;overflow:hidden;}@media(min-width:500px){body{background:linear-gradient(135deg,#f8d7e3,#fce4ec,#f3d0e8)!important;}.app{height:90vh;max-height:900px;border-radius:40px;box-shadow:0 40px 100px rgba(233,30,99,0.25),0 0 0 10px rgba(255,255,255,0.5);}}
+.app{position:relative;z-index:1;width:100%;max-width:430px;height:100vh;overflow:hidden;}@media(min-width:500px){body{background:linear-gradient(135deg,#f8d7e3,#fce4ec,#f3d0e8)!important;}.app{height:90vh;max-height:900px;border-radius:40px;box-shadow:0 40px 100px rgba(233,30,99,0.25);outline:10px solid rgba(255,255,255,0.5);}}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 18px 30px;opacity:0;pointer-events:none;transition:opacity 0.4s ease,transform 0.4s ease;transform:translateX(40px) scale(0.97);}
 .screen.active{opacity:1;pointer-events:all;transform:translateX(0) scale(1);}
 #s-customize{justify-content:flex-start;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
@@ -545,12 +545,17 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 
     <!-- SPOTIFY -->
     <div class="field-group">
-      <label class="field-label">Song Link (Spotify or YouTube)</label>
-      <div class="spotify-wrap">
-        <span class="spotify-prefix">🎧</span>
-        <input type="text" id="cSpotify" placeholder="Paste Spotify or YouTube link..." oninput="handleSpotify(this.value)">
+      <label class="field-label">🎵 Search & Pick a Song</label>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input type="text" id="ytSearchInput" placeholder="Type song name e.g. Tum Hi Ho..." style="flex:1;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.9rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;" maxlength="100" onkeydown="if(event.key==='Enter')searchYouTube()">
+        <button onclick="searchYouTube()" style="padding:13px 18px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:14px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;touch-action:manipulation;">🔍 Search</button>
       </div>
-      <div class="field-hint">Paste any Spotify track link or YouTube video link</div>
+      <div id="ytSearchResults" style="margin-bottom:8px;"></div>
+      <div id="ytSelectedSong" style="display:none;background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:none;">
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-bottom:4px;">NOW PLAYING ON CARD</div>
+        <div id="ytSelectedName" style="font-size:0.88rem;font-weight:600;color:white;"></div>
+      </div>
+      <input type="hidden" id="cSpotify">
     </div>
 
     <div class="preview-bar">
@@ -1000,10 +1005,8 @@ function togglePhotoFx(cb){
 }
 
 function handleSpotify(val){
+  if(!val) return;
   const wrap=document.getElementById('spotifyWrap'),card=document.getElementById('songCardEl');
-  val = val.trim();
-  
-  // YouTube link
   var ytMatch = val.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   if(ytMatch){
     var ytId = ytMatch[1];
@@ -1013,8 +1016,6 @@ function handleSpotify(val){
     if(card) card.style.display='none';
     return;
   }
-  
-  // Spotify link
   var spMatch = val.match(/track\/([a-zA-Z0-9]+)/);
   if(spMatch){
     spotifySrc=`https://open.spotify.com/embed/track/${spMatch[1]}?utm_source=generator&theme=0`;
@@ -1023,13 +1024,69 @@ function handleSpotify(val){
     if(card) card.style.display='none';
     return;
   }
-  
-  // Nothing matched
   spotifySrc='';
   document.getElementById('spotifyFrame').src='';
   if(wrap) wrap.style.display='none';
   if(card) card.style.display='block';
 }
+
+// ── YouTube Search ────────────────────────────────────
+async function searchYouTube() {
+  var query = document.getElementById('ytSearchInput').value.trim();
+  if(!query) { alert('Please type a song name first.'); return; }
+  var resultsDiv = document.getElementById('ytSearchResults');
+  resultsDiv.innerHTML = '<div style="text-align:center;padding:12px;font-size:0.82rem;color:var(--mid);">🔍 Searching...</div>';
+  try {
+    var text = await callClaude(
+      'Give me 5 real YouTube video IDs for this song search: "' + query + '".\n' +
+      'Return ONLY a JSON array, no markdown:\n' +
+      '[{"id":"YOUTUBE_VIDEO_ID","title":"Song Title","artist":"Artist Name"}]\n' +
+      'Use only real YouTube video IDs that actually exist. These are 11-character strings like dQw4w9WgXcQ.'
+    );
+    var clean = text.replace(/```json|```/g,'').trim();
+    var videos = JSON.parse(clean);
+    resultsDiv.innerHTML = '';
+    videos.forEach(function(v) {
+      var card = document.createElement('div');
+      card.style.cssText = 'display:flex;align-items:center;gap:10px;background:white;border-radius:12px;padding:10px 12px;border:1.5px solid rgba(233,30,99,0.12);margin-bottom:8px;cursor:pointer;transition:all 0.18s;';
+      var thumb = 'https://img.youtube.com/vi/' + v.id + '/default.jpg';
+      card.innerHTML =
+        '<img src="' + thumb + '" style="width:56px;height:42px;border-radius:7px;object-fit:cover;flex-shrink:0;" onerror="this.style.display=\'none\'">' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div style="font-size:0.83rem;font-weight:600;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + v.title + '</div>' +
+          '<div style="font-size:0.71rem;color:var(--mid);">' + v.artist + '</div>' +
+        '</div>' +
+        '<button style="padding:6px 12px;background:var(--pink);color:white;border:none;border-radius:20px;font-size:0.7rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:\'DM Sans\',sans-serif;">✓ Use</button>';
+      card.querySelector('button').onclick = function(e) {
+        e.stopPropagation();
+        selectYouTubeSong(v.id, v.title, v.artist);
+      };
+      resultsDiv.appendChild(card);
+    });
+  } catch(e) {
+    resultsDiv.innerHTML = '<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Could not search. Try again.</div>';
+  }
+}
+
+function selectYouTubeSong(videoId, title, artist) {
+  var ytUrl = 'https://www.youtube.com/watch?v=' + videoId;
+  document.getElementById('cSpotify').value = ytUrl;
+  handleSpotify(ytUrl);
+  // Show selected song name display
+  var sel = document.getElementById('ytSelectedSong');
+  var nm  = document.getElementById('ytSelectedName');
+  if(sel) { sel.style.display='block'; }
+  if(nm)  { nm.textContent = title + ' — ' + artist; }
+  // Update song screen display
+  var sn = document.getElementById('songName');
+  var sa = document.getElementById('songArtist');
+  if(sn) sn.textContent = title;
+  if(sa) sa.textContent = artist;
+  // Clear search results and show confirmation
+  document.getElementById('ytSearchResults').innerHTML =
+    '<div style="font-size:0.78rem;color:var(--pink);font-weight:600;padding:6px 2px;">✅ ' + title + ' added to your card!</div>';
+}
+// ─────────────────────────────────────────────────────
 
 function saveAndBack(){
   const name=document.getElementById('cName').value.trim();
