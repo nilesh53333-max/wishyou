@@ -1334,7 +1334,7 @@ async function runPersonalisation() {
 // ── FEATURE 2: Song Suggestions ───────────────────────
 async function runSongSuggestions() {
   var mood = document.getElementById('aiSongMood').value.trim();
-  if(!mood) { alert('Please describe the mood or genre first.'); return; }
+  if(!mood) { alert('Please select a language and vibe first.'); return; }
   var btn     = document.getElementById('aiSongBtn');
   var loading = document.getElementById('aiSongLoading');
   var results = document.getElementById('aiSongResults');
@@ -1343,31 +1343,38 @@ async function runSongSuggestions() {
   results.innerHTML = '';
   try {
     var text = await callClaude(
-      'Suggest 3 real Spotify songs for a birthday card with this mood: "' + mood + '".\n' +
-      'Return ONLY a JSON array, no markdown:\n' +
-      '[{"name":"Song Name","artist":"Artist Name","spotify":"https://open.spotify.com/track/REAL_TRACK_ID"}]\n' +
-      'Use only real, well-known songs with real Spotify track IDs.'
+      'Suggest 4 real, well-known songs for a birthday card with this mood: "' + mood + '".\n' +
+      'Return ONLY a JSON array, no markdown, no explanation:\n' +
+      '[{"name":"Song Name","artist":"Artist Name"}]\n' +
+      'Only suggest very popular, well-known songs that are easy to find on Spotify.'
     );
     var clean = text.replace(/```json|```/g,'').trim();
     var songs = JSON.parse(clean);
+    // Header
+    var header = document.createElement('div');
+    header.style.cssText = 'font-size:0.75rem;color:var(--mid);margin-bottom:8px;line-height:1.5;';
+    header.textContent = 'Tap "Search" to find the song on Spotify, copy its link and paste it below ↓';
+    results.appendChild(header);
     songs.forEach(function(s) {
       var el = document.createElement('div');
       el.className = 'song-suggestion';
+      el.style.cssText = 'cursor:default;';
+      var searchQuery = encodeURIComponent(s.name + ' ' + s.artist);
+      var spotifySearchUrl = 'https://open.spotify.com/search/' + searchQuery;
       el.innerHTML =
         '<span style="font-size:1.4rem">🎵</span>' +
         '<div class="song-suggestion-info">' +
           '<div class="song-suggestion-name">' + s.name + '</div>' +
           '<div class="song-suggestion-artist">' + s.artist + '</div>' +
         '</div>' +
-        '<span class="song-suggestion-use">Use →</span>';
-      el.onclick = function() {
-        document.getElementById('cSpotify').value = s.spotify;
-        handleSpotify(s.spotify);
-        document.querySelectorAll('.song-suggestion').forEach(function(x){ x.style.borderColor=''; });
-        el.style.borderColor = 'var(--pink)';
-      };
+        '<a href="' + spotifySearchUrl + '" target="_blank" style="font-size:0.7rem;font-weight:700;color:white;background:#1DB954;padding:5px 10px;border-radius:20px;text-decoration:none;white-space:nowrap;">Search →</a>';
       results.appendChild(el);
     });
+    // Helpful note
+    var note = document.createElement('div');
+    note.style.cssText = 'font-size:0.72rem;color:var(--mid);margin-top:8px;padding:10px 12px;background:var(--pink4);border-radius:10px;line-height:1.6;';
+    note.innerHTML = '💡 <strong>How to use:</strong> Tap Search → opens Spotify → find the song → tap the 3 dots ••• → Share → Copy Link → paste it in the Spotify link box below';
+    results.appendChild(note);
   } catch(e) {
     results.innerHTML = '<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Could not fetch suggestions. Try again.</div>';
   }
