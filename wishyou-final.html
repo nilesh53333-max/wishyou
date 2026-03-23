@@ -1223,17 +1223,25 @@ function selectRel(el, rel) {
 }
 
 async function callClaude(prompt) {
-  var res = await fetch('https://wild-fog-b15e.nilesh53333.workers.dev/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-  var data = await res.json();
-  return data.content && data.content[0] ? data.content[0].text : '';
+  try {
+    var res = await fetch('https://wild-fog-b15e.nilesh53333.workers.dev/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    var text = await res.text();
+    console.log('Worker response:', text);
+    var data = JSON.parse(text);
+    if(data.error) { console.error('Claude error:', data.error); return ''; }
+    return data.content && data.content[0] ? data.content[0].text : '';
+  } catch(e) {
+    console.error('callClaude failed:', e.message);
+    return '';
+  }
 }
 
 // ── FEATURE 4: Occasion Detector ──────────────────────
