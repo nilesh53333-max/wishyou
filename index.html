@@ -4,118 +4,531 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WishYou.ai — Send Love, Beautifully</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0508;--rose:#e8295a;--rose2:#ff6b9d;--rose3:#ffd6e7;--gold:#f0c060;--cream:#fdf5ee;}
+:root {
+  --bg: #080407;
+  --rose: #e8295a;
+  --rose2: #ff6b9d;
+  --rose-dim: rgba(232,41,90,0.12);
+  --gold: #f0c060;
+  --gold-dim: rgba(240,192,96,0.15);
+  --text-primary: #f5eef0;
+  --text-secondary: rgba(245,238,240,0.65);
+  --text-muted: rgba(245,238,240,0.38);
+  --card-border: rgba(255,255,255,0.08);
+  --card-border-hover: rgba(255,255,255,0.18);
+}
+
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--cream);overflow-x:hidden;min-height:100vh;}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:0.6;}
-.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 60px;text-align:center;overflow:hidden;}
-.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 20%,rgba(232,41,90,0.18) 0%,transparent 70%);pointer-events:none;}
-.orb{position:absolute;border-radius:50%;filter:blur(60px);animation:orbDrift ease-in-out infinite;pointer-events:none;}
-.orb1{width:300px;height:300px;background:rgba(232,41,90,0.15);top:-80px;left:-80px;animation-duration:12s;}
-.orb2{width:200px;height:200px;background:rgba(240,192,96,0.1);bottom:10%;right:-40px;animation-duration:9s;animation-delay:3s;}
-.orb3{width:150px;height:150px;background:rgba(255,107,157,0.12);top:40%;left:5%;animation-duration:15s;animation-delay:6s;}
-@keyframes orbDrift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-20px) scale(1.08);}66%{transform:translate(-20px,30px) scale(0.95);}}
-.hero-hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-.hh{position:absolute;bottom:-20px;font-size:1.2rem;animation:hhFloat linear infinite;opacity:0;}
-@keyframes hhFloat{0%{transform:translateY(0) rotate(0deg);opacity:0;}10%{opacity:0.6;}85%{opacity:0.4;}100%{transform:translateY(-110vh) rotate(360deg);opacity:0;}}
-.logo{position:relative;z-index:2;margin-bottom:40px;animation:fadeDown 0.8s both;}
-.logo-mark{display:inline-flex;align-items:center;gap:10px;}
-.logo-icon{font-size:2rem;animation:heartbeat 2s ease infinite;}
-@keyframes heartbeat{0%,100%{transform:scale(1);}15%{transform:scale(1.2);}30%{transform:scale(1);}45%{transform:scale(1.1);}}
-.logo-text{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;letter-spacing:0.02em;color:#1a0a10;}
-.logo-ai{font-family:'DM Sans',sans-serif;font-size:0.65rem;font-weight:700;color:#f5c842;letter-spacing:0.15em;text-transform:uppercase;text-shadow:0 0 12px rgba(245,200,66,0.6);}
-.hero-headline{position:relative;z-index:2;margin-bottom:18px;animation:fadeDown 0.8s 0.15s both;}
-.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,8vw,5.5rem);font-weight:300;line-height:1.1;letter-spacing:-0.01em;color:#1a0a10;}
-.hero-h1 em{font-style:italic;color:#c2185b;}
-.hero-sub{position:relative;z-index:2;font-size:clamp(0.9rem,2.5vw,1.05rem);color:#3a1020;max-width:480px;line-height:1.7;margin:0 auto 52px;animation:fadeDown 0.8s 0.3s both;}
-.occasions{position:relative;z-index:2;width:100%;max-width:900px;margin:0 auto;padding:0 16px;animation:fadeUp 0.8s 0.45s both;}
-.occasions-label{font-size:0.7rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,240,245,0.65);margin-bottom:24px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
-.occ-card{position:relative;border-radius:22px;padding:28px 18px 22px;cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,0.07);transition:transform 0.35s cubic-bezier(.4,0,.2,1),box-shadow 0.35s,border-color 0.3s;text-align:center;animation:cardPop 0.6s cubic-bezier(.34,1.26,.64,1) both;text-decoration:none;display:block;}
-.occ-card:hover{transform:translateY(-6px) scale(1.02);border-color:rgba(255,255,255,0.18);}
-.occ-card:active{transform:scale(0.97);}
-.occ-birthday{background:linear-gradient(145deg,#1a0510 0%,#2d0a1a 100%);box-shadow:0 8px 40px rgba(232,41,90,0.2);}
-.occ-birthday:hover{box-shadow:0 20px 60px rgba(232,41,90,0.4);}
-.occ-anniversary{background:linear-gradient(145deg,#0d0f1a 0%,#1a1530 100%);box-shadow:0 8px 40px rgba(100,80,220,0.15);}
-.occ-valentine{background:linear-gradient(145deg,#1a0512 0%,#350820 100%);box-shadow:0 8px 40px rgba(232,41,90,0.15);}
-.occ-friendship{background:linear-gradient(145deg,#0a1210 0%,#0d2018 100%);box-shadow:0 8px 40px rgba(40,180,120,0.12);}
-.occ-mother{background:linear-gradient(145deg,#120d08 0%,#231508 100%);box-shadow:0 8px 40px rgba(240,160,60,0.12);}
-.occ-custom{background:linear-gradient(145deg,#0c0c0c 0%,#181818 100%);box-shadow:0 8px 32px rgba(255,255,255,0.04);}
-.occ-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;border-radius:22px;}
-.occ-birthday::before{background:radial-gradient(circle at 50% 0%,rgba(232,41,90,0.25),transparent 70%);}
-.occ-anniversary::before{background:radial-gradient(circle at 50% 0%,rgba(140,100,255,0.2),transparent 70%);}
-.occ-valentine::before{background:radial-gradient(circle at 50% 0%,rgba(255,80,140,0.22),transparent 70%);}
-.occ-friendship::before{background:radial-gradient(circle at 50% 0%,rgba(60,200,140,0.2),transparent 70%);}
-.occ-mother::before{background:radial-gradient(circle at 50% 0%,rgba(240,180,80,0.2),transparent 70%);}
-.occ-card:hover::before{opacity:1;}
-.occ-emoji{font-size:2.6rem;display:block;margin-bottom:14px;animation:emojiFloat 3s ease-in-out infinite;}
-@keyframes emojiFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-.occ-card:nth-child(2) .occ-emoji{animation-delay:0.4s;}.occ-card:nth-child(3) .occ-emoji{animation-delay:0.8s;}.occ-card:nth-child(4) .occ-emoji{animation-delay:1.2s;}.occ-card:nth-child(5) .occ-emoji{animation-delay:0.6s;}.occ-card:nth-child(6) .occ-emoji{animation-delay:1s;}
-.occ-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:white;margin-bottom:6px;}
-.occ-desc{font-size:0.72rem;color:rgba(255,255,255,0.45);line-height:1.5;}
-.occ-badge{display:inline-block;margin-top:10px;font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
-.badge-live{background:rgba(232,41,90,0.25);color:#ff6b9d;border:1px solid rgba(232,41,90,0.35);}
-.badge-soon{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.35);border:1px solid rgba(255,255,255,0.1);}
-.occ-card:nth-child(1){animation-delay:0.45s;}.occ-card:nth-child(2){animation-delay:0.55s;}.occ-card:nth-child(3){animation-delay:0.65s;}.occ-card:nth-child(4){animation-delay:0.75s;}.occ-card:nth-child(5){animation-delay:0.85s;}.occ-card:nth-child(6){animation-delay:0.95s;}
-@keyframes cardPop{from{opacity:0;transform:translateY(30px) scale(0.95);}to{opacity:1;transform:translateY(0) scale(1);}}
-.tagline{position:relative;z-index:2;margin-top:56px;text-align:center;animation:fadeUp 0.8s 1s both;}
-.tagline p{font-size:0.8rem;color:rgba(255,240,245,0.6);letter-spacing:0.06em;}
-.tagline strong{color:rgba(255,240,245,0.85);}
-.footer{position:relative;z-index:2;padding:32px 24px;text-align:center;border-top:1px solid rgba(255,255,255,0.05);margin-top:60px;}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-style:italic;color:rgba(255,240,245,0.6);margin-bottom:8px;}
-.footer-sub{font-size:0.72rem;color:rgba(255,240,245,0.45);}
+
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text-primary);
+  overflow-x:hidden;
+  min-height:100vh;
+}
+
+/* ── Grain texture overlay ── */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1;
+}
+
+/* ── Background mesh ── */
+.bg-mesh {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.bg-mesh::before {
+  content:'';
+  position:absolute;
+  width:600px;height:600px;
+  top:-200px;left:-150px;
+  background:radial-gradient(circle, rgba(232,41,90,0.13) 0%, transparent 65%);
+  animation:meshDrift1 18s ease-in-out infinite;
+}
+.bg-mesh::after {
+  content:'';
+  position:absolute;
+  width:500px;height:500px;
+  bottom:-100px;right:-100px;
+  background:radial-gradient(circle, rgba(240,192,96,0.09) 0%, transparent 65%);
+  animation:meshDrift2 14s ease-in-out infinite;
+}
+.bg-mesh-mid {
+  position:fixed;
+  width:350px;height:350px;
+  top:40%;left:60%;
+  background:radial-gradient(circle, rgba(255,107,157,0.07) 0%, transparent 65%);
+  animation:meshDrift3 20s ease-in-out infinite;
+  pointer-events:none;
+  z-index:0;
+}
+
+@keyframes meshDrift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(60px,40px) scale(1.1);}}
+@keyframes meshDrift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,-60px) scale(1.08);}}
+@keyframes meshDrift3{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,50px);}}
+
+/* ── Floating hearts ── */
+.hero-hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.hh{position:absolute;bottom:-20px;animation:hhFloat linear infinite;opacity:0;}
+@keyframes hhFloat{
+  0%{transform:translateY(0) rotate(-10deg);opacity:0;}
+  8%{opacity:0.5;}
+  90%{opacity:0.25;}
+  100%{transform:translateY(-105vh) rotate(10deg);opacity:0;}
+}
+
+/* ── Hero layout ── */
+.hero {
+  position:relative;
+  z-index:2;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:90px 24px 70px;
+  text-align:center;
+}
+
+/* ── Logo ── */
+.logo {
+  margin-bottom:48px;
+  animation:fadeDown 0.9s cubic-bezier(.22,1,.36,1) both;
+}
+.logo-mark {
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 20px 10px 14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:100px;
+  backdrop-filter:blur(10px);
+}
+.logo-icon {
+  font-size:1.5rem;
+  animation:heartbeat 2.4s ease infinite;
+  display:block;
+}
+@keyframes heartbeat{
+  0%,100%{transform:scale(1);}
+  14%{transform:scale(1.22);}
+  28%{transform:scale(1);}
+  42%{transform:scale(1.12);}
+}
+.logo-wordmark {
+  display:flex;
+  align-items:baseline;
+  gap:2px;
+}
+.logo-text {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;
+  font-weight:600;
+  letter-spacing:0.01em;
+  color:var(--text-primary);
+}
+.logo-ai {
+  font-family:'DM Sans',sans-serif;
+  font-size:0.6rem;
+  font-weight:600;
+  color:var(--gold);
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  opacity:0.9;
+}
+
+/* ── Hero headline ── */
+.hero-headline {
+  margin-bottom:20px;
+  animation:fadeDown 0.9s 0.12s cubic-bezier(.22,1,.36,1) both;
+}
+.hero-h1 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3.2rem,9vw,6rem);
+  font-weight:300;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  color:var(--text-primary);
+}
+.hero-h1 em {
+  font-style:italic;
+  font-weight:300;
+  background:linear-gradient(135deg, #ff6b9d 0%, #e8295a 50%, #f0c060 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ── Hero subtitle ── */
+.hero-sub {
+  font-size:clamp(0.92rem,2.5vw,1.05rem);
+  color:var(--text-secondary);
+  max-width:440px;
+  line-height:1.75;
+  margin:0 auto 56px;
+  font-weight:300;
+  animation:fadeDown 0.9s 0.22s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ── Section label ── */
+.occasions {
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:920px;
+  margin:0 auto;
+  padding:0 16px;
+  animation:fadeUp 0.9s 0.35s cubic-bezier(.22,1,.36,1) both;
+}
+.occasions-label {
+  font-size:0.68rem;
+  font-weight:600;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+.occasions-label::before,
+.occasions-label::after {
+  content:'';
+  width:40px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(245,238,240,0.2), transparent);
+}
+
+/* ── Cards grid ── */
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:12px;
+}
+
+.occ-card {
+  position:relative;
+  border-radius:20px;
+  padding:28px 16px 22px;
+  cursor:pointer;
+  overflow:hidden;
+  border:1px solid var(--card-border);
+  transition:transform 0.32s cubic-bezier(.4,0,.2,1), box-shadow 0.32s, border-color 0.28s;
+  text-align:center;
+  animation:cardPop 0.7s cubic-bezier(.34,1.26,.64,1) both;
+  text-decoration:none;
+  display:block;
+}
+.occ-card:hover {
+  transform:translateY(-7px) scale(1.025);
+  border-color:var(--card-border-hover);
+}
+.occ-card:active { transform:scale(0.96); }
+
+/* Card backgrounds — rich, deep, distinct */
+.occ-birthday  { background:linear-gradient(150deg,#1c0410 0%,#2e0b1c 55%,#1a0410 100%); box-shadow:0 6px 32px rgba(232,41,90,0.18); }
+.occ-anniversary { background:linear-gradient(150deg,#0b0d1e 0%,#161230 55%,#0e0b1c 100%); box-shadow:0 6px 32px rgba(100,80,220,0.12); }
+.occ-valentine { background:linear-gradient(150deg,#1c0414 0%,#320820 55%,#1a0412 100%); box-shadow:0 6px 32px rgba(220,50,120,0.14); }
+.occ-friendship { background:linear-gradient(150deg,#071410 0%,#0b2018 55%,#081410 100%); box-shadow:0 6px 32px rgba(40,180,120,0.1); }
+.occ-mother  { background:linear-gradient(150deg,#130c06 0%,#221508 55%,#130c06 100%); box-shadow:0 6px 32px rgba(240,160,60,0.1); }
+.occ-custom  { background:linear-gradient(150deg,#0e0e0e 0%,#191919 55%,#0e0e0e 100%); box-shadow:0 6px 32px rgba(255,255,255,0.03); }
+
+/* Hover glow */
+.occ-birthday:hover  { box-shadow:0 20px 60px rgba(232,41,90,0.35); }
+.occ-anniversary:hover { box-shadow:0 20px 60px rgba(100,80,220,0.28); }
+.occ-valentine:hover { box-shadow:0 20px 60px rgba(220,50,120,0.3); }
+.occ-friendship:hover { box-shadow:0 20px 60px rgba(40,180,120,0.22); }
+.occ-mother:hover  { box-shadow:0 20px 60px rgba(240,160,60,0.22); }
+.occ-custom:hover  { box-shadow:0 20px 60px rgba(255,255,255,0.08); }
+
+/* Shimmer on hover */
+.occ-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity 0.35s;
+  border-radius:20px;
+}
+.occ-birthday::before   { background:radial-gradient(ellipse at 50% 0%, rgba(232,41,90,0.22), transparent 68%); }
+.occ-anniversary::before { background:radial-gradient(ellipse at 50% 0%, rgba(130,100,255,0.18), transparent 68%); }
+.occ-valentine::before  { background:radial-gradient(ellipse at 50% 0%, rgba(255,80,140,0.2), transparent 68%); }
+.occ-friendship::before { background:radial-gradient(ellipse at 50% 0%, rgba(60,200,140,0.18), transparent 68%); }
+.occ-mother::before    { background:radial-gradient(ellipse at 50% 0%, rgba(240,180,80,0.18), transparent 68%); }
+.occ-custom::before    { background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.06), transparent 68%); }
+.occ-card:hover::before { opacity:1; }
+
+/* Top accent line */
+.occ-card::after {
+  content:'';
+  position:absolute;
+  top:0;left:20%;right:20%;
+  height:1px;
+  opacity:0;
+  transition:opacity 0.35s;
+  border-radius:1px;
+}
+.occ-birthday::after   { background:linear-gradient(90deg,transparent,rgba(232,41,90,0.7),transparent); }
+.occ-anniversary::after { background:linear-gradient(90deg,transparent,rgba(130,100,255,0.7),transparent); }
+.occ-valentine::after  { background:linear-gradient(90deg,transparent,rgba(255,80,140,0.7),transparent); }
+.occ-friendship::after { background:linear-gradient(90deg,transparent,rgba(60,200,140,0.7),transparent); }
+.occ-mother::after    { background:linear-gradient(90deg,transparent,rgba(240,180,80,0.7),transparent); }
+.occ-custom::after    { background:linear-gradient(90deg,transparent,rgba(200,200,200,0.4),transparent); }
+.occ-card:hover::after { opacity:1; }
+
+/* Emoji */
+.occ-emoji {
+  font-size:2.4rem;
+  display:block;
+  margin-bottom:14px;
+  animation:emojiFloat 3.2s ease-in-out infinite;
+  position:relative;
+  z-index:1;
+}
+@keyframes emojiFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.occ-card:nth-child(2) .occ-emoji{animation-delay:0.5s;}
+.occ-card:nth-child(3) .occ-emoji{animation-delay:1s;}
+.occ-card:nth-child(4) .occ-emoji{animation-delay:0.3s;}
+.occ-card:nth-child(5) .occ-emoji{animation-delay:0.8s;}
+.occ-card:nth-child(6) .occ-emoji{animation-delay:1.3s;}
+
+/* Card text */
+.occ-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.12rem;
+  font-weight:600;
+  color:var(--text-primary);
+  margin-bottom:6px;
+  position:relative;
+  z-index:1;
+  letter-spacing:0.01em;
+}
+.occ-desc {
+  font-size:0.7rem;
+  color:var(--text-secondary);
+  line-height:1.55;
+  position:relative;
+  z-index:1;
+  font-weight:300;
+}
+.occ-badge {
+  display:inline-block;
+  margin-top:12px;
+  font-size:0.58rem;
+  font-weight:600;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  padding:4px 11px;
+  border-radius:100px;
+  position:relative;
+  z-index:1;
+}
+.badge-live {
+  background:rgba(232,41,90,0.18);
+  color:#ff8ab5;
+  border:1px solid rgba(232,41,90,0.3);
+}
+.badge-soon {
+  background:rgba(255,255,255,0.05);
+  color:var(--text-muted);
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+/* Card stagger */
+.occ-card:nth-child(1){animation-delay:0.38s;}
+.occ-card:nth-child(2){animation-delay:0.46s;}
+.occ-card:nth-child(3){animation-delay:0.54s;}
+.occ-card:nth-child(4){animation-delay:0.62s;}
+.occ-card:nth-child(5){animation-delay:0.70s;}
+.occ-card:nth-child(6){animation-delay:0.78s;}
+@keyframes cardPop{
+  from{opacity:0;transform:translateY(28px) scale(0.94);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
+
 .occ-card.coming-soon{cursor:default;}
 .occ-card.coming-soon:hover{transform:translateY(-3px) scale(1.01);}
-@keyframes fadeDown{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-@media(max-width:480px){.grid{grid-template-columns:1fr 1fr;gap:12px;}.hero{padding:60px 18px 40px;}}
+
+/* ── Tagline ── */
+.tagline {
+  margin-top:52px;
+  animation:fadeUp 0.9s 0.9s cubic-bezier(.22,1,.36,1) both;
+}
+.tagline p {
+  font-size:0.76rem;
+  color:var(--text-muted);
+  letter-spacing:0.1em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.tagline strong {
+  color:var(--text-secondary);
+  font-weight:500;
+}
+.tagline-dot {
+  width:3px;height:3px;
+  border-radius:50%;
+  background:var(--text-muted);
+  display:inline-block;
+}
+
+/* ── Footer ── */
+.footer {
+  position:relative;
+  z-index:2;
+  padding:28px 24px;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,0.05);
+  margin-top:48px;
+}
+.footer-logo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;
+  font-style:italic;
+  color:var(--text-muted);
+  margin-bottom:6px;
+  letter-spacing:0.03em;
+}
+.footer-sub {
+  font-size:0.68rem;
+  color:rgba(245,238,240,0.25);
+  letter-spacing:0.05em;
+}
+
+/* ── Animations ── */
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── Mobile ── */
+@media(max-width:520px){
+  .grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .hero{padding:70px 16px 50px;}
+  .occ-card{padding:22px 12px 18px;}
+  .occ-emoji{font-size:2rem;}
+}
+@media(max-width:360px){
+  .hero-h1{font-size:2.8rem;}
+}
 </style>
 </head>
 <body>
+
+<div class="bg-mesh"></div>
+<div class="bg-mesh-mid"></div>
 <div class="hero-hearts" id="heroHearts"></div>
+
 <main class="hero">
-  <div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div>
-  <div class="logo"><div class="logo-mark"><span class="logo-icon">💝</span><div><div class="logo-text">WishYou</div><div class="logo-ai">.ai</div></div></div></div>
-  <div class="hero-headline"><h1 class="hero-h1">Send love,<br><em>beautifully.</em></h1></div>
-  <p class="hero-sub">Interactive cards that feel like a real gift — with photos, music, letters &amp; moments that feel them special.</p>
+
+  <!-- Logo -->
+  <div class="logo">
+    <div class="logo-mark">
+      <span class="logo-icon">💝</span>
+      <div class="logo-wordmark">
+        <span class="logo-text">WishYou</span>
+        <span class="logo-ai">.ai</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Headline -->
+  <div class="hero-headline">
+    <h1 class="hero-h1">Send love,<br><em>beautifully.</em></h1>
+  </div>
+
+  <!-- Subtitle -->
+  <p class="hero-sub">Interactive cards that feel like a real gift — with photos, music, letters &amp; moments that make them feel truly special.</p>
+
+  <!-- Occasions -->
   <div class="occasions">
     <div class="occasions-label">Choose your occasion</div>
     <div class="grid">
-      <div class="occ-card occ-birthday" onclick="openBirthdayCard()"><span class="occ-emoji">🎂</span><div class="occ-name">Birthday</div><div class="occ-desc">Make their day unforgettable</div><span class="occ-badge badge-live">✦ Live Now</span></div>
-      <div class="occ-card occ-anniversary coming-soon"><span class="occ-emoji">💍</span><div class="occ-name">Anniversary</div><div class="occ-desc">Celebrate your forever</div><span class="occ-badge badge-soon">Coming Soon</span></div>
-      <div class="occ-card occ-valentine coming-soon"><span class="occ-emoji">💘</span><div class="occ-name">Valentine's</div><div class="occ-desc">Say it with your whole heart</div><span class="occ-badge badge-soon">Coming Soon</span></div>
-      <div class="occ-card occ-friendship coming-soon"><span class="occ-emoji">🤝</span><div class="occ-name">Friendship</div><div class="occ-desc">Because friends deserve magic</div><span class="occ-badge badge-soon">Coming Soon</span></div>
-      <div class="occ-card occ-mother coming-soon"><span class="occ-emoji">🌸</span><div class="occ-name">Mother's Day</div><div class="occ-desc">Thank her the right way</div><span class="occ-badge badge-soon">Coming Soon</span></div>
-      <div class="occ-card occ-custom coming-soon"><span class="occ-emoji">✨</span><div class="occ-name">Custom</div><div class="occ-desc">Any reason to celebrate</div><span class="occ-badge badge-soon">Coming Soon</span></div>
+      <div class="occ-card occ-birthday" onclick="openBirthdayCard()">
+        <span class="occ-emoji">🎂</span>
+        <div class="occ-name">Birthday</div>
+        <div class="occ-desc">Make their day unforgettable</div>
+        <span class="occ-badge badge-live">✦ Live Now</span>
+      </div>
+      <div class="occ-card occ-anniversary coming-soon">
+        <span class="occ-emoji">💍</span>
+        <div class="occ-name">Anniversary</div>
+        <div class="occ-desc">Celebrate your forever</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-valentine coming-soon">
+        <span class="occ-emoji">💘</span>
+        <div class="occ-name">Valentine's</div>
+        <div class="occ-desc">Say it with your whole heart</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-friendship coming-soon">
+        <span class="occ-emoji">🤝</span>
+        <div class="occ-name">Friendship</div>
+        <div class="occ-desc">Because friends deserve magic</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-mother coming-soon">
+        <span class="occ-emoji">🌸</span>
+        <div class="occ-name">Mother's Day</div>
+        <div class="occ-desc">Thank her the right way</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-custom coming-soon">
+        <span class="occ-emoji">✨</span>
+        <div class="occ-name">Custom</div>
+        <div class="occ-desc">Any reason to celebrate</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
     </div>
   </div>
-  <div class="tagline"><p>Made with love &middot; <strong>WishYou.ai</strong> &middot; Free to try</p></div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    <p>Made with love <span class="tagline-dot"></span> <strong>WishYou.ai</strong> <span class="tagline-dot"></span> Free to try</p>
+  </div>
+
 </main>
-<footer class="footer"><div class="footer-logo">WishYou.ai</div><div class="footer-sub">Interactive digital cards that feel real &nbsp;&middot;&nbsp; 2025</div></footer>
+
+<footer class="footer">
+  <div class="footer-logo">WishYou.ai</div>
+  <div class="footer-sub">Interactive digital cards that feel real &nbsp;·&nbsp; 2025</div>
+</footer>
 
 <script>
-const hh=document.getElementById('heroHearts');
-const he=['❤️','🩷','💕','💖','🌸','✨','💝','💗'];
-for(let i=0;i<18;i++){
-  const h=document.createElement('span');h.className='hh';
-  h.textContent=he[Math.floor(Math.random()*he.length)];
-  h.style.cssText='left:'+Math.random()*100+'%;font-size:'+(10+Math.random()*12)+'px;animation-duration:'+(10+Math.random()*15)+'s;animation-delay:'+(Math.random()*12)+'s;';
+// Floating hearts
+const hh = document.getElementById('heroHearts');
+const he = ['❤️','🩷','💕','💖','🌸','✨','💝','💗'];
+for(let i = 0; i < 16; i++){
+  const h = document.createElement('span');
+  h.className = 'hh';
+  h.textContent = he[Math.floor(Math.random() * he.length)];
+  h.style.cssText = `left:${Math.random()*100}%;font-size:${9+Math.random()*10}px;animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*14}s;`;
   hh.appendChild(h);
 }
+
 function openBirthdayCard(){
-  window.location.href='wishyou-final.html';
-}
-function closeCard(){
-  document.getElementById('cardView').style.display='none';
-  document.querySelector('main').style.display='';
-  document.querySelector('footer').style.display='';
-  document.getElementById('heroHearts').style.display='';
-  document.body.style.overflow='';
-  document.body.style.background='';
+  window.location.href = 'wishyou-final.html';
 }
 </script>
 </body>
