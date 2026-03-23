@@ -191,7 +191,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 <div class="hearts-bg" id="heartsBg"></div>
 <audio id="theAudio" loop></audio>
 
-<div class="app">
+<div class="app" id="mainApp">
 
 <!-- WELCOME -->
 <div class="screen active" id="s-welcome">
@@ -202,7 +202,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Open Card ✨</button>
     <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
   </div></div>
-  <div class="progress-dots"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+  <div class="progress-dots"><div class="pdot active" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
 </div>
 
 <!-- MEMORIES -->
@@ -276,7 +276,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <button class="btn btn-outline" id="custBtnMemories" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
     </div>
   </div>
-  <div class="progress-dots"><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div></div>
+  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
 </div>
 
 <!-- SONG -->
@@ -316,7 +316,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <button class="btn btn-outline" id="custBtnSong" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
     </div>
   </div>
-  <div class="progress-dots"><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div></div>
+  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
 </div>
 
 <!-- ENVELOPE -->
@@ -348,7 +348,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <button class="btn btn-outline" id="custBtnEnvelope" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
     </div>
   </div>
-  <div class="progress-dots"><div class="pdot done"></div><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div></div>
+  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
 </div>
 
 <!-- LETTER -->
@@ -486,6 +486,60 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 <div class="wm">WishYou.ai</div>
 
 <script>
+// ── SWIPE NAVIGATION ─────────────────────────────────────
+var SCREEN_ORDER = ['s-welcome','s-memories','s-song','s-envelope','s-letter'];
+var _swStartX = 0, _swStartY = 0, _swStartTime = 0;
+
+function _onTouchStart(e) {
+  if(e.touches.length !== 1) return;
+  _swStartX = e.touches[0].clientX;
+  _swStartY = e.touches[0].clientY;
+  _swStartTime = Date.now();
+}
+
+function _onTouchEnd(e) {
+  if(typeof cur === 'undefined') return;
+  if(cur === 's-customize') return;
+  if(!e.changedTouches.length) return;
+  var dx = e.changedTouches[0].clientX - _swStartX;
+  var dy = e.changedTouches[0].clientY - _swStartY;
+  var dt = Date.now() - _swStartTime;
+  // Must be fast enough, horizontal enough, and long enough
+  if(dt > 500) return;
+  if(Math.abs(dx) < 40) return;
+  if(Math.abs(dx) < Math.abs(dy) * 1.2) return;
+  var idx = SCREEN_ORDER.indexOf(cur);
+  if(idx === -1) return;
+  if(dx < 0) {
+    // swipe left = go forward
+    var next = SCREEN_ORDER[idx + 1];
+    if(next && next !== 's-letter') goTo(next);
+  } else {
+    // swipe right = go back
+    if(idx > 0) goBack();
+  }
+}
+
+// Make dots clickable
+function dotClick(screenId) {
+  if(typeof cur === 'undefined' || screenId === cur) return;
+  if(screenId === 's-letter') return;
+  if(screenId === 's-customize') return;
+  var curIdx = SCREEN_ORDER.indexOf(cur);
+  var targetIdx = SCREEN_ORDER.indexOf(screenId);
+  if(targetIdx > curIdx) goTo(screenId);
+  else goBack();
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+  var app = document.getElementById('mainApp');
+  if(app) {
+    app.addEventListener('touchstart', _onTouchStart, {passive: true});
+    app.addEventListener('touchend',   _onTouchEnd,   {passive: true});
+  }
+});
+// ─────────────────────────────────────────────────────────
+
 // HEARTS
 const hb=document.getElementById('heartsBg');
 ['❤️','🩷','💕','💗','💖','💓','💝'].forEach(e=>{
