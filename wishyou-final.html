@@ -937,12 +937,15 @@ function shareWhatsApp(){
   Promise.all(photoPromises)
     .then(function(photoUrls){
       var spotifyInput = document.getElementById('cSpotify');
+      var now = Date.now();
       var cardData = {
         name: name, sender: sender, title: title,
         msg: msg, sign: sign, sub: sub,
         spotify: spotifyInput ? spotifyInput.value.trim() : '',
         photos: photoUrls.filter(function(u){ return u; }),
-        created: Date.now()
+        created: now,
+        createdAt: now,
+        expiresAt: now + (24 * 60 * 60 * 1000)
       };
 
       if(btn) btn.textContent = 'Saving card...';
@@ -979,15 +982,65 @@ function shareWhatsApp(){
     });
 }
 
+// ── AUTO-DELETE: expired card screen ──────────────────────
+function showExpiredScreen(){
+  document.querySelector('.app').innerHTML = [
+    '<div style="min-height:100vh;display:flex;flex-direction:column;',
+    'align-items:center;justify-content:center;text-align:center;',
+    'padding:40px 24px;background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);">',
+    '<div style="font-size:72px;margin-bottom:24px;">🕯️</div>',
+    '<div style="font-family:\'Playfair Display\',serif;font-size:1.7rem;font-weight:700;',
+    'color:#4a0e2a;margin-bottom:12px;">This card has faded away</div>',
+    '<p style="font-size:0.95rem;color:#8d3a5a;line-height:1.7;max-width:300px;margin:0 auto 28px;">',
+    'Cards on WishYou.ai live for 24 hours, then disappear — like a real moment.</p>',
+    '<a href="/" style="display:inline-block;padding:14px 32px;',
+    'background:linear-gradient(135deg,#e91e63,#f06292);color:white;',
+    'border-radius:50px;text-decoration:none;font-weight:600;font-size:0.95rem;',
+    'box-shadow:0 6px 24px rgba(233,30,99,0.4);">Create a new card ✨</a>',
+    '</div>'
+  ].join('');
+}
+
+// ── AUTO-DELETE: background sweep of all expired cards ────
+function sweepExpiredCards(){
+  fetch(FIREBASE_URL + '.json?orderBy=%22expiresAt%22&endAt=' + Date.now() + '&limitToLast=50')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data) return;
+      var updates = {};
+      Object.keys(data).forEach(function(key){
+        updates[key] = null;
+      });
+      if(Object.keys(updates).length === 0) return;
+      return fetch(FIREBASE_URL + '.json', {
+        method: 'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(updates)
+      });
+    })
+    .catch(function(){}); // silent — never break the card experience
+}
+
 function loadCardFromURL(){
   var params = new URLSearchParams(window.location.search);
   var cardId = params.get('card');
   if(!cardId) return;
 
+  // Run sweep silently in background every time a card is opened
+  sweepExpiredCards();
+
   fetch(FIREBASE_URL + '/' + cardId + '.json')
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if(!d) return;
+      // ── EXPIRY CHECK ──────────────────────────────────────
+      if(!d){ showExpiredScreen(); return; }
+      if(d.expiresAt && Date.now() > d.expiresAt){
+        // Delete it from Firebase then show expired screen
+        fetch(FIREBASE_URL + '/' + cardId + '.json', { method: 'DELETE' }).catch(function(){});
+        showExpiredScreen();
+        return;
+      }
+      // ─────────────────────────────────────────────────────
       if(d.title){ var t=document.getElementById('welcomeTitle'); if(t) t.textContent=d.title; }
       if(d.name){
         var sb=document.getElementById('welcomeSub'); if(sb) sb.textContent='This is for you, '+d.name+' \uD83C\uDF38';
