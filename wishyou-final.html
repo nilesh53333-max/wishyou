@@ -174,7 +174,33 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 .thumb-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
 .thumb-row img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--pink2);}
 .clear-btn{display:none;margin:8px auto 0;background:none;border:1px solid rgba(233,30,99,0.3);border-radius:20px;padding:5px 14px;font-size:0.76rem;color:var(--pink);cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;}
-@keyframes tapPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+/* ── AI FEATURES ── */
+.ai-magic-box{background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:18px;padding:18px 16px;margin-bottom:18px;border:1.5px solid rgba(233,30,99,0.3);}
+.ai-magic-title{font-size:0.78rem;font-weight:700;color:#ff6b9d;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.ai-magic-title span{font-size:1rem;}
+.ai-occasion-input{width:100%;border:1.5px solid rgba(233,30,99,0.3);border-radius:12px;padding:11px 14px;font-size:0.9rem;font-family:'DM Sans',sans-serif;color:white;background:rgba(255,255,255,0.08);outline:none;}
+.ai-occasion-input::placeholder{color:rgba(255,255,255,0.35);}
+.ai-occasion-input:focus{border-color:rgba(233,30,99,0.7);}
+.btn-ai{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:50px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;background:linear-gradient(135deg,#e91e63,#9c27b0);color:white;box-shadow:0 4px 20px rgba(233,30,99,0.35);margin-top:10px;touch-action:manipulation;transition:opacity 0.2s;}
+.btn-ai:disabled{opacity:0.55;cursor:not-allowed;}
+.ai-loading{display:none;align-items:center;justify-content:center;gap:8px;padding:10px;font-size:0.82rem;color:#ff6b9d;}
+.ai-loading.show{display:flex;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#ff6b9d;animation:aiPulse 1.2s ease infinite;}
+.ai-dot:nth-child(2){animation-delay:0.2s;}
+.ai-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes aiPulse{0%,100%{transform:scale(0.6);opacity:0.4;}50%{transform:scale(1.2);opacity:1;}}
+.rel-chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px;}
+.rel-chip{padding:6px 13px;border-radius:100px;font-size:0.76rem;font-weight:600;border:1.5px solid rgba(233,30,99,0.25);color:var(--mid);background:white;cursor:pointer;touch-action:manipulation;transition:all 0.18s;}
+.rel-chip.selected{background:var(--pink);color:white;border-color:var(--pink);}
+.song-suggestion{display:flex;align-items:center;gap:10px;background:white;border-radius:12px;padding:11px 13px;border:1.5px solid rgba(233,30,99,0.15);margin-bottom:8px;cursor:pointer;touch-action:manipulation;transition:all 0.18s;}
+.song-suggestion:hover,.song-suggestion:active{border-color:var(--pink);background:var(--pink4);}
+.song-suggestion-info{flex:1;min-width:0;}
+.song-suggestion-name{font-size:0.85rem;font-weight:600;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.song-suggestion-artist{font-size:0.72rem;color:var(--mid);}
+.song-suggestion-use{font-size:0.7rem;font-weight:700;color:var(--pink);white-space:nowrap;}
+.ai-result-banner{background:rgba(233,30,99,0.08);border:1px solid rgba(233,30,99,0.2);border-radius:10px;padding:10px 13px;font-size:0.78rem;color:var(--mid);margin-top:8px;display:none;}
+.ai-result-banner.show{display:block;}
+
 @keyframes hb1{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
 @keyframes float1{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
 .demo-pol{animation:demoFloat ease-in-out infinite;}
@@ -375,14 +401,40 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <div class="back-btn" style="position:relative;top:0;left:0;flex-shrink:0" onclick="saveAndBack()">←</div>
       <div class="cust-title">Edit Your Card ✏️</div>
     </div>
+    <!-- ✨ FEATURE 4: AI OCCASION DETECTOR -->
+    <div class="ai-magic-box" style="margin-bottom:20px;">
+      <div class="ai-magic-title"><span>✨</span> Magic Fill — AI fills everything</div>
+      <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:10px;line-height:1.6;">Describe the occasion in your own words and AI will fill the name, title, letter and suggest a song automatically.</div>
+      <input class="ai-occasion-input" id="aiOccasionInput" placeholder="e.g. my girlfriend Priya's birthday, we met in college 3 years ago..." maxlength="200">
+      <button class="btn-ai" onclick="runOccasionDetector()" id="aiOccasionBtn">✨ Fill My Card with AI</button>
+      <div class="ai-loading" id="aiOccasionLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI is personalising your card...</span></div>
+      <div class="ai-result-banner" id="aiOccasionResult"></div>
+    </div>
+
     <div class="field-group">
       <label class="field-label">Their Name</label>
-      <input type="text" id="cName" placeholder="e.g. Priya" maxlength="30" >
+      <input type="text" id="cName" placeholder="e.g. Priya" maxlength="30">
     </div>
     <div class="field-group">
       <label class="field-label">Card Title</label>
       <input type="text" id="cTitle" value="Happy Birthday!" maxlength="60">
     </div>
+
+    <!-- ✨ FEATURE 3: AI CARD PERSONALISATION -->
+    <div class="field-group">
+      <label class="field-label">Relationship Type</label>
+      <div class="rel-chips" id="relChips">
+        <div class="rel-chip" onclick="selectRel(this,'Romantic Partner')">💕 Partner</div>
+        <div class="rel-chip" onclick="selectRel(this,'Best Friend')">🤝 Best Friend</div>
+        <div class="rel-chip" onclick="selectRel(this,'Mom')">🌸 Mom</div>
+        <div class="rel-chip" onclick="selectRel(this,'Dad')">👨 Dad</div>
+        <div class="rel-chip" onclick="selectRel(this,'Sibling')">👫 Sibling</div>
+        <div class="rel-chip" onclick="selectRel(this,'Colleague')">💼 Colleague</div>
+      </div>
+      <button class="btn-ai" id="aiPersonaliseBtn" onclick="runPersonalisation()" style="display:none;">🪄 Personalise Letter for this Relationship</button>
+      <div class="ai-loading" id="aiPersonaliseLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Writing a personalised letter...</span></div>
+    </div>
+
     <div class="field-group">
       <label class="field-label">Your Letter</label>
       <textarea id="cMsg" rows="5">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you - for every laugh we share, every dream we build, and every small miracle of love between us. May our hearts stay close, today and always, wherever life leads us.</textarea>
@@ -454,6 +506,15 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
           </div>
         </label>
       </div>
+    </div>
+
+    <!-- ✨ FEATURE 2: AI SONG RECOMMENDATION -->
+    <div class="field-group">
+      <label class="field-label">🎵 AI Song Suggestions</label>
+      <input type="text" id="aiSongMood" placeholder="e.g. romantic Bollywood, happy English pop..." style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;" maxlength="100">
+      <button class="btn-ai" onclick="runSongSuggestions()" id="aiSongBtn" style="margin-top:8px;">🎵 Suggest Songs with AI</button>
+      <div class="ai-loading" id="aiSongLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Finding perfect songs...</span></div>
+      <div id="aiSongResults" style="margin-top:10px;"></div>
     </div>
 
     <!-- SPOTIFY -->
@@ -1146,6 +1207,133 @@ function loadCardFromURL(){
 }
 
 window.addEventListener('DOMContentLoaded', loadCardFromURL);
+
+// ══════════════════════════════════════════════════════
+// AI FEATURES — Anthropic API
+// ══════════════════════════════════════════════════════
+
+var selectedRelationship = '';
+
+function selectRel(el, rel) {
+  document.querySelectorAll('.rel-chip').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  selectedRelationship = rel;
+  var btn = document.getElementById('aiPersonaliseBtn');
+  if(btn) btn.style.display = 'flex';
+}
+
+async function callClaude(prompt) {
+  var res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  var data = await res.json();
+  return data.content && data.content[0] ? data.content[0].text : '';
+}
+
+// ── FEATURE 4: Occasion Detector ──────────────────────
+async function runOccasionDetector() {
+  var input = document.getElementById('aiOccasionInput').value.trim();
+  if(!input) { alert('Please describe the occasion first.'); return; }
+  var btn = document.getElementById('aiOccasionBtn');
+  var loading = document.getElementById('aiOccasionLoading');
+  var result = document.getElementById('aiOccasionResult');
+  btn.disabled = true;
+  loading.classList.add('show');
+  result.classList.remove('show');
+  try {
+    var text = await callClaude(
+      'You are helping create a birthday card. Based on this description: "' + input + '"\n\n' +
+      'Return ONLY a JSON object with these exact keys (no markdown, no explanation):\n' +
+      '{"name":"receiver first name","title":"card title like Happy Birthday Priya!","letter":"3-4 sentence heartfelt birthday letter","sign":"sign off line","songMood":"2-3 word mood for song search e.g. romantic Bollywood"}'
+    );
+    var clean = text.replace(/```json|```/g,'').trim();
+    var d = JSON.parse(clean);
+    if(d.name)   document.getElementById('cName').value  = d.name;
+    if(d.title)  document.getElementById('cTitle').value = d.title;
+    if(d.letter) document.getElementById('cMsg').value   = d.letter;
+    if(d.sign)   document.getElementById('cSign').value  = d.sign;
+    if(d.songMood) document.getElementById('aiSongMood').value = d.songMood;
+    result.textContent = '✅ Card filled! Review and edit anything you want below.';
+    result.classList.add('show');
+  } catch(e) {
+    result.textContent = '⚠️ Something went wrong. Please try again.';
+    result.classList.add('show');
+  }
+  btn.disabled = false;
+  loading.classList.remove('show');
+}
+
+// ── FEATURE 3: Letter Personalisation ─────────────────
+async function runPersonalisation() {
+  if(!selectedRelationship) return;
+  var name    = document.getElementById('cName').value.trim() || 'them';
+  var btn     = document.getElementById('aiPersonaliseBtn');
+  var loading = document.getElementById('aiPersonaliseLoading');
+  btn.disabled = true;
+  loading.classList.add('show');
+  try {
+    var text = await callClaude(
+      'Write a short, heartfelt birthday letter (3-4 sentences) for my ' + selectedRelationship +
+      ' named ' + name + '. The tone should match the relationship — romantic and deep for a partner, warm and fun for a best friend, grateful for mom/dad. Return ONLY the letter text, no greeting line like Dear X, no sign off, just the body.'
+    );
+    if(text) document.getElementById('cMsg').value = text.trim();
+  } catch(e) {
+    alert('Could not personalise. Please try again.');
+  }
+  btn.disabled = false;
+  loading.classList.remove('show');
+}
+
+// ── FEATURE 2: Song Suggestions ───────────────────────
+async function runSongSuggestions() {
+  var mood = document.getElementById('aiSongMood').value.trim();
+  if(!mood) { alert('Please describe the mood or genre first.'); return; }
+  var btn     = document.getElementById('aiSongBtn');
+  var loading = document.getElementById('aiSongLoading');
+  var results = document.getElementById('aiSongResults');
+  btn.disabled = true;
+  loading.classList.add('show');
+  results.innerHTML = '';
+  try {
+    var text = await callClaude(
+      'Suggest 3 real Spotify songs for a birthday card with this mood: "' + mood + '".\n' +
+      'Return ONLY a JSON array, no markdown:\n' +
+      '[{"name":"Song Name","artist":"Artist Name","spotify":"https://open.spotify.com/track/REAL_TRACK_ID"}]\n' +
+      'Use only real, well-known songs with real Spotify track IDs.'
+    );
+    var clean = text.replace(/```json|```/g,'').trim();
+    var songs = JSON.parse(clean);
+    songs.forEach(function(s) {
+      var el = document.createElement('div');
+      el.className = 'song-suggestion';
+      el.innerHTML =
+        '<span style="font-size:1.4rem">🎵</span>' +
+        '<div class="song-suggestion-info">' +
+          '<div class="song-suggestion-name">' + s.name + '</div>' +
+          '<div class="song-suggestion-artist">' + s.artist + '</div>' +
+        '</div>' +
+        '<span class="song-suggestion-use">Use →</span>';
+      el.onclick = function() {
+        document.getElementById('cSpotify').value = s.spotify;
+        handleSpotify(s.spotify);
+        document.querySelectorAll('.song-suggestion').forEach(function(x){ x.style.borderColor=''; });
+        el.style.borderColor = 'var(--pink)';
+      };
+      results.appendChild(el);
+    });
+  } catch(e) {
+    results.innerHTML = '<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Could not fetch suggestions. Try again.</div>';
+  }
+  btn.disabled = false;
+  loading.classList.remove('show');
+}
+
 
 </script>
 </body>
