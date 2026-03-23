@@ -239,7 +239,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
     <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🌸</div>
     <div id="birthdayTodayBanner" style="display:none;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;font-weight:600;text-align:center;animation:fadeUp 0.5s both;">🎂 Today is the special day! Happy Birthday! 🎉</div>
-    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Demo Card ✨</button>
+    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Preview Card ✨</button>
     <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize Card</button>
     <div id="demoNotice" style="font-size:0.72rem;color:var(--mid);text-align:center;margin-top:8px;opacity:0.8;">👆 Customize first to add your photos, letter &amp; song</div>
   </div></div>
@@ -404,7 +404,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div class="letter-sender-name" id="letterSenderName"></div>
       </div>
       <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
-      <button class="btn btn-wa" style="margin-top:0" onclick="shareWhatsApp()">💬 Share on WhatsApp</button>
+      <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
     </div>
   </div>
 </div>
@@ -1157,7 +1157,7 @@ function saveAndBack(){
   const sub=document.getElementById('cSongSub').value.trim();
   document.getElementById('welcomeTitle').textContent=title||"Happy Birthday!";
   document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
-  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Demo Card ✨';
+  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Preview Card ✨';
   document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
   document.getElementById('letterBody').textContent=msg||'';
   document.getElementById('letterSign').textContent=sign||'Forever yours 💕';
