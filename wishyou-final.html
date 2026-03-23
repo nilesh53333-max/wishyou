@@ -511,7 +511,17 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <!-- ✨ FEATURE 2: AI SONG RECOMMENDATION -->
     <div class="field-group">
       <label class="field-label">🎵 AI Song Suggestions</label>
-      <input type="text" id="aiSongMood" placeholder="e.g. romantic Bollywood, happy English pop..." style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;" maxlength="100">
+      <div class="rel-chips" id="songMoodChips" style="margin-bottom:8px;">
+        <div class="rel-chip" onclick="selectSongMood(this,'Hindi Romantic')">💕 Hindi Romantic</div>
+        <div class="rel-chip" onclick="selectSongMood(this,'English Romantic')">🌹 English Romantic</div>
+        <div class="rel-chip" onclick="selectSongMood(this,'Hindi Gazal')">🎶 Hindi Gazal</div>
+        <div class="rel-chip" onclick="selectSongMood(this,'Bollywood Happy')">🎉 Bollywood Happy</div>
+        <div class="rel-chip" onclick="selectSongMood(this,'English Pop Happy')">✨ English Pop</div>
+        <div class="rel-chip" onclick="selectSongMood(this,'Punjabi Party')">🔥 Punjabi Party</div>
+        <div class="rel-chip" onclick="selectSongMood(this,'Soft Instrumental')">🎹 Instrumental</div>
+        <div class="rel-chip" onclick="selectSongMood(this,'Tamil Romantic')">🌸 Tamil Romantic</div>
+      </div>
+      <input type="text" id="aiSongMood" placeholder="Or type your own mood e.g. Marathi romantic..." style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;" maxlength="100">
       <button class="btn-ai" onclick="runSongSuggestions()" id="aiSongBtn" style="margin-top:8px;">🎵 Suggest Songs with AI</button>
       <div class="ai-loading" id="aiSongLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Finding perfect songs...</span></div>
       <div id="aiSongResults" style="margin-top:10px;"></div>
@@ -1213,6 +1223,12 @@ window.addEventListener('DOMContentLoaded', loadCardFromURL);
 // ══════════════════════════════════════════════════════
 
 var selectedRelationship = '';
+
+function selectSongMood(el, mood) {
+  document.querySelectorAll('#songMoodChips .rel-chip').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  document.getElementById('aiSongMood').value = mood;
+}
 
 function selectRel(el, rel) {
   document.querySelectorAll('.rel-chip').forEach(function(c){ c.classList.remove('selected'); });
