@@ -191,7 +191,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 <div class="hearts-bg" id="heartsBg"></div>
 <audio id="theAudio" loop></audio>
 
-<div class="app" ontouchstart="appSwipeStart(event)" ontouchend="appSwipeEnd(event)">
+<div class="app">
 
 <!-- WELCOME -->
 <div class="screen active" id="s-welcome">
@@ -199,10 +199,10 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <span class="big-heart">💝</span>
     <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
     <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🌸</div>
-    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Demo Card ✨</button>
-    <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Open Card ✨</button>
+    <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
   </div></div>
-  <div class="progress-dots"><div class="pdot active" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
+  <div class="progress-dots"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
 </div>
 
 <!-- MEMORIES -->
@@ -273,10 +273,10 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       </div>
       <div id="photoTapHint" style="display:none;text-align:center;font-size:0.75rem;color:var(--mid);margin-top:-12px;margin-bottom:10px;opacity:0.8;">👆 Tap any photo to see it full screen</div>
       <button class="btn btn-primary" onclick="ripple(event);goTo('s-song')">Next ›</button>
-      <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+      <button class="btn btn-outline" id="custBtnMemories" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
     </div>
   </div>
-  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
+  <div class="progress-dots"><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div></div>
 </div>
 
 <!-- SONG -->
@@ -313,10 +313,10 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div style="font-size:0.78rem;color:var(--mid);text-align:center;margin-top:5px;">▶ Tap play inside the player above</div>
       </div>
       <button class="btn btn-primary" onclick="ripple(event);pauseAudio();goTo('s-envelope')">Next ›</button>
-      <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+      <button class="btn btn-outline" id="custBtnSong" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
     </div>
   </div>
-  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
+  <div class="progress-dots"><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div></div>
 </div>
 
 <!-- ENVELOPE -->
@@ -345,10 +345,10 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         </svg>
         <div style="font-size:0.83rem;color:var(--mid);margin-top:6px;animation:tapPulse 2s ease infinite;">Tap the envelope to open</div>
       </button>
-      <button class="btn btn-outline" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+      <button class="btn btn-outline" id="custBtnEnvelope" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
     </div>
   </div>
-  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
+  <div class="progress-dots"><div class="pdot done"></div><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div></div>
 </div>
 
 <!-- LETTER -->
@@ -362,7 +362,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div class="letter-sign" id="letterSign">Forever yours 💕</div>
         <div class="letter-sender-name" id="letterSenderName"></div>
       </div>
-      <button class="btn btn-primary" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
+      <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
       <button class="btn btn-wa" style="margin-top:0" onclick="shareWhatsApp()">💬 Share on WhatsApp</button>
     </div>
   </div>
@@ -377,7 +377,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     </div>
     <div class="field-group">
       <label class="field-label">Their Name</label>
-      <input type="text" id="cName" placeholder="e.g. Priya" maxlength="30" oninput="var ob=document.getElementById('openCardBtn');if(ob)ob.textContent=this.value.trim()?'Open '+this.value.trim()+'\'s Card ✨':'Open Card ✨';">
+      <input type="text" id="cName" placeholder="e.g. Priya" maxlength="30" >
     </div>
     <div class="field-group">
       <label class="field-label">Card Title</label>
@@ -781,7 +781,6 @@ function updateExpandArrows(){
 }
 
 var swipeX=0;
-var swipeY=0;
 function swipeStart(e){if(e.touches&&e.touches.length>0)swipeX=e.touches[0].clientX;}
 function swipeEnd(e){
   if(!e.changedTouches||!e.changedTouches.length) return;
@@ -790,52 +789,6 @@ function swipeEnd(e){
     if(dx<0) expandNav(1); else expandNav(-1);
   }
 }
-
-// ── SCREEN ORDER for swipe navigation ────────────────────
-var SCREEN_ORDER=['s-welcome','s-memories','s-song','s-envelope','s-letter'];
-var appSwipeX=0;
-var appSwipeY=0;
-
-function appSwipeStart(e){
-  if(cur==='s-customize') return; // don't swipe on customize
-  if(e.touches&&e.touches.length>0){
-    appSwipeX=e.touches[0].clientX;
-    appSwipeY=e.touches[0].clientY;
-  }
-}
-
-function appSwipeEnd(e){
-  if(cur==='s-customize') return;
-  if(!e.changedTouches||!e.changedTouches.length) return;
-  var dx=e.changedTouches[0].clientX-appSwipeX;
-  var dy=e.changedTouches[0].clientY-appSwipeY;
-  // Only trigger if horizontal swipe is dominant (not a scroll)
-  if(Math.abs(dx)<50||Math.abs(dx)<Math.abs(dy)*1.5) return;
-  var idx=SCREEN_ORDER.indexOf(cur);
-  if(idx===-1) return;
-  if(dx<0){
-    // swipe left = next screen
-    if(idx<SCREEN_ORDER.length-1){
-      var next=SCREEN_ORDER[idx+1];
-      if(next==='s-letter') return; // letter only opens via envelope tap
-      goTo(next);
-    }
-  } else {
-    // swipe right = previous screen
-    if(idx>0) goBack();
-  }
-}
-
-// Make progress dots clickable
-function dotClick(screenId){
-  if(screenId===cur) return;
-  if(screenId==='s-letter') return; // only via envelope
-  var curIdx=SCREEN_ORDER.indexOf(cur);
-  var targetIdx=SCREEN_ORDER.indexOf(screenId);
-  if(targetIdx>curIdx) goTo(screenId);
-  else goBack();
-}
-// ─────────────────────────────────────────────────────────
 
 function updateExpandDots(){
   document.querySelectorAll('.photo-expand-dot').forEach((d,i)=>d.classList.toggle('active',i===expandIdx));
@@ -927,7 +880,7 @@ function saveAndBack(){
   const sub=document.getElementById('cSongSub').value.trim();
   document.getElementById('welcomeTitle').textContent=title||"Happy Birthday!";
   document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
-  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent=name?'Open '+name+"'s Card ✨":'Open Card ✨';
+  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Open Card ✨';
   document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
   document.getElementById('letterBody').textContent=msg||'';
   document.getElementById('letterSign').textContent=sign||'Forever yours 💕';
@@ -1094,8 +1047,13 @@ function loadCardFromURL(){
       if(d.name){
         var sb=document.getElementById('welcomeSub'); if(sb) sb.textContent='This is for you, '+d.name+' \uD83C\uDF38';
         var ld=document.getElementById('letterDear'); if(ld) ld.textContent='Dear '+d.name+',';
-        var ob=document.getElementById('openCardBtn'); if(ob) ob.textContent='Open '+d.name+"'s Card \u2728";
+        var ob=document.getElementById('openCardBtn'); if(ob) ob.textContent='Open Card \u2728';
       }
+      // ── RECEIVER MODE: hide all Customize buttons ─────────
+      ['custBtnWelcome','custBtnMemories','custBtnSong','custBtnEnvelope','custBtnLetter'].forEach(function(id){
+        var el=document.getElementById(id); if(el) el.style.display='none';
+      });
+      // ─────────────────────────────────────────────────────
       if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb) lb.textContent=d.msg; }
       if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
       if(d.sub)  { var ss=document.getElementById('songSub');     if(ss) ss.textContent=d.sub; }
