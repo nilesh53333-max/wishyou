@@ -1193,18 +1193,38 @@ function shareWhatsApp(){
       }
       var shareUrl = base + '?card=' + cardId;
 
-      var waMsg = '';
-      if(sender && name)      waMsg = sender + ' made a special birthday card for you, ' + name + '! ';
-      else if(name)           waMsg = 'Someone made a special birthday card for you, ' + name + '! ';
-      else if(sender)         waMsg = sender + ' made a special birthday card for you! ';
-      else                    waMsg = 'Someone made a special birthday card for you! ';
-      waMsg += 'Tap to open your surprise: ' + shareUrl;
+      if(btn) btn.textContent = 'Shortening link...';
 
-      var waUrl = 'https://wa.me/?text=' + encodeURIComponent(waMsg);
-      // window.open is blocked on mobile browsers — location.href works everywhere
-      window.location.href = waUrl;
+      // Shorten URL via TinyURL free API
+      fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(shareUrl))
+        .then(function(r){ return r.text(); })
+        .catch(function(){ return shareUrl; }) // fallback to full URL if shortening fails
+        .then(function(shortUrl){
+          shortUrl = shortUrl.trim() || shareUrl;
 
-      if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
+          // Beautiful formatted WhatsApp message
+          var emoji = '🎂';
+          var greeting = name ? 'Happy Birthday, ' + name + '!' : 'Happy Birthday!';
+          var fromLine = sender ? 'From ' + sender + ', with love 💕' : 'Someone special made this for you 💕';
+
+          var waMsg = emoji + ' ' + greeting + '\n\n' +
+            fromLine + '\n\n' +
+            '🎁 Open your birthday surprise:\n' +
+            shortUrl + '\n\n' +
+            '✨ Made with WishYou.ai';
+
+          // iPhone uses whatsapp:// scheme, Android uses wa.me
+          var isIphone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+          var waUrl;
+          if(isIphone){
+            waUrl = 'whatsapp://send?text=' + encodeURIComponent(waMsg);
+          } else {
+            waUrl = 'https://wa.me/?text=' + encodeURIComponent(waMsg);
+          }
+
+          window.location.href = waUrl;
+          if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
+        });
     })
     .catch(function(err){
       alert('Error: ' + err.message + '. Please check your internet connection.');
