@@ -239,7 +239,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
     <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🌸</div>
     <div id="birthdayTodayBanner" style="display:none;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;font-weight:600;text-align:center;animation:fadeUp 0.5s both;">🎂 Today is the special day! Happy Birthday! 🎉</div>
-    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Open Card ✨</button>
+    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Demo Card ✨</button>
     <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize Card</button>
     <div id="demoNotice" style="font-size:0.72rem;color:var(--mid);text-align:center;margin-top:8px;opacity:0.8;">👆 Customize first to add your photos, letter &amp; song</div>
   </div></div>
@@ -403,8 +403,9 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div class="letter-sign" id="letterSign">Forever yours 💕</div>
         <div class="letter-sender-name" id="letterSenderName"></div>
       </div>
+      <!-- Creator buttons — hidden for receiver -->
       <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
-      <button class="btn btn-wa" style="margin-top:0" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
+      <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
     </div>
   </div>
 </div>
@@ -1157,21 +1158,13 @@ function saveAndBack(){
   const sub=document.getElementById('cSongSub').value.trim();
   document.getElementById('welcomeTitle').textContent=title||"Happy Birthday!";
   document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
-  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Open Card ✨';
+  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Demo Card ✨';
   document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
   document.getElementById('letterBody').textContent=msg||'';
   document.getElementById('letterSign').textContent=sign||'Forever yours 💕';
   document.getElementById('songSub').textContent=sub||'This song always reminds me of you.';
   const sel=document.getElementById('letterSenderName');
-  if(sender){
-    // Only show if not already in sign-off
-    var signVal = (sign||'').toLowerCase();
-    if(signVal.indexOf(sender.toLowerCase()) === -1){
-      sel.textContent=sender; sel.style.display='block';
-    } else {
-      sel.style.display='none';
-    }
-  } else { sel.style.display='none'; }
+  if(sender){sel.textContent=sender;sel.style.display='block';}else sel.style.display='none';
   if(spotifySrc){document.getElementById('spotifyFrame').src=spotifySrc;document.getElementById('spotifyWrap').style.display='block';document.getElementById('songCardEl').style.display='none';}
   if(photos.length){
     document.getElementById('photoTapHint').style.display='block';
@@ -1264,7 +1257,7 @@ function shareWhatsApp(){
       if(btn) btn.textContent = 'Shortening link...';
 
       // Shorten URL via TinyURL free API
-      fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(shareUrl))
+      fetch('https://is.gd/create.php?format=simple&url=' + encodeURIComponent(shareUrl))
         .then(function(r){ return r.text(); })
         .catch(function(){ return shareUrl; })
         .then(function(shortUrl){
@@ -1316,14 +1309,7 @@ function openWhatsAppShare(){
   var waUrl = isIphone
     ? 'whatsapp://send?text=' + encodeURIComponent(waMsg)
     : 'https://wa.me/?text=' + encodeURIComponent(waMsg);
-  // Use hidden anchor — opens WhatsApp without navigating away from card
-  var a = document.createElement('a');
-  a.href = waUrl;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function(){ if(a.parentNode) a.parentNode.removeChild(a); }, 300);
+  window.location.href = waUrl;
 }
 
 function shareInstagram(){
@@ -1444,28 +1430,21 @@ function loadCardFromURL(){
         }
       }
 
-      // ── Fix 9: Receiver mode — hide demo notice + customize
-      ['custBtnWelcome','custBtnMemories','custBtnSong','custBtnEnvelope','custBtnLetter'].forEach(function(id){
+      // ── Fix 9: Receiver mode — hide demo notice + customize + share
+      ['custBtnWelcome','custBtnMemories','custBtnSong','custBtnEnvelope','custBtnLetter','shareCardBtn'].forEach(function(id){
         var el=document.getElementById(id); if(el) el.style.display='none';
       });
       var demo = document.getElementById('demoNotice');
       if(demo) demo.style.display = 'none';
+      // Change button from Demo Card to Open Card for receiver
+      var ob2 = document.getElementById('openCardBtn');
+      if(ob2) ob2.textContent = 'Open Card \u2728';
 
       if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb) lb.textContent=d.msg; }
       if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
       if(d.sub)  { var ss=document.getElementById('songSub');     if(ss) ss.textContent=d.sub; }
       if(d.sender){
-        var sn=document.getElementById('letterSenderName');
-        // Only show sender name if it's not already mentioned in the sign-off
-        if(sn){
-          var signText = (d.sign||'').toLowerCase();
-          var senderLower = d.sender.toLowerCase();
-          if(signText.indexOf(senderLower) === -1){
-            sn.textContent=d.sender;sn.style.display='block';
-          } else {
-            sn.style.display='none';
-          }
-        }
+        var sn=document.getElementById('letterSenderName'); if(sn){sn.textContent=d.sender;sn.style.display='block';}
         var et=document.getElementById('envTitle'); if(et) et.innerHTML=d.sender+' wrote a letter<br>for you... \uD83D\uDC8C';
       }
       if(d.photos && d.photos.length){
