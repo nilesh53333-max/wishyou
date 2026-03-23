@@ -170,7 +170,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 .spotify-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.1rem;z-index:1;pointer-events:none;}
 .preview-bar{position:sticky;bottom:0;background:linear-gradient(to top,rgba(253,232,240,0.98) 80%,transparent);padding:16px 0 10px;}
 .btn-wa{background:linear-gradient(135deg,#25d366,#128c4e);color:white;box-shadow:0 6px 20px rgba(37,211,102,0.35);}
-.wm{position:fixed;bottom:12px;right:14px;font-size:0.7rem;color:var(--mid);opacity:0.4;pointer-events:none;z-index:1;font-family:'Playfair Display',serif;}
+.wm{position:fixed;bottom:10px;right:12px;font-size:0.78rem;color:var(--pink);opacity:0.55;pointer-events:none;z-index:10;font-family:'Playfair Display',serif;letter-spacing:0.04em;text-shadow:0 1px 4px rgba(233,30,99,0.2);}
 .thumb-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
 .thumb-row img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--pink2);}
 .clear-btn{display:none;margin:8px auto 0;background:none;border:1px solid rgba(233,30,99,0.3);border-radius:20px;padding:5px 14px;font-size:0.76rem;color:var(--pink);cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;}
@@ -210,6 +210,19 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 .demo-pol:nth-child(4){animation-duration:3.2s;animation-delay:0.2s;}
 .demo-pol:nth-child(5){animation-duration:3.6s;animation-delay:0.5s;}
 @keyframes demoFloat{0%,100%{transform:translateY(0) rotate(-1.5deg);}50%{transform:translateY(-5px) rotate(0.5deg);}}
+/* Share confirmation overlay */
+.share-confirm{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.6);display:none;align-items:flex-end;justify-content:center;}
+.share-confirm.open{display:flex;}
+.share-confirm-box{background:white;border-radius:28px 28px 0 0;padding:28px 24px 44px;width:100%;max-width:430px;animation:slideUp 0.35s cubic-bezier(.4,0,.2,1);}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.share-link-box{background:var(--pink4);border:1.5px solid rgba(233,30,99,0.2);border-radius:12px;padding:12px 50px 12px 14px;font-size:0.75rem;color:var(--mid);word-break:break-all;margin-bottom:14px;position:relative;line-height:1.5;}
+.copy-link-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--pink);color:white;border:none;border-radius:8px;padding:5px 10px;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
+.expiry-notice{font-size:0.74rem;color:#c0392b;background:rgba(255,100,100,0.08);border:1px solid rgba(255,100,100,0.2);border-radius:8px;padding:8px 12px;margin-bottom:14px;text-align:center;}
+/* Upsell modal */
+.upsell-modal{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;padding:20px;}
+.upsell-modal.open{display:flex;}
+.upsell-box{background:white;border-radius:24px;padding:28px 22px;width:100%;max-width:360px;text-align:center;animation:popIn 0.4s cubic-bezier(.34,1.26,.64,1);}
+@keyframes popIn{from{transform:scale(0.8);opacity:0;}to{transform:scale(1);opacity:1;}}
 </style>
 </head>
 <body>
@@ -225,8 +238,10 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <span class="big-heart">💝</span>
     <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
     <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🌸</div>
+    <div id="birthdayTodayBanner" style="display:none;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;font-weight:600;text-align:center;animation:fadeUp 0.5s both;">🎂 Today is the special day! Happy Birthday! 🎉</div>
     <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Open Card ✨</button>
-    <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+    <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize Card</button>
+    <div id="demoNotice" style="font-size:0.72rem;color:var(--mid);text-align:center;margin-top:8px;opacity:0.8;">👆 Customize first to add your photos, letter &amp; song</div>
   </div></div>
   <div class="progress-dots"><div class="pdot active" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
 </div>
@@ -381,7 +396,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 <div class="screen" id="s-letter">
   <div class="card">
     <div class="back-btn" onclick="goBack()">←</div>
-    <div class="card-inner" style="padding-top:52px;padding-bottom:18px;">
+    <div class="card-inner" style="padding-top:52px;padding-bottom:18px;overflow-y:auto;max-height:calc(100vh - 40px);-webkit-overflow-scrolling:touch;">
       <div class="letter-page">
         <div class="letter-dear" id="letterDear">Dear,</div>
         <div class="letter-body" id="letterBody">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you - for every laugh we share, every dream we build, and every small miracle of love between us. May our hearts stay close, today and always, wherever life leads us.</div>
@@ -566,6 +581,40 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 </div>
 
 </div><!-- /app -->
+
+<!-- SHARE CONFIRMATION -->
+<div class="share-confirm" id="shareConfirm">
+  <div class="share-confirm-box">
+    <div style="font-size:2rem;margin-bottom:8px;">🎉</div>
+    <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--dark);margin-bottom:6px;">Card saved successfully!</div>
+    <div style="font-size:0.82rem;color:var(--mid);margin-bottom:16px;line-height:1.6;">Share the link below on WhatsApp, Instagram, or anywhere!</div>
+    <div class="expiry-notice">⏳ This card expires in <strong>3 days</strong> — share it soon!</div>
+    <div class="share-link-box" id="shareLinkBox">
+      <span id="shareLinkText"></span>
+      <button class="copy-link-btn" onclick="copyShareLink()">Copy</button>
+    </div>
+    <button class="btn btn-wa" style="width:100%;margin-bottom:10px;" onclick="openWhatsAppShare()">💬 Share on WhatsApp</button>
+    <button style="width:100%;padding:12px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:white;border:none;border-radius:50px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;" onclick="shareInstagram()">📸 Share to Instagram</button>
+    <button style="width:100%;padding:10px;background:none;border:1px solid rgba(233,30,99,0.2);border-radius:50px;font-size:0.82rem;color:var(--mid);cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="closeShareConfirm()">Done</button>
+  </div>
+</div>
+
+<!-- UPSELL MODAL -->
+<div class="upsell-modal" id="upsellModal">
+  <div class="upsell-box">
+    <span style="font-size:2.5rem;display:block;margin-bottom:12px;">✨</span>
+    <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--dark);margin-bottom:8px;">Make it even more special</div>
+    <div style="font-size:0.82rem;color:var(--mid);margin-bottom:16px;line-height:1.6;">Upgrade this card for the full experience</div>
+    <div style="text-align:left;margin-bottom:18px;">
+      <div style="font-size:0.8rem;color:var(--dark);padding:5px 0;display:flex;align-items:center;gap:8px;">✅ Card stays active for <strong>30 days</strong></div>
+      <div style="font-size:0.8rem;color:var(--dark);padding:5px 0;display:flex;align-items:center;gap:8px;">✅ Remove WishYou.ai watermark</div>
+      <div style="font-size:0.8rem;color:var(--dark);padding:5px 0;display:flex;align-items:center;gap:8px;">✅ Know when receiver opens the card</div>
+      <div style="font-size:0.8rem;color:var(--dark);padding:5px 0;display:flex;align-items:center;gap:8px;">✅ Premium card themes</div>
+    </div>
+    <button style="width:100%;padding:14px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;box-shadow:0 6px 20px rgba(233,30,99,0.35);" onclick="closeUpsell()">Coming Soon 🚀</button>
+    <button style="width:100%;padding:10px;background:none;border:none;color:var(--mid);font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="closeUpsell()">No thanks, continue free</button>
+  </div>
+</div>
 
 <!-- PHOTO EXPAND OVERLAY -->
 <div class="photo-expand" id="photoExpand" onclick="closeExpand(event)" ontouchstart="swipeStart(event)" ontouchend="swipeEnd(event)">
@@ -1155,11 +1204,22 @@ function shareWhatsApp(){
   var sub    = ((document.getElementById('cSongSub')||{value:''}).value||'').trim();
 
   var btn = document.querySelector('.btn-wa');
-  if(btn){ btn.textContent = 'Uploading photos...'; btn.disabled = true; }
+  var totalPhotos = (photos && photos.length) ? photos.length : 0;
+  if(btn){ btn.textContent = totalPhotos > 0 ? 'Uploading '+totalPhotos+' photo'+(totalPhotos>1?'s':'')+'... (0/'+totalPhotos+')' : 'Saving card...'; btn.disabled = true; }
 
-  // Upload all photos to Cloudinary first
+  var uploadedCount = 0;
+
+  // Upload all photos to Cloudinary first with progress
   var photoPromises = (photos && photos.length)
-    ? photos.map(function(url){ return uploadPhotoToCloudinary(url); })
+    ? photos.map(function(url){
+        return uploadPhotoToCloudinary(url).then(function(result){
+          uploadedCount++;
+          if(btn && totalPhotos > 0){
+            btn.textContent = 'Uploading photos... (' + uploadedCount + '/' + totalPhotos + ')';
+          }
+          return result;
+        });
+      })
     : [Promise.resolve(null)];
 
   Promise.all(photoPromises)
@@ -1173,7 +1233,7 @@ function shareWhatsApp(){
         photos: photoUrls.filter(function(u){ return u; }),
         created: now,
         createdAt: now,
-        expiresAt: now + (24 * 60 * 60 * 1000)
+        expiresAt: now + (3 * 24 * 60 * 60 * 1000)
       };
 
       if(btn) btn.textContent = 'Saving card...';
@@ -1198,38 +1258,83 @@ function shareWhatsApp(){
       // Shorten URL via TinyURL free API
       fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(shareUrl))
         .then(function(r){ return r.text(); })
-        .catch(function(){ return shareUrl; }) // fallback to full URL if shortening fails
+        .catch(function(){ return shareUrl; })
         .then(function(shortUrl){
           shortUrl = shortUrl.trim() || shareUrl;
 
-          // Beautiful formatted WhatsApp message
-          var emoji = '🎂';
-          var greeting = name ? 'Happy Birthday, ' + name + '!' : 'Happy Birthday!';
-          var fromLine = sender ? 'From ' + sender + ', with love 💕' : 'Someone special made this for you 💕';
+          // Store globally for re-share
+          window._lastShortUrl = shortUrl;
+          window._lastShareName = name;
+          window._lastShareSender = sender;
 
-          var waMsg = emoji + ' ' + greeting + '\n\n' +
-            fromLine + '\n\n' +
-            '🎁 Open your birthday surprise:\n' +
-            shortUrl + '\n\n' +
-            '✨ Made with WishYou.ai';
+          // Show share confirmation modal
+          document.getElementById('shareLinkText').textContent = shortUrl;
+          document.getElementById('shareConfirm').classList.add('open');
 
-          // iPhone uses whatsapp:// scheme, Android uses wa.me
-          var isIphone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-          var waUrl;
-          if(isIphone){
-            waUrl = 'whatsapp://send?text=' + encodeURIComponent(waMsg);
-          } else {
-            waUrl = 'https://wa.me/?text=' + encodeURIComponent(waMsg);
-          }
+          // Show upsell after 2 seconds
+          setTimeout(function(){
+            document.getElementById('upsellModal').classList.add('open');
+          }, 2000);
 
-          window.location.href = waUrl;
           if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
+
+          // Fix 12: Analytics — increment card view count
+          fetch(FIREBASE_URL + '/' + cardId + '/views.json', {
+            method: 'PUT',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify(0)
+          }).catch(function(){});
         });
     })
     .catch(function(err){
       alert('Error: ' + err.message + '. Please check your internet connection.');
       if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
     });
+}
+
+function openWhatsAppShare(){
+  var shortUrl = window._lastShortUrl || '';
+  var name = window._lastShareName || '';
+  var sender = window._lastShareSender || '';
+  var emoji = '🎂';
+  var greeting = name ? 'Happy Birthday, ' + name + '!' : 'Happy Birthday!';
+  var fromLine = sender ? 'From ' + sender + ', with love 💕' : 'Someone special made this for you 💕';
+  var waMsg = emoji + ' ' + greeting + '\n\n' +
+    fromLine + '\n\n' +
+    '🎁 Open your birthday surprise:\n' +
+    shortUrl + '\n\n' +
+    '✨ Made with WishYou.ai';
+  var isIphone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  var waUrl = isIphone
+    ? 'whatsapp://send?text=' + encodeURIComponent(waMsg)
+    : 'https://wa.me/?text=' + encodeURIComponent(waMsg);
+  window.location.href = waUrl;
+}
+
+function shareInstagram(){
+  // Instagram doesn't support pre-filled links — copy to clipboard instead
+  var shortUrl = window._lastShortUrl || '';
+  navigator.clipboard.writeText(shortUrl).then(function(){
+    alert('Link copied! Open Instagram and paste it in your story or DM.');
+  }).catch(function(){
+    alert('Your card link: ' + shortUrl + '\n\nCopy it and share on Instagram!');
+  });
+}
+
+function copyShareLink(){
+  var shortUrl = window._lastShortUrl || document.getElementById('shareLinkText').textContent;
+  navigator.clipboard.writeText(shortUrl).then(function(){
+    var btn = document.querySelector('.copy-link-btn');
+    if(btn){ btn.textContent = 'Copied!'; setTimeout(function(){ btn.textContent = 'Copy'; }, 2000); }
+  }).catch(function(){});
+}
+
+function closeShareConfirm(){
+  document.getElementById('shareConfirm').classList.remove('open');
+}
+
+function closeUpsell(){
+  document.getElementById('upsellModal').classList.remove('open');
 }
 
 // ── AUTO-DELETE: expired card screen ──────────────────────
@@ -1276,32 +1381,61 @@ function loadCardFromURL(){
   var cardId = params.get('card');
   if(!cardId) return;
 
-  // Run sweep silently in background every time a card is opened
+  // Run sweep silently in background
   sweepExpiredCards();
 
   fetch(FIREBASE_URL + '/' + cardId + '.json')
     .then(function(r){ return r.json(); })
     .then(function(d){
-      // ── EXPIRY CHECK ──────────────────────────────────────
       if(!d){ showExpiredScreen(); return; }
       if(d.expiresAt && Date.now() > d.expiresAt){
-        // Delete it from Firebase then show expired screen
         fetch(FIREBASE_URL + '/' + cardId + '.json', { method: 'DELETE' }).catch(function(){});
         showExpiredScreen();
         return;
       }
-      // ─────────────────────────────────────────────────────
+
+      // ── Fix 12: Analytics — increment view count ──────────
+      var views = (d.views || 0) + 1;
+      fetch(FIREBASE_URL + '/' + cardId + '/views.json', {
+        method: 'PUT',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(views)
+      }).catch(function(){});
+
+      // ── Fix 13: Notify sender when receiver opens card ────
+      if(d.sender && views === 1 && d.senderPhone){
+        // First open — notify sender via WhatsApp (if they saved phone)
+        var notifyMsg = '🎉 ' + (d.name || 'Someone') + ' just opened your birthday card on WishYou.ai!';
+        // We store the notification URL, sender can tap it themselves
+        fetch(FIREBASE_URL + '/' + cardId + '/opened.json', {
+          method: 'PUT',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(Date.now())
+        }).catch(function(){});
+      }
+
       if(d.title){ var t=document.getElementById('welcomeTitle'); if(t) t.textContent=d.title; }
       if(d.name){
         var sb=document.getElementById('welcomeSub'); if(sb) sb.textContent='This is for you, '+d.name+' \uD83C\uDF38';
         var ld=document.getElementById('letterDear'); if(ld) ld.textContent='Dear '+d.name+',';
         var ob=document.getElementById('openCardBtn'); if(ob) ob.textContent='Open Card \u2728';
+
+        // ── Fix 11: Birthday today detection ─────────────────
+        var today = new Date();
+        var todayStr = (today.getMonth()+1) + '/' + today.getDate();
+        if(d.birthdayDate && d.birthdayDate === todayStr){
+          var banner = document.getElementById('birthdayTodayBanner');
+          if(banner) banner.style.display = 'block';
+        }
       }
-      // ── RECEIVER MODE: hide all Customize buttons ─────────
+
+      // ── Fix 9: Receiver mode — hide demo notice + customize
       ['custBtnWelcome','custBtnMemories','custBtnSong','custBtnEnvelope','custBtnLetter'].forEach(function(id){
         var el=document.getElementById(id); if(el) el.style.display='none';
       });
-      // ─────────────────────────────────────────────────────
+      var demo = document.getElementById('demoNotice');
+      if(demo) demo.style.display = 'none';
+
       if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb) lb.textContent=d.msg; }
       if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
       if(d.sub)  { var ss=document.getElementById('songSub');     if(ss) ss.textContent=d.sub; }
@@ -1309,7 +1443,6 @@ function loadCardFromURL(){
         var sn=document.getElementById('letterSenderName'); if(sn){sn.textContent=d.sender;sn.style.display='block';}
         var et=document.getElementById('envTitle'); if(et) et.innerHTML=d.sender+' wrote a letter<br>for you... \uD83D\uDC8C';
       }
-      // Load photos from Cloudinary into the card
       if(d.photos && d.photos.length){
         photos = d.photos;
         document.getElementById('photoPlaceholder').style.display='none';
@@ -1317,11 +1450,9 @@ function loadCardFromURL(){
         var hint=document.getElementById('photoTapHint');
         if(hint)hint.style.display='block';
       }
-      // Populate customize fields
       function sv(id,v){var e=document.getElementById(id);if(e&&v)e.value=v;}
       sv('cName',d.name);sv('cTitle',d.title);sv('cMsg',d.msg);
       sv('cSign',d.sign);sv('cSender',d.sender);sv('cSongSub',d.sub);
-      // Restore song link (Spotify or YouTube)
       if(d.spotify){
         sv('cSpotify',d.spotify);
         handleSpotify(d.spotify);
