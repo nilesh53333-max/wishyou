@@ -972,7 +972,9 @@ function shareWhatsApp(){
       else                    waMsg = 'Someone made a special birthday card for you! ';
       waMsg += 'Tap to open your surprise: ' + shareUrl;
 
-      window.open('https://wa.me/?text=' + encodeURIComponent(waMsg), '_blank');
+      var waUrl = 'https://wa.me/?text=' + encodeURIComponent(waMsg);
+      // window.open is blocked on mobile browsers — location.href works everywhere
+      window.location.href = waUrl;
 
       if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
     })
