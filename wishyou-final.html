@@ -460,7 +460,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div class="letter-sender-name" id="letterSenderName"></div>
       </div>
       <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
-      <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
+      <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0;display:none;" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
     </div>
   </div>
 </div>
@@ -962,20 +962,16 @@ function buildSlides(){
   document.getElementById('photoPlaceholder').style.display='none';
   wrap.style.display='flex';
   var hasFxOff=wrap.classList.contains('photo-fx-off');
-  // Use balloon layout
-  wrap.className='balloon-wrap count-'+photos.length;
+  wrap.className='pol-wrap count-'+photos.length;
   if(hasFxOff) wrap.classList.add('photo-fx-off');
   document.getElementById('photoTapHint').style.display= photos.length ? 'block' : 'none';
   photos.forEach((url,i)=>{
     const card=document.createElement('div');
-    card.className='balloon-card';
-    card.innerHTML=
-      '<div class="balloon-photo"><img src="'+url+'" alt="Memory '+(i+1)+'"></div>'+
-      '<div class="balloon-string"></div>';
+    card.className='pol-card';
+    card.innerHTML='<img src="'+url+'" alt="Memory '+(i+1)+'"><div class="pol-label">Memory '+(i+1)+'</div>';
     card.addEventListener('click',()=>openExpand(i));
     wrap.appendChild(card);
   });
-  // build expand nav dots
   const nav=document.getElementById('expandNav');
   nav.innerHTML='';
   photos.forEach((_,i)=>{
@@ -985,6 +981,35 @@ function buildSlides(){
     nav.appendChild(d);
   });
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function openExpand(i){
   expandIdx=i;
@@ -1229,6 +1254,9 @@ function saveAndBack(){
   }
   resetEnv();
   startBGM();
+  // Show Create & Share Card now that user has customized
+  var scb = document.getElementById('shareCardBtn');
+  if(scb) scb.style.display = 'flex';
   goBack();
 }
 
@@ -1314,14 +1342,14 @@ function shareWhatsApp(){
 
       if(btn) btn.textContent = 'Shortening link...';
 
-      // Shorten URL — try CleanURI first, fallback to full URL
-      fetch('https://cleanuri.com/api/v1/shorten', {
+      // Shorten URL via Cloudflare worker → is.gd (no CORS issues)
+      fetch('https://wild-fog-b15e.nilesh53333.workers.dev/', {
         method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: 'url=' + encodeURIComponent(shareUrl)
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ type: 'shorten', url: shareUrl })
       })
         .then(function(r){ return r.json(); })
-        .then(function(j){ return (j && j.result_url) ? j.result_url : shareUrl; })
+        .then(function(j){ return (j && j.short) ? j.short : shareUrl; })
         .catch(function(){ return shareUrl; })
         .then(function(shortUrl){
           shortUrl = (shortUrl && shortUrl.indexOf('http') === 0) ? shortUrl : shareUrl;
@@ -1371,9 +1399,14 @@ function openWhatsAppShare(){
     '🎁 Open your birthday surprise:\n' +
     shortUrl + '\n\n' +
     '✨ Made with WishYou.ai';
-  // wa.me works on all platforms including desktop
-  var waUrl = 'https://wa.me/?text=' + encodeURIComponent(waMsg);
-  window.open(waUrl, '_blank');
+  var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if(isIOS){
+    // On iOS whatsapp:// opens the app with message pre-filled
+    window.location.href = 'whatsapp://send?text=' + encodeURIComponent(waMsg);
+  } else {
+    // On Android and desktop use wa.me in new tab
+    window.open('https://wa.me/?text=' + encodeURIComponent(waMsg), '_blank');
+  }
 }
 
 function shareInstagram(){
