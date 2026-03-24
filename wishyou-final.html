@@ -191,8 +191,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100
 
 /* LETTER */
 .letter-page{width:100%;background:white;border-radius:20px;padding:22px 20px 18px;text-align:left;box-shadow:0 6px 30px rgba(233,30,99,0.12);border-top:4px solid var(--pink);position:relative;animation:letterReveal 0.7s cubic-bezier(.4,0,.2,1) both;}
-/* Scroll hint fade at bottom of card-inner when letter is long */
-.card-inner.has-scroll::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,0.9));pointer-events:none;border-radius:0 0 var(--r) var(--r);}
 @keyframes letterReveal{from{transform:scale(0.8) translateY(40px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
 .letter-page::after{content:'💌';position:absolute;right:14px;top:12px;font-size:1.3rem;opacity:0.3;}
 .letter-dear{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--dark);margin-bottom:10px;font-weight:700;}
@@ -470,11 +468,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div class="letter-sender-name" id="letterSenderName"></div>
       </div>
       <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
-      <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0;display:none;" onclick="shareWhatsApp()">\uD83C\uDF81 Create &amp; Share Card</button>
-      <div id="receiverEndCTA" style="display:none;margin-top:14px;text-align:center;">
-        <div style="font-size:0.78rem;color:var(--mid);margin-bottom:10px;line-height:1.6;">Want to send someone a card like this? 💝</div>
-        <a href="https://wishyou.ai" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:50px;font-size:0.88rem;font-weight:600;text-decoration:none;box-shadow:0 4px 16px rgba(233,30,99,0.35);">Create your own on WishYou.ai ✨</a>
-      </div>
+      <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0;display:none;" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
     </div>
   </div>
 </div>
@@ -638,7 +632,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <button onclick="searchYouTube()" style="padding:13px 18px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:14px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;touch-action:manipulation;">🔍 Search</button>
       </div>
       <div id="ytSearchResults" style="margin-bottom:8px;"></div>
-      <div id="ytSelectedSong" style="display:none;background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
+      <div id="ytSelectedSong" style="display:none;background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:none;">
         <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-bottom:4px;">NOW PLAYING ON CARD</div>
         <div id="ytSelectedName" style="font-size:0.88rem;font-weight:600;color:white;"></div>
       </div>
@@ -646,7 +640,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     </div>
 
     <div class="preview-bar">
-      <button class="btn btn-primary" onclick="ripple(event);saveAndBack()" style="margin-bottom:8px">💾 Save &amp; Preview</button>
+      <button class="btn btn-primary" onclick="ripple(event);saveAndBack()" style="margin-bottom:8px">👁️ Preview Card</button>
       <button class="btn btn-wa" style="margin-bottom:0" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
     </div>
   </div>
@@ -702,7 +696,6 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 // ── SWIPE NAVIGATION ─────────────────────────────────────
 var SCREEN_ORDER = ['s-welcome','s-memories','s-song','s-envelope','s-letter'];
 var _swStartX = 0, _swStartY = 0, _swStartTime = 0;
-var isReceiver = false; // set to true when card loaded from URL (receiver mode)
 
 function _onTouchStart(e) {
   if(e.touches.length !== 1) return;
@@ -911,13 +904,6 @@ function typewriterLetter(){
   }
   // Clear any running animation
   if(_twTimer){ clearTimeout(_twTimer); _twTimer = null; }
-
-  // If demo mode (no real card loaded), just show text instantly
-  if(!isReceiver && !window._lastShortUrl){
-    el.textContent = fullText;
-    return;
-  }
-
   el.textContent = '';
   var cursor = document.createElement('span');
   cursor.className = 'letter-cursor';
@@ -1428,12 +1414,10 @@ function shareWhatsApp(){
           document.getElementById('shareLinkText').textContent = shortUrl;
           document.getElementById('shareConfirm').classList.add('open');
 
-          // Show upsell after 2 seconds — only for creator, not receiver
-          if(!isReceiver){
-            setTimeout(function(){
-              document.getElementById('upsellModal').classList.add('open');
-            }, 2000);
-          }
+          // Show upsell after 2 seconds
+          setTimeout(function(){
+            document.getElementById('upsellModal').classList.add('open');
+          }, 2000);
 
           if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
 
@@ -1456,7 +1440,7 @@ function openWhatsAppShare(){
   var name = window._lastShareName || '';
   var sender = window._lastShareSender || '';
   var greeting = name ? 'Happy Birthday, ' + name + '!' : 'Happy Birthday!';
-  var fromLine = sender ? 'From ' + sender + ', with love \uD83D\uDC95' : 'Someone special made this for you \uD83D\uDC95';
+  var fromLine = sender ? 'From ' + sender + ', with love 💕' : 'Someone special made this for you 💕';
   var waMsg = '\uD83C\uDF82 ' + greeting + '\n\n' +
     fromLine + '\n\n' +
     '\uD83C\uDF81 Open your birthday surprise:\n' +
@@ -1542,16 +1526,6 @@ function loadCardFromURL(){
   var cardId = params.get('card');
   if(!cardId) return;
 
-  // Show loading state on welcome screen immediately
-  var ob = document.getElementById('openCardBtn');
-  if(ob){ ob.textContent = 'Loading... 💝'; ob.disabled = true; }
-  var cw = document.getElementById('custBtnWelcome');
-  if(cw) cw.style.display = 'none';
-  var dn = document.getElementById('demoNotice');
-  if(dn) dn.style.display = 'none';
-
-  isReceiver = true;
-
   // Run sweep silently in background
   sweepExpiredCards();
 
@@ -1604,9 +1578,6 @@ function loadCardFromURL(){
       ['custBtnWelcome','custBtnMemories','custBtnSong','custBtnEnvelope','custBtnLetter','shareCardBtn'].forEach(function(id){
         var el=document.getElementById(id); if(el) el.style.display='none';
       });
-      // Show receiver end CTA on letter screen
-      var rCTA = document.getElementById('receiverEndCTA');
-      if(rCTA) rCTA.style.display = 'block';
       var demo = document.getElementById('demoNotice');
       if(demo) demo.style.display = 'none';
       // Change button from Demo Card to Open Card for receiver
