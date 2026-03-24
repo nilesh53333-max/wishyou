@@ -314,7 +314,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
   <div class="card">
     <div class="back-btn" onclick="goBack()">←</div>
     <div class="card-inner">
-      <div class="screen-title">Our Memories 📸</div>
+      <div class="screen-title" id="memoriesTitle">Our Memories 📸</div>
       <div id="memoriesSenderSub" style="display:none;font-size:0.75rem;color:var(--mid);font-style:italic;margin-top:-6px;margin-bottom:8px;text-align:center;">— chosen by <span id="memoriesSenderName"></span> with love</div>
       <div class="photo-frame" id="photoFrame">
         <div class="photo-placeholder" id="photoPlaceholder">
@@ -509,10 +509,17 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <select id="relSelect" onchange="onRelChange(this.value)" style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 15px center;">
         <option value="">Select relationship...</option>
         <option value="Romantic Partner">💕 Romantic Partner</option>
+        <option value="Husband">💍 Husband</option>
+        <option value="Wife">💍 Wife</option>
         <option value="Best Friend">🤝 Best Friend</option>
         <option value="Mom">🌸 Mom</option>
         <option value="Dad">👨 Dad</option>
+        <option value="Son">👦 Son</option>
+        <option value="Daughter">👧 Daughter</option>
         <option value="Sibling">👫 Sibling</option>
+        <option value="Cousin">🤗 Cousin</option>
+        <option value="Grandfather">👴 Grandfather</option>
+        <option value="Grandmother">👵 Grandmother</option>
         <option value="Colleague">💼 Colleague</option>
         <option value="Childhood Friend">🧒 Childhood Friend</option>
         <option value="Teacher">📚 Teacher</option>
@@ -544,6 +551,17 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       </label>
       <div class="thumb-row" id="photoThumbs" style="margin-top:10px;"></div>
       <button class="clear-btn" id="clearPhotosBtn" onclick="clearPhotos()">✕ Clear all photos</button>
+    </div>
+
+    <!-- PHOTO SCREEN TITLE -->
+    <div class="field-group">
+      <label class="field-label">Photos Screen Title</label>
+      <select id="cMemoriesHeading" style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 15px center;">
+        <option value="Our Memories 📸">Our Memories 📸</option>
+        <option value="Photos for You 💝">Photos for You 💝</option>
+        <option value="Moments We've Shared ✨">Moments We've Shared ✨</option>
+        <option value="Photos I Treasure 🎞️">Photos I Treasure 🎞️</option>
+      </select>
     </div>
 
     <!-- PHOTO ANIMATION TOGGLE -->
@@ -1292,6 +1310,9 @@ function saveAndBack(){
   document.getElementById('welcomeTitle').textContent=title||"Happy Birthday!";
   document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
   var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Preview Card ✨';
+  var mhEl=document.getElementById('cMemoriesHeading');
+  var mtEl=document.getElementById('memoriesTitle');
+  if(mhEl&&mtEl) mtEl.textContent=mhEl.value||'Our Memories 📸';
   document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
   var lb = document.getElementById('letterBody');
   if(lb){ lb.textContent=msg||''; lb.setAttribute('data-full', msg||''); }
@@ -1376,6 +1397,7 @@ function shareWhatsApp(){
         msg: msg, sign: sign, sub: sub,
         spotify: spotifyInput ? spotifyInput.value.trim() : '',
         photos: photoUrls.filter(function(u){ return u; }),
+        memoriesHeading: (document.getElementById('cMemoriesHeading')||{value:'Our Memories 📸'}).value||'Our Memories 📸',
         created: now,
         createdAt: now,
         expiresAt: now + (3 * 24 * 60 * 60 * 1000)
@@ -1611,7 +1633,8 @@ function loadCardFromURL(){
 
       if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb){ lb.textContent=d.msg; lb.setAttribute('data-full',d.msg); } }
       if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
-      if(d.sub)  { var ss=document.getElementById('songSub');     if(ss) ss.textContent=d.sub; }
+      if(d.sub)  { var ss=document.getElementById('songSub'); if(ss) ss.textContent=d.sub; }
+      if(d.memoriesHeading){ var mht=document.getElementById('memoriesTitle'); if(mht) mht.textContent=d.memoriesHeading; }
       if(d.sender){
         var sn=document.getElementById('letterSenderName');
         var signText=(d.sign||'').toLowerCase();
