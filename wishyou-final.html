@@ -509,10 +509,17 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <select id="relSelect" onchange="onRelChange(this.value)" style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 15px center;">
         <option value="">Select relationship...</option>
         <option value="Romantic Partner">💕 Romantic Partner</option>
+        <option value="Husband">💍 Husband</option>
+        <option value="Wife">💍 Wife</option>
         <option value="Best Friend">🤝 Best Friend</option>
         <option value="Mom">🌸 Mom</option>
         <option value="Dad">👨 Dad</option>
+        <option value="Son">👦 Son</option>
+        <option value="Daughter">👧 Daughter</option>
         <option value="Sibling">👫 Sibling</option>
+        <option value="Cousin">🤗 Cousin</option>
+        <option value="Grandfather">👴 Grandfather</option>
+        <option value="Grandmother">👵 Grandmother</option>
         <option value="Colleague">💼 Colleague</option>
         <option value="Childhood Friend">🧒 Childhood Friend</option>
         <option value="Teacher">📚 Teacher</option>
@@ -1752,7 +1759,7 @@ async function runPersonalisation() {
   try {
     var text = await callClaude(
       'Write a short, heartfelt birthday letter (3-4 sentences) for my ' + selectedRelationship +
-      ' named ' + name + '. The tone should match the relationship — romantic and deep for a partner, warm and fun for a best friend, grateful for mom/dad. Return ONLY the letter text, no greeting line like Dear X, no sign off, just the body.'
+      ' named ' + name + '. The tone should match the relationship — romantic and deep for a partner/husband/wife, warm and fun for a best friend, grateful and loving for mom/dad, proud and encouraging for son/daughter, nostalgic for childhood friend, respectful for teacher/colleague, warm for grandparents/cousin/sibling. Return ONLY the letter text, no greeting line like Dear X, no sign off, just the body.'
     );
     if(text) document.getElementById('cMsg').value = text.trim();
   } catch(e) {
