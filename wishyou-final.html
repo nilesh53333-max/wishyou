@@ -469,6 +469,10 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       </div>
       <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
       <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0;display:none;" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
+      <div id="receiverEndCTA" style="display:none;margin-top:14px;text-align:center;">
+        <div style="font-size:0.78rem;color:var(--mid);margin-bottom:10px;line-height:1.6;">Want to send someone a card like this? 💝</div>
+        <a href="https://wishyou.ai" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:50px;font-size:0.88rem;font-weight:600;text-decoration:none;box-shadow:0 4px 16px rgba(233,30,99,0.35);">Create your own on WishYou.ai ✨</a>
+      </div>
     </div>
   </div>
 </div>
@@ -632,7 +636,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <button onclick="searchYouTube()" style="padding:13px 18px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:14px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;touch-action:manipulation;">🔍 Search</button>
       </div>
       <div id="ytSearchResults" style="margin-bottom:8px;"></div>
-      <div id="ytSelectedSong" style="display:none;background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:14px;padding:12px 14px;margin-bottom:8px;display:none;">
+      <div id="ytSelectedSong" style="display:none;background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
         <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-bottom:4px;">NOW PLAYING ON CARD</div>
         <div id="ytSelectedName" style="font-size:0.88rem;font-weight:600;color:white;"></div>
       </div>
@@ -696,6 +700,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
 // ── SWIPE NAVIGATION ─────────────────────────────────────
 var SCREEN_ORDER = ['s-welcome','s-memories','s-song','s-envelope','s-letter'];
 var _swStartX = 0, _swStartY = 0, _swStartTime = 0;
+var isReceiver = false; // true when card is loaded from a shared URL
 
 function _onTouchStart(e) {
   if(e.touches.length !== 1) return;
@@ -898,12 +903,16 @@ function typewriterLetter(){
   var el = document.getElementById('letterBody');
   if(!el) return;
   var fullText = el.getAttribute('data-full') || el.textContent;
-  // Store original text on first run
-  if(!el.getAttribute('data-full')){
-    el.setAttribute('data-full', fullText);
-  }
-  // Clear any running animation
+  if(!el.getAttribute('data-full')) el.setAttribute('data-full', fullText);
   if(_twTimer){ clearTimeout(_twTimer); _twTimer = null; }
+
+  // Demo mode — show instantly, no animation
+  if(!isReceiver){
+    el.textContent = fullText;
+    return;
+  }
+
+  // Real card — typewriter animation
   el.textContent = '';
   var cursor = document.createElement('span');
   cursor.className = 'letter-cursor';
@@ -916,7 +925,6 @@ function typewriterLetter(){
       i++;
       _twTimer = setTimeout(type, speed);
     } else {
-      // Remove cursor when done
       setTimeout(function(){ if(cursor.parentNode) cursor.parentNode.removeChild(cursor); }, 800);
     }
   }
@@ -1414,10 +1422,12 @@ function shareWhatsApp(){
           document.getElementById('shareLinkText').textContent = shortUrl;
           document.getElementById('shareConfirm').classList.add('open');
 
-          // Show upsell after 2 seconds
-          setTimeout(function(){
-            document.getElementById('upsellModal').classList.add('open');
-          }, 2000);
+          // Show upsell after 2 seconds — creator only, never receiver
+          if(!isReceiver){
+            setTimeout(function(){
+              document.getElementById('upsellModal').classList.add('open');
+            }, 2000);
+          }
 
           if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
 
@@ -1440,7 +1450,7 @@ function openWhatsAppShare(){
   var name = window._lastShareName || '';
   var sender = window._lastShareSender || '';
   var greeting = name ? 'Happy Birthday, ' + name + '!' : 'Happy Birthday!';
-  var fromLine = sender ? 'From ' + sender + ', with love 💕' : 'Someone special made this for you 💕';
+  var fromLine = sender ? 'From ' + sender + ', with love \uD83D\uDC95' : 'Someone special made this for you \uD83D\uDC95';
   var waMsg = '\uD83C\uDF82 ' + greeting + '\n\n' +
     fromLine + '\n\n' +
     '\uD83C\uDF81 Open your birthday surprise:\n' +
@@ -1526,6 +1536,15 @@ function loadCardFromURL(){
   var cardId = params.get('card');
   if(!cardId) return;
 
+  // Immediately hide creator-only UI to prevent flash
+  isReceiver = true;
+  var ob = document.getElementById('openCardBtn');
+  if(ob){ ob.textContent = 'Loading... \uD83D\uDC9D'; ob.disabled = true; }
+  var cw = document.getElementById('custBtnWelcome');
+  if(cw) cw.style.display = 'none';
+  var dn = document.getElementById('demoNotice');
+  if(dn) dn.style.display = 'none';
+
   // Run sweep silently in background
   sweepExpiredCards();
 
@@ -1580,6 +1599,9 @@ function loadCardFromURL(){
       });
       var demo = document.getElementById('demoNotice');
       if(demo) demo.style.display = 'none';
+      // Show receiver end CTA on letter screen
+      var rCTA = document.getElementById('receiverEndCTA');
+      if(rCTA) rCTA.style.display = 'block';
       // Change button from Demo Card to Open Card for receiver
       var ob2 = document.getElementById('openCardBtn');
       if(ob2) ob2.textContent = 'Open Card \u2728';
