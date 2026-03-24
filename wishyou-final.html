@@ -19,7 +19,71 @@
 <meta name="twitter:card" content="summary_large_image">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--pink:#e91e63;--pink2:#f06292;--pink3:#fce4ec;--pink4:#fff0f5;--dark:#4a0e2a;--mid:#8d3a5a;--bg:linear-gradient(160deg,#fde8f0 0%,#fce4ec 40%,#fdf0f5 100%);--card-bg:rgba(255,255,255,0.88);--shadow:0 20px 60px rgba(233,30,99,0.18);--r:26px;}
+:root{--pink:#e91e63;--pink2:#f06292;--pink3:#fce4ec;--pink4:#fff0f5;--dark:#4a0e2a;--mid:#8d3a5a;--bg:linear-gradient(160deg,#fde8f0 0%,#fce4ec 40%,#fdf0f5 100%);--card-bg:rgba(255,255,255,0.88);--shadow:0 20px 60px rgba(233,30,99,0.18);--r:26px;--heart-color1:❤️;--theme-name:Rose;}
+
+/* 🌙 Midnight Theme */
+body.theme-midnight{background:linear-gradient(160deg,#0d0618 0%,#150d2e 50%,#0a0414 100%)!important;}
+body.theme-midnight .app{background:transparent;}
+body.theme-midnight .card{background:rgba(20,10,40,0.92)!important;border-color:rgba(147,51,234,0.3)!important;box-shadow:0 20px 60px rgba(147,51,234,0.25)!important;}
+body.theme-midnight .screen-title,body.theme-midnight .letter-dear{color:#e9d5ff!important;}
+body.theme-midnight .screen-sub,body.theme-midnight .letter-body,body.theme-midnight .song-artist{color:rgba(233,213,255,0.65)!important;}
+body.theme-midnight .btn-primary{background:linear-gradient(135deg,#7c3aed,#9d52f5)!important;box-shadow:0 6px 24px rgba(124,58,237,0.5)!important;}
+body.theme-midnight .btn-outline{background:rgba(124,58,237,0.1)!important;color:#c084fc!important;border-color:rgba(124,58,237,0.3)!important;}
+body.theme-midnight .letter-page{background:rgba(15,8,30,0.95)!important;border-top-color:#7c3aed!important;}
+body.theme-midnight .letter-sign{color:#c084fc!important;}
+body.theme-midnight .back-btn{background:rgba(124,58,237,0.15)!important;border-color:rgba(124,58,237,0.2)!important;color:#c084fc!important;}
+body.theme-midnight .wm a{color:#c084fc!important;}
+body.theme-midnight .song-card{background:linear-gradient(135deg,#0d0618,#1e0a3c)!important;}
+body.theme-midnight .pdot{background:rgba(124,58,237,0.25)!important;}
+body.theme-midnight .pdot.active{background:#7c3aed!important;}
+body.theme-midnight .pdot.done{background:#9d52f5!important;}
+@media(min-width:500px){body.theme-midnight{background:linear-gradient(135deg,#0d0618,#150d2e,#0a0414)!important;}}
+
+/* 🌸 Sakura Theme */
+body.theme-sakura{background:linear-gradient(160deg,#fef0f5 0%,#fce8f3 40%,#fff5f8 100%)!important;}
+body.theme-sakura .card{background:rgba(255,248,252,0.92)!important;border-color:rgba(255,182,193,0.5)!important;box-shadow:0 20px 60px rgba(255,105,180,0.15)!important;}
+body.theme-sakura .screen-title,body.theme-sakura .letter-dear{color:#831843!important;}
+body.theme-sakura .screen-sub{color:#9d4e6f!important;}
+body.theme-sakura .btn-primary{background:linear-gradient(135deg,#ec4899,#f472b6)!important;box-shadow:0 6px 24px rgba(236,72,153,0.4)!important;}
+body.theme-sakura .btn-outline{color:#ec4899!important;border-color:rgba(236,72,153,0.3)!important;}
+body.theme-sakura .letter-page{border-top-color:#ec4899!important;}
+body.theme-sakura .letter-sign{color:#ec4899!important;}
+body.theme-sakura .pdot{background:rgba(236,72,153,0.2)!important;}
+body.theme-sakura .pdot.active{background:#ec4899!important;}
+body.theme-sakura .pdot.done{background:#f472b6!important;}
+@media(min-width:500px){body.theme-sakura{background:linear-gradient(135deg,#fce8f3,#fef0f5,#fff0f8)!important;}}
+
+/* 🌊 Ocean Theme */
+body.theme-ocean{background:linear-gradient(160deg,#e0f2fe 0%,#bae6fd 40%,#e0f7fa 100%)!important;}
+body.theme-ocean .card{background:rgba(240,249,255,0.92)!important;border-color:rgba(14,165,233,0.25)!important;box-shadow:0 20px 60px rgba(14,165,233,0.2)!important;}
+body.theme-ocean .screen-title,body.theme-ocean .letter-dear{color:#0c4a6e!important;}
+body.theme-ocean .screen-sub{color:#075985!important;}
+body.theme-ocean .btn-primary{background:linear-gradient(135deg,#0284c7,#38bdf8)!important;box-shadow:0 6px 24px rgba(2,132,199,0.45)!important;}
+body.theme-ocean .btn-outline{color:#0284c7!important;border-color:rgba(2,132,199,0.3)!important;}
+body.theme-ocean .letter-page{border-top-color:#0284c7!important;}
+body.theme-ocean .letter-sign{color:#0284c7!important;}
+body.theme-ocean .song-card{background:linear-gradient(135deg,#0c2a3e,#0e4d6e)!important;}
+body.theme-ocean .pdot{background:rgba(2,132,199,0.2)!important;}
+body.theme-ocean .pdot.active{background:#0284c7!important;}
+body.theme-ocean .pdot.done{background:#38bdf8!important;}
+body.theme-ocean .back-btn{border-color:rgba(2,132,199,0.2)!important;color:#0284c7!important;}
+@media(min-width:500px){body.theme-ocean{background:linear-gradient(135deg,#e0f2fe,#bae6fd,#e0f7fa)!important;}}
+
+/* 🔥 Ember Theme */
+body.theme-ember{background:linear-gradient(160deg,#fff7ed 0%,#ffedd5 40%,#fffbeb 100%)!important;}
+body.theme-ember .card{background:rgba(255,252,245,0.92)!important;border-color:rgba(249,115,22,0.25)!important;box-shadow:0 20px 60px rgba(249,115,22,0.18)!important;}
+body.theme-ember .screen-title,body.theme-ember .letter-dear{color:#7c2d12!important;}
+body.theme-ember .screen-sub{color:#9a3412!important;}
+body.theme-ember .btn-primary{background:linear-gradient(135deg,#ea580c,#fb923c)!important;box-shadow:0 6px 24px rgba(234,88,12,0.45)!important;}
+body.theme-ember .btn-outline{color:#ea580c!important;border-color:rgba(234,88,12,0.3)!important;}
+body.theme-ember .letter-page{border-top-color:#ea580c!important;}
+body.theme-ember .letter-sign{color:#ea580c!important;}
+body.theme-ember .song-card{background:linear-gradient(135deg,#1c0a00,#3d1500)!important;}
+body.theme-ember .pdot{background:rgba(234,88,12,0.2)!important;}
+body.theme-ember .pdot.active{background:#ea580c!important;}
+body.theme-ember .pdot.done{background:#fb923c!important;}
+body.theme-ember .back-btn{border-color:rgba(234,88,12,0.2)!important;color:#ea580c!important;}
+@media(min-width:500px){body.theme-ember{background:linear-gradient(135deg,#fff7ed,#ffedd5,#fffbeb)!important;}}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{height:100%;overflow:hidden;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;}
@@ -538,12 +602,12 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     </div>
     <div class="field-group">
       <label class="field-label">Your Name (Sender)</label>
-      <input type="text" id="cSender" placeholder="e.g. Aryan" maxlength="30" oninput="var et=document.getElementById('envTitle');if(et)et.innerHTML=this.value.trim()?this.value.trim()+' wrote a letter<br>for you... 💌':'I wrote a letter<br>for you... 💌';">
+      <input type="text" id="cSender" placeholder="e.g. Aryan" maxlength="30" oninput="var et=document.getElementById('envTitle');if(et)et.innerHTML=this.value.trim()?this.value.trim()+' wrote a letter<br>for you... \uD83D\uDC8C':'I wrote a letter<br>for you... \uD83D\uDC8C';">
     </div>
 
     <!-- PHOTOS -->
     <div class="field-group">
-      <label class="field-label">Memories Photos (up to 5)</label>
+      <label class="field-label">Your Photos (up to 5)</label>
       <label style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;padding:28px 16px;border:2px dashed rgba(233,30,99,0.4);border-radius:18px;background:var(--pink4);cursor:pointer;position:relative;overflow:hidden;transition:background 0.2s;">
         <span style="font-size:2.2rem">📸</span>
         <span id="photoUploadText" style="font-size:0.9rem;color:var(--mid);font-weight:500;text-align:center;">Tap to select photos<br><span style="font-size:0.78rem;opacity:0.7;">You can add one at a time or select multiple</span></span>
@@ -661,8 +725,40 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <input type="hidden" id="cSpotify">
     </div>
 
+    <!-- CARD THEME -->
+    <div class="field-group">
+      <label class="field-label">🎨 Card Theme</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div onclick="setTheme('')" id="theme-rose" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid var(--pink);background:linear-gradient(135deg,#fde8f0,#fce4ec);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">🌹</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#4a0e2a;">Rose</div>
+          <div style="font-size:0.62rem;color:#8d3a5a;">Default</div>
+        </div>
+        <div onclick="setTheme('midnight')" id="theme-midnight" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#150d2e,#1e0a3c);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">🌙</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#e9d5ff;">Midnight</div>
+          <div style="font-size:0.62rem;color:#c084fc;">Dark & Romantic</div>
+        </div>
+        <div onclick="setTheme('sakura')" id="theme-sakura" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#fce8f3,#fdf2f8);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">🌸</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#831843;">Sakura</div>
+          <div style="font-size:0.62rem;color:#9d4e6f;">Soft & Gentle</div>
+        </div>
+        <div onclick="setTheme('ocean')" id="theme-ocean" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#e0f2fe,#bae6fd);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">🌊</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#0c4a6e;">Ocean</div>
+          <div style="font-size:0.62rem;color:#075985;">Cool & Serene</div>
+        </div>
+        <div onclick="setTheme('ember')" id="theme-ember" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#fff7ed,#ffedd5);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">🔥</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#7c2d12;">Ember</div>
+          <div style="font-size:0.62rem;color:#9a3412;">Warm & Passionate</div>
+        </div>
+      </div>
+    </div>
+
     <div class="preview-bar">
-      <button class="btn btn-primary" onclick="ripple(event);saveAndBack()" style="margin-bottom:8px">👁️ Preview Card</button>
+      <button class="btn btn-primary" onclick="ripple(event);saveAndBack()" style="margin-bottom:8px">💾 Save &amp; Preview</button>
       <button class="btn btn-wa" style="margin-bottom:0" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
     </div>
   </div>
@@ -1236,9 +1332,7 @@ async function searchYouTube() {
   var query = document.getElementById('ytSearchInput').value.trim();
   if(!query) { alert('Please type a song name first.'); return; }
   var resultsDiv = document.getElementById('ytSearchResults');
-  resultsDiv.innerHTML = '<div style="text-align:center;padding:16px 12px;font-size:0.88rem;color:var(--pink);font-weight:600;background:var(--pink4);border-radius:12px;border:1.5px solid rgba(233,30,99,0.15);">🔍 Searching YouTube...<br><span style="font-size:0.72rem;color:var(--mid);font-weight:400;">Results will appear here</span></div>';
-  // Scroll to results immediately so user sees the loading state
-  setTimeout(function(){ resultsDiv.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
+  resultsDiv.innerHTML = '<div style="text-align:center;padding:12px;font-size:0.82rem;color:var(--mid);">🔍 Searching YouTube...</div>';
   try {
     var res = await fetch('https://wild-fog-b15e.nilesh53333.workers.dev/', {
       method: 'POST',
@@ -1276,8 +1370,6 @@ async function searchYouTube() {
       };
       resultsDiv.appendChild(card);
     });
-    // Scroll to results now that they're loaded
-    setTimeout(function(){ resultsDiv.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
   } catch(e) {
     console.error('Search error:', e.message);
     resultsDiv.innerHTML = '<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Search failed. Please try again.</div>';
@@ -1316,6 +1408,8 @@ function saveAndBack(){
   var mhEl=document.getElementById('cMemoriesHeading');
   var mtEl=document.getElementById('memoriesTitle');
   if(mhEl&&mtEl) mtEl.textContent=mhEl.value||'Our Memories 📸';
+  // Apply selected theme
+  setTheme(currentTheme);
   document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
   var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Preview Card ✨';
   document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
@@ -1403,6 +1497,7 @@ function shareWhatsApp(){
         spotify: spotifyInput ? spotifyInput.value.trim() : '',
         photos: photoUrls.filter(function(u){ return u; }),
         memoriesHeading: (document.getElementById('cMemoriesHeading')||{value:'Our Memories 📸'}).value||'Our Memories 📸',
+        theme: currentTheme||'',
         created: now,
         createdAt: now,
         expiresAt: now + (3 * 24 * 60 * 60 * 1000)
@@ -1543,13 +1638,16 @@ function showExpiredScreen(){
 
 // ── AUTO-DELETE: background sweep of all expired cards ────
 function sweepExpiredCards(){
-  fetch(FIREBASE_URL + '.json?orderBy=%22expiresAt%22&endAt=' + Date.now() + '&limitToLast=50')
+  fetch(FIREBASE_URL + '.json?limitToLast=100')
     .then(function(r){ return r.json(); })
     .then(function(data){
       if(!data) return;
+      var now = Date.now();
       var updates = {};
       Object.keys(data).forEach(function(key){
-        updates[key] = null;
+        if(data[key] && data[key].expiresAt && data[key].expiresAt < now){
+          updates[key] = null;
+        }
       });
       if(Object.keys(updates).length === 0) return;
       return fetch(FIREBASE_URL + '.json', {
@@ -1558,7 +1656,7 @@ function sweepExpiredCards(){
         body: JSON.stringify(updates)
       });
     })
-    .catch(function(){}); // silent — never break the card experience
+    .catch(function(){});
 }
 
 function loadCardFromURL(){
@@ -1640,6 +1738,7 @@ function loadCardFromURL(){
       if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
       if(d.sub)  { var ss=document.getElementById('songSub'); if(ss) ss.textContent=d.sub; }
       if(d.memoriesHeading){ var mht=document.getElementById('memoriesTitle'); if(mht) mht.textContent=d.memoriesHeading; }
+      if(d.theme){ setTheme(d.theme); }
       if(d.sender){
         var sn=document.getElementById('letterSenderName');
         var signText=(d.sign||'').toLowerCase();
@@ -1676,6 +1775,30 @@ window.addEventListener('DOMContentLoaded', loadCardFromURL);
 // ══════════════════════════════════════════════════════
 // AI FEATURES — Anthropic API
 // ══════════════════════════════════════════════════════
+
+// ── THEMES ────────────────────────────────────────────
+var currentTheme = '';
+var THEMES = ['','midnight','sakura','ocean','ember'];
+var THEME_BORDERS = {
+  '': '#e91e63',
+  'midnight': '#7c3aed',
+  'sakura': '#ec4899',
+  'ocean': '#0284c7',
+  'ember': '#ea580c'
+};
+
+function setTheme(name){
+  // Remove all theme classes
+  THEMES.forEach(function(t){ if(t) document.body.classList.remove('theme-'+t); });
+  if(name) document.body.classList.add('theme-'+name);
+  currentTheme = name;
+  // Update UI selection borders
+  THEMES.forEach(function(t){
+    var el = document.getElementById('theme-'+(t||'rose'));
+    if(!el) return;
+    el.style.border = (t === name) ? '2px solid '+(THEME_BORDERS[t]||THEME_BORDERS['']) : '2px solid transparent';
+  });
+}
 
 var selectedRelationship = '';
 
@@ -1845,7 +1968,10 @@ async function runSongSuggestions() {
         // Auto-fill the search box and search
         document.getElementById('ytSearchInput').value = s.name + ' ' + s.artist;
         searchYouTube();
-        // searchYouTube now handles scrolling automatically
+        // Scroll down to results
+        setTimeout(function(){
+          el.scrollIntoView({behavior:'smooth', block:'nearest'});
+        }, 300);
       };
       results.appendChild(el);
     });
