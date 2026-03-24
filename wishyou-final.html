@@ -467,7 +467,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div class="letter-sign" id="letterSign">Forever yours 💕</div>
         <div class="letter-sender-name" id="letterSenderName"></div>
       </div>
-      <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Personalise This Card</button>
+      <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Edit Letter</button>
       <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0;display:none;" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
       <div id="receiverEndCTA" style="display:none;margin-top:14px;text-align:center;">
         <div style="font-size:0.78rem;color:var(--mid);margin-bottom:10px;line-height:1.6;">Want to send someone a card like this? 💝</div>
@@ -1599,15 +1599,12 @@ function loadCardFromURL(){
       });
       var demo = document.getElementById('demoNotice');
       if(demo) demo.style.display = 'none';
-      // Re-enable and relabel the open card button now that data is loaded
-      var obFinal = document.getElementById('openCardBtn');
-      if(obFinal){ obFinal.textContent = 'Open Card \u2728'; obFinal.disabled = false; }
       // Show receiver end CTA on letter screen
       var rCTA = document.getElementById('receiverEndCTA');
       if(rCTA) rCTA.style.display = 'block';
       // Change button from Demo Card to Open Card for receiver
       var ob2 = document.getElementById('openCardBtn');
-      if(ob2) ob2.textContent = 'Open Card \u2728';
+      if(ob2){ ob2.textContent = 'Open Card \u2728'; ob2.disabled = false; }
 
       if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb){ lb.textContent=d.msg; lb.setAttribute('data-full',d.msg); } }
       if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
@@ -1638,10 +1635,10 @@ function loadCardFromURL(){
       }
     })
     .catch(function(){
-      // Re-enable button on error so user isn't stuck
       var ob = document.getElementById('openCardBtn');
       if(ob){ ob.textContent = 'Open Card \u2728'; ob.disabled = false; }
     });
+}
 
 window.addEventListener('DOMContentLoaded', loadCardFromURL);
 
