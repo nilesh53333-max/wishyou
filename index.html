@@ -4,6 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WishYou.ai — Send Love, Beautifully</title>
+
+<!-- Favicon -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+
+<!-- SEO & OG tags for WhatsApp/social sharing -->
+<meta name="description" content="Send interactive birthday cards with photos, music & heartfelt letters. Make someone feel truly special with WishYou.ai">
+<meta name="keywords" content="birthday card, interactive card, digital card, birthday wishes, AI card">
+<meta property="og:title" content="WishYou.ai — Send Love, Beautifully">
+<meta property="og:description" content="Interactive cards that feel like a real gift — with photos, music, letters & moments that make them feel truly special.">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<meta property="og:url" content="https://wishyou.ai">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WishYou.ai — Send Love, Beautifully">
+<meta name="twitter:description" content="Interactive cards that feel like a real gift — with photos, music & letters.">
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -421,7 +438,50 @@ body::before {
   to{opacity:1;transform:translateY(0);}
 }
 
-/* ── Mobile ── */
+/* ── Toast notification ── */
+.toast {
+  position:fixed;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:rgba(20,10,15,0.95);
+  border:1px solid rgba(232,41,90,0.3);
+  color:var(--text-primary);
+  padding:12px 22px;
+  border-radius:100px;
+  font-size:0.82rem;
+  font-weight:500;
+  z-index:1000;
+  white-space:nowrap;
+  backdrop-filter:blur(20px);
+  transition:transform 0.35s cubic-bezier(.34,1.26,.64,1), opacity 0.35s;
+  opacity:0;
+  pointer-events:none;
+}
+.toast.show {
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+/* ── Instagram link ── */
+.footer-links {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-top:10px;
+}
+.footer-links a {
+  font-size:0.68rem;
+  color:rgba(245,238,240,0.3);
+  text-decoration:none;
+  letter-spacing:0.05em;
+  transition:color 0.2s;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.footer-links a:hover { color:rgba(245,238,240,0.7); }
 @media(max-width:520px){
   .grid{grid-template-columns:1fr 1fr;gap:10px;}
   .hero{padding:70px 16px 50px;}
@@ -470,31 +530,31 @@ body::before {
         <div class="occ-desc">Make their day unforgettable</div>
         <span class="occ-badge badge-live">✦ Live Now</span>
       </div>
-      <div class="occ-card occ-anniversary coming-soon">
+      <div class="occ-card occ-anniversary coming-soon" onclick="showComingSoon(this)">
         <span class="occ-emoji">💍</span>
         <div class="occ-name">Anniversary</div>
         <div class="occ-desc">Celebrate your forever</div>
         <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-      <div class="occ-card occ-valentine coming-soon">
+      <div class="occ-card occ-valentine coming-soon" onclick="showComingSoon(this)">
         <span class="occ-emoji">💘</span>
         <div class="occ-name">Valentine's</div>
         <div class="occ-desc">Say it with your whole heart</div>
         <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-      <div class="occ-card occ-friendship coming-soon">
+      <div class="occ-card occ-friendship coming-soon" onclick="showComingSoon(this)">
         <span class="occ-emoji">🤝</span>
         <div class="occ-name">Friendship</div>
         <div class="occ-desc">Because friends deserve magic</div>
         <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-      <div class="occ-card occ-mother coming-soon">
+      <div class="occ-card occ-mother coming-soon" onclick="showComingSoon(this)">
         <span class="occ-emoji">🌸</span>
         <div class="occ-name">Mother's Day</div>
         <div class="occ-desc">Thank her the right way</div>
         <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-      <div class="occ-card occ-custom coming-soon">
+      <div class="occ-card occ-custom coming-soon" onclick="showComingSoon(this)">
         <span class="occ-emoji">✨</span>
         <div class="occ-name">Custom</div>
         <div class="occ-desc">Any reason to celebrate</div>
@@ -512,8 +572,16 @@ body::before {
 
 <footer class="footer">
   <div class="footer-logo">WishYou.ai</div>
-  <div class="footer-sub">Interactive digital cards that feel real &nbsp;·&nbsp; 2025</div>
+  <div class="footer-sub">Interactive digital cards that feel real &nbsp;·&nbsp; 2026</div>
+  <div class="footer-links">
+    <a href="https://instagram.com/wishyou.ai" target="_blank" rel="noopener">📸 Instagram</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="mailto:hello@wishyou.ai">✉️ Contact</a>
+  </div>
 </footer>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
 
 <script>
 // Floating hearts
@@ -529,6 +597,17 @@ for(let i = 0; i < 16; i++){
 
 function openBirthdayCard(){
   window.location.href = 'wishyou-final.html';
+}
+
+// Toast for coming soon cards
+var _toastTimer = null;
+function showComingSoon(el) {
+  var name = el.querySelector('.occ-name') ? el.querySelector('.occ-name').textContent : 'This';
+  var toast = document.getElementById('toast');
+  toast.textContent = name + ' cards coming soon! 🎂 Birthday cards are live now';
+  toast.classList.add('show');
+  if(_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2800);
 }
 </script>
 </body>
