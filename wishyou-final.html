@@ -41,7 +41,63 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 
 /* fan wrap */
-.pol-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:4px 0;}
+/* ── BALLOON PHOTO ANIMATION ── */
+.balloon-wrap{position:relative;width:100%;min-height:220px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:10px 4px 4px;}
+.balloon-card{
+  flex:0 0 auto;
+  width:calc(33% - 8px);
+  position:relative;
+  cursor:pointer;
+  animation:balloonFloat ease-in-out infinite;
+  touch-action:manipulation;
+}
+.balloon-card:nth-child(1){animation-duration:3.2s;animation-delay:0s;}
+.balloon-card:nth-child(2){animation-duration:2.8s;animation-delay:0.4s;}
+.balloon-card:nth-child(3){animation-duration:3.5s;animation-delay:0.2s;}
+.balloon-card:nth-child(4){animation-duration:3.0s;animation-delay:0.6s;}
+.balloon-card:nth-child(5){animation-duration:2.6s;animation-delay:0.3s;}
+@keyframes balloonFloat{
+  0%,100%{transform:translateY(0) rotate(-2deg);}
+  50%{transform:translateY(-10px) rotate(2deg);}
+}
+.balloon-string{
+  width:2px;height:24px;
+  background:linear-gradient(to bottom,rgba(233,30,99,0.4),transparent);
+  margin:0 auto;
+  border-radius:1px;
+}
+.balloon-photo{
+  width:100%;
+  aspect-ratio:3/4;
+  border-radius:50% 50% 45% 45%;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(233,30,99,0.25);
+  border:3px solid white;
+  position:relative;
+}
+.balloon-photo img{
+  width:100%;height:100%;object-fit:cover;
+  filter:sepia(0.3) saturate(1.4) brightness(1.06);
+}
+.balloon-photo::after{
+  content:'';
+  position:absolute;
+  top:8%;left:15%;
+  width:30%;height:20%;
+  background:rgba(255,255,255,0.35);
+  border-radius:50%;
+  transform:rotate(-30deg);
+  pointer-events:none;
+}
+.balloon-card:nth-child(odd) .balloon-photo{background:linear-gradient(135deg,#ff6b9d,#e91e63);}
+.balloon-card:nth-child(even) .balloon-photo{background:linear-gradient(135deg,#f48fb1,#e91e63);}
+.photo-fx-off .balloon-photo img{filter:none;}
+.photo-fx-off .balloon-card{animation:none;}
+/* 1 photo */
+.balloon-wrap.count-1 .balloon-card{width:55%;}
+/* 2 photos */
+.balloon-wrap.count-2 .balloon-card{width:44%;}
+
 .pol-card{
   flex:0 0 auto;
   width:calc(33% - 6px);
@@ -239,7 +295,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
     <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🌸</div>
     <div id="birthdayTodayBanner" style="display:none;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;font-weight:600;text-align:center;animation:fadeUp 0.5s both;">🎂 Today is the special day! Happy Birthday! 🎉</div>
-    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Preview Card ✨</button>
+    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Demo Card ✨</button>
     <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize Card</button>
     <div id="demoNotice" style="font-size:0.72rem;color:var(--mid);text-align:center;margin-top:8px;opacity:0.8;">👆 Customize first to add your photos, letter &amp; song</div>
   </div></div>
@@ -906,13 +962,16 @@ function buildSlides(){
   document.getElementById('photoPlaceholder').style.display='none';
   wrap.style.display='flex';
   var hasFxOff=wrap.classList.contains('photo-fx-off');
-  wrap.className='pol-wrap count-'+photos.length;
+  // Use balloon layout
+  wrap.className='balloon-wrap count-'+photos.length;
   if(hasFxOff) wrap.classList.add('photo-fx-off');
   document.getElementById('photoTapHint').style.display= photos.length ? 'block' : 'none';
   photos.forEach((url,i)=>{
     const card=document.createElement('div');
-    card.className='pol-card';
-    card.innerHTML=`<img src="${url}" alt="Memory ${i+1}"><div class="pol-label">Memory ${i+1}</div>`;
+    card.className='balloon-card';
+    card.innerHTML=
+      '<div class="balloon-photo"><img src="'+url+'" alt="Memory '+(i+1)+'"></div>'+
+      '<div class="balloon-string"></div>';
     card.addEventListener('click',()=>openExpand(i));
     wrap.appendChild(card);
   });
@@ -1255,12 +1314,17 @@ function shareWhatsApp(){
 
       if(btn) btn.textContent = 'Shortening link...';
 
-      // Shorten URL via is.gd — no preview page, instant redirect
-      fetch('https://is.gd/create.php?format=simple&url=' + encodeURIComponent(shareUrl))
-        .then(function(r){ return r.text(); })
+      // Shorten URL — try CleanURI first, fallback to full URL
+      fetch('https://cleanuri.com/api/v1/shorten', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'url=' + encodeURIComponent(shareUrl)
+      })
+        .then(function(r){ return r.json(); })
+        .then(function(j){ return (j && j.result_url) ? j.result_url : shareUrl; })
         .catch(function(){ return shareUrl; })
         .then(function(shortUrl){
-          shortUrl = (shortUrl && shortUrl.trim().indexOf('http') === 0) ? shortUrl.trim() : shareUrl;
+          shortUrl = (shortUrl && shortUrl.indexOf('http') === 0) ? shortUrl : shareUrl;
 
           // Store globally for re-share
           window._lastShortUrl = shortUrl;
@@ -1307,26 +1371,9 @@ function openWhatsAppShare(){
     '🎁 Open your birthday surprise:\n' +
     shortUrl + '\n\n' +
     '✨ Made with WishYou.ai';
-
-  // Try Web Share API first (best on mobile — opens native share sheet)
-  if(navigator.share){
-    navigator.share({ text: waMsg })
-      .catch(function(){});
-    return;
-  }
-
-  // Fallback: open WhatsApp via anchor without navigating away
-  var isIphone = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  var waUrl = isIphone
-    ? 'whatsapp://send?text=' + encodeURIComponent(waMsg)
-    : 'https://wa.me/?text=' + encodeURIComponent(waMsg);
-  var a = document.createElement('a');
-  a.href = waUrl;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function(){ if(a.parentNode) a.parentNode.removeChild(a); }, 300);
+  // wa.me works on all platforms including desktop
+  var waUrl = 'https://wa.me/?text=' + encodeURIComponent(waMsg);
+  window.open(waUrl, '_blank');
 }
 
 function shareInstagram(){
@@ -1447,12 +1494,15 @@ function loadCardFromURL(){
         }
       }
 
-      // ── Fix 9: Receiver mode — hide demo notice + customize
-      ['custBtnWelcome','custBtnMemories','custBtnSong','custBtnEnvelope','custBtnLetter'].forEach(function(id){
+      // ── Receiver mode — hide customize + share buttons ────
+      ['custBtnWelcome','custBtnMemories','custBtnSong','custBtnEnvelope','custBtnLetter','shareCardBtn'].forEach(function(id){
         var el=document.getElementById(id); if(el) el.style.display='none';
       });
       var demo = document.getElementById('demoNotice');
       if(demo) demo.style.display = 'none';
+      // Change button from Demo Card to Open Card for receiver
+      var ob2 = document.getElementById('openCardBtn');
+      if(ob2) ob2.textContent = 'Open Card \u2728';
 
       if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb) lb.textContent=d.msg; }
       if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
