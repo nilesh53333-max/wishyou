@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WishYou.ai — Admin</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0608;
+  --card: #130c10;
+  --card2: #1a1018;
+  --pink: #e91e63;
+  --pink2: #f06292;
+  --pink-dim: rgba(233,30,99,0.12);
+  --pink-glow: rgba(233,30,99,0.25);
+  --text: #f5eef0;
+  --text2: rgba(245,238,240,0.6);
+  --text3: rgba(245,238,240,0.35);
+  --border: rgba(233,30,99,0.15);
+  --green: #4caf87;
+  --amber: #f0a050;
+  --r: 16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100vh;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);}
+
+/* ── Login screen ── */
+#loginScreen {
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 30% 40%, rgba(233,30,99,0.12) 0%, transparent 60%),
+             radial-gradient(ellipse at 80% 70%, rgba(233,30,99,0.06) 0%, transparent 50%),
+             var(--bg);
+}
+.login-box {
+  background:var(--card);border:1px solid var(--border);border-radius:24px;
+  padding:40px 36px;width:100%;max-width:360px;text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,0.6);
+}
+.login-logo {font-size:2.5rem;margin-bottom:16px;display:block;}
+.login-title {font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--text);margin-bottom:4px;}
+.login-sub {font-size:0.8rem;color:var(--text3);margin-bottom:28px;letter-spacing:0.05em;}
+.login-input {
+  width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;font-size:0.95rem;color:var(--text);
+  font-family:'DM Mono',monospace;outline:none;text-align:center;letter-spacing:0.15em;
+  transition:border-color 0.2s;margin-bottom:14px;
+}
+.login-input:focus{border-color:var(--pink);}
+.login-btn {
+  width:100%;padding:14px;background:linear-gradient(135deg,var(--pink),var(--pink2));
+  color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:600;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity 0.2s;
+}
+.login-btn:hover{opacity:0.9;}
+.login-err {font-size:0.78rem;color:#ff6b9d;margin-top:8px;min-height:20px;}
+
+/* ── Main dashboard ── */
+#dashboard {display:none;}
+.topbar {
+  padding:18px 28px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);background:var(--card);
+  position:sticky;top:0;z-index:10;
+}
+.topbar-logo {display:flex;align-items:center;gap:10px;}
+.topbar-logo span {font-size:1.4rem;}
+.topbar-logo h1 {font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text);}
+.topbar-logo small {font-size:0.6rem;color:var(--pink);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;display:block;margin-top:-2px;}
+.topbar-right {display:flex;align-items:center;gap:14px;}
+.refresh-btn {
+  padding:8px 18px;background:var(--pink-dim);border:1px solid var(--border);
+  border-radius:50px;font-size:0.78rem;color:var(--pink2);cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-weight:600;transition:all 0.2s;
+}
+.refresh-btn:hover{background:rgba(233,30,99,0.2);}
+.logout-btn {
+  padding:8px 16px;background:transparent;border:1px solid rgba(255,255,255,0.1);
+  border-radius:50px;font-size:0.75rem;color:var(--text3);cursor:pointer;
+  font-family:'DM Sans',sans-serif;transition:all 0.2s;
+}
+.logout-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.2);}
+
+.main {padding:28px;}
+
+/* ── Stats grid ── */
+.stats-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:28px;}
+.stat-card {
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:20px 18px;position:relative;overflow:hidden;
+}
+.stat-card::before {
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;
+  background:radial-gradient(ellipse at 50% 0%,rgba(233,30,99,0.1),transparent 65%);
+}
+.stat-card:hover::before{opacity:1;}
+.stat-icon {font-size:1.4rem;margin-bottom:10px;display:block;}
+.stat-val {font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;color:var(--text);line-height:1;}
+.stat-label {font-size:0.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-top:6px;}
+.stat-sub {font-size:0.72rem;color:var(--green);margin-top:4px;}
+
+/* ── Section ── */
+.section-title {
+  font-family:'Playfair Display',serif;font-size:1rem;color:var(--text2);
+  margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.section-title span{font-size:1.1rem;}
+
+/* ── Cards table ── */
+.cards-section {margin-bottom:28px;}
+.cards-table {width:100%;border-collapse:collapse;}
+.cards-table th {
+  text-align:left;font-size:0.65rem;color:var(--text3);text-transform:uppercase;
+  letter-spacing:0.12em;padding:10px 14px;border-bottom:1px solid var(--border);
+  font-weight:600;white-space:nowrap;
+}
+.cards-table td {
+  padding:12px 14px;border-bottom:1px solid rgba(233,30,99,0.06);
+  font-size:0.82rem;color:var(--text2);vertical-align:middle;
+}
+.cards-table tr:hover td{background:rgba(255,255,255,0.02);}
+.badge {
+  display:inline-block;padding:3px 10px;border-radius:50px;font-size:0.65rem;
+  font-weight:700;letter-spacing:0.06em;text-transform:uppercase;
+}
+.badge-active{background:rgba(76,175,135,0.15);color:var(--green);border:1px solid rgba(76,175,135,0.3);}
+.badge-expired{background:rgba(255,255,255,0.05);color:var(--text3);border:1px solid rgba(255,255,255,0.08);}
+.badge-views{background:var(--pink-dim);color:var(--pink2);border:1px solid var(--border);}
+.card-name {color:var(--text);font-weight:600;}
+.card-link {
+  color:var(--pink2);text-decoration:none;font-size:0.72rem;font-family:'DM Mono',monospace;
+  opacity:0.7;transition:opacity 0.2s;
+}
+.card-link:hover{opacity:1;}
+.no-photos {color:var(--text3);font-style:italic;}
+
+/* ── Charts row ── */
+.charts-row {display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;}
+@media(max-width:700px){.charts-row{grid-template-columns:1fr;}}
+.chart-card {
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;
+}
+.bar-item {margin-bottom:12px;}
+.bar-label {display:flex;justify-content:space-between;margin-bottom:5px;}
+.bar-label span:first-child{font-size:0.8rem;color:var(--text2);}
+.bar-label span:last-child{font-size:0.75rem;color:var(--pink2);font-family:'DM Mono',monospace;}
+.bar-track {height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.bar-fill {height:100%;border-radius:3px;background:linear-gradient(90deg,var(--pink),var(--pink2));transition:width 0.8s cubic-bezier(.4,0,.2,1);}
+
+/* ── Loading ── */
+.loading {text-align:center;padding:60px 20px;color:var(--text3);font-size:0.85rem;}
+.loading-dots span {
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--pink);margin:0 3px;animation:ldot 1.2s ease infinite;
+}
+.loading-dots span:nth-child(2){animation-delay:0.2s;}
+.loading-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes ldot{0%,100%{transform:scale(0.5);opacity:0.3;}50%{transform:scale(1.2);opacity:1;}}
+
+/* ── Scrollable table wrapper ── */
+.table-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--border);}
+
+/* ── Timeline ── */
+.timeline-bar{display:flex;gap:3px;align-items:flex-end;height:60px;margin-top:8px;}
+.t-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.t-bar{width:100%;border-radius:3px 3px 0 0;background:linear-gradient(to top,var(--pink),var(--pink2));min-height:2px;transition:height 0.6s;}
+.t-label{font-size:0.55rem;color:var(--text3);text-align:center;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.stat-card,.chart-card,.table-wrap{animation:fadeIn 0.5s both;}
+.stat-card:nth-child(1){animation-delay:0.05s;}
+.stat-card:nth-child(2){animation-delay:0.1s;}
+.stat-card:nth-child(3){animation-delay:0.15s;}
+.stat-card:nth-child(4){animation-delay:0.2s;}
+.stat-card:nth-child(5){animation-delay:0.25s;}
+
+@media(max-width:600px){
+  .main{padding:16px;}
+  .topbar{padding:14px 16px;}
+  .cards-table th,.cards-table td{padding:10px 10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <span class="login-logo">🔐</span>
+    <div class="login-title">Admin Access</div>
+    <div class="login-sub">WISHYOU.AI DASHBOARD</div>
+    <input type="password" class="login-input" id="pwInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Enter Dashboard</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-logo">
+      <span>💝</span>
+      <div>
+        <h1>WishYou.ai</h1>
+        <small>Admin Dashboard</small>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div id="loadingState" class="loading">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <div style="margin-top:12px;">Loading card data...</div>
+    </div>
+
+    <div id="dashContent" style="display:none;">
+
+      <!-- Stats -->
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <span class="stat-icon">🎂</span>
+          <div class="stat-val" id="statTotal">—</div>
+          <div class="stat-label">Total Cards Created</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">✅</span>
+          <div class="stat-val" id="statActive">—</div>
+          <div class="stat-label">Active Cards</div>
+          <div class="stat-sub" id="statActiveSub"></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">👀</span>
+          <div class="stat-val" id="statViews">—</div>
+          <div class="stat-label">Total Views</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📸</span>
+          <div class="stat-val" id="statPhotos">—</div>
+          <div class="stat-label">Cards with Photos</div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">🎵</span>
+          <div class="stat-val" id="statSongs">—</div>
+          <div class="stat-label">Cards with Songs</div>
+        </div>
+      </div>
+
+      <!-- Charts row -->
+      <div class="charts-row">
+
+        <!-- Relationship chart -->
+        <div class="chart-card">
+          <div class="section-title"><span>💕</span> Top Relationships</div>
+          <div id="relChart"><div style="color:var(--text3);font-size:0.8rem;">Not enough data yet</div></div>
+        </div>
+
+        <!-- Cards per day -->
+        <div class="chart-card">
+          <div class="section-title"><span>📅</span> Cards This Week</div>
+          <div class="timeline-bar" id="weekChart"></div>
+          <div style="font-size:0.7rem;color:var(--text3);margin-top:8px;text-align:right;" id="weekTotal"></div>
+        </div>
+
+      </div>
+
+      <!-- All cards table -->
+      <div class="cards-section">
+        <div class="section-title"><span>🗃️</span> All Cards <span style="font-size:0.75rem;color:var(--text3);font-family:'DM Mono',monospace;" id="cardCount"></span></div>
+        <div class="table-wrap">
+          <table class="cards-table">
+            <thead>
+              <tr>
+                <th>Receiver</th>
+                <th>Sender</th>
+                <th>Created</th>
+                <th>Expires</th>
+                <th>Status</th>
+                <th>Views</th>
+                <th>Photos</th>
+                <th>Song</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody id="cardsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /dashContent -->
+  </div>
+</div>
+
+<script>
+var FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+var ADMIN_PASSWORD = 'wishyou2026'; // Change this to your password
+var BASE_URL = 'https://wishyou.ai/wishyou-final.html';
+
+function doLogin(){
+  var pw = document.getElementById('pwInput').value;
+  if(pw === ADMIN_PASSWORD){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    sessionStorage.setItem('wadmin', '1');
+    loadData();
+  } else {
+    document.getElementById('loginErr').textContent = '❌ Incorrect password';
+    document.getElementById('pwInput').value = '';
+    setTimeout(function(){ document.getElementById('loginErr').textContent = ''; }, 2000);
+  }
+}
+
+function doLogout(){
+  sessionStorage.removeItem('wadmin');
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('pwInput').value = '';
+}
+
+// Auto-login if session active
+window.addEventListener('DOMContentLoaded', function(){
+  if(sessionStorage.getItem('wadmin') === '1'){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadData();
+  }
+});
+
+function loadData(){
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('dashContent').style.display = 'none';
+
+  fetch(FIREBASE_URL + '.json')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(!data){
+        document.getElementById('loadingState').innerHTML = '<div style="color:var(--text3);">No cards found yet.</div>';
+        document.getElementById('dashContent').style.display = 'block';
+        document.getElementById('loadingState').style.display = 'none';
+        return;
+      }
+      processData(data);
+    })
+    .catch(function(e){
+      document.getElementById('loadingState').innerHTML = '<div style="color:#ff6b9d;">Error loading data. Check Firebase connection.</div>';
+    });
+}
+
+function processData(data){
+  var now = Date.now();
+  var cards = [];
+  Object.keys(data).forEach(function(id){
+    var c = data[id];
+    c._id = id;
+    cards.push(c);
+  });
+
+  // Sort by created desc
+  cards.sort(function(a,b){ return (b.createdAt||b.created||0) - (a.createdAt||a.created||0); });
+
+  var total = cards.length;
+  var active = cards.filter(function(c){ return !c.expiresAt || c.expiresAt > now; }).length;
+  var totalViews = cards.reduce(function(s,c){ return s + (c.views||0); }, 0);
+  var withPhotos = cards.filter(function(c){ return c.photos && c.photos.length > 0; }).length;
+  var withSongs = cards.filter(function(c){ return c.spotify && c.spotify.trim(); }).length;
+
+  // Update stats
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statActive').textContent = active;
+  document.getElementById('statActiveSub').textContent = (total - active) + ' expired';
+  document.getElementById('statViews').textContent = totalViews;
+  document.getElementById('statPhotos').textContent = withPhotos;
+  document.getElementById('statSongs').textContent = withSongs;
+  document.getElementById('cardCount').textContent = '(' + total + ')';
+
+  // Relationship chart
+  var relCounts = {};
+  cards.forEach(function(c){
+    if(c.relationship){ relCounts[c.relationship] = (relCounts[c.relationship]||0) + 1; }
+  });
+  var relEl = document.getElementById('relChart');
+  var relEntries = Object.entries(relCounts).sort(function(a,b){ return b[1]-a[1]; }).slice(0,6);
+  var maxRel = relEntries.length ? relEntries[0][1] : 1;
+  if(relEntries.length){
+    relEl.innerHTML = relEntries.map(function(e){
+      var pct = Math.round((e[1]/maxRel)*100);
+      return '<div class="bar-item"><div class="bar-label"><span>'+e[0]+'</span><span>'+e[1]+'</span></div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%"></div></div></div>';
+    }).join('');
+  }
+
+  // Week chart - last 7 days
+  var weekEl = document.getElementById('weekChart');
+  var days = [];
+  for(var i=6;i>=0;i--){
+    var d = new Date(); d.setDate(d.getDate()-i);
+    var dayStr = d.toLocaleDateString('en-IN',{weekday:'short'});
+    var dayStart = new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+    var dayEnd = dayStart + 86400000;
+    var count = cards.filter(function(c){ var t=c.createdAt||c.created||0; return t>=dayStart&&t<dayEnd; }).length;
+    days.push({label:dayStr, count:count});
+  }
+  var maxDay = Math.max.apply(null, days.map(function(d){ return d.count; })) || 1;
+  weekEl.innerHTML = days.map(function(d){
+    var h = Math.max(4, Math.round((d.count/maxDay)*56));
+    return '<div class="t-col"><div class="t-bar" style="height:'+h+'px" title="'+d.count+' cards"></div><div class="t-label">'+d.label+'<br>'+d.count+'</div></div>';
+  }).join('');
+  document.getElementById('weekTotal').textContent = days.reduce(function(s,d){return s+d.count;},0) + ' cards this week';
+
+  // Cards table
+  var tbody = document.getElementById('cardsBody');
+  tbody.innerHTML = cards.map(function(c){
+    var isActive = !c.expiresAt || c.expiresAt > now;
+    var created = c.createdAt||c.created ? new Date(c.createdAt||c.created).toLocaleDateString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : '—';
+    var expires = c.expiresAt ? new Date(c.expiresAt).toLocaleDateString('en-IN',{day:'2-digit',month:'short'}) : '—';
+    var photoCount = c.photos ? c.photos.length : 0;
+    var hasSong = c.spotify && c.spotify.trim();
+    var link = BASE_URL + '?card=' + c._id;
+    var shortId = c._id.substring(0,8) + '...';
+    return '<tr>' +
+      '<td><span class="card-name">'+(c.name||'<span class="no-photos">No name</span>')+'</span></td>' +
+      '<td>'+(c.sender||'<span class="no-photos">—</span>')+'</td>' +
+      '<td style="font-family:\'DM Mono\',monospace;font-size:0.75rem;">'+created+'</td>' +
+      '<td style="font-family:\'DM Mono\',monospace;font-size:0.75rem;">'+expires+'</td>' +
+      '<td><span class="badge '+(isActive?'badge-active':'badge-expired')+'">'+(isActive?'Active':'Expired')+'</span></td>' +
+      '<td><span class="badge badge-views">'+(c.views||0)+'</span></td>' +
+      '<td>'+(photoCount > 0 ? '📸 '+photoCount : '<span class="no-photos">None</span>')+'</td>' +
+      '<td>'+(hasSong ? '🎵' : '<span class="no-photos">—</span>')+'</td>' +
+      '<td><a href="'+link+'" target="_blank" class="card-link">'+shortId+'↗</a></td>' +
+    '</tr>';
+  }).join('');
+
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('dashContent').style.display = 'block';
+}
+</script>
+</body>
+</html>
