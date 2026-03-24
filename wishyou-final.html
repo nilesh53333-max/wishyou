@@ -98,6 +98,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100
 /* 2 photos */
 .balloon-wrap.count-2 .balloon-card{width:44%;}
 
+.pol-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:4px 0;width:100%;box-sizing:border-box;}
 .pol-card{
   flex:0 0 auto;
   width:calc(33% - 6px);
@@ -113,42 +114,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100
   position:relative;
   overflow:hidden;
 }
-/* alternating slight rotation for natural feel */
 .pol-card:nth-child(odd){transform:rotate(-1.5deg);}
 .pol-card:nth-child(even){transform:rotate(1.5deg);}
 .pol-card:active{transform:scale(0.93) rotate(0deg) !important;box-shadow:0 2px 8px rgba(0,0,0,0.12);}
-/* Ken Burns + warm vintage filter on polaroid photos */
 .pol-card img{
   width:100%;height:100%;object-fit:cover;border-radius:5px;display:block;
   filter:sepia(0.45) saturate(1.6) brightness(1.08) contrast(1.1) hue-rotate(-10deg);
-  animation:kenBurns 8s ease-in-out infinite alternate;-webkit-animation:kenBurns 8s ease-in-out infinite alternate;
+  animation:kenBurns 8s ease-in-out infinite alternate;
   transform-origin:center center;
 }
 @keyframes kenBurns{
   from{transform:scale(1) translate(0%,0%);}
   to{transform:scale(1.15) translate(-3%,-2%);}
 }
-.photo-fx-off .pol-card img{
-  filter:none !important;
-  animation:none !important;
-  animation-play-state:paused !important;
-  transform:scale(1) !important;
-  transition:none !important;
-}
-.photo-fx-off .pol-card::before{
-  display:none !important;
-  opacity:0 !important;
-}
+.pol-card::before{
   content:'';position:absolute;inset:5px 5px 20px 5px;z-index:2;border-radius:5px;
   background:radial-gradient(ellipse at center,transparent 40%,rgba(80,0,20,0.35) 100%);
   pointer-events:none;
 }
+.photo-fx-off .pol-card img{
+  filter:none !important;
+  animation:none !important;
+  transform:scale(1) !important;
+}
+.photo-fx-off .pol-card::before{display:none !important;}
 .pol-card .pol-label{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-family:'Playfair Display',serif;font-size:0.62rem;color:var(--mid);font-style:italic;}
-/* 1 photo - full width */
 .pol-wrap.count-1 .pol-card{width:80%;aspect-ratio:4/3;}
-/* 2 photos - half each */
 .pol-wrap.count-2 .pol-card{width:calc(50% - 6px);}
-/* 4-5 photos - two rows */
 .pol-wrap.count-4 .pol-card,.pol-wrap.count-5 .pol-card{width:calc(33% - 6px);}
 
 /* expanded photo overlay */
@@ -190,6 +182,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100
 .letter-page::after{content:'💌';position:absolute;right:14px;top:12px;font-size:1.3rem;opacity:0.3;}
 .letter-dear{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--dark);margin-bottom:10px;font-weight:700;}
 .letter-body{font-size:0.87rem;line-height:1.72;color:var(--dark);white-space:pre-wrap;}
+.letter-cursor{display:inline-block;width:2px;height:1em;background:var(--pink);margin-left:1px;vertical-align:text-bottom;animation:cursorBlink 0.7s step-end infinite;}
+@keyframes cursorBlink{0%,100%{opacity:1;}50%{opacity:0;}}
 .letter-sign{font-family:'Playfair Display',serif;font-style:italic;color:var(--pink);font-size:0.95rem;text-align:right;margin-top:12px;}
 .letter-sender-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--dark);font-weight:700;text-align:right;margin-top:3px;display:none;}
 
@@ -873,12 +867,44 @@ function goTo(id){
   if(bgmEnabled&&id!=='s-song'&&id!=='s-memories') startBGM();
   showScreen(id);
   if(id==='s-customize')setTimeout(function(){document.getElementById('custScroll').scrollTo(0,0);},50);
+  if(id==='s-letter') setTimeout(typewriterLetter, 400);
 }
 function goBack(){
   var p=BACK[cur];if(!p)return;
   if(bgmEnabled&&p!=='s-song'&&p!=='s-memories') startBGM();
   showScreen(p);
   if(p==='s-envelope')resetEnv();
+}
+
+// TYPEWRITER LETTER ANIMATION
+var _twTimer = null;
+function typewriterLetter(){
+  var el = document.getElementById('letterBody');
+  if(!el) return;
+  var fullText = el.getAttribute('data-full') || el.textContent;
+  // Store original text on first run
+  if(!el.getAttribute('data-full')){
+    el.setAttribute('data-full', fullText);
+  }
+  // Clear any running animation
+  if(_twTimer){ clearTimeout(_twTimer); _twTimer = null; }
+  el.textContent = '';
+  var cursor = document.createElement('span');
+  cursor.className = 'letter-cursor';
+  el.appendChild(cursor);
+  var i = 0;
+  var speed = Math.max(18, Math.min(38, Math.floor(2200 / fullText.length)));
+  function type(){
+    if(i < fullText.length){
+      el.insertBefore(document.createTextNode(fullText[i]), cursor);
+      i++;
+      _twTimer = setTimeout(type, speed);
+    } else {
+      // Remove cursor when done
+      setTimeout(function(){ if(cursor.parentNode) cursor.parentNode.removeChild(cursor); }, 800);
+    }
+  }
+  type();
 }
 
 // RIPPLE
@@ -1243,7 +1269,8 @@ function saveAndBack(){
   document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
   var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Preview Card ✨';
   document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
-  document.getElementById('letterBody').textContent=msg||'';
+  var lb = document.getElementById('letterBody');
+  if(lb){ lb.textContent=msg||''; lb.setAttribute('data-full', msg||''); }
   document.getElementById('letterSign').textContent=sign||'Forever yours 💕';
   document.getElementById('songSub').textContent=sub||'This song always reminds me of you.';
   const sel=document.getElementById('letterSenderName');
@@ -1537,7 +1564,7 @@ function loadCardFromURL(){
       var ob2 = document.getElementById('openCardBtn');
       if(ob2) ob2.textContent = 'Open Card \u2728';
 
-      if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb) lb.textContent=d.msg; }
+      if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb){ lb.textContent=d.msg; lb.setAttribute('data-full',d.msg); } }
       if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
       if(d.sub)  { var ss=document.getElementById('songSub');     if(ss) ss.textContent=d.sub; }
       if(d.sender){
