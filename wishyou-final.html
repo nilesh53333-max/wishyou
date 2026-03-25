@@ -416,7 +416,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="screen-sub" id="welcomeSub" style="margin-bottom:16px;">Someone special made this just for you 🌸</div>
     <div id="birthdayTodayBanner" style="display:none;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;font-weight:600;text-align:center;animation:fadeUp 0.5s both;">🎂 Today is the special day! Happy Birthday! 🎉</div>
 
-    <!-- DEMO MODE: two style cards -->
+    <!-- STATE 1: DEMO MODE — first time, no customization yet -->
     <div id="demoBtns">
       <div style="font-size:0.68rem;color:var(--mid);text-align:center;margin-bottom:10px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;">Choose a style to preview</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
@@ -442,7 +442,14 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <div id="demoNotice" style="font-size:0.7rem;color:var(--mid);text-align:center;margin-top:6px;opacity:0.8;">👆 Add your photos, letter &amp; song</div>
     </div>
 
-    <!-- RECEIVER MODE: single open button -->
+    <!-- STATE 2: SAVED MODE — after creator has customized -->
+    <div id="savedBtns" style="display:none;">
+      <button class="btn btn-primary" id="previewSavedBtn" onclick="ripple(event);goTo('s-memories')" style="margin-bottom:10px;">▶ Preview Card ✨</button>
+      <button class="btn btn-wa" id="shareCardBtnWelcome" onclick="shareWhatsApp()" style="margin-bottom:10px;display:none;">🎁 Create &amp; Share Card</button>
+      <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')" style="margin-bottom:0;">✏️ Edit Card</button>
+    </div>
+
+    <!-- STATE 3: RECEIVER MODE -->
     <div id="receiverBtns" style="display:none;">
       <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Open Card ✨</button>
     </div>
@@ -1717,24 +1724,28 @@ function saveAndBack(){
   }
   resetEnv();
   startBGM();
-  // Show Create & Share Card now that user has customized
+  // Show Create & Share Card on letter screen
   var scb = document.getElementById('shareCardBtn');
   if(scb) scb.style.display = 'flex';
   // Update letter button
   var clb = document.getElementById('custBtnLetter');
   if(clb) clb.textContent = '\u270F\uFE0F Edit Letter';
-  // After save: show "Preview Card" button in demoBtns
-  var previewBtn = document.getElementById('previewAfterSaveBtn');
-  if(!previewBtn){
-    previewBtn = document.createElement('button');
-    previewBtn.id = 'previewAfterSaveBtn';
-    previewBtn.className = 'btn btn-primary';
-    previewBtn.style.marginBottom = '10px';
-    previewBtn.onclick = function(){ ripple(event); goTo('s-memories'); };
-    var demoBtns = document.getElementById('demoBtns');
-    if(demoBtns) demoBtns.insertBefore(previewBtn, demoBtns.firstChild);
+  // Switch welcome screen to saved state
+  document.getElementById('demoBtns').style.display = 'none';
+  var savedBtns = document.getElementById('savedBtns');
+  if(savedBtns) savedBtns.style.display = 'block';
+  // Update preview button label to match chosen style
+  var previewSavedBtn = document.getElementById('previewSavedBtn');
+  if(previewSavedBtn){
+    if(currentCardStyle==='retro'){
+      previewSavedBtn.textContent = '\uD83C\uDF8A Preview Retro Party Card \u2728';
+    } else {
+      previewSavedBtn.textContent = '\uD83D\uDC8C Preview Intimate Card \u2728';
+    }
   }
-  previewBtn.textContent = (currentCardStyle==='retro' ? '🎊' : '💌') + ' Preview ' + (currentCardStyle==='retro' ? 'Retro Party' : 'Intimate') + ' Card ✨';
+  // Show share button on welcome too
+  var scbw = document.getElementById('shareCardBtnWelcome');
+  if(scbw) scbw.style.display = 'flex';
   goBack();
 }
 
@@ -1970,6 +1981,8 @@ function loadCardFromURL(){
   isReceiver = true;
   var demoBtnsEl = document.getElementById('demoBtns');
   if(demoBtnsEl) demoBtnsEl.style.display = 'none';
+  var savedBtnsEl = document.getElementById('savedBtns');
+  if(savedBtnsEl) savedBtnsEl.style.display = 'none';
   var receiverBtnsEl = document.getElementById('receiverBtns');
   if(receiverBtnsEl) receiverBtnsEl.style.display = 'block';
   var ob = document.getElementById('openCardBtn');
