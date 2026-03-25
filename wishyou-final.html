@@ -457,8 +457,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     </div>
 
   </div></div>
-  <div class="progress-dots" style="visibility:hidden;">
-</div>
+  <div class="progress-dots" style="visibility:hidden;"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
 
 <!-- MEMORIES -->
 <div class="screen" id="s-memories">
@@ -1190,19 +1189,37 @@ function showScreen(id){
 var currentCardStyle = 'intimate';
 
 function startDemoIntimate(){
-  setCardStyle('intimate');
-  goTo('s-memories'); // goTo calls updateRetroBg
+  currentCardStyle = 'intimate';
+  document.body.classList.remove('style-retro-active');
+  // Show/hide correct overlays
+  var env=document.getElementById('envBtn'); if(env) env.style.display='block';
+  var bal=document.getElementById('retroBalloonBtn'); if(bal) bal.style.display='none';
+  var rj=document.getElementById('retroJukebox'); if(rj) rj.style.display='none';
+  var rct=document.getElementById('retroComicTitle'); if(rct) rct.style.display='none';
+  var rnp=document.getElementById('retroNewspaper'); if(rnp) rnp.style.display='none';
+  var nlp=document.getElementById('normalLetterPage'); if(nlp) nlp.style.display='block';
+  var ip=document.getElementById('intimatePlaceholder'); if(ip) ip.style.display='flex';
+  var rp=document.getElementById('retroPlaceholder'); if(rp) rp.style.display='none';
+  goTo('s-memories');
 }
 
 function startDemoRetro(){
-  setCardStyle('retro');
-  goTo('s-memories'); // goTo calls updateRetroBg
+  currentCardStyle = 'retro';
+  // Show/hide correct overlays
+  var env=document.getElementById('envBtn'); if(env) env.style.display='none';
+  var bal=document.getElementById('retroBalloonBtn'); if(bal) bal.style.display='block';
+  var rj=document.getElementById('retroJukebox'); if(rj) rj.style.display='block';
+  var rct=document.getElementById('retroComicTitle'); if(rct) rct.style.display='block';
+  var rnp=document.getElementById('retroNewspaper'); if(rnp) rnp.style.display='block';
+  var nlp=document.getElementById('normalLetterPage'); if(nlp) nlp.style.display='none';
+  var ip=document.getElementById('intimatePlaceholder'); if(ip) ip.style.display='none';
+  var rp=document.getElementById('retroPlaceholder'); if(rp) rp.style.display='flex';
+  var nd=document.getElementById('retroNewsDate');
+  if(nd) nd.textContent='Special Edition \u00B7 ' + new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  goTo('s-memories'); // goTo calls updateRetroBg which adds style-retro-active
 }
 
 function openCustomize(){
-  // setCardStyle already updates all visual states
-  // Just re-apply to ensure everything is in sync
-  setCardStyle(currentCardStyle);
   goTo('s-customize');
 }
 
