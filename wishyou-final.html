@@ -49,6 +49,51 @@ body.style-celebration .wm a{color:#ff6f00!important;}
 .ribbon-bow-l{position:absolute;top:-18px;left:50%;margin-left:-34px;width:32px;height:32px;background:linear-gradient(135deg,#ffe57f,#ffca28);border-radius:50% 0 50% 50%;transform:rotate(-45deg);}
 .ribbon-bow-r{position:absolute;top:-18px;left:50%;margin-left:2px;width:32px;height:32px;background:linear-gradient(135deg,#ffe57f,#ffca28);border-radius:0 50% 50% 50%;transform:rotate(45deg);}
 .ribbon-hint{font-size:0.82rem;color:#bf360c;margin-top:10px;text-align:center;animation:tapPulse 2s ease infinite;}
+
+/* ══ RETRO PARTY CARD STYLE ═══════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Patrick+Hand&display=swap');
+body.style-retro{background:#FFE135!important;}
+@media(min-width:500px){body.style-retro{background:#FFE135!important;}}
+body.style-retro .app{background:transparent;}
+body.style-retro .card{background:#fff!important;border:4px solid #111!important;border-radius:12px!important;box-shadow:6px 6px 0 #111!important;}
+body.style-retro .screen-title{font-family:'Fredoka One',cursive!important;color:#d90429!important;font-size:clamp(1.6rem,6vw,2.2rem)!important;letter-spacing:0.02em!important;-webkit-text-stroke:1px #111;}
+body.style-retro .screen-sub{font-family:'Patrick Hand',cursive!important;color:#333!important;font-size:1rem!important;}
+body.style-retro .btn-primary{background:#d90429!important;color:#fff!important;border:3px solid #111!important;border-radius:8px!important;box-shadow:4px 4px 0 #111!important;font-family:'Fredoka One',cursive!important;font-size:1.1rem!important;letter-spacing:0.04em!important;transition:transform 0.1s,box-shadow 0.1s!important;}
+body.style-retro .btn-primary:active{transform:translate(3px,3px)!important;box-shadow:1px 1px 0 #111!important;}
+body.style-retro .btn-outline{border:3px solid #111!important;border-radius:8px!important;box-shadow:3px 3px 0 #111!important;font-family:'Fredoka One',cursive!important;color:#111!important;background:#fff!important;}
+body.style-retro .back-btn{border:3px solid #111!important;box-shadow:3px 3px 0 #111!important;border-radius:8px!important;font-weight:900!important;}
+body.style-retro .pdot{background:rgba(17,17,17,0.2)!important;border:2px solid #111!important;}
+body.style-retro .pdot.active{background:#d90429!important;}
+body.style-retro .pdot.done{background:#FFE135!important;border-color:#111!important;}
+body.style-retro .wm a{color:#d90429!important;font-family:'Fredoka One',cursive!important;}
+body.style-retro .song-card{background:#1a1a2e!important;border:3px solid #111!important;box-shadow:5px 5px 0 #111!important;border-radius:12px!important;}
+/* Retro comic photo layout */
+.retro-comic-wrap{display:flex;gap:0;width:100%;border:3px solid #111;border-radius:8px;overflow:hidden;box-shadow:4px 4px 0 #111;}
+.retro-comic-panel{flex:1;position:relative;border-right:3px solid #111;min-height:120px;background:#f0f0f0;overflow:hidden;}
+.retro-comic-panel:last-child{border-right:none;}
+.retro-comic-panel img{width:100%;height:100%;object-fit:cover;display:block;}
+.retro-comic-caption{position:absolute;bottom:0;left:0;right:0;background:#FFE135;border-top:2px solid #111;font-family:'Patrick Hand',cursive;font-size:0.62rem;font-weight:700;color:#111;text-align:center;padding:2px 4px;}
+/* Retro jukebox */
+.retro-jukebox{background:linear-gradient(135deg,#1a1a2e,#16213e);border:4px solid #111;border-radius:16px;padding:20px;box-shadow:6px 6px 0 #111;text-align:center;position:relative;overflow:hidden;}
+.retro-jukebox::before{content:'★ JUKEBOX ★';position:absolute;top:8px;left:0;right:0;font-family:'Fredoka One',cursive;font-size:0.7rem;color:#FFE135;letter-spacing:0.2em;}
+.retro-record{width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 50%,#333 0%,#333 15%,#111 15%,#111 20%,#222 20%,#222 35%,#111 35%,#111 40%,#d90429 40%,#d90429 45%,#111 45%);margin:20px auto 12px;animation:vinylSpin 3s linear infinite;box-shadow:0 0 20px rgba(217,4,41,0.5);}
+.retro-record-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:#FFE135;border:2px solid #111;}
+.retro-song-name{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#FFE135;margin-bottom:4px;}
+.retro-artist{font-family:'Patrick Hand',cursive;font-size:0.85rem;color:rgba(255,225,53,0.7);}
+/* Retro balloon */
+.retro-balloon-wrap{text-align:center;cursor:pointer;padding:10px 0;touch-action:manipulation;}
+.retro-balloon{font-size:6rem;display:block;animation:balloonBounce 1s ease-in-out infinite;filter:drop-shadow(3px 3px 0 #111);}
+@keyframes balloonBounce{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-15px) rotate(5deg);}}
+.retro-balloon-hint{font-family:'Patrick Hand',cursive;font-size:1rem;color:#111;font-weight:700;margin-top:8px;}
+/* Retro newspaper letter */
+.retro-newspaper{background:#fdf8e7;border:4px solid #111;border-radius:8px;padding:16px;box-shadow:5px 5px 0 #111;text-align:left;}
+.retro-newspaper-header{text-align:center;border-bottom:4px double #111;padding-bottom:8px;margin-bottom:12px;}
+.retro-newspaper-masthead{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#111;letter-spacing:0.05em;}
+.retro-newspaper-date{font-family:'Patrick Hand',cursive;font-size:0.72rem;color:#666;margin-top:2px;}
+.retro-newspaper-headline{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#d90429;line-height:1.2;margin-bottom:8px;text-transform:uppercase;-webkit-text-stroke:0.5px #111;}
+.retro-newspaper-body{font-family:'Patrick Hand',cursive;font-size:0.88rem;color:#222;line-height:1.7;column-count:1;}
+.retro-newspaper-byline{font-family:'Patrick Hand',cursive;font-size:0.78rem;color:#666;margin-top:8px;font-style:italic;border-top:1px solid #ccc;padding-top:6px;}
+@keyframes balloonPop{0%{transform:scale(1);}30%{transform:scale(1.3);}60%{transform:scale(0.1);opacity:0;}100%{display:none;opacity:0;}}
 body.theme-midnight{background:linear-gradient(160deg,#0d0618 0%,#150d2e 50%,#0a0414 100%)!important;}
 body.theme-midnight .app{background:transparent;}
 body.theme-midnight .card{background:rgba(20,10,40,0.92)!important;border-color:rgba(147,51,234,0.3)!important;box-shadow:0 20px 60px rgba(147,51,234,0.25)!important;}
@@ -403,7 +448,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
 
         <!-- Intimate card -->
-        <div onclick="startDemoIntimate()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:linear-gradient(150deg,#fde8f0,#fce4ec);border:2px solid rgba(233,30,99,0.25);transition:transform 0.2s,box-shadow 0.2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform='scale(1)'">
+        <div onclick="startDemoIntimate()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:linear-gradient(150deg,#fde8f0,#fce4ec);border:2px solid rgba(233,30,99,0.25);transition:transform 0.2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform='scale(1)'">
           <div style="font-size:2.2rem;margin-bottom:8px;">💌</div>
           <div style="font-size:0.85rem;font-weight:700;color:#4a0e2a;margin-bottom:3px;">Intimate</div>
           <div style="font-size:0.65rem;color:#8d3a5a;line-height:1.4;">Soft & emotional<br>envelope reveal</div>
@@ -411,11 +456,19 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         </div>
 
         <!-- Celebration card -->
-        <div onclick="startDemoCelebration()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:linear-gradient(150deg,#fff9c4,#ffe0b2);border:2px solid rgba(255,111,0,0.25);transition:transform 0.2s,box-shadow 0.2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform='scale(1)'">
+        <div onclick="startDemoCelebration()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:linear-gradient(150deg,#fff9c4,#ffe0b2);border:2px solid rgba(255,111,0,0.25);transition:transform 0.2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform='scale(1)'">
           <div style="font-size:2.2rem;margin-bottom:8px;">🎉</div>
           <div style="font-size:0.85rem;font-weight:700;color:#e65100;margin-bottom:3px;">Celebration</div>
           <div style="font-size:0.65rem;color:#bf360c;line-height:1.4;">Bold & festive<br>ribbon pull reveal</div>
           <div style="margin-top:10px;background:linear-gradient(135deg,#ff6f00,#ff8f00);color:white;border-radius:50px;padding:6px 0;font-size:0.72rem;font-weight:700;">Preview ›</div>
+        </div>
+
+        <!-- Retro Party card -->
+        <div onclick="startDemoRetro()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:#FFE135;border:3px solid #111;box-shadow:4px 4px 0 #111;transition:transform 0.1s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #111'" ontouchend="this.style.transform='translate(0,0)';this.style.boxShadow='4px 4px 0 #111'">
+          <div style="font-size:2.2rem;margin-bottom:8px;">🎊</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:0.95rem;font-weight:700;color:#d90429;margin-bottom:3px;letter-spacing:0.02em;">Retro Party</div>
+          <div style="font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#333;line-height:1.4;">Comic style, balloon<br>pop & newspaper</div>
+          <div style="margin-top:10px;background:#d90429;color:white;border-radius:6px;border:2px solid #111;padding:6px 0;font-family:'Fredoka One',cursive;font-size:0.78rem;box-shadow:2px 2px 0 #111;">Preview ›</div>
         </div>
 
       </div>
@@ -438,6 +491,8 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="back-btn" onclick="goBack()">←</div>
     <div class="card-inner">
       <div class="screen-title" id="memoriesTitle">Our Memories 📸</div>
+      <!-- Retro comic strip title (shown only in retro mode) -->
+      <div id="retroComicTitle" style="display:none;font-family:'Fredoka One',cursive;font-size:1rem;color:#d90429;text-align:center;background:#FFE135;border:2px solid #111;border-radius:6px;padding:4px 10px;margin-bottom:8px;box-shadow:3px 3px 0 #111;letter-spacing:0.04em;">📰 THE BIRTHDAY KID</div>
       <div id="memoriesSenderSub" style="display:none;font-size:0.75rem;color:var(--mid);font-style:italic;margin-top:-6px;margin-bottom:8px;text-align:center;">— chosen by <span id="memoriesSenderName"></span> with love</div>
       <div class="photo-frame" id="photoFrame">
         <div class="photo-placeholder" id="photoPlaceholder">
@@ -514,6 +569,16 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="card-inner">
       <div class="screen-title">Song for You 🎵</div>
       <div class="screen-sub" id="songSub">This song always reminds me of you.</div>
+      <!-- Retro jukebox (shown in retro mode) -->
+      <div class="retro-jukebox" id="retroJukebox" style="display:none;margin-bottom:14px;">
+        <div style="position:relative;display:inline-block;margin:8px auto 0;display:block;text-align:center;">
+          <div class="retro-record" style="position:relative;">
+            <div class="retro-record-center"></div>
+          </div>
+        </div>
+        <div class="retro-song-name" id="retroSongName">Your Party Anthem 🎵</div>
+        <div class="retro-artist" id="retroArtist">Select a song below ↓</div>
+      </div>
       <div class="song-card" id="songCardEl">
         <!-- vinyl record animation -->
         <div style="display:flex;align-items:center;gap:16px;">
@@ -586,6 +651,11 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         </div>
         <div class="ribbon-hint">Pull the ribbon to open! 🎀</div>
       </button>
+      <!-- Balloon pop (Retro style) -->
+      <div class="retro-balloon-wrap" id="retroBalloonBtn" style="display:none;" onclick="popBalloon(this)">
+        <span class="retro-balloon" id="retroBalloon">🎈</span>
+        <div class="retro-balloon-hint">POP the balloon! 🎊</div>
+      </div>
       <button class="btn btn-outline" id="custBtnEnvelope" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
     </div>
   </div>
@@ -597,11 +667,26 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
   <div class="card">
     <div class="back-btn" onclick="goBack()">←</div>
     <div class="card-inner" style="padding-top:52px;padding-bottom:18px;overflow-y:auto;max-height:calc(100vh - 40px);-webkit-overflow-scrolling:touch;">
+      <!-- Normal letter (intimate/celebration) -->
+      <div id="normalLetterPage">
       <div class="letter-page">
         <div class="letter-dear" id="letterDear">Dear,</div>
         <div class="letter-body" id="letterBody">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you - for every laugh we share, every dream we build, and every small miracle of love between us. May our hearts stay close, today and always, wherever life leads us.</div>
         <div class="letter-sign" id="letterSign">Forever yours 💕</div>
         <div class="letter-sender-name" id="letterSenderName"></div>
+      </div>
+      </div>
+      <!-- Retro newspaper letter -->
+      <div id="retroNewspaper" style="display:none;">
+        <div class="retro-newspaper">
+          <div class="retro-newspaper-header">
+            <div class="retro-newspaper-masthead">🗞️ THE BIRTHDAY GAZETTE</div>
+            <div class="retro-newspaper-date" id="retroNewsDate">Special Edition · Today's Date</div>
+          </div>
+          <div class="retro-newspaper-headline" id="retroHeadline">BREAKING: IT'S YOUR BIRTHDAY! 🎂</div>
+          <div class="retro-newspaper-body" id="retroLetterBody">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.</div>
+          <div class="retro-newspaper-byline" id="retroByline">— Reported with love 💛</div>
+        </div>
       </div>
       <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✨ Create Your Own Card</button>
       <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0;display:none;" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
@@ -633,6 +718,10 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="field-group">
       <label class="field-label">Their Name</label>
       <input type="text" id="cName" placeholder="e.g. Priya" maxlength="30">
+    </div>
+    <div class="field-group" id="ageFieldGroup" style="display:none;">
+      <label class="field-label">Their Age <span style="font-size:0.7rem;color:var(--mid);font-weight:400;">(shown in newspaper headline)</span></label>
+      <input type="number" id="cAge" placeholder="e.g. 25" min="1" max="120" style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;">
     </div>
     <div class="field-group">
       <label class="field-label">Card Title</label>
@@ -810,6 +899,11 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
           <div style="font-size:1.8rem;margin-bottom:6px;">🎉</div>
           <div style="font-size:0.82rem;font-weight:700;color:#e65100;">Celebration</div>
           <div style="font-size:0.65rem;color:#bf360c;margin-top:2px;line-height:1.4;">Bold & festive<br>ribbon pull reveal</div>
+        </div>
+        <div onclick="setCardStyle('retro')" id="cstyle-retro" style="cursor:pointer;border-radius:16px;padding:16px 10px;text-align:center;border:2px solid transparent;background:#FFE135;transition:all 0.1s;touch-action:manipulation;">
+          <div style="font-size:1.8rem;margin-bottom:6px;">🎊</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:0.85rem;font-weight:700;color:#d90429;">Retro Party</div>
+          <div style="font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#333;margin-top:2px;line-height:1.4;">Comic style &<br>newspaper letter</div>
         </div>
       </div>
     </div>
@@ -1099,6 +1193,11 @@ function startDemoCelebration(){
   goTo('s-memories');
 }
 
+function startDemoRetro(){
+  setCardStyle('retro');
+  goTo('s-memories');
+}
+
 function setCardStyle(style){
   currentCardStyle = style;
   if(style === 'celebration'){
@@ -1144,6 +1243,44 @@ function stopConfetti(){
   if(_confettiInterval){ clearInterval(_confettiInterval); _confettiInterval=null; }
   _confettiPieces.forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
   _confettiPieces=[];
+}
+
+function syncRetroNewspaper(name, age, msg, sign, sender){
+  // Headline
+  var hl = document.getElementById('retroHeadline');
+  if(hl){
+    if(name && age) hl.textContent = 'BREAKING: ' + name.toUpperCase() + ' IS TURNING ' + age + '! \uD83C\uDF82';
+    else if(name) hl.textContent = 'BREAKING: HAPPY BIRTHDAY ' + name.toUpperCase() + '! \uD83C\uDF82';
+    else hl.textContent = 'BREAKING: IT\u2019S YOUR BIRTHDAY! \uD83C\uDF82';
+  }
+  // Body
+  var rb = document.getElementById('retroLetterBody');
+  if(rb) rb.textContent = msg || 'Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning.';
+  // Byline
+  var by = document.getElementById('retroByline');
+  if(by) by.textContent = '\u2014 Reported with love by ' + (sender || 'Someone Special') + ' \uD83D\uDC9B';
+  // Date
+  var nd = document.getElementById('retroNewsDate');
+  if(nd) nd.textContent = 'Special Edition \u00B7 ' + new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+}
+
+function popBalloon(wrap){
+  var balloon = document.getElementById('retroBalloon');
+  if(!balloon) return;
+  // Pop animation
+  balloon.style.transition = 'transform 0.1s,opacity 0.2s';
+  balloon.style.transform = 'scale(1.4)';
+  setTimeout(function(){
+    balloon.textContent = '💥';
+    balloon.style.transform = 'scale(0.1)';
+    balloon.style.opacity = '0';
+    // Burst confetti
+    startConfetti();
+    setTimeout(function(){
+      stopConfetti();
+      goTo('s-letter');
+    }, 800);
+  }, 100);
 }
 
 function goTo(id){
@@ -1237,6 +1374,9 @@ function resetEnv(){
   const flap=document.getElementById('envFlap'),heart=document.getElementById('envHeart'),paper=document.getElementById('envPaper'),btn=document.getElementById('envBtn');
   if(flap)flap.style.transform='';if(heart){heart.style.opacity='1';heart.style.transform='';}
   if(paper)paper.style.transform='';if(btn)btn.style.transform='';
+  // Reset balloon for retro
+  var balloon=document.getElementById('retroBalloon');
+  if(balloon){balloon.textContent='\uD83C\uDF88';balloon.style.transform='';balloon.style.opacity='1';balloon.style.transition='';}
 }
 
 // PHOTO GALLERY
@@ -1539,6 +1679,11 @@ function selectYouTubeSong(videoId, title, artist) {
   var sa = document.getElementById('songArtist');
   if(sn) sn.textContent = title;
   if(sa) sa.textContent = artist;
+  // Sync retro jukebox
+  var rsn = document.getElementById('retroSongName');
+  var rat = document.getElementById('retroArtist');
+  if(rsn) rsn.textContent = title;
+  if(rat) rat.textContent = artist;
   // Clear search results and show confirmation
   document.getElementById('ytSearchResults').innerHTML =
     '<div style="font-size:0.78rem;color:var(--pink);font-weight:600;padding:6px 2px;">✅ ' + title + ' added to your card!</div>';
@@ -1566,6 +1711,9 @@ function saveAndBack(){
   var lb = document.getElementById('letterBody');
   if(lb){ lb.textContent=msg||''; lb.setAttribute('data-full', msg||''); }
   document.getElementById('letterSign').textContent=sign||'Forever yours 💕';
+  // Sync retro newspaper
+  var age = (document.getElementById('cAge')||{value:''}).value.trim();
+  syncRetroNewspaper(name, age, msg, sign, sender);
   document.getElementById('songSub').textContent=sub||'This song always reminds me of you.';
   const sel=document.getElementById('letterSenderName');
   if(sender){sel.textContent=sender;sel.style.display='block';}else sel.style.display='none';
@@ -1649,6 +1797,7 @@ function shareWhatsApp(){
         memoriesHeading: (document.getElementById('cMemoriesHeading')||{value:'Our Memories 📸'}).value||'Our Memories 📸',
         theme: currentTheme||'',
         cardStyle: currentCardStyle||'intimate',
+        age: (document.getElementById('cAge')||{value:''}).value.trim()||'',
         created: now,
         createdAt: now,
         expiresAt: now + (3 * 24 * 60 * 60 * 1000)
@@ -1889,6 +2038,15 @@ function loadCardFromURL(){
       if(d.memoriesHeading){ var mht=document.getElementById('memoriesTitle'); if(mht) mht.textContent=d.memoriesHeading; }
       if(d.theme){ setTheme(d.theme); }
       if(d.cardStyle){ setCardStyle(d.cardStyle); }
+      if(d.cardStyle==='retro'){
+        syncRetroNewspaper(d.name||'', d.age||'', d.msg||'', d.sign||'', d.sender||'');
+        var rsn=document.getElementById('retroSongName');
+        var rat=document.getElementById('retroArtist');
+        var sn=document.getElementById('songName');
+        var sa=document.getElementById('songArtist');
+        if(rsn&&sn&&sn.textContent) rsn.textContent=sn.textContent;
+        if(rat&&sa&&sa.textContent) rat.textContent=sa.textContent;
+      }
       if(d.sender){
         var sn=document.getElementById('letterSenderName');
         var signText=(d.sign||'').toLowerCase();
@@ -1954,24 +2112,54 @@ function setTheme(name){
 var _origSetCardStyle = setCardStyle;
 function setCardStyle(style){
   currentCardStyle = style;
-  if(style === 'celebration'){
+  // Remove all style classes
+  document.body.classList.remove('style-celebration','style-retro');
+
+  // Reset all overlays to default
+  var env=document.getElementById('envBtn'); if(env) env.style.display='block';
+  var rib=document.getElementById('ribbonBtn'); if(rib) rib.style.display='none';
+  var bal=document.getElementById('retroBalloonBtn'); if(bal) bal.style.display='none';
+  var rj=document.getElementById('retroJukebox'); if(rj) rj.style.display='none';
+  var rct=document.getElementById('retroComicTitle'); if(rct) rct.style.display='none';
+  var rnp=document.getElementById('retroNewspaper'); if(rnp) rnp.style.display='none';
+  var nlp=document.getElementById('normalLetterPage'); if(nlp) nlp.style.display='block';
+  var ageGrp=document.getElementById('ageFieldGroup'); if(ageGrp) ageGrp.style.display='none';
+  stopConfetti();
+
+  if(style==='celebration'){
     document.body.classList.add('style-celebration');
-    var env=document.getElementById('envBtn'); if(env) env.style.display='none';
-    var rib=document.getElementById('ribbonBtn'); if(rib) rib.style.display='block';
+    if(rib) rib.style.display='block';
+    if(env) env.style.display='none';
     var et=document.getElementById('envTitle'); if(et) et.innerHTML='You\u2019ve got a surprise!<br>\uD83C\uDF89';
     startConfetti();
+
+  } else if(style==='retro'){
+    document.body.classList.add('style-retro');
+    if(bal) bal.style.display='block';
+    if(env) env.style.display='none';
+    if(rj) rj.style.display='block';
+    if(rct) rct.style.display='block';
+    if(rnp) rnp.style.display='block';
+    if(nlp) nlp.style.display='none';
+    if(ageGrp) ageGrp.style.display='block';
+    var et2=document.getElementById('envTitle'); if(et2) et2.innerHTML='There\u2019s a surprise<br>waiting for you! \uD83C\uDF88';
+    // Update newspaper date
+    var nd=document.getElementById('retroNewsDate');
+    if(nd) nd.textContent='Special Edition \u00B7 ' + new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+
   } else {
-    document.body.classList.remove('style-celebration');
-    var env2=document.getElementById('envBtn'); if(env2) env2.style.display='block';
-    var rib2=document.getElementById('ribbonBtn'); if(rib2) rib2.style.display='none';
-    var et2=document.getElementById('envTitle'); if(et2) et2.innerHTML='I wrote a letter<br>for you... \uD83D\uDC8C';
-    stopConfetti();
+    // intimate — defaults already set above
+    var et3=document.getElementById('envTitle'); if(et3) et3.innerHTML='I wrote a letter<br>for you... \uD83D\uDC8C';
   }
-  // Update customize picker UI
+
+  // Update customize picker UI borders
   var ci=document.getElementById('cstyle-intimate');
   var cc=document.getElementById('cstyle-celebration');
+  var cr=document.getElementById('cstyle-retro');
   if(ci) ci.style.border = style==='intimate' ? '2px solid var(--pink)' : '2px solid transparent';
   if(cc) cc.style.border = style==='celebration' ? '2px solid #ff6f00' : '2px solid transparent';
+  if(cr) cr.style.border = style==='retro' ? '3px solid #111' : '2px solid transparent';
+  if(cr) cr.style.boxShadow = style==='retro' ? '3px 3px 0 #111' : 'none';
 }
 
 var selectedRelationship = '';
