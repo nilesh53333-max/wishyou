@@ -59,13 +59,14 @@ body.style-retro .song-card{background:#1a1a2e!important;border:3px solid #111!i
 @keyframes balloonBounce{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-15px) rotate(5deg);}}
 .retro-balloon-hint{font-family:'Patrick Hand',cursive;font-size:1rem;color:#111;font-weight:700;margin-top:8px;}
 /* Retro newspaper letter */
-.retro-newspaper{background:#fdf8e7;border:4px solid #111;border-radius:8px;padding:16px;box-shadow:5px 5px 0 #111;text-align:left;}
-.retro-newspaper-header{text-align:center;border-bottom:4px double #111;padding-bottom:8px;margin-bottom:12px;}
-.retro-newspaper-masthead{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#111;letter-spacing:0.05em;}
-.retro-newspaper-date{font-family:'Patrick Hand',cursive;font-size:0.72rem;color:#666;margin-top:2px;}
-.retro-newspaper-headline{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#d90429;line-height:1.2;margin-bottom:8px;text-transform:uppercase;-webkit-text-stroke:0.5px #111;}
-.retro-newspaper-body{font-family:'Patrick Hand',cursive;font-size:0.88rem;color:#222;line-height:1.7;column-count:1;}
-.retro-newspaper-byline{font-family:'Patrick Hand',cursive;font-size:0.78rem;color:#666;margin-top:8px;font-style:italic;border-top:1px solid #ccc;padding-top:6px;}
+.retro-newspaper{background:#fdf8e7;border:4px solid #111;border-radius:8px;padding:14px 16px 16px;box-shadow:5px 5px 0 #111;text-align:left;}
+.retro-newspaper-header{text-align:center;border-bottom:5px double #111;padding-bottom:10px;margin-bottom:10px;position:relative;}
+.retro-newspaper-flag{display:flex;justify-content:space-between;font-family:'Patrick Hand',cursive;font-size:0.6rem;color:#666;margin-bottom:4px;border-bottom:1px solid #ccc;padding-bottom:3px;}
+.retro-newspaper-masthead{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#111;letter-spacing:0.03em;line-height:1.1;}
+.retro-newspaper-date{font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#666;margin-top:3px;letter-spacing:0.05em;}
+.retro-newspaper-headline{font-family:'Fredoka One',cursive;font-size:1.05rem;color:#d90429;line-height:1.2;margin-bottom:6px;text-transform:uppercase;background:#d90429;color:white;padding:5px 8px;border-radius:4px;display:block;}
+.retro-newspaper-body{font-family:'Patrick Hand',cursive;font-size:0.9rem;color:#222;line-height:1.7;}
+.retro-newspaper-byline{font-family:'Patrick Hand',cursive;font-size:0.75rem;color:#555;margin-top:8px;font-style:italic;border-top:1px solid #bbb;padding-top:6px;}
 @keyframes balloonPop{0%{transform:scale(1);}30%{transform:scale(1.3);}60%{transform:scale(0.1);opacity:0;}100%{display:none;opacity:0;}}
 body.theme-midnight{background:linear-gradient(160deg,#0d0618 0%,#150d2e 50%,#0a0414 100%)!important;}
 body.theme-midnight .app{background:transparent;}
@@ -461,13 +462,12 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <div id="memoriesSenderSub" style="display:none;font-size:0.75rem;color:var(--mid);font-style:italic;margin-top:-6px;margin-bottom:8px;text-align:center;">— chosen by <span id="memoriesSenderName"></span> with love</div>
       <div class="photo-frame" id="photoFrame">
         <div class="photo-placeholder" id="photoPlaceholder">
-          <!-- 5 animated couple illustration polaroids -->
-          <div class="pol-wrap count-5" style="display:flex;padding:4px 0;">
+          <!-- Intimate polaroid placeholder (shown for intimate style) -->
+          <div id="intimatePlaceholder" class="pol-wrap count-5" style="display:flex;padding:4px 0;">
 
             <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#ffd6e7,#ffb3cc);">
               <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;">
                 <circle cx="40" cy="40" r="38" fill="#fff5f8"/>
-                <!-- two hearts -->
                 <text x="22" y="48" font-size="22" style="animation:hb1 1.4s ease infinite;">❤️</text>
                 <text x="44" y="44" font-size="16" style="animation:hb1 1.6s 0.2s ease infinite;">🩷</text>
                 <text x="30" y="30" font-size="12" opacity="0.5">✨</text>
@@ -478,7 +478,6 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
             <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#e8f4fd,#c8e6ff);">
               <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;">
                 <circle cx="40" cy="40" r="38" fill="#f0f8ff"/>
-                <!-- couple holding hands -->
                 <text x="18" y="52" font-size="38">👫</text>
                 <text x="54" y="26" font-size="14" style="animation:float1 2s ease infinite;">⭐</text>
               </svg>
@@ -515,7 +514,38 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
             </div>
 
           </div>
-          <div style="font-size:0.75rem;color:var(--mid);margin-top:8px;text-align:center;opacity:0.7;">Upload your real photos in Customize ↗</div>
+
+          <!-- Retro comic strip placeholder (shown for retro style) -->
+          <div id="retroPlaceholder" class="retro-comic-wrap" style="display:none;">
+            <div class="retro-comic-panel">
+              <svg viewBox="0 0 80 130" style="width:100%;height:130px;display:block;background:#fff9c4;">
+                <text x="40" y="55" text-anchor="middle" font-size="38">🎂</text>
+                <text x="40" y="90" text-anchor="middle" font-size="11" font-family="Patrick Hand,cursive" fill="#d90429" font-weight="700">BIRTHDAY</text>
+                <text x="40" y="108" text-anchor="middle" font-size="10" font-family="Patrick Hand,cursive" fill="#111">LEGEND!</text>
+              </svg>
+              <div class="retro-comic-caption">The Hero!</div>
+            </div>
+            <div class="retro-comic-panel">
+              <svg viewBox="0 0 80 130" style="width:100%;height:130px;display:block;background:#ffe0b2;">
+                <text x="40" y="50" text-anchor="middle" font-size="34">🎉</text>
+                <text x="10" y="80" font-size="16">⭐</text>
+                <text x="52" y="90" font-size="20">🎊</text>
+                <text x="40" y="112" text-anchor="middle" font-size="10" font-family="Patrick Hand,cursive" fill="#111">PARTY MODE!</text>
+              </svg>
+              <div class="retro-comic-caption">Best Day!</div>
+            </div>
+            <div class="retro-comic-panel">
+              <svg viewBox="0 0 80 130" style="width:100%;height:130px;display:block;background:#fce4ec;">
+                <text x="40" y="55" text-anchor="middle" font-size="36">🎈</text>
+                <text x="20" y="85" font-size="14">💥</text>
+                <text x="48" y="78" font-size="12">✨</text>
+                <text x="40" y="112" text-anchor="middle" font-size="10" font-family="Patrick Hand,cursive" fill="#d90429" font-weight="700">POP!</text>
+              </svg>
+              <div class="retro-comic-caption">So Cool!</div>
+            </div>
+          </div>
+
+          <div style="font-size:0.75rem;color:var(--mid);margin-top:8px;text-align:center;opacity:0.7;" id="placeholderHint">Upload your real photos in Customize ↗</div>
         </div>
         <div class="pol-wrap" id="polWrap" style="display:none"></div>
       </div>
@@ -632,6 +662,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <div id="retroNewspaper" style="display:none;">
         <div class="retro-newspaper">
           <div class="retro-newspaper-header">
+            <div class="retro-newspaper-flag"><span>VOL. 1 · SPECIAL EDITION</span><span>FREE 💛</span></div>
             <div class="retro-newspaper-masthead">🗞️ THE BIRTHDAY GAZETTE</div>
             <div class="retro-newspaper-date" id="retroNewsDate">Special Edition · Today's Date</div>
           </div>
@@ -1689,9 +1720,21 @@ function saveAndBack(){
   // Show Create & Share Card now that user has customized
   var scb = document.getElementById('shareCardBtn');
   if(scb) scb.style.display = 'flex';
-  // Update letter button from "Create Your Own" to "Edit Letter" now that card is customised
+  // Update letter button
   var clb = document.getElementById('custBtnLetter');
   if(clb) clb.textContent = '\u270F\uFE0F Edit Letter';
+  // After save: show "Preview Card" button in demoBtns
+  var previewBtn = document.getElementById('previewAfterSaveBtn');
+  if(!previewBtn){
+    previewBtn = document.createElement('button');
+    previewBtn.id = 'previewAfterSaveBtn';
+    previewBtn.className = 'btn btn-primary';
+    previewBtn.style.marginBottom = '10px';
+    previewBtn.onclick = function(){ ripple(event); goTo('s-memories'); };
+    var demoBtns = document.getElementById('demoBtns');
+    if(demoBtns) demoBtns.insertBefore(previewBtn, demoBtns.firstChild);
+  }
+  previewBtn.textContent = (currentCardStyle==='retro' ? '🎊' : '💌') + ' Preview ' + (currentCardStyle==='retro' ? 'Retro Party' : 'Intimate') + ' Card ✨';
   goBack();
 }
 
@@ -2056,14 +2099,15 @@ var THEME_BORDERS = {
 
 function setTheme(name){
   THEMES.forEach(function(t){ if(t) document.body.classList.remove('theme-'+t); });
-  if(name) document.body.classList.add('theme-'+name);
+  if(name && currentCardStyle!=='retro') document.body.classList.add('theme-'+name);
   currentTheme = name;
+  // Only update borders if not in retro mode (retro greys out the whole grid)
+  if(currentCardStyle==='retro') return;
   THEMES.forEach(function(t){
     var el = document.getElementById('theme-'+(t||'rose'));
     if(!el) return;
     el.style.border = (t === name) ? '2px solid '+(THEME_BORDERS[t]||THEME_BORDERS['']) : '2px solid transparent';
   });
-  // Fix rose selected border
   if(name === ''){ var rose=document.getElementById('theme-rose'); if(rose) rose.style.border='2px solid #e91e63'; }
 }
 
@@ -2106,6 +2150,15 @@ function setCardStyle(style){
   if(ci) ci.style.border = style==='intimate' ? '2px solid var(--pink)' : '2px solid transparent';
   if(cr) cr.style.border = style==='retro' ? '3px solid #111' : '2px solid transparent';
   if(cr) cr.style.boxShadow = style==='retro' ? '3px 3px 0 #111' : 'none';
+  // Switch placeholder illustration
+  var ip=document.getElementById('intimatePlaceholder');
+  var rp=document.getElementById('retroPlaceholder');
+  var ph=document.getElementById('placeholderHint');
+  if(ip) ip.style.display = style==='retro' ? 'none' : 'flex';
+  if(rp) rp.style.display = style==='retro' ? 'flex' : 'none';
+  if(ph && style==='retro') ph.innerHTML='<span style="font-family:\'Patrick Hand\',cursive;font-weight:700;color:#111;">📸 Upload YOUR photos in Customize!</span>';
+  if(ph && style!=='retro') ph.innerHTML='Upload your real photos in Customize ↗';
+
   // Show/hide theme section note in retro mode
   var themeNote=document.getElementById('themeNote');
   var themeGrid=document.getElementById('themeGrid');
