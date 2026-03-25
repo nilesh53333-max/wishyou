@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Retro Party Birthday Card</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎊</text></svg>">
+<meta property="og:title" content="You've got a birthday surprise! 🎊">
+<meta property="og:description" content="Someone made you a Retro Party birthday card — pop the balloon to reveal it!">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Patrick+Hand&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ─────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{height:100%;overflow:hidden;}
+body{
+  font-family:'Patrick Hand',cursive;
+  background:#FFE135;
+  height:100%;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── App shell ─────────────────────────────────────── */
+.app{
+  position:relative;width:100%;max-width:430px;
+  height:100vh;overflow:hidden;
+}
+@media(min-width:500px){
+  body{background:#FFD600!important;}
+  .app{height:90vh;max-height:900px;border-radius:40px;
+    box-shadow:0 40px 100px rgba(0,0,0,0.3);
+    outline:10px solid rgba(255,255,255,0.4);}
+}
+
+/* ── Confetti bg ───────────────────────────────────── */
+.confetti-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+@keyframes confettiFall{
+  0%{transform:translateY(-10px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
+}
+
+/* ── Screens ───────────────────────────────────────── */
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px 18px 30px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.4s ease,transform 0.4s ease;
+  transform:translateX(40px) scale(0.97);
+}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0) scale(1);}
+
+/* ── Card ──────────────────────────────────────────── */
+.card{
+  background:#fff;
+  border-radius:12px;width:100%;
+  border:4px solid #111;
+  box-shadow:6px 6px 0 #111;
+  position:relative;
+}
+.card-inner{
+  padding:48px 22px 22px;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+/* ── Back button ───────────────────────────────────── */
+.back-btn{
+  position:absolute;top:12px;left:12px;
+  width:34px;height:34px;border-radius:8px;
+  background:#fff;border:3px solid #111;
+  box-shadow:3px 3px 0 #111;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1rem;color:#111;font-weight:900;
+  touch-action:manipulation;z-index:2;
+}
+.back-btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111;}
+
+/* ── Typography ────────────────────────────────────── */
+.screen-title{
+  font-family:'Fredoka One',cursive;
+  color:#d90429;
+  font-size:clamp(1.6rem,6vw,2.2rem);
+  line-height:1.2;margin-bottom:8px;
+  text-align:center;
+  -webkit-text-stroke:1px #111;
+}
+.screen-sub{
+  font-family:'Patrick Hand',cursive;
+  font-size:1rem;color:#333;
+  margin-bottom:20px;line-height:1.5;text-align:center;
+}
+.big-emoji{font-size:2.8rem;display:block;margin-bottom:12px;animation:bounce 1.2s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+/* ── Buttons ───────────────────────────────────────── */
+.btn{
+  width:100%;padding:15px;
+  font-family:'Fredoka One',cursive;
+  font-size:1.05rem;letter-spacing:0.03em;
+  cursor:pointer;border:none;
+  margin-top:10px;touch-action:manipulation;
+  position:relative;overflow:hidden;
+}
+.btn:active{transform:translate(2px,2px)!important;}
+.btn-primary{
+  background:#d90429;color:#fff;
+  border:3px solid #111;border-radius:8px;
+  box-shadow:4px 4px 0 #111;
+}
+.btn-primary:active{box-shadow:1px 1px 0 #111!important;}
+.btn-outline{
+  background:#fff;color:#111;
+  border:3px solid #111;border-radius:8px;
+  box-shadow:3px 3px 0 #111;
+}
+.btn-outline:active{box-shadow:1px 1px 0 #111!important;}
+.btn-wa{
+  background:#25d366;color:#fff;
+  border:3px solid #111;border-radius:8px;
+  box-shadow:4px 4px 0 #111;
+}
+.btn-wa:active{box-shadow:1px 1px 0 #111!important;}
+
+/* ── Progress dots ─────────────────────────────────── */
+.progress-dots{display:flex;gap:7px;justify-content:center;margin-top:18px;}
+.pdot{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(17,17,17,0.2);border:2px solid #111;
+  transition:all 0.3s;cursor:pointer;
+}
+.pdot.active{background:#d90429;transform:scale(1.2);}
+.pdot.done{background:#FFE135;border-color:#111;}
+
+/* ── Comic strip photos ─────────────────────────────── */
+.comic-wrap{
+  display:flex;gap:0;width:100%;
+  border:3px solid #111;border-radius:8px;
+  overflow:hidden;box-shadow:4px 4px 0 #111;
+  margin-bottom:14px;
+}
+.comic-panel{
+  flex:1;position:relative;
+  border-right:3px solid #111;
+  overflow:hidden;background:#f0f0f0;
+  min-width:0;aspect-ratio:3/4;
+}
+.comic-panel:last-child{border-right:none;}
+.comic-panel img{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  position:absolute;top:0;left:0;
+}
+.comic-panel svg{width:100%;height:100%;display:block;}
+.comic-caption{
+  position:absolute;bottom:0;left:0;right:0;
+  background:#FFE135;border-top:2px solid #111;
+  font-family:'Patrick Hand',cursive;
+  font-size:0.62rem;font-weight:700;color:#111;
+  text-align:center;padding:3px;line-height:1.2;z-index:1;
+}
+
+/* ── Comic title banner ─────────────────────────────── */
+.comic-title{
+  background:#FFE135;border:2px solid #111;border-radius:6px;
+  padding:5px 12px;margin-bottom:10px;
+  font-family:'Fredoka One',cursive;font-size:0.95rem;
+  color:#d90429;letter-spacing:0.04em;
+  box-shadow:3px 3px 0 #111;text-align:center;
+  width:100%;
+}
+
+/* ── Turntable ──────────────────────────────────────── */
+.turntable-wrap{
+  background:linear-gradient(135deg,#1a0a00,#2d1500);
+  border:4px solid #111;border-radius:14px;
+  padding:16px 14px 14px;
+  box-shadow:5px 5px 0 #111;
+  text-align:center;position:relative;
+  overflow:hidden;width:100%;margin-bottom:14px;
+}
+.turntable-wrap::before{
+  content:'★ NOW PLAYING ★';
+  position:absolute;top:8px;left:0;right:0;
+  font-family:'Fredoka One',cursive;font-size:0.62rem;
+  color:#FFE135;letter-spacing:0.18em;
+}
+.turntable{position:relative;width:110px;height:110px;margin:22px auto 10px;}
+.platter{
+  width:110px;height:110px;border-radius:50%;
+  background:conic-gradient(#111 0deg,#222 20deg,#111 40deg,#222 60deg,#111 80deg,#222 100deg,#111 120deg,#222 140deg,#111 160deg,#222 180deg,#111 200deg,#222 220deg,#111 240deg,#222 260deg,#111 280deg,#222 300deg,#111 320deg,#222 340deg,#111 360deg);
+  border:3px solid #333;
+  animation:spin 3s linear infinite;
+  box-shadow:0 0 0 4px #222,0 0 0 6px #444;
+}
+.platter-label{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,#d90429,#ff4444);
+  border:2px solid #111;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.62rem;color:white;
+  font-family:'Fredoka One',cursive;
+  text-align:center;line-height:1.2;z-index:2;
+}
+.tonearm{
+  position:absolute;top:-8px;right:-10px;
+  width:50px;height:70px;pointer-events:none;
+}
+.turntable-song{font-family:'Fredoka One',cursive;font-size:1rem;color:#FFE135;margin-bottom:3px;padding:0 8px;line-height:1.3;}
+.turntable-artist{font-family:'Patrick Hand',cursive;font-size:0.82rem;color:rgba(255,225,53,0.65);}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* ── Balloon ────────────────────────────────────────── */
+.balloon-wrap{text-align:center;cursor:pointer;padding:10px 0;touch-action:manipulation;}
+.balloon{font-size:6rem;display:block;animation:balloonBounce 1s ease-in-out infinite;filter:drop-shadow(3px 3px 0 #111);}
+@keyframes balloonBounce{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-15px) rotate(5deg);}}
+.balloon-hint{font-family:'Patrick Hand',cursive;font-size:1rem;color:#111;font-weight:700;margin-top:8px;animation:tapPulse 2s ease infinite;}
+@keyframes tapPulse{0%,100%{opacity:0.7;}50%{opacity:1;}}
+
+/* ── Newspaper letter ───────────────────────────────── */
+.newspaper{
+  background:#fdf8e7;border:4px solid #111;
+  border-radius:8px;padding:14px 16px 16px;
+  box-shadow:5px 5px 0 #111;text-align:left;
+  width:100%;margin-bottom:14px;
+}
+.newspaper-flag{
+  display:flex;justify-content:space-between;
+  font-family:'Patrick Hand',cursive;font-size:0.6rem;color:#666;
+  margin-bottom:4px;border-bottom:1px solid #ccc;padding-bottom:3px;
+}
+.newspaper-masthead{
+  font-family:'Fredoka One',cursive;font-size:1.4rem;color:#111;
+  letter-spacing:0.03em;line-height:1.1;text-align:center;
+}
+.newspaper-date{
+  font-family:'Patrick Hand',cursive;font-size:0.65rem;
+  color:#666;margin-top:3px;letter-spacing:0.05em;text-align:center;
+  border-bottom:4px double #111;padding-bottom:8px;margin-bottom:10px;
+}
+.newspaper-headline{
+  font-family:'Fredoka One',cursive;font-size:1rem;
+  background:#d90429;color:white;
+  padding:5px 8px;border-radius:4px;
+  text-transform:uppercase;margin-bottom:8px;
+  display:block;line-height:1.2;
+}
+.newspaper-body{
+  font-family:'Patrick Hand',cursive;font-size:0.9rem;
+  color:#222;line-height:1.7;
+}
+.newspaper-byline{
+  font-family:'Patrick Hand',cursive;font-size:0.75rem;
+  color:#555;margin-top:8px;font-style:italic;
+  border-top:1px solid #bbb;padding-top:6px;
+}
+
+/* ── Customize scroll ───────────────────────────────── */
+#s-customize{justify-content:flex-start;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.cust-scroll{width:100%;max-width:430px;padding:0 18px 40px;overflow-y:auto;height:100vh;-webkit-overflow-scrolling:touch;background:#FFE135;}
+.cust-header{
+  display:flex;align-items:center;gap:12px;padding:16px 0 8px;
+  position:sticky;top:0;background:#FFE135;z-index:10;
+  border-bottom:3px solid #111;margin-bottom:16px;
+}
+.cust-title{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#d90429;}
+.field-group{margin-bottom:16px;}
+.field-label{
+  display:block;font-family:'Fredoka One',cursive;
+  font-size:0.82rem;color:#111;margin-bottom:7px;
+  letter-spacing:0.03em;
+}
+input[type=text],input[type=number],textarea,select{
+  width:100%;border:3px solid #111;border-radius:8px;
+  padding:12px 14px;font-size:0.95rem;
+  font-family:'Patrick Hand',cursive;color:#111;background:white;outline:none;
+  box-shadow:3px 3px 0 #111;
+  transition:box-shadow 0.15s;
+}
+input:focus,textarea:focus,select:focus{box-shadow:4px 4px 0 #d90429;border-color:#d90429;}
+textarea{min-height:100px;resize:vertical;line-height:1.6;}
+.preview-bar{
+  padding:16px 0 0;border-top:3px solid #111;margin-top:8px;
+}
+
+/* ── AI box ─────────────────────────────────────────── */
+.ai-box{
+  background:#111;border-radius:12px;
+  border:3px solid #FFE135;
+  padding:14px 16px;margin-bottom:16px;
+  box-shadow:4px 4px 0 #FFE135;
+}
+.ai-box-title{font-family:'Fredoka One',cursive;font-size:0.9rem;color:#FFE135;margin-bottom:8px;}
+.ai-input{
+  width:100%;background:rgba(255,255,255,0.1);
+  border:2px solid rgba(255,225,53,0.4);border-radius:8px;
+  padding:10px 12px;font-size:0.88rem;color:white;
+  font-family:'Patrick Hand',cursive;outline:none;margin-bottom:8px;
+}
+.ai-input::placeholder{color:rgba(255,255,255,0.45);}
+.btn-ai{
+  width:100%;padding:11px;
+  background:#d90429;color:white;
+  border:2px solid #FFE135;border-radius:8px;
+  font-family:'Fredoka One',cursive;font-size:0.9rem;
+  cursor:pointer;box-shadow:3px 3px 0 #FFE135;
+}
+.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;color:#FFE135;margin-top:8px;}
+.ai-loading.show{display:flex;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#FFE135;animation:aiPulse 1s ease-in-out infinite;}
+.ai-dot:nth-child(2){animation-delay:0.2s;}.ai-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+.ai-result{font-size:0.78rem;color:#FFE135;margin-top:6px;display:none;}
+.ai-result.show{display:block;}
+
+/* ── Photo thumbs ───────────────────────────────────── */
+.photo-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.thumb-wrap{position:relative;width:64px;height:64px;}
+.thumb-wrap img{width:100%;height:100%;object-fit:cover;border-radius:6px;border:3px solid #111;}
+.thumb-del{
+  position:absolute;top:-6px;right:-6px;
+  width:18px;height:18px;background:#d90429;
+  color:white;border-radius:50%;border:2px solid #111;
+  font-size:0.65rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── Song search ─────────────────────────────────────── */
+.song-search-box{
+  background:white;border:3px solid #111;border-radius:10px;
+  padding:12px 14px;margin-bottom:8px;
+  box-shadow:3px 3px 0 #111;
+}
+.yt-result{
+  display:flex;align-items:center;gap:10px;
+  background:white;border-radius:8px;
+  padding:8px 10px;border:2px solid #111;
+  margin-bottom:6px;box-shadow:2px 2px 0 #111;
+}
+.yt-result img{width:56px;height:42px;border-radius:4px;object-fit:cover;flex-shrink:0;border:2px solid #111;}
+.yt-use-btn{
+  padding:6px 10px;background:#d90429;color:white;
+  border:2px solid #111;border-radius:6px;
+  font-family:'Fredoka One',cursive;font-size:0.7rem;
+  cursor:pointer;flex-shrink:0;
+  box-shadow:2px 2px 0 #111;touch-action:manipulation;
+}
+
+/* ── Share modal ─────────────────────────────────────── */
+.share-modal{
+  position:fixed;inset:0;background:rgba(0,0,0,0.85);
+  z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.share-modal.show{display:flex;}
+.share-box{
+  background:#FFE135;border:4px solid #111;border-radius:16px;
+  padding:24px 20px;width:100%;max-width:360px;
+  text-align:center;box-shadow:8px 8px 0 #111;
+}
+.share-box h3{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#111;margin-bottom:6px;}
+.share-link-row{
+  background:white;border:3px solid #111;border-radius:8px;
+  padding:10px 12px;margin:12px 0;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;box-shadow:3px 3px 0 #111;
+}
+.share-link-text{font-size:0.72rem;color:#111;word-break:break-all;flex:1;font-family:'Patrick Hand',cursive;}
+.copy-btn{
+  background:#d90429;color:white;border:2px solid #111;
+  border-radius:6px;padding:6px 10px;
+  font-family:'Fredoka One',cursive;font-size:0.72rem;
+  cursor:pointer;white-space:nowrap;
+  box-shadow:2px 2px 0 #111;flex-shrink:0;
+}
+.expiry-note{
+  font-family:'Patrick Hand',cursive;font-size:0.75rem;color:#555;
+  background:rgba(255,255,255,0.7);border-radius:8px;
+  padding:6px 10px;margin-bottom:10px;
+}
+
+/* ── Photo expand ────────────────────────────────────── */
+.photo-expand{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;}
+.photo-expand.show{display:flex;}
+.photo-expand img{max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;border:4px solid #111;}
+.expand-dots{display:flex;gap:8px;margin-top:16px;}
+.expand-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;border:2px solid rgba(255,255,255,0.5);}
+.expand-dot.active{background:#FFE135;border-color:#111;}
+
+/* ── Watermark ───────────────────────────────────────── */
+.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.62rem;color:rgba(17,17,17,0.5);font-weight:600;}
+.wm a{color:inherit;text-decoration:none;font-family:'Fredoka One',cursive;}
+
+/* ── Receiver CTA ────────────────────────────────────── */
+#receiverCTA{display:none;margin-top:14px;text-align:center;}
+
+/* ── Animations ──────────────────────────────────────── */
+@keyframes ripple{to{transform:scale(4);opacity:0;}}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+<div class="confetti-bg" id="confettiBg"></div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1: WELCOME
+═══════════════════════════════════════════ -->
+<div class="screen active" id="s-welcome">
+  <div class="card"><div class="card-inner">
+    <span class="big-emoji">🎂</span>
+    <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
+    <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🎊</div>
+
+    <!-- Creator mode -->
+    <div id="creatorBtns">
+      <button class="btn btn-primary" onclick="ripple(event);goTo('s-memories')" style="margin-top:0;">🎊 Preview Retro Card</button>
+      <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')">✏️ Customize Card</button>
+      <div style="font-size:0.85rem;color:#555;text-align:center;margin-top:6px;font-family:'Patrick Hand',cursive;">👆 Add your photos, letter &amp; song</div>
+    </div>
+
+    <!-- After save -->
+    <div id="savedBtns" style="display:none;">
+      <button class="btn btn-primary" onclick="ripple(event);goTo('s-memories')" style="margin-top:0;" id="previewBtn">🎊 Preview Retro Card ✨</button>
+      <button class="btn btn-wa" onclick="shareCard()" id="shareWelcomeBtn" style="display:none;">🎁 Create &amp; Share Card</button>
+      <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')">✏️ Edit Card</button>
+    </div>
+
+    <!-- Receiver mode -->
+    <div id="receiverBtns" style="display:none;">
+      <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">🎊 Open Card!</button>
+    </div>
+  </div></div>
+  <div class="progress-dots" style="visibility:hidden;"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2: MEMORIES (COMIC STRIP)
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-memories">
+  <div class="card">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="card-inner">
+      <div class="screen-title" id="memoriesTitle">Our Memories 📸</div>
+      <div class="comic-title">📰 THE BIRTHDAY KID</div>
+      <div id="memoriesSub" style="display:none;font-family:'Patrick Hand',cursive;font-size:0.75rem;color:#555;font-style:italic;margin-top:-6px;margin-bottom:8px;text-align:center;">— chosen by <span id="memoriesSender"></span> with love</div>
+
+      <!-- Comic placeholder -->
+      <div id="photoPlaceholder">
+        <div class="comic-wrap">
+          <div class="comic-panel">
+            <svg viewBox="0 0 80 130" style="background:#fff9c4;"><text x="40" y="55" text-anchor="middle" font-size="38">🎂</text><text x="40" y="88" text-anchor="middle" font-size="10" font-family="Patrick Hand,cursive" fill="#d90429" font-weight="700">BIRTHDAY</text><text x="40" y="106" text-anchor="middle" font-size="9" font-family="Patrick Hand,cursive" fill="#111">LEGEND!</text></svg>
+            <div class="comic-caption">The Hero!</div>
+          </div>
+          <div class="comic-panel">
+            <svg viewBox="0 0 80 130" style="background:#ffe0b2;"><text x="40" y="50" text-anchor="middle" font-size="34">🎉</text><text x="12" y="80" font-size="16">⭐</text><text x="50" y="90" font-size="20">🎊</text><text x="40" y="112" text-anchor="middle" font-size="9" font-family="Patrick Hand,cursive" fill="#111">PARTY MODE!</text></svg>
+            <div class="comic-caption">Best Day!</div>
+          </div>
+          <div class="comic-panel">
+            <svg viewBox="0 0 80 130" style="background:#fce4ec;"><text x="40" y="55" text-anchor="middle" font-size="36">🎈</text><text x="20" y="85" font-size="14">💥</text><text x="48" y="78" font-size="12">✨</text><text x="40" y="112" text-anchor="middle" font-size="10" font-family="Patrick Hand,cursive" fill="#d90429" font-weight="700">POP IT!</text></svg>
+            <div class="comic-caption">So Cool!</div>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;color:#555;margin-top:8px;text-align:center;font-family:'Patrick Hand',cursive;">Upload your real photos in Customize ↗</div>
+      </div>
+
+      <!-- Real photos -->
+      <div class="comic-wrap" id="comicWrap" style="display:none;"></div>
+
+      <div id="photoTapHint" style="display:none;text-align:center;font-size:0.82rem;color:#555;margin-bottom:8px;font-family:'Patrick Hand',cursive;">👆 Tap any photo to see it full screen</div>
+      <button class="btn btn-primary" onclick="ripple(event);goTo('s-song')">Next ›</button>
+      <button class="btn btn-outline" id="custBtnMem" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+    </div>
+  </div>
+  <div class="progress-dots"><div class="pdot done" style="cursor:pointer" onclick="goTo('s-welcome')"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3: SONG (TURNTABLE)
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-song">
+  <div class="card">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="card-inner">
+      <div class="screen-title">Song for You 🎵</div>
+      <div class="screen-sub" id="songSub">This song always reminds me of you.</div>
+
+      <!-- Turntable -->
+      <div class="turntable-wrap">
+        <div class="turntable">
+          <div class="platter"><div class="platter-label">🎵<br>HBD</div></div>
+          <svg class="tonearm" viewBox="0 0 50 70" fill="none">
+            <line x1="40" y1="5" x2="15" y2="55" stroke="#888" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="40" cy="5" r="5" fill="#555" stroke="#333" stroke-width="1.5"/>
+            <circle cx="14" cy="56" r="4" fill="#d90429" stroke="#111" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="turntable-song" id="songName">Your Party Anthem 🎵</div>
+        <div class="turntable-artist" id="songArtist">Select a song below ↓</div>
+      </div>
+
+      <!-- Spotify/YouTube embed -->
+      <div id="spotifyWrap" style="display:none;margin-bottom:14px;border-radius:10px;overflow:hidden;border:3px solid #111;box-shadow:4px 4px 0 #111;">
+        <iframe id="spotifyFrame" src="" width="100%" height="152" frameBorder="0" allow="autoplay;encrypted-media;fullscreen;picture-in-picture" loading="lazy" allowfullscreen style="display:block;"></iframe>
+        <a id="ytFallbackLink" href="#" target="_blank" rel="noopener" style="display:none;font-family:'Patrick Hand',cursive;font-size:0.82rem;color:#d90429;font-weight:700;text-align:center;padding:10px;background:#FFE135;text-decoration:none;display:none;border-top:2px solid #111;">▶ Video blocked here — tap to open on YouTube 🎵</a>
+      </div>
+
+      <button class="btn btn-primary" onclick="ripple(event);goTo('s-balloon')">Next ›</button>
+      <button class="btn btn-outline" id="custBtnSong" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+    </div>
+  </div>
+  <div class="progress-dots"><div class="pdot done" style="cursor:pointer" onclick="goTo('s-welcome')"></div><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4: BALLOON POP
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-balloon">
+  <div class="card">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="card-inner">
+      <div class="screen-title" id="balloonTitle">There's a surprise<br>waiting for you! 🎊</div>
+      <div class="balloon-wrap" onclick="popBalloon()">
+        <span class="balloon" id="balloon">🎈</span>
+        <div class="balloon-hint">POP the balloon! 🎊</div>
+      </div>
+      <button class="btn btn-outline" id="custBtnBalloon" onclick="ripple(event);goTo('s-customize')" style="margin-top:14px;">✏️ Customize</button>
+    </div>
+  </div>
+  <div class="progress-dots"><div class="pdot done" style="cursor:pointer" onclick="goTo('s-welcome')"></div><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 5: NEWSPAPER LETTER
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-letter">
+  <div class="card">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="card-inner" style="padding-top:52px;padding-bottom:18px;overflow-y:auto;max-height:calc(100vh - 40px);-webkit-overflow-scrolling:touch;">
+      <div class="newspaper">
+        <div class="newspaper-flag"><span>VOL. 1 · SPECIAL EDITION</span><span>FREE 🎊</span></div>
+        <div class="newspaper-masthead">🗞️ THE BIRTHDAY GAZETTE</div>
+        <div class="newspaper-date" id="newsDate">Special Edition · Today</div>
+        <div class="newspaper-headline" id="newsHeadline">BREAKING: IT'S YOUR BIRTHDAY! 🎂</div>
+        <div class="newspaper-body" id="newsBody">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.</div>
+        <div class="newspaper-byline" id="newsByline">— Reported with love 💛</div>
+      </div>
+      <button class="btn btn-primary" id="custBtnLetter" onclick="ripple(event);goTo('s-customize')" style="margin-top:0;">🎊 Create Your Own Card</button>
+      <button class="btn btn-wa" id="shareCardBtn" onclick="shareCard()" style="margin-top:8px;display:none;">🎁 Create &amp; Share Card</button>
+      <div id="receiverCTA" style="display:none;margin-top:14px;text-align:center;">
+        <div style="font-family:'Patrick Hand',cursive;font-size:0.88rem;color:#555;margin-bottom:10px;">Want to send someone a card like this? 🎊</div>
+        <a href="https://wishyou.ai" style="display:inline-block;padding:12px 28px;background:#d90429;color:white;border-radius:8px;font-family:'Fredoka One',cursive;font-size:0.95rem;text-decoration:none;border:3px solid #111;box-shadow:4px 4px 0 #111;">Create your own on WishYou.ai 🎊</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 6: CUSTOMIZE
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-customize">
+  <div class="cust-scroll" id="custScroll">
+    <div class="cust-header">
+      <div class="back-btn" style="position:relative;top:0;left:0;flex-shrink:0;" onclick="saveAndBack()">←</div>
+      <div class="cust-title">Edit Retro Party Card ✏️</div>
+    </div>
+
+    <!-- AI Magic Fill -->
+    <div class="ai-box">
+      <div class="ai-box-title">✨ Magic Fill — AI fills everything</div>
+      <div style="font-size:0.82rem;color:rgba(255,225,53,0.7);margin-bottom:8px;font-family:'Patrick Hand',cursive;">Describe the occasion and AI fills everything!</div>
+      <input class="ai-input" id="aiInput" placeholder="e.g. my best friend Rahul's 25th birthday, we've been friends since school..." maxlength="200">
+      <button class="btn-ai" onclick="runMagicFill()" id="magicFillBtn">✨ Fill My Card with AI</button>
+      <div class="ai-loading" id="magicLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI is personalising your card...</span></div>
+      <div class="ai-result" id="magicResult"></div>
+    </div>
+
+    <!-- Their Name -->
+    <div class="field-group">
+      <label class="field-label">Their Name</label>
+      <input type="text" id="cName" placeholder="e.g. Rahul" maxlength="30">
+    </div>
+
+    <!-- Age (for headline) -->
+    <div class="field-group">
+      <label class="field-label">Their Age <span style="font-size:0.7rem;color:#555;font-family:'Patrick Hand',cursive;">(shown in newspaper headline)</span></label>
+      <input type="number" id="cAge" placeholder="e.g. 25" min="1" max="120">
+    </div>
+
+    <!-- Card Title -->
+    <div class="field-group">
+      <label class="field-label">Card Title</label>
+      <input type="text" id="cTitle" value="Happy Birthday!" maxlength="60">
+    </div>
+
+    <!-- Relationship for AI -->
+    <div class="field-group">
+      <label class="field-label">Relationship Type</label>
+      <select id="relSelect" onchange="onRelChange(this.value)">
+        <option value="">Select relationship...</option>
+        <option value="Best Friend">🤝 Best Friend</option>
+        <option value="Romantic Partner">💕 Romantic Partner</option>
+        <option value="Husband">💍 Husband</option>
+        <option value="Wife">💍 Wife</option>
+        <option value="Mom">🌸 Mom</option>
+        <option value="Dad">💪 Dad</option>
+        <option value="Son">👦 Son</option>
+        <option value="Daughter">👧 Daughter</option>
+        <option value="Sister">👯 Sister</option>
+        <option value="Brother">🤜 Brother</option>
+        <option value="Colleague">💼 Colleague</option>
+        <option value="Cousin">🤗 Cousin</option>
+      </select>
+      <div style="margin-top:10px;background:rgba(0,0,0,0.1);border-radius:10px;padding:10px 12px;">
+        <div style="font-size:0.78rem;color:#555;margin-bottom:6px;font-family:'Patrick Hand',cursive;">AI writes a letter based on your relationship</div>
+        <button id="aiPersonaliseBtn" style="display:none;width:100%;padding:10px;background:#d90429;color:white;border:2px solid #111;border-radius:8px;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;box-shadow:3px 3px 0 #111;" onclick="runPersonalise()">📝 Write Letter with AI</button>
+        <div class="ai-loading" id="personaliseLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Writing your letter...</span></div>
+      </div>
+    </div>
+
+    <!-- Letter body -->
+    <div class="field-group">
+      <label class="field-label">Your Letter (newspaper body)</label>
+      <textarea id="cMsg" rows="5" placeholder="Write something fun and heartfelt..."></textarea>
+    </div>
+
+    <!-- Sign off -->
+    <div class="field-group">
+      <label class="field-label">Sign Off</label>
+      <input type="text" id="cSign" placeholder="e.g. Reported with love 💛" maxlength="60">
+    </div>
+
+    <!-- Sender -->
+    <div class="field-group">
+      <label class="field-label">Your Name (Sender)</label>
+      <input type="text" id="cSender" placeholder="e.g. Nilesh" maxlength="30">
+    </div>
+
+    <!-- Song subtitle -->
+    <div class="field-group">
+      <label class="field-label">Song Message</label>
+      <input type="text" id="cSongSub" placeholder="e.g. This banger is for you!" maxlength="80">
+    </div>
+
+    <!-- Photos -->
+    <div class="field-group">
+      <label class="field-label">Your Photos (up to 5)</label>
+      <div id="photoThumbs" class="photo-thumbs"></div>
+      <label style="display:flex;align-items:center;gap:8px;padding:12px 14px;background:rgba(0,0,0,0.1);border:3px dashed #111;border-radius:10px;cursor:pointer;margin-top:8px;font-family:'Patrick Hand',cursive;font-size:0.88rem;color:#111;" id="photoUploadLabel">
+        📸 Tap to add photos
+        <input type="file" accept="image/*" multiple style="display:none;" id="photoInput" onchange="handlePhotos(this)">
+      </label>
+    </div>
+
+    <!-- Song search -->
+    <div class="field-group">
+      <label class="field-label">🎵 Search &amp; Pick a Song</label>
+      <div id="ytSelectedSong" style="display:none;background:#111;border:3px solid #FFE135;border-radius:10px;padding:10px 12px;margin-bottom:8px;box-shadow:3px 3px 0 #FFE135;">
+        <div style="font-size:0.72rem;color:rgba(255,225,53,0.7);margin-bottom:3px;font-family:'Patrick Hand',cursive;">Now playing on your card:</div>
+        <div id="ytSelectedName" style="font-size:0.88rem;font-weight:600;color:#FFE135;font-family:'Patrick Hand',cursive;"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input type="text" id="ytSearchInput" placeholder="Type song name..." style="flex:1;" maxlength="100" onkeydown="if(event.key==='Enter')searchYouTube()">
+        <button onclick="searchYouTube()" style="padding:12px 16px;background:#d90429;color:white;border:3px solid #111;border-radius:8px;font-family:'Fredoka One',cursive;font-size:0.88rem;cursor:pointer;box-shadow:3px 3px 0 #111;touch-action:manipulation;">🔍</button>
+      </div>
+      <div id="ytResults" style="margin-bottom:8px;"></div>
+      <input type="hidden" id="cSpotify">
+
+      <!-- AI Song suggestions -->
+      <div class="song-search-box">
+        <div style="font-family:'Fredoka One',cursive;font-size:0.82rem;color:#111;margin-bottom:8px;">🤖 AI Song Suggestions</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <select id="songLang" onchange="updateSongMood()" style="flex:1;padding:8px 10px;font-size:0.82rem;">
+            <option value="">Any language</option>
+            <option value="Hindi">Hindi</option>
+            <option value="English">English</option>
+            <option value="Marathi">Marathi</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Punjabi">Punjabi</option>
+          </select>
+          <select id="songVibe" onchange="updateSongMood()" style="flex:1;padding:8px 10px;font-size:0.82rem;">
+            <option value="">Any vibe</option>
+            <option value="Fun & Upbeat">Fun & Upbeat 🎉</option>
+            <option value="Romantic">Romantic 💕</option>
+            <option value="Friendship">Friendship 🤝</option>
+            <option value="Nostalgic">Nostalgic 🌅</option>
+          </select>
+        </div>
+        <input type="hidden" id="aiSongMood">
+        <button id="aiSongBtn" onclick="runSongSuggestions()" style="width:100%;padding:10px;background:#d90429;color:white;border:2px solid #111;border-radius:8px;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;box-shadow:3px 3px 0 #111;">✨ Suggest Songs</button>
+        <div class="ai-loading" id="aiSongLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Finding bangers...</span></div>
+        <div id="aiSongResults" style="margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <div class="preview-bar">
+      <button class="btn btn-primary" onclick="ripple(event);saveAndBack()" style="margin-bottom:10px;">💾 Save &amp; Preview</button>
+      <button class="btn btn-wa" onclick="shareCard()" id="shareCardBtnCust">🎁 Create &amp; Share Card</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- Photo expand -->
+<div class="photo-expand" id="photoExpand" onclick="closeExpand()">
+  <img id="expandImg" src="" alt="">
+  <div class="expand-dots" id="expandNav"></div>
+</div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:2rem;margin-bottom:6px;">🎊</div>
+    <h3>Card Saved!</h3>
+    <div style="font-family:'Patrick Hand',cursive;font-size:0.88rem;color:#555;margin-bottom:12px;">Share this link with the birthday person!</div>
+    <div class="expiry-note">⏳ Card expires in <strong>3 days</strong> — share it soon!</div>
+    <div class="share-link-row">
+      <span class="share-link-text" id="shareLinkText"></span>
+      <button class="copy-btn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="btn btn-wa" style="width:100%;margin-bottom:8px;" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
+    <button style="width:100%;padding:10px;background:none;border:3px solid #111;border-radius:8px;font-family:'Fredoka One',cursive;font-size:0.85rem;color:#111;cursor:pointer;box-shadow:3px 3px 0 #111;" onclick="closeShare()">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="/">WishYou.ai</a></div>
+
+<script>
+// ════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════
+const FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const CLOUDINARY_CLOUD = 'dkvbjazfe';
+const CLOUDINARY_PRESET = 'wishyou-uploads';
+const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
+const CARD_TYPE = 'birthday-retro';
+
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let cur = 's-welcome';
+let isReceiver = false;
+let photos = [];
+let spotifySrc = '';
+let currentTheme = '';
+let selectedRelationship = '';
+let shareLink = '';
+let expandIdx = 0;
+
+const ALL = ['s-welcome','s-memories','s-song','s-balloon','s-letter','s-customize'];
+const BACK = {'s-memories':'s-welcome','s-song':'s-memories','s-balloon':'s-song','s-letter':'s-balloon','s-customize':'s-welcome'};
+
+// ════════════════════════════════════════════════
+// CONFETTI
+// ════════════════════════════════════════════════
+const CONFETTI_COLORS = ['#ff6f00','#ff8f00','#ffca28','#ff5252','#69f0ae','#40c4ff','#e040fb','#ff4081','#d90429','#FFE135'];
+let confettiTimer = null;
+let confettiPieces = [];
+
+function startConfetti(){
+  if(confettiTimer) return;
+  const bg = document.getElementById('confettiBg');
+  confettiTimer = setInterval(() => {
+    if(confettiPieces.length > 60) return;
+    const p = document.createElement('div');
+    const size = 6 + Math.random()*8;
+    const color = CONFETTI_COLORS[Math.floor(Math.random()*CONFETTI_COLORS.length)];
+    p.style.cssText = `position:absolute;pointer-events:none;top:-10px;left:${Math.random()*100}%;width:${size}px;height:${size}px;background:${color};border-radius:${Math.random()>0.5?'50%':'2px'};border:1px solid rgba(0,0,0,0.2);animation:confettiFall ${3+Math.random()*4}s linear ${Math.random()*2}s forwards;`;
+    bg.appendChild(p);
+    confettiPieces.push(p);
+    setTimeout(() => { if(p.parentNode) p.parentNode.removeChild(p); confettiPieces = confettiPieces.filter(x=>x!==p); }, 7000);
+  }, 100);
+}
+
+function stopConfetti(){
+  if(confettiTimer){ clearInterval(confettiTimer); confettiTimer=null; }
+  confettiPieces.forEach(p => { if(p.parentNode) p.parentNode.removeChild(p); });
+  confettiPieces = [];
+}
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function showScreen(id){
+  ALL.forEach(s => document.getElementById(s).classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  cur = id;
+  if(id === 's-memories' && photos.length) buildComicStrip();
+  if(id === 's-song' && spotifySrc){
+    const f = document.getElementById('spotifyFrame');
+    if(f.src !== spotifySrc) f.src = spotifySrc;
+    document.getElementById('spotifyWrap').style.display = 'block';
+  }
+  // Confetti on card screens
+  if(id === 's-welcome' || id === 's-customize'){ stopConfetti(); }
+  else { startConfetti(); }
+}
+
+function goTo(id){
+  if(cur === id) return;
+  showScreen(id);
+  if(id === 's-customize') setTimeout(() => document.getElementById('custScroll').scrollTo(0,0), 50);
+  if(id === 's-letter') syncNewspaper();
+}
+
+function goBack(){
+  const p = BACK[cur]; if(!p) return;
+  showScreen(p);
+  if(p === 's-balloon') resetBalloon();
+}
+
+// ════════════════════════════════════════════════
+// BALLOON POP
+// ════════════════════════════════════════════════
+function popBalloon(){
+  const balloon = document.getElementById('balloon');
+  if(!balloon || balloon.textContent === '💥') return;
+  balloon.style.transition = 'transform 0.1s,opacity 0.2s';
+  balloon.style.transform = 'scale(1.4)';
+  setTimeout(() => {
+    balloon.textContent = '💥';
+    balloon.style.transform = 'scale(0.1)';
+    balloon.style.opacity = '0';
+    setTimeout(() => { stopConfetti(); goTo('s-letter'); }, 600);
+  }, 100);
+}
+
+function resetBalloon(){
+  const balloon = document.getElementById('balloon');
+  if(balloon){ balloon.textContent='🎈'; balloon.style.transform=''; balloon.style.opacity='1'; balloon.style.transition=''; }
+}
+
+// ════════════════════════════════════════════════
+// NEWSPAPER
+// ════════════════════════════════════════════════
+function syncNewspaper(){
+  const name = document.getElementById('cName').value.trim();
+  const age = document.getElementById('cAge').value.trim();
+  const msg = document.getElementById('cMsg').value.trim();
+  const sign = document.getElementById('cSign').value.trim();
+  const sender = document.getElementById('cSender').value.trim();
+
+  const hl = document.getElementById('newsHeadline');
+  if(hl){
+    if(name && age) hl.textContent = `BREAKING: ${name.toUpperCase()} IS TURNING ${age}! 🎂`;
+    else if(name) hl.textContent = `BREAKING: HAPPY BIRTHDAY ${name.toUpperCase()}! 🎂`;
+    else hl.textContent = 'BREAKING: IT\'S YOUR BIRTHDAY! 🎂';
+  }
+  const nb = document.getElementById('newsBody');
+  if(nb && msg) nb.textContent = msg;
+  const by = document.getElementById('newsByline');
+  if(by) by.textContent = '— Reported with love by ' + (sender||'Someone Special') + ' 💛';
+  const nd = document.getElementById('newsDate');
+  if(nd) nd.textContent = 'Special Edition · ' + new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+}
+
+// ════════════════════════════════════════════════
+// RIPPLE
+// ════════════════════════════════════════════════
+function ripple(e){
+  const btn = e.currentTarget;
+  const r = document.createElement('span');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width,rect.height);
+  r.style.cssText = `position:absolute;width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;background:rgba(255,255,255,0.3);border-radius:50%;transform:scale(0);animation:ripple 0.5s linear;pointer-events:none;`;
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 600);
+}
+
+// ════════════════════════════════════════════════
+// PHOTOS
+// ════════════════════════════════════════════════
+function handlePhotos(inp){
+  const files = Array.from(inp.files);
+  if(!files.length) return;
+  photos = [...photos, ...files.map(f=>URL.createObjectURL(f))].slice(0,5);
+  buildThumbs();
+  if(cur === 's-memories') buildComicStrip();
+}
+
+function buildThumbs(){
+  const tb = document.getElementById('photoThumbs'); tb.innerHTML='';
+  photos.forEach((url,i) => {
+    const w = document.createElement('div'); w.className='thumb-wrap';
+    w.innerHTML = `<img src="${url}"><button class="thumb-del" onclick="removePhoto(${i})">✕</button>`;
+    tb.appendChild(w);
+  });
+  document.getElementById('photoUploadLabel').style.display = photos.length>=5?'none':'';
+}
+
+function removePhoto(i){
+  photos.splice(i,1); buildThumbs();
+  if(photos.length===0){ document.getElementById('comicWrap').style.display='none'; document.getElementById('photoPlaceholder').style.display='block'; }
+  else if(cur==='s-memories') buildComicStrip();
+}
+
+const CAPTIONS = ['The Hero!','Best Day!','So Cool!','Legend!','Party Time!'];
+
+function buildComicStrip(){
+  const wrap = document.getElementById('comicWrap');
+  wrap.innerHTML='';
+  if(!photos.length) return;
+  document.getElementById('photoPlaceholder').style.display='none';
+  wrap.style.display='flex';
+  document.getElementById('photoTapHint').style.display='block';
+  photos.forEach((url,i) => {
+    const panel = document.createElement('div');
+    panel.className = 'comic-panel';
+    panel.innerHTML = `<img src="${url}" alt="Photo ${i+1}"><div class="comic-caption">${CAPTIONS[i]||'Memory '+(i+1)}</div>`;
+    panel.addEventListener('click', () => openExpand(i));
+    wrap.appendChild(panel);
+  });
+  // Expand nav
+  const nav = document.getElementById('expandNav'); nav.innerHTML='';
+  photos.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'expand-dot'+(i===0?' active':'');
+    d.onclick = e => { e.stopPropagation(); goExpand(i); };
+    nav.appendChild(d);
+  });
+}
+
+function openExpand(i){ expandIdx=i; goExpand(i); document.getElementById('photoExpand').classList.add('show'); }
+function closeExpand(){ document.getElementById('photoExpand').classList.remove('show'); }
+function goExpand(i){
+  expandIdx=i;
+  document.getElementById('expandImg').src=photos[i];
+  document.querySelectorAll('.expand-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+}
+
+// ════════════════════════════════════════════════
+// SONG / YOUTUBE
+// ════════════════════════════════════════════════
+function handleSpotify(val){
+  if(!val) return;
+  const wrap=document.getElementById('spotifyWrap');
+  const fallback=document.getElementById('ytFallbackLink');
+  if(fallback) fallback.style.display='none';
+  const ytMatch = val.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if(ytMatch){
+    const ytId=ytMatch[1], origUrl='https://www.youtube.com/watch?v='+ytId;
+    spotifySrc='https://www.youtube.com/embed/'+ytId+'?autoplay=0&rel=0';
+    document.getElementById('spotifyFrame').src=spotifySrc;
+    if(wrap) wrap.style.display='block';
+    if(fallback){ fallback.href=origUrl; }
+    const t=setTimeout(()=>{ if(fallback) fallback.style.display='block'; },5000);
+    document.getElementById('spotifyFrame').onload=()=>clearTimeout(t);
+    return;
+  }
+  const spMatch=val.match(/track\/([a-zA-Z0-9]+)/);
+  if(spMatch){
+    spotifySrc=`https://open.spotify.com/embed/track/${spMatch[1]}?utm_source=generator&theme=0`;
+    document.getElementById('spotifyFrame').src=spotifySrc;
+    if(wrap) wrap.style.display='block';
+    return;
+  }
+  spotifySrc='';
+  document.getElementById('spotifyFrame').src='';
+  if(wrap) wrap.style.display='none';
+}
+
+function updateSongMood(){
+  const l=document.getElementById('songLang').value, v=document.getElementById('songVibe').value;
+  document.getElementById('aiSongMood').value=[l,v].filter(Boolean).join(' ');
+}
+
+async function searchYouTube(){
+  const query=document.getElementById('ytSearchInput').value.trim();
+  if(!query){ alert('Please type a song name first.'); return; }
+  const rd=document.getElementById('ytResults');
+  rd.innerHTML='<div style="text-align:center;padding:14px;font-family:\'Patrick Hand\',cursive;font-size:0.88rem;color:#d90429;background:#FFE135;border:2px solid #111;border-radius:8px;">🔍 Searching...</div>';
+  const cs=document.getElementById('custScroll');
+  if(cs){ setTimeout(()=>{ const r=document.getElementById('ytResults'); if(r) cs.scrollTop=r.offsetTop-80; },100); }
+  try {
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query})});
+    const data=await res.json();
+    if(!data.items||!data.items.length){ rd.innerHTML='<div style="font-size:0.82rem;color:#555;padding:8px;font-family:\'Patrick Hand\',cursive;">No results. Try different keywords.</div>'; return; }
+    rd.innerHTML='';
+    data.items.forEach(item=>{
+      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
+      const card=document.createElement('div');
+      card.className='yt-result';
+      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.78rem;font-weight:700;color:#111;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-family:'Patrick Hand',cursive;">${title}</div><div style="font-size:0.68rem;color:#555;margin-top:2px;font-family:'Patrick Hand',cursive;">${channelTitle}</div></div><button class="yt-use-btn">✓ Use</button>`;
+      card.querySelector('button').onclick=e=>{ e.stopPropagation(); selectSong(videoId,title,channelTitle); };
+      rd.appendChild(card);
+    });
+    if(cs){ setTimeout(()=>{ const r=document.getElementById('ytResults'); if(r) cs.scrollTop=r.offsetTop-80; },150); }
+  } catch(e){ rd.innerHTML='<div style="font-size:0.82rem;color:#555;padding:8px;font-family:\'Patrick Hand\',cursive;">Search failed. Try again.</div>'; }
+}
+
+function selectSong(videoId,title,artist){
+  const ytUrl='https://www.youtube.com/watch?v='+videoId;
+  document.getElementById('cSpotify').value=ytUrl;
+  handleSpotify(ytUrl);
+  const sel=document.getElementById('ytSelectedSong'),nm=document.getElementById('ytSelectedName');
+  if(sel) sel.style.display='block';
+  if(nm) nm.textContent=title+' — '+artist;
+  document.getElementById('songName').textContent=title;
+  document.getElementById('songArtist').textContent=artist;
+  document.getElementById('ytResults').innerHTML=`<div style="font-size:0.82rem;color:#d90429;font-weight:700;padding:6px 2px;font-family:'Patrick Hand',cursive;">✅ ${title} added!</div>`;
+  const cs=document.getElementById('custScroll');
+  if(cs&&sel){ setTimeout(()=>{ cs.scrollTop=sel.offsetTop-80; },100); }
+}
+
+// ════════════════════════════════════════════════
+// SAVE & BACK
+// ════════════════════════════════════════════════
+function saveAndBack(){
+  const name=document.getElementById('cName').value.trim();
+  const title=document.getElementById('cTitle').value.trim();
+  const msg=document.getElementById('cMsg').value.trim();
+  const sign=document.getElementById('cSign').value.trim();
+  const sender=document.getElementById('cSender').value.trim();
+  const sub=document.getElementById('cSongSub').value.trim();
+
+  document.getElementById('welcomeTitle').textContent=title||'Happy Birthday!';
+  document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🎊`:'Someone special made this just for you 🎊';
+  document.getElementById('songSub').textContent=sub||'This song always reminds me of you.';
+
+  const ms=document.getElementById('memoriesSub'),mn=document.getElementById('memoriesSender');
+  if(ms&&mn){ if(sender){ mn.textContent=sender; ms.style.display='block'; } else ms.style.display='none'; }
+
+  const sp=document.getElementById('cSpotify').value.trim();
+  if(sp) handleSpotify(sp);
+
+  syncNewspaper();
+
+  // Switch to saved state
+  document.getElementById('creatorBtns').style.display='none';
+  document.getElementById('savedBtns').style.display='block';
+  document.getElementById('shareWelcomeBtn').style.display='block';
+  document.getElementById('shareCardBtn').style.display='flex';
+  const cl=document.getElementById('custBtnLetter'); if(cl) cl.textContent='✏️ Edit Letter';
+
+  goBack();
+}
+
+// ════════════════════════════════════════════════
+// SHARE / FIREBASE
+// ════════════════════════════════════════════════
+async function shareCard(){
+  const btns = document.querySelectorAll('.btn-wa');
+  btns.forEach(b=>{ if(b.id!=='shareCardBtnCust') b.textContent='Saving... 🎊'; });
+
+  let photoUrls=[];
+  for(let i=0;i<photos.length;i++){
+    try {
+      const blob=await fetch(photos[i]).then(r=>r.blob());
+      const fd=new FormData(); fd.append('file',blob); fd.append('upload_preset',CLOUDINARY_PRESET); fd.append('folder','wishyou');
+      const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+      const d=await res.json(); if(d.secure_url) photoUrls.push(d.secure_url);
+    } catch(e){ console.error('Upload failed:',e); }
+  }
+
+  const now=Date.now();
+  const cardData={
+    type:CARD_TYPE,
+    name:document.getElementById('cName').value.trim(),
+    age:document.getElementById('cAge').value.trim(),
+    sender:document.getElementById('cSender').value.trim(),
+    title:document.getElementById('cTitle').value.trim(),
+    msg:document.getElementById('cMsg').value.trim(),
+    sign:document.getElementById('cSign').value.trim(),
+    sub:document.getElementById('cSongSub').value.trim(),
+    spotify:document.getElementById('cSpotify').value.trim(),
+    photos:photoUrls,
+    created:now,createdAt:now,
+    expiresAt:now+3*24*60*60*1000
+  };
+
+  try {
+    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
+    const data=await res.json();
+    const cardId=data.name;
+    shareLink=`https://wishyou.ai/birthday/retro.html?card=${cardId}`;
+    document.getElementById('shareLinkText').textContent=shareLink;
+    document.getElementById('shareModal').classList.add('show');
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
+  } catch(e){ alert('Could not save card. Please try again.'); }
+
+  btns.forEach(b=>{ b.textContent='🎁 Create & Share Card'; });
+}
+
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(()=>{
+    const btn=document.querySelector('.copy-btn'); btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+function openWhatsApp(){ window.open('https://wa.me/?text='+encodeURIComponent('🎊 I made you a Retro Party birthday card! Open it: '+shareLink)); }
+function closeShare(){ document.getElementById('shareModal').classList.remove('show'); }
+
+// ════════════════════════════════════════════════
+// AI FUNCTIONS
+// ════════════════════════════════════════════════
+function onRelChange(rel){
+  selectedRelationship=rel;
+  const btn=document.getElementById('aiPersonaliseBtn');
+  if(btn) btn.style.display=rel?'block':'none';
+}
+
+async function callClaude(prompt){
+  try {
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    if(data.error) return '';
+    return data.content&&data.content[0]?data.content[0].text:'';
+  } catch(e){ return ''; }
+}
+
+function stripMarkdown(t){
+  return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();
+}
+
+async function runPersonalise(){
+  if(!selectedRelationship) return;
+  const name=document.getElementById('cName').value.trim()||'them';
+  const btn=document.getElementById('aiPersonaliseBtn'),loading=document.getElementById('personaliseLoading');
+  btn.disabled=true; loading.classList.add('show');
+  const text=await callClaude(`Write a short fun birthday letter (3-4 sentences) for my ${selectedRelationship} named ${name}. Keep it warm and celebratory. Return ONLY the letter body, no greeting, no sign off.`);
+  if(text) document.getElementById('cMsg').value=stripMarkdown(text);
+  btn.disabled=false; loading.classList.remove('show');
+}
+
+async function runMagicFill(){
+  const input=document.getElementById('aiInput').value.trim();
+  if(!input){ alert('Please describe the occasion first.'); return; }
+  const btn=document.getElementById('magicFillBtn'),loading=document.getElementById('magicLoading'),result=document.getElementById('magicResult');
+  btn.disabled=true; loading.classList.add('show'); result.classList.remove('show');
+  const text=await callClaude(`Extract from: "${input}"\nReturn ONLY valid JSON (no markdown):\n{"name":"person name","age":"age if mentioned, else empty string","title":"card title","msg":"3-4 sentence fun letter body (no Dear X, no sign off)","sign":"sign off","songSearch":"song name + artist"}`);
+  try {
+    const d=JSON.parse(text.replace(/```json|```/g,'').trim());
+    if(d.name) document.getElementById('cName').value=d.name;
+    if(d.age) document.getElementById('cAge').value=d.age;
+    if(d.title) document.getElementById('cTitle').value=d.title;
+    if(d.msg) document.getElementById('cMsg').value=stripMarkdown(d.msg);
+    if(d.sign) document.getElementById('cSign').value=d.sign;
+    if(d.songSearch) document.getElementById('ytSearchInput').value=d.songSearch;
+    document.getElementById('welcomeTitle').textContent=d.title||'Happy Birthday!';
+    document.getElementById('welcomeSub').textContent=d.name?`This is for you, ${d.name} 🎊`:'Someone special made this just for you 🎊';
+    result.textContent='✅ Card filled! Review and tweak as needed.'; result.classList.add('show');
+  } catch(e){ result.textContent='⚠️ Could not parse. Try again.'; result.classList.add('show'); }
+  btn.disabled=false; loading.classList.remove('show');
+}
+
+async function runSongSuggestions(){
+  const mood=document.getElementById('aiSongMood').value.trim()||'fun birthday';
+  const lang=document.getElementById('songLang').value;
+  const btn=document.getElementById('aiSongBtn'),loading=document.getElementById('aiSongLoading'),results=document.getElementById('aiSongResults');
+  btn.disabled=true; loading.classList.add('show'); results.innerHTML='';
+  const text=await callClaude(`Suggest 4 real popular songs for a fun birthday card.\nLanguage: ${lang||'any'}\nMood: ${mood}\nReturn ONLY a JSON array:\n[{"name":"Song Name","artist":"Artist Name"}]`);
+  try {
+    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    songs.forEach(s=>{
+      const el=document.createElement('div');
+      el.style.cssText='display:flex;align-items:center;gap:10px;background:#FFE135;border:2px solid #111;border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer;box-shadow:2px 2px 0 #111;';
+      el.innerHTML=`<span style="font-size:1.2rem">🎵</span><div style="flex:1;"><div style="font-family:\'Fredoka One\',cursive;font-size:0.85rem;color:#111;">${s.name}</div><div style="font-family:\'Patrick Hand\',cursive;font-size:0.72rem;color:#555;">${s.artist}</div></div><span style="font-family:\'Fredoka One\',cursive;font-size:0.7rem;color:#d90429;">Search ›</span>`;
+      el.onclick=()=>{ document.getElementById('ytSearchInput').value=s.name+' '+s.artist; searchYouTube(); };
+      results.appendChild(el);
+    });
+  } catch(e){ results.innerHTML='<div style="font-size:0.82rem;color:#555;padding:8px;font-family:\'Patrick Hand\',cursive;">Could not fetch. Try again.</div>'; }
+  btn.disabled=false; loading.classList.remove('show');
+}
+
+// ════════════════════════════════════════════════
+// LOAD CARD FROM URL (RECEIVER)
+// ════════════════════════════════════════════════
+function loadCardFromURL(){
+  const params=new URLSearchParams(window.location.search);
+  const cardId=params.get('card');
+  if(!cardId) return;
+
+  isReceiver=true;
+  document.getElementById('creatorBtns').style.display='none';
+  document.getElementById('savedBtns').style.display='none';
+  const rb=document.getElementById('receiverBtns'); if(rb) rb.style.display='block';
+  const ob=document.getElementById('openCardBtn'); if(ob){ ob.textContent='Loading... 🎊'; ob.disabled=true; }
+
+  ['custBtnMem','custBtnSong','custBtnBalloon','custBtnLetter','shareCardBtn'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.style.display='none';
+  });
+  const cta=document.getElementById('receiverCTA'); if(cta) cta.style.display='block';
+
+  fetch(FIREBASE_URL+'/'+cardId+'.json')
+    .then(r=>r.json())
+    .then(d=>{
+      if(!d||(d.expiresAt&&Date.now()>d.expiresAt)){
+        if(ob){ ob.textContent='❌ Card Expired'; ob.disabled=true; }
+        return;
+      }
+      // Track views
+      fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((d.views||0)+1)}).catch(()=>{});
+      fetch(FIREBASE_URL+'/'+cardId+'/opened.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(Date.now())}).catch(()=>{});
+
+      if(d.title) document.getElementById('welcomeTitle').textContent=d.title;
+      if(d.name){
+        document.getElementById('welcomeSub').textContent=`This is for you, ${d.name} 🎊`;
+        // Pre-fill for newspaper
+        document.getElementById('cName').value=d.name;
+      }
+      if(d.age) document.getElementById('cAge').value=d.age;
+      if(d.msg){ document.getElementById('cMsg').value=d.msg; document.getElementById('newsBody').textContent=d.msg; }
+      if(d.sign) document.getElementById('cSign').value=d.sign;
+      if(d.sender){
+        document.getElementById('cSender').value=d.sender;
+        const bt=document.getElementById('balloonTitle');
+        if(bt) bt.innerHTML=d.sender+' has a surprise<br>for you! 🎊';
+        const ms=document.getElementById('memoriesSub'),mn=document.getElementById('memoriesSender');
+        if(ms&&mn){ mn.textContent=d.sender; ms.style.display='block'; }
+      }
+      if(d.sub) document.getElementById('songSub').textContent=d.sub;
+      if(d.spotify) handleSpotify(d.spotify);
+      if(d.photos&&d.photos.length){
+        photos=d.photos;
+        document.getElementById('photoPlaceholder').style.display='none';
+        document.getElementById('photoTapHint').style.display='block';
+        buildComicStrip();
+      }
+      // Sync newspaper with loaded data
+      syncNewspaper();
+      // Update song names if set
+      if(d.spotify){
+        // song name will show from turntable after handleSpotify
+      }
+
+      if(ob){ ob.textContent='🎊 Open Card!'; ob.disabled=false; }
+    })
+    .catch(()=>{ if(ob){ ob.textContent='🎊 Open Card!'; ob.disabled=false; } });
+}
+
+window.addEventListener('DOMContentLoaded', loadCardFromURL);
+</script>
+</body>
+</html>
