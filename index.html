@@ -249,6 +249,8 @@ body::before {
   animation:cardPop 0.7s cubic-bezier(.34,1.26,.64,1) both;
   text-decoration:none;
   display:block;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
 }
 .occ-card:hover {
   transform:translateY(-7px) scale(1.025);
@@ -536,12 +538,12 @@ body::before {
   <div class="occasions">
     <div class="occasions-label">Choose your occasion</div>
     <div class="grid">
-      <div class="occ-card occ-birthday" onclick="openBirthdayCard()">
+      <a class="occ-card occ-birthday" href="wishyou-final.html" style="text-decoration:none;">
         <span class="occ-emoji">🎂</span>
         <div class="occ-name">Birthday</div>
         <div class="occ-desc">Make their day unforgettable</div>
         <span class="occ-badge badge-live">✦ Live Now</span>
-      </div>
+      </a>
       <div class="occ-card occ-anniversary coming-soon" onclick="showComingSoon(this)">
         <span class="occ-emoji">💍</span>
         <div class="occ-name">Anniversary</div>
