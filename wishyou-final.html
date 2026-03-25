@@ -17,41 +17,14 @@
 <meta property="og:url" content="https://wishyou.ai">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
 :root{--pink:#e91e63;--pink2:#f06292;--pink3:#fce4ec;--pink4:#fff0f5;--dark:#4a0e2a;--mid:#8d3a5a;--bg:linear-gradient(160deg,#fde8f0 0%,#fce4ec 40%,#fdf0f5 100%);--card-bg:rgba(255,255,255,0.88);--shadow:0 20px 60px rgba(233,30,99,0.18);--r:26px;--heart-color1:❤️;--theme-name:Rose;}
 
 /* ── Confetti ── */
 @keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
 
-/* ── Celebration style ── */
-body.style-celebration{background:linear-gradient(160deg,#fff9c4 0%,#ffe0b2 40%,#fce4ec 100%)!important;}
-@media(min-width:500px){body.style-celebration{background:linear-gradient(135deg,#fff9c4,#ffe0b2,#fce4ec)!important;}}
-body.style-celebration .card{background:rgba(255,255,255,0.92)!important;border-color:rgba(255,152,0,0.3)!important;box-shadow:0 20px 60px rgba(255,152,0,0.2)!important;}
-body.style-celebration .screen-title{font-family:'DM Sans',sans-serif!important;font-weight:800!important;color:#e65100!important;letter-spacing:-0.01em!important;}
-body.style-celebration .screen-sub{color:#bf360c!important;}
-body.style-celebration .btn-primary{background:linear-gradient(135deg,#ff6f00,#ff8f00)!important;box-shadow:0 6px 24px rgba(255,111,0,0.45)!important;}
-body.style-celebration .btn-outline{color:#ff6f00!important;border-color:rgba(255,111,0,0.3)!important;}
-body.style-celebration .back-btn{border-color:rgba(255,111,0,0.2)!important;color:#ff6f00!important;}
-body.style-celebration .letter-page{border-top-color:#ff6f00!important;}
-body.style-celebration .letter-sign{color:#ff6f00!important;}
-body.style-celebration .song-card{background:linear-gradient(135deg,#1a0a00,#2d1500)!important;}
-body.style-celebration .pdot{background:rgba(255,111,0,0.2)!important;}
-body.style-celebration .pdot.active{background:#ff6f00!important;}
-body.style-celebration .pdot.done{background:#ff8f00!important;}
-body.style-celebration .wm a{color:#ff6f00!important;}
-/* Ribbon gift box */
-.ribbon-btn{display:block;width:100%;background:none;border:none;cursor:pointer;padding:10px 0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
-.ribbon-box-wrap{width:150px;height:150px;margin:0 auto;position:relative;}
-.ribbon-box-body{width:130px;height:100px;background:linear-gradient(135deg,#ff6f00,#ff8f00);border-radius:14px;position:absolute;bottom:0;left:50%;transform:translateX(-50%);box-shadow:0 10px 32px rgba(255,111,0,0.4);display:flex;align-items:center;justify-content:center;font-size:2rem;}
-.ribbon-v{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:24px;background:linear-gradient(135deg,#fff176,#ffee58);border-radius:3px;z-index:1;}
-.ribbon-h{position:absolute;top:50%;transform:translateY(-50%);left:0;right:0;height:24px;background:linear-gradient(135deg,#fff176,#ffee58);border-radius:3px;z-index:1;}
-.ribbon-bow-l{position:absolute;top:-18px;left:50%;margin-left:-34px;width:32px;height:32px;background:linear-gradient(135deg,#ffe57f,#ffca28);border-radius:50% 0 50% 50%;transform:rotate(-45deg);}
-.ribbon-bow-r{position:absolute;top:-18px;left:50%;margin-left:2px;width:32px;height:32px;background:linear-gradient(135deg,#ffe57f,#ffca28);border-radius:0 50% 50% 50%;transform:rotate(45deg);}
-.ribbon-hint{font-size:0.82rem;color:#bf360c;margin-top:10px;text-align:center;animation:tapPulse 2s ease infinite;}
-
 /* ══ RETRO PARTY CARD STYLE ═══════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Patrick+Hand&display=swap');
 body.style-retro{background:#FFE135!important;}
 @media(min-width:500px){body.style-retro{background:#FFE135!important;}}
 body.style-retro .app{background:transparent;}
@@ -455,14 +428,6 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
           <div style="margin-top:10px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:50px;padding:6px 0;font-size:0.72rem;font-weight:700;">Preview ›</div>
         </div>
 
-        <!-- Celebration card -->
-        <div onclick="startDemoCelebration()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:linear-gradient(150deg,#fff9c4,#ffe0b2);border:2px solid rgba(255,111,0,0.25);transition:transform 0.2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform='scale(1)'">
-          <div style="font-size:2.2rem;margin-bottom:8px;">🎉</div>
-          <div style="font-size:0.85rem;font-weight:700;color:#e65100;margin-bottom:3px;">Celebration</div>
-          <div style="font-size:0.65rem;color:#bf360c;line-height:1.4;">Bold & festive<br>ribbon pull reveal</div>
-          <div style="margin-top:10px;background:linear-gradient(135deg,#ff6f00,#ff8f00);color:white;border-radius:50px;padding:6px 0;font-size:0.72rem;font-weight:700;">Preview ›</div>
-        </div>
-
         <!-- Retro Party card -->
         <div onclick="startDemoRetro()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:#FFE135;border:3px solid #111;box-shadow:4px 4px 0 #111;transition:transform 0.1s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #111'" ontouchend="this.style.transform='translate(0,0)';this.style.boxShadow='4px 4px 0 #111'">
           <div style="font-size:2.2rem;margin-bottom:8px;">🎊</div>
@@ -638,19 +603,6 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         </svg>
         <div style="font-size:0.83rem;color:var(--mid);margin-top:6px;animation:tapPulse 2s ease infinite;">Tap the envelope to open</div>
       </button>
-      <!-- Ribbon (Celebration style) -->
-      <button class="ribbon-btn" id="ribbonBtn" style="display:none;" onclick="openEnvelope(this)">
-        <div class="ribbon-box-wrap">
-          <div class="ribbon-bow-l"></div>
-          <div class="ribbon-bow-r"></div>
-          <div class="ribbon-box-body">
-            <div class="ribbon-v"></div>
-            <div class="ribbon-h"></div>
-            <span style="position:relative;z-index:2;">🎁</span>
-          </div>
-        </div>
-        <div class="ribbon-hint">Pull the ribbon to open! 🎀</div>
-      </button>
       <!-- Balloon pop (Retro style) -->
       <div class="retro-balloon-wrap" id="retroBalloonBtn" style="display:none;" onclick="popBalloon(this)">
         <span class="retro-balloon" id="retroBalloon">🎈</span>
@@ -667,7 +619,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
   <div class="card">
     <div class="back-btn" onclick="goBack()">←</div>
     <div class="card-inner" style="padding-top:52px;padding-bottom:18px;overflow-y:auto;max-height:calc(100vh - 40px);-webkit-overflow-scrolling:touch;">
-      <!-- Normal letter (intimate/celebration) -->
+      <!-- Normal letter (intimate style) -->
       <div id="normalLetterPage">
       <div class="letter-page">
         <div class="letter-dear" id="letterDear">Dear,</div>
@@ -894,11 +846,6 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
           <div style="font-size:1.8rem;margin-bottom:6px;">💌</div>
           <div style="font-size:0.82rem;font-weight:700;color:#4a0e2a;">Intimate</div>
           <div style="font-size:0.65rem;color:#8d3a5a;margin-top:2px;line-height:1.4;">Soft & emotional<br>envelope reveal</div>
-        </div>
-        <div onclick="setCardStyle('celebration')" id="cstyle-celebration" style="cursor:pointer;border-radius:16px;padding:16px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#fff9c4,#ffe0b2);transition:all 0.2s;touch-action:manipulation;">
-          <div style="font-size:1.8rem;margin-bottom:6px;">🎉</div>
-          <div style="font-size:0.82rem;font-weight:700;color:#e65100;">Celebration</div>
-          <div style="font-size:0.65rem;color:#bf360c;margin-top:2px;line-height:1.4;">Bold & festive<br>ribbon pull reveal</div>
         </div>
         <div onclick="setCardStyle('retro')" id="cstyle-retro" style="cursor:pointer;border-radius:16px;padding:16px 10px;text-align:center;border:2px solid transparent;background:#FFE135;transition:all 0.1s;touch-action:manipulation;">
           <div style="font-size:1.8rem;margin-bottom:6px;">🎊</div>
@@ -1188,37 +1135,9 @@ function startDemoIntimate(){
   goTo('s-memories');
 }
 
-function startDemoCelebration(){
-  setCardStyle('celebration');
-  goTo('s-memories');
-}
-
 function startDemoRetro(){
   setCardStyle('retro');
   goTo('s-memories');
-}
-
-function setCardStyle(style){
-  currentCardStyle = style;
-  if(style === 'celebration'){
-    document.body.classList.add('style-celebration');
-    var env = document.getElementById('envBtn');
-    var rib = document.getElementById('ribbonBtn');
-    if(env) env.style.display = 'none';
-    if(rib) rib.style.display = 'block';
-    var et = document.getElementById('envTitle');
-    if(et) et.innerHTML = 'You\u2019ve got a surprise!<br>\uD83C\uDF89';
-    startConfetti();
-  } else {
-    document.body.classList.remove('style-celebration');
-    var env2 = document.getElementById('envBtn');
-    var rib2 = document.getElementById('ribbonBtn');
-    if(env2) env2.style.display = 'block';
-    if(rib2) rib2.style.display = 'none';
-    var et2 = document.getElementById('envTitle');
-    if(et2) et2.innerHTML = 'I wrote a letter<br>for you... \uD83D\uDC8C';
-    stopConfetti();
-  }
 }
 
 var _confettiInterval = null;
@@ -2108,16 +2027,13 @@ function setTheme(name){
   if(name === ''){ var rose=document.getElementById('theme-rose'); if(rose) rose.style.border='2px solid #e91e63'; }
 }
 
-// setCardStyle also updates the customize picker borders
-var _origSetCardStyle = setCardStyle;
 function setCardStyle(style){
   currentCardStyle = style;
   // Remove all style classes
-  document.body.classList.remove('style-celebration','style-retro');
+  document.body.classList.remove('style-retro');
 
   // Reset all overlays to default
   var env=document.getElementById('envBtn'); if(env) env.style.display='block';
-  var rib=document.getElementById('ribbonBtn'); if(rib) rib.style.display='none';
   var bal=document.getElementById('retroBalloonBtn'); if(bal) bal.style.display='none';
   var rj=document.getElementById('retroJukebox'); if(rj) rj.style.display='none';
   var rct=document.getElementById('retroComicTitle'); if(rct) rct.style.display='none';
@@ -2126,14 +2042,7 @@ function setCardStyle(style){
   var ageGrp=document.getElementById('ageFieldGroup'); if(ageGrp) ageGrp.style.display='none';
   stopConfetti();
 
-  if(style==='celebration'){
-    document.body.classList.add('style-celebration');
-    if(rib) rib.style.display='block';
-    if(env) env.style.display='none';
-    var et=document.getElementById('envTitle'); if(et) et.innerHTML='You\u2019ve got a surprise!<br>\uD83C\uDF89';
-    startConfetti();
-
-  } else if(style==='retro'){
+  if(style==='retro'){
     document.body.classList.add('style-retro');
     if(bal) bal.style.display='block';
     if(env) env.style.display='none';
@@ -2142,22 +2051,19 @@ function setCardStyle(style){
     if(rnp) rnp.style.display='block';
     if(nlp) nlp.style.display='none';
     if(ageGrp) ageGrp.style.display='block';
-    var et2=document.getElementById('envTitle'); if(et2) et2.innerHTML='There\u2019s a surprise<br>waiting for you! \uD83C\uDF88';
-    // Update newspaper date
+    var et=document.getElementById('envTitle'); if(et) et.innerHTML='There\u2019s a surprise<br>waiting for you! \uD83C\uDF88';
     var nd=document.getElementById('retroNewsDate');
     if(nd) nd.textContent='Special Edition \u00B7 ' + new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
 
   } else {
     // intimate — defaults already set above
-    var et3=document.getElementById('envTitle'); if(et3) et3.innerHTML='I wrote a letter<br>for you... \uD83D\uDC8C';
+    var et2=document.getElementById('envTitle'); if(et2) et2.innerHTML='I wrote a letter<br>for you... \uD83D\uDC8C';
   }
 
   // Update customize picker UI borders
   var ci=document.getElementById('cstyle-intimate');
-  var cc=document.getElementById('cstyle-celebration');
   var cr=document.getElementById('cstyle-retro');
   if(ci) ci.style.border = style==='intimate' ? '2px solid var(--pink)' : '2px solid transparent';
-  if(cc) cc.style.border = style==='celebration' ? '2px solid #ff6f00' : '2px solid transparent';
   if(cr) cr.style.border = style==='retro' ? '3px solid #111' : '2px solid transparent';
   if(cr) cr.style.boxShadow = style==='retro' ? '3px 3px 0 #111' : 'none';
 }
