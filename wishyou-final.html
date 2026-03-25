@@ -25,8 +25,8 @@
 @keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
 
 /* ══ RETRO PARTY CARD STYLE ═══════════════════════════ */
-body.style-retro{background:#FFE135!important;}
-@media(min-width:500px){body.style-retro{background:#FFE135!important;}}
+body.style-retro-active{background:#FFE135!important;}
+@media(min-width:500px){body.style-retro-active{background:#FFE135!important;}}
 body.style-retro .app{background:transparent;}
 body.style-retro .card{background:#fff!important;border:4px solid #111!important;border-radius:12px!important;box-shadow:6px 6px 0 #111!important;}
 body.style-retro .screen-title{font-family:'Fredoka One',cursive!important;color:#d90429!important;font-size:clamp(1.6rem,6vw,2.2rem)!important;letter-spacing:0.02em!important;-webkit-text-stroke:1px #111;}
@@ -42,10 +42,10 @@ body.style-retro .wm a{color:#d90429!important;font-family:'Fredoka One',cursive
 body.style-retro .song-card{background:#1a1a2e!important;border:3px solid #111!important;box-shadow:5px 5px 0 #111!important;border-radius:12px!important;}
 /* Retro comic photo layout */
 .retro-comic-wrap{display:flex;gap:0;width:100%;border:3px solid #111;border-radius:8px;overflow:hidden;box-shadow:4px 4px 0 #111;}
-.retro-comic-panel{flex:1;position:relative;border-right:3px solid #111;min-height:120px;background:#f0f0f0;overflow:hidden;}
+.retro-comic-panel{flex:1;position:relative;border-right:3px solid #111;overflow:hidden;background:#f0f0f0;min-width:0;}
 .retro-comic-panel:last-child{border-right:none;}
-.retro-comic-panel img{width:100%;height:100%;object-fit:cover;display:block;}
-.retro-comic-caption{position:absolute;bottom:0;left:0;right:0;background:#FFE135;border-top:2px solid #111;font-family:'Patrick Hand',cursive;font-size:0.62rem;font-weight:700;color:#111;text-align:center;padding:2px 4px;}
+.retro-comic-panel img{width:100%;height:130px;object-fit:cover;display:block;}
+.retro-comic-caption{position:absolute;bottom:0;left:0;right:0;background:#FFE135;border-top:2px solid #111;font-family:'Patrick Hand',cursive;font-size:0.6rem;font-weight:700;color:#111;text-align:center;padding:2px 3px;line-height:1.2;}
 /* Retro jukebox */
 .retro-jukebox{background:linear-gradient(135deg,#1a1a2e,#16213e);border:4px solid #111;border-radius:16px;padding:20px;box-shadow:6px 6px 0 #111;text-align:center;position:relative;overflow:hidden;}
 .retro-jukebox::before{content:'★ JUKEBOX ★';position:absolute;top:8px;left:0;right:0;font-family:'Fredoka One',cursive;font-size:0.7rem;color:#FFE135;letter-spacing:0.2em;}
@@ -856,9 +856,10 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     </div>
 
     <!-- CARD THEME -->
-    <div class="field-group">
+    <div class="field-group" id="themeSectionGroup">
       <label class="field-label">🎨 Card Theme</label>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div id="themeNote" style="display:none;font-size:0.78rem;color:#d90429;font-family:'Patrick Hand',cursive;background:#FFE135;border:2px solid #111;border-radius:8px;padding:8px 12px;text-align:center;margin-bottom:8px;box-shadow:2px 2px 0 #111;">🎊 Retro Party has its own fixed style — themes don't apply!</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="themeGrid">
         <div onclick="setTheme('')" id="theme-rose" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid var(--pink);background:linear-gradient(135deg,#fde8f0,#fce4ec);transition:all 0.2s;">
           <div style="font-size:1.3rem;margin-bottom:4px;">🌹</div>
           <div style="font-size:0.78rem;font-weight:700;color:#4a0e2a;">Rose</div>
@@ -1125,6 +1126,17 @@ function showScreen(id){
     bgmCtx.resume();
   }
   if(id==='s-memories'&&photos.length) buildSlides();
+  if(id==='s-memories'&&!photos.length){
+    // Show retro-themed placeholder hint
+    var uploadHint = document.querySelector('#photoPlaceholder > div:last-child');
+    if(uploadHint){
+      if(currentCardStyle==='retro'){
+        uploadHint.innerHTML='<span style="font-family:\'Patrick Hand\',cursive;font-size:0.82rem;color:#111;font-weight:700;">📸 Upload your photos in Customize!</span>';
+      } else {
+        uploadHint.innerHTML='Upload your real photos in Customize ↗';
+      }
+    }
+  }
 }
 
 // ── CARD STYLE & DEMO FUNCTIONS ──────────────────────
@@ -1206,6 +1218,7 @@ function goTo(id){
   if(cur===id)return;
   if(bgmEnabled&&id!=='s-song'&&id!=='s-memories') startBGM();
   showScreen(id);
+  updateRetroBg(id);
   if(id==='s-customize')setTimeout(function(){document.getElementById('custScroll').scrollTo(0,0);},50);
   if(id==='s-letter') setTimeout(typewriterLetter, 400);
 }
@@ -1213,7 +1226,17 @@ function goBack(){
   var p=BACK[cur];if(!p)return;
   if(bgmEnabled&&p!=='s-song'&&p!=='s-memories') startBGM();
   showScreen(p);
+  updateRetroBg(p);
   if(p==='s-envelope')resetEnv();
+}
+
+function updateRetroBg(screenId){
+  var noYellow = (screenId==='s-welcome'||screenId==='s-customize');
+  if(currentCardStyle==='retro' && !noYellow){
+    document.body.classList.add('style-retro-active');
+  } else {
+    document.body.classList.remove('style-retro-active');
+  }
 }
 
 // TYPEWRITER LETTER ANIMATION
@@ -1333,17 +1356,34 @@ function buildSlides(){
   if(!photos.length)return;
   document.getElementById('photoPlaceholder').style.display='none';
   wrap.style.display='flex';
-  var hasFxOff=wrap.classList.contains('photo-fx-off');
-  wrap.className='pol-wrap count-'+photos.length;
-  if(hasFxOff) wrap.classList.add('photo-fx-off');
-  document.getElementById('photoTapHint').style.display= photos.length ? 'block' : 'none';
-  photos.forEach((url,i)=>{
-    const card=document.createElement('div');
-    card.className='pol-card';
-    card.innerHTML='<img src="'+url+'" alt="Memory '+(i+1)+'"><div class="pol-label">Memory '+(i+1)+'</div>';
-    card.addEventListener('click',()=>openExpand(i));
-    wrap.appendChild(card);
-  });
+  document.getElementById('photoTapHint').style.display='block';
+
+  if(currentCardStyle==='retro'){
+    // Comic strip layout
+    wrap.className='retro-comic-wrap';
+    const captions=['The Hero!','Best Day!','So Cool!','Legend!','Party Time!'];
+    photos.forEach((url,i)=>{
+      const panel=document.createElement('div');
+      panel.className='retro-comic-panel';
+      panel.innerHTML='<img src="'+url+'" alt="Memory '+(i+1)+'">'
+        +'<div class="retro-comic-caption">'+(captions[i]||'Memory '+(i+1))+'</div>';
+      panel.addEventListener('click',()=>openExpand(i));
+      wrap.appendChild(panel);
+    });
+  } else {
+    // Normal polaroid layout
+    var hasFxOff=wrap.classList.contains('photo-fx-off');
+    wrap.className='pol-wrap count-'+photos.length;
+    if(hasFxOff) wrap.classList.add('photo-fx-off');
+    photos.forEach((url,i)=>{
+      const card=document.createElement('div');
+      card.className='pol-card';
+      card.innerHTML='<img src="'+url+'" alt="Memory '+(i+1)+'"><div class="pol-label">Memory '+(i+1)+'</div>';
+      card.addEventListener('click',()=>openExpand(i));
+      wrap.appendChild(card);
+    });
+  }
+
   const nav=document.getElementById('expandNav');
   nav.innerHTML='';
   photos.forEach((_,i)=>{
@@ -2066,6 +2106,12 @@ function setCardStyle(style){
   if(ci) ci.style.border = style==='intimate' ? '2px solid var(--pink)' : '2px solid transparent';
   if(cr) cr.style.border = style==='retro' ? '3px solid #111' : '2px solid transparent';
   if(cr) cr.style.boxShadow = style==='retro' ? '3px 3px 0 #111' : 'none';
+  // Show/hide theme section note in retro mode
+  var themeNote=document.getElementById('themeNote');
+  var themeGrid=document.getElementById('themeGrid');
+  if(themeNote) themeNote.style.display = style==='retro' ? 'block' : 'none';
+  if(themeGrid) themeGrid.style.opacity = style==='retro' ? '0.35' : '1';
+  if(themeGrid) themeGrid.style.pointerEvents = style==='retro' ? 'none' : '';
 }
 
 var selectedRelationship = '';
