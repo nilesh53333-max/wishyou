@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Intimate Birthday Card</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+<meta property="og:title" content="You have a birthday surprise! 💝">
+<meta property="og:description" content="Someone made you a special interactive card with photos, music & a heartfelt letter.">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{height:100%;overflow:hidden;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 40%,#fdf0f5 100%);
+  height:100%;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+:root{
+  --pink:#e91e63;--pink2:#f06292;--pink3:#fce4ec;--pink4:#fff0f5;
+  --dark:#4a0e2a;--mid:#8d3a5a;
+  --card-bg:rgba(255,255,255,0.88);
+  --shadow:0 20px 60px rgba(233,30,99,0.18);
+  --r:26px;
+}
+
+/* ── App shell ─────────────────────────────────────── */
+.app{
+  position:relative;width:100%;max-width:430px;
+  height:100vh;overflow:hidden;
+}
+@media(min-width:500px){
+  body{background:linear-gradient(135deg,#f8d7e3,#fce4ec,#f3d0e8)!important;}
+  .app{height:90vh;max-height:900px;border-radius:40px;
+    box-shadow:0 40px 100px rgba(233,30,99,0.25);
+    outline:10px solid rgba(255,255,255,0.5);}
+}
+
+/* ── Floating hearts ───────────────────────────────── */
+.hearts-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.hrt{position:absolute;bottom:-20px;animation:floatUp linear infinite;opacity:0;}
+@keyframes floatUp{
+  0%{transform:translateY(0) rotate(-10deg);opacity:0;}
+  10%{opacity:0.5;}90%{opacity:0.25;}
+  100%{transform:translateY(-110vh) rotate(10deg);opacity:0;}
+}
+
+/* ── Screens ───────────────────────────────────────── */
+.screen{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px 18px 30px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.4s ease,transform 0.4s ease;
+  transform:translateX(40px) scale(0.97);
+}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0) scale(1);}
+
+/* ── Card ──────────────────────────────────────────── */
+.card{
+  background:var(--card-bg);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border-radius:var(--r);width:100%;
+  box-shadow:var(--shadow);
+  border:1.5px solid rgba(255,255,255,0.95);
+  position:relative;
+}
+.card-inner{
+  padding:48px 22px 22px;
+  display:flex;flex-direction:column;align-items:center;
+  gap:0;
+}
+
+/* ── Back button ───────────────────────────────────── */
+.back-btn{
+  position:absolute;top:14px;left:14px;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,0.7);
+  border:1px solid rgba(233,30,99,0.15);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1rem;color:var(--mid);
+  transition:background 0.2s;z-index:2;
+  touch-action:manipulation;
+}
+.back-btn:active{background:rgba(233,30,99,0.1);}
+
+/* ── Typography ────────────────────────────────────── */
+.screen-title{
+  font-family:'Playfair Display',serif;font-weight:700;
+  color:var(--dark);font-size:clamp(1.5rem,5.5vw,1.9rem);
+  line-height:1.2;margin-bottom:8px;
+  animation:fadeUp 0.5s 0.1s both;text-align:center;
+}
+.screen-sub{
+  font-size:0.92rem;color:var(--mid);
+  margin-bottom:20px;line-height:1.5;
+  animation:fadeUp 0.5s 0.2s both;text-align:center;
+}
+.big-heart{
+  font-size:2.8rem;display:block;margin-bottom:12px;
+  animation:hb 2.4s ease infinite;
+}
+@keyframes hb{0%,100%{transform:scale(1);}14%{transform:scale(1.22);}28%{transform:scale(1);}42%{transform:scale(1.12);}}
+
+/* ── Buttons ───────────────────────────────────────── */
+.btn{
+  width:100%;padding:15px;border-radius:50px;
+  font-size:0.95rem;font-weight:600;cursor:pointer;
+  font-family:'DM Sans',sans-serif;border:none;
+  margin-top:10px;touch-action:manipulation;
+  transition:transform 0.15s,box-shadow 0.15s;
+  position:relative;overflow:hidden;
+}
+.btn:active{transform:scale(0.97);}
+.btn-primary{
+  background:linear-gradient(135deg,var(--pink),var(--pink2));
+  color:white;box-shadow:0 6px 24px rgba(233,30,99,0.38);
+}
+.btn-outline{
+  background:white;color:var(--pink);
+  border:1.5px solid rgba(233,30,99,0.25);
+  box-shadow:0 2px 8px rgba(233,30,99,0.08);
+}
+.btn-wa{
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  color:white;box-shadow:0 6px 20px rgba(37,211,102,0.38);
+}
+
+/* ── Progress dots ─────────────────────────────────── */
+.progress-dots{
+  display:flex;gap:7px;justify-content:center;margin-top:18px;
+}
+.pdot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(233,30,99,0.2);
+  transition:all 0.3s;cursor:pointer;
+}
+.pdot.active{background:var(--pink);transform:scale(1.25);}
+.pdot.done{background:var(--pink2);}
+
+/* ── Photo frame ───────────────────────────────────── */
+.photo-frame{width:100%;margin-bottom:16px;position:relative;min-height:160px;}
+.pol-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:4px 0;}
+.pol-card{
+  flex:0 0 auto;width:calc(33% - 6px);aspect-ratio:3/4;
+  background:white;border-radius:10px;padding:5px 5px 20px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.15);
+  cursor:pointer;touch-action:manipulation;
+  transition:transform 0.25s;position:relative;overflow:hidden;
+}
+.pol-card:nth-child(odd){transform:rotate(-1.5deg);}
+.pol-card:nth-child(even){transform:rotate(1.5deg);}
+.pol-card:active{transform:scale(0.93) rotate(0deg)!important;}
+.pol-card img{width:100%;height:calc(100% - 16px);object-fit:cover;border-radius:6px;display:block;}
+.pol-label{
+  position:absolute;bottom:3px;left:0;right:0;
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:0.58rem;text-align:center;color:#888;
+}
+.pol-wrap.count-1 .pol-card{width:70%;aspect-ratio:4/3;}
+.pol-wrap.count-2 .pol-card{width:calc(50% - 6px);}
+
+/* ── Song card ─────────────────────────────────────── */
+.song-card{
+  background:linear-gradient(135deg,#2d1048,#1a0a2e);
+  border-radius:18px;padding:16px 18px 12px;
+  width:100%;margin-bottom:16px;position:relative;overflow:hidden;
+}
+.song-name{font-size:0.95rem;font-weight:600;color:white;margin-bottom:2px;}
+.song-artist{font-size:0.75rem;color:rgba(255,255,255,0.6);}
+.song-play-btn{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--pink2));
+  border:none;color:white;font-size:0.85rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.music-bars{display:flex;align-items:flex-end;gap:3px;height:18px;margin-top:8px;}
+.bar{width:3px;background:rgba(233,30,99,0.6);border-radius:2px;animation:barPulse 0.8s ease-in-out infinite;height:8px;}
+.bar:nth-child(2){animation-delay:0.15s;height:14px;}
+.bar:nth-child(3){animation-delay:0.3s;height:10px;}
+.bar:nth-child(4){animation-delay:0.45s;height:16px;}
+@keyframes barPulse{0%,100%{transform:scaleY(0.5);}50%{transform:scaleY(1.3);}}
+@keyframes progressPulse{0%{width:20%;}50%{width:65%;}100%{width:20%;}}
+
+/* ── Envelope ──────────────────────────────────────── */
+#envBtn{
+  display:block;width:100%;background:none;border:none;
+  cursor:pointer;padding:10px 0 6px;touch-action:manipulation;
+}
+
+/* ── Letter ────────────────────────────────────────── */
+.letter-page{
+  background:rgba(255,255,255,0.97);
+  border-radius:14px;padding:20px 18px;
+  border-top:4px solid var(--pink);
+  width:100%;margin-bottom:16px;
+  position:relative;
+}
+.letter-page::after{content:'💌';position:absolute;right:14px;top:12px;font-size:1.3rem;opacity:0.3;}
+.letter-dear{font-family:'Playfair Display',serif;font-size:1rem;color:var(--dark);margin-bottom:12px;}
+.letter-body{font-size:0.88rem;color:#5a2a3a;line-height:1.85;white-space:pre-line;}
+.letter-sign{font-family:'Playfair Display',serif;font-style:italic;font-size:0.9rem;color:var(--pink);margin-top:16px;display:block;}
+.letter-sender-name{font-size:0.78rem;color:var(--mid);margin-top:4px;display:none;}
+
+/* ── Customize scroll ──────────────────────────────── */
+#s-customize{justify-content:flex-start;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.customize-scroll{width:100%;max-width:430px;padding:0 18px 40px;overflow-y:auto;height:100vh;-webkit-overflow-scrolling:touch;}
+.cust-header{display:flex;align-items:center;gap:12px;padding:16px 0 8px;position:sticky;top:0;background:linear-gradient(160deg,#fde8f0,#fce4ec);z-index:10;}
+.cust-title{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--dark);}
+.field-group{margin-bottom:16px;}
+.field-label{display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--mid);margin-bottom:7px;}
+input[type=text],input[type=url],textarea,select{
+  width:100%;border:1.5px solid rgba(233,30,99,0.2);
+  border-radius:14px;padding:13px 15px;font-size:0.95rem;
+  font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;
+  transition:border-color 0.2s;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--pink);}
+textarea{min-height:100px;resize:vertical;line-height:1.6;}
+.preview-bar{padding:16px 0 0;border-top:1px solid rgba(233,30,99,0.1);margin-top:8px;}
+
+/* ── AI box ────────────────────────────────────────── */
+.ai-magic-box{background:linear-gradient(135deg,#2d1048,#1a0a2e);border-radius:18px;padding:16px 18px;margin-bottom:16px;}
+.ai-magic-title{font-size:0.88rem;font-weight:700;color:white;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.ai-occasion-input{width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:11px 14px;font-size:0.88rem;color:white;font-family:'DM Sans',sans-serif;outline:none;margin-bottom:10px;}
+.ai-occasion-input::placeholder{color:rgba(255,255,255,0.45);}
+.btn-ai{width:100%;padding:12px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:12px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;color:rgba(255,255,255,0.6);margin-top:8px;}
+.ai-loading.show{display:flex;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--pink2);animation:aiPulse 1s ease-in-out infinite;}
+.ai-dot:nth-child(2){animation-delay:0.2s;}.ai-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+.ai-result-banner{font-size:0.78rem;color:rgba(255,255,255,0.8);margin-top:8px;line-height:1.5;display:none;}
+.ai-result-banner.show{display:block;}
+
+/* ── AI personalise ────────────────────────────────── */
+.ai-personalise-box{background:linear-gradient(135deg,rgba(233,30,99,0.08),rgba(240,98,146,0.05));border:1px solid rgba(233,30,99,0.15);border-radius:14px;padding:14px 16px;margin-top:8px;}
+#aiPersonaliseBtn{display:none;width:100%;padding:11px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:50px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;align-items:center;justify-content:center;gap:6px;}
+
+/* ── Song search ───────────────────────────────────── */
+.ai-song-section{background:rgba(255,255,255,0.7);border:1px solid rgba(233,30,99,0.12);border-radius:16px;padding:14px 16px;margin-bottom:8px;}
+#ytSelectedSong{display:none;background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:14px;padding:12px 14px;margin-bottom:8px;}
+
+/* ── Photo thumbnails ──────────────────────────────── */
+.photo-thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.thumb-wrap{position:relative;width:64px;height:64px;}
+.thumb-wrap img{width:100%;height:100%;object-fit:cover;border-radius:10px;border:2px solid rgba(233,30,99,0.2);}
+.thumb-del{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--pink);color:white;border-radius:50%;border:none;font-size:0.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* ── Themes ────────────────────────────────────────── */
+/* Midnight */
+body.theme-midnight{background:linear-gradient(160deg,#0d0618,#150d2e,#0a0414)!important;}
+body.theme-midnight .card{background:rgba(20,10,40,0.92)!important;border-color:rgba(147,51,234,0.3)!important;box-shadow:0 20px 60px rgba(147,51,234,0.25)!important;}
+body.theme-midnight .screen-title,.theme-midnight .letter-dear{color:#e9d5ff!important;}
+body.theme-midnight .screen-sub{color:rgba(233,213,255,0.65)!important;}
+body.theme-midnight .btn-primary{background:linear-gradient(135deg,#7c3aed,#9d52f5)!important;box-shadow:0 6px 24px rgba(124,58,237,0.5)!important;}
+body.theme-midnight .btn-outline{color:#c084fc!important;border-color:rgba(124,58,237,0.3)!important;}
+body.theme-midnight .letter-page{border-top-color:#7c3aed!important;}
+body.theme-midnight .letter-sign{color:#c084fc!important;}
+body.theme-midnight .pdot{background:rgba(124,58,237,0.25)!important;}.theme-midnight .pdot.active{background:#7c3aed!important;}.theme-midnight .pdot.done{background:#9d52f5!important;}
+body.theme-midnight .back-btn{background:rgba(124,58,237,0.15)!important;border-color:rgba(124,58,237,0.2)!important;color:#c084fc!important;}
+/* Golden */
+body.theme-golden{background:linear-gradient(160deg,#fffbeb,#fef3c7,#fffdf0)!important;}
+body.theme-golden .card{background:rgba(255,253,240,0.95)!important;border-color:rgba(217,148,0,0.3)!important;box-shadow:0 20px 60px rgba(217,148,0,0.2)!important;}
+body.theme-golden .screen-title,.theme-golden .letter-dear{color:#78350f!important;}
+body.theme-golden .screen-sub{color:#92400e!important;}
+body.theme-golden .btn-primary{background:linear-gradient(135deg,#d97706,#f59e0b)!important;box-shadow:0 6px 24px rgba(217,119,6,0.45)!important;}
+body.theme-golden .btn-outline{color:#d97706!important;border-color:rgba(217,119,6,0.3)!important;}
+body.theme-golden .letter-page{border-top-color:#d97706!important;}
+body.theme-golden .letter-sign{color:#d97706!important;}
+body.theme-golden .pdot.active{background:#d97706!important;}.theme-golden .pdot.done{background:#f59e0b!important;}
+/* Forest */
+body.theme-forest{background:linear-gradient(160deg,#f0fdf4,#dcfce7,#f0fdf4)!important;}
+body.theme-forest .card{background:rgba(240,253,244,0.95)!important;border-color:rgba(22,163,74,0.25)!important;box-shadow:0 20px 60px rgba(22,163,74,0.18)!important;}
+body.theme-forest .screen-title,.theme-forest .letter-dear{color:#14532d!important;}
+body.theme-forest .screen-sub{color:#166534!important;}
+body.theme-forest .btn-primary{background:linear-gradient(135deg,#16a34a,#4ade80)!important;box-shadow:0 6px 24px rgba(22,163,74,0.4)!important;}
+body.theme-forest .btn-outline{color:#16a34a!important;border-color:rgba(22,163,74,0.3)!important;}
+body.theme-forest .letter-page{border-top-color:#16a34a!important;}
+body.theme-forest .letter-sign{color:#16a34a!important;}
+body.theme-forest .pdot.active{background:#16a34a!important;}.theme-forest .pdot.done{background:#4ade80!important;}
+/* Velvet */
+body.theme-velvet{background:linear-gradient(160deg,#1a0a2e,#0f0520,#1a0a2e)!important;}
+body.theme-velvet .card{background:rgba(30,10,50,0.95)!important;border-color:rgba(168,85,247,0.25)!important;box-shadow:0 20px 60px rgba(168,85,247,0.2)!important;}
+body.theme-velvet .screen-title,.theme-velvet .letter-dear{color:#f3e8ff!important;}
+body.theme-velvet .screen-sub{color:rgba(243,232,255,0.6)!important;}
+body.theme-velvet .btn-primary{background:linear-gradient(135deg,#9333ea,#a855f7)!important;box-shadow:0 6px 24px rgba(147,51,234,0.5)!important;}
+body.theme-velvet .btn-outline{background:rgba(147,51,234,0.1)!important;color:#d8b4fe!important;border-color:rgba(147,51,234,0.3)!important;}
+body.theme-velvet .letter-page{background:rgba(20,8,36,0.98)!important;border-top-color:#9333ea!important;}
+body.theme-velvet .letter-sign{color:#d8b4fe!important;}
+body.theme-velvet .pdot.active{background:#9333ea!important;}.theme-velvet .pdot.done{background:#a855f7!important;}
+body.theme-velvet .back-btn{background:rgba(147,51,234,0.12)!important;border-color:rgba(147,51,234,0.2)!important;color:#d8b4fe!important;}
+
+/* ── Share & modals ────────────────────────────────── */
+.share-confirm{position:fixed;inset:0;background:rgba(45,10,24,0.7);backdrop-filter:blur(12px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-confirm.show{display:flex;}
+.share-confirm-box{background:white;border-radius:24px;padding:28px 22px;width:100%;max-width:360px;text-align:center;}
+.share-link-box{background:var(--pink4);border:1px solid rgba(233,30,99,0.2);border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;word-break:break-all;font-size:0.78rem;color:var(--dark);}
+.copy-link-btn{background:var(--pink);color:white;border:none;border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;flex-shrink:0;}
+.expiry-notice{font-size:0.75rem;color:var(--mid);background:var(--pink4);border-radius:10px;padding:8px 12px;margin-bottom:12px;}
+.upsell-modal{position:fixed;inset:0;background:rgba(45,10,24,0.7);backdrop-filter:blur(12px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.upsell-modal.show{display:flex;}
+.upsell-box{background:white;border-radius:24px;padding:28px 22px;width:100%;max-width:360px;text-align:center;}
+
+/* ── Expand photo modal ─────────────────────────────── */
+.photo-expand{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;}
+.photo-expand.show{display:flex;}
+.photo-expand img{max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;}
+.photo-expand-dots{display:flex;gap:8px;margin-top:16px;}
+.photo-expand-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;}
+.photo-expand-dot.active{background:white;}
+
+/* ── Watermark ─────────────────────────────────────── */
+.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.62rem;color:rgba(233,30,99,0.5);font-weight:600;letter-spacing:0.04em;}
+.wm a{color:inherit;text-decoration:none;}
+
+/* ── Receiver CTA ──────────────────────────────────── */
+#receiverEndCTA{display:none;margin-top:14px;text-align:center;}
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes tapPulse{0%,100%{opacity:0.7;}50%{opacity:1;}}
+@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes ripple{to{transform:scale(4);opacity:0;}}
+
+/* ── Song search results ───────────────────────────── */
+.yt-result-card{display:flex;align-items:center;gap:10px;background:white;border-radius:12px;padding:10px 12px;border:1.5px solid rgba(233,30,99,0.12);margin-bottom:8px;}
+.yt-result-card img{width:64px;height:48px;border-radius:7px;object-fit:cover;flex-shrink:0;}
+.yt-use-btn{padding:7px 12px;background:var(--pink);color:white;border:none;border-radius:20px;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;touch-action:manipulation;}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1: WELCOME
+═══════════════════════════════════════════ -->
+<div class="screen active" id="s-welcome">
+  <div class="card"><div class="card-inner">
+    <span class="big-heart">💝</span>
+    <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
+    <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🌸</div>
+    <div id="birthdayBanner" style="display:none;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;font-weight:600;text-align:center;">🎂 Today is the special day! Happy Birthday! 🎉</div>
+
+    <!-- Creator mode -->
+    <div id="creatorBtns">
+      <button class="btn btn-primary" onclick="ripple(event);goTo('s-memories')" style="margin-top:0;">💌 Preview Intimate Card</button>
+      <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')">✏️ Customize Card</button>
+      <div style="font-size:0.7rem;color:var(--mid);text-align:center;margin-top:6px;opacity:0.8;">👆 Add your photos, letter &amp; song</div>
+    </div>
+
+    <!-- After save -->
+    <div id="savedBtns" style="display:none;">
+      <button class="btn btn-primary" id="previewBtn" onclick="ripple(event);goTo('s-memories')" style="margin-top:0;">💌 Preview Card ✨</button>
+      <button class="btn btn-wa" id="shareWelcomeBtn" onclick="shareWhatsApp()" style="display:none;">🎁 Create &amp; Share Card</button>
+      <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')">✏️ Edit Card</button>
+    </div>
+
+    <!-- Receiver mode -->
+    <div id="receiverBtns" style="display:none;">
+      <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Open Card ✨</button>
+    </div>
+  </div></div>
+  <div class="progress-dots" style="visibility:hidden;"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2: MEMORIES
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-memories">
+  <div class="card">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="card-inner">
+      <div class="screen-title" id="memoriesTitle">Our Memories 📸</div>
+      <div id="memoriesSub" style="display:none;font-size:0.75rem;color:var(--mid);font-style:italic;margin-top:-6px;margin-bottom:8px;text-align:center;">— chosen by <span id="memoriesSender"></span> with love</div>
+      <div class="photo-frame" id="photoFrame">
+        <!-- Placeholder -->
+        <div id="photoPlaceholder">
+          <div class="pol-wrap count-5" style="display:flex;padding:4px 0;">
+            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#ffd6e7,#ffb3cc);">
+              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;"><circle cx="40" cy="40" r="38" fill="#fff5f8"/><text x="22" y="48" font-size="22">❤️</text><text x="44" y="44" font-size="16">🩷</text><text x="30" y="30" font-size="12" opacity="0.5">✨</text></svg>
+              <div class="pol-label">Us ❤️</div>
+            </div>
+            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#e8f4fd,#c8e6ff);">
+              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;"><circle cx="40" cy="40" r="38" fill="#f0f8ff"/><text x="18" y="52" font-size="38">👫</text><text x="54" y="26" font-size="14">⭐</text></svg>
+              <div class="pol-label">Together 👫</div>
+            </div>
+            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
+              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;"><circle cx="40" cy="40" r="38" fill="#fffaf0"/><text x="20" y="50" font-size="36">🌹</text><text x="50" y="30" font-size="16">💕</text></svg>
+              <div class="pol-label">Love 🌹</div>
+            </div>
+            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
+              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;"><circle cx="40" cy="40" r="38" fill="#fdf5ff"/><text x="16" y="52" font-size="38">💑</text><text x="54" y="28" font-size="14">💗</text></svg>
+              <div class="pol-label">Forever 💑</div>
+            </div>
+            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;"><circle cx="40" cy="40" r="38" fill="#f0fff4"/><text x="16" y="52" font-size="36">🌟</text><text x="46" y="48" font-size="24">💖</text></svg>
+              <div class="pol-label">Magic ✨</div>
+            </div>
+          </div>
+          <div style="font-size:0.75rem;color:var(--mid);margin-top:8px;text-align:center;opacity:0.7;">Upload your real photos in Customize ↗</div>
+        </div>
+        <div class="pol-wrap" id="polWrap" style="display:none;"></div>
+      </div>
+      <div id="photoTapHint" style="display:none;text-align:center;font-size:0.75rem;color:var(--mid);margin-bottom:8px;">👆 Tap any photo to see it full screen</div>
+      <button class="btn btn-primary" onclick="ripple(event);goTo('s-song')">Next ›</button>
+      <button class="btn btn-outline" id="custBtnMem" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+    </div>
+  </div>
+  <div class="progress-dots"><div class="pdot done" onclick="dotNav('s-welcome')" style="cursor:pointer"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3: SONG
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-song">
+  <div class="card">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="card-inner">
+      <div class="screen-title">Song for You 🎵</div>
+      <div class="screen-sub" id="songSub">This song always reminds me of you.</div>
+      <div class="song-card" id="songCardEl">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3a1a28,#1a0a14);box-shadow:0 4px 20px rgba(0,0,0,0.5);flex-shrink:0;position:relative;animation:vinylSpin 4s linear infinite;">
+            <div style="position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,transparent,transparent 4px,rgba(255,255,255,0.04) 4px,rgba(255,255,255,0.04) 5px);"></div>
+            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink2));display:flex;align-items:center;justify-content:center;font-size:0.5rem;">❤️</div>
+          </div>
+          <div style="flex:1;">
+            <div class="song-name" id="songName">Your Special Song</div>
+            <div class="song-artist" id="songArtist">Add a link below ↓</div>
+            <div style="margin-top:8px;height:3px;border-radius:3px;background:rgba(255,255,255,0.15);overflow:hidden;">
+              <div style="height:100%;width:35%;background:linear-gradient(90deg,var(--pink),var(--pink2));border-radius:3px;animation:progressPulse 3s ease infinite;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="music-bars"><div class="bar" style="height:10px"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+        <button class="song-play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+      </div>
+      <div id="spotifyWrap" style="display:none;margin-bottom:16px;border-radius:14px;overflow:hidden;">
+        <iframe id="spotifyFrame" style="border-radius:14px" src="" width="100%" height="152" frameBorder="0" allow="autoplay;encrypted-media;fullscreen;picture-in-picture" loading="lazy" allowfullscreen></iframe>
+        <div style="font-size:0.78rem;color:var(--mid);text-align:center;margin-top:5px;" id="songHint">▶ Tap play inside the player above</div>
+        <a id="ytFallbackLink" href="#" target="_blank" rel="noopener" style="display:none;font-size:0.82rem;color:var(--pink);font-weight:600;text-align:center;margin-top:8px;padding:10px;background:rgba(233,30,99,0.08);border-radius:10px;text-decoration:none;border:1px solid rgba(233,30,99,0.2);">▶ Video blocked here — tap to open on YouTube</a>
+      </div>
+      <button class="btn btn-primary" onclick="ripple(event);goTo('s-envelope')">Next ›</button>
+      <button class="btn btn-outline" id="custBtnSong" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+    </div>
+  </div>
+  <div class="progress-dots"><div class="pdot done" onclick="dotNav('s-welcome')" style="cursor:pointer"></div><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4: ENVELOPE
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-envelope">
+  <div class="card">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="card-inner">
+      <div class="screen-title" id="envTitle">I wrote a letter<br>for you... 💌</div>
+      <button id="envBtn" onclick="openEnvelope(this)" style="display:block;width:100%;background:none;border:none;cursor:pointer;padding:10px 0 6px;touch-action:manipulation;">
+        <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;display:block;margin:0 auto;filter:drop-shadow(0 14px 36px rgba(233,30,99,0.32));">
+          <defs>
+            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffd6e7"/><stop offset="100%" stop-color="#ffaac8"/></linearGradient>
+            <linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff80aa"/><stop offset="100%" stop-color="#ffb3cc"/></linearGradient>
+            <linearGradient id="lt" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffbdd4"/><stop offset="100%" stop-color="#ff8fb5"/></linearGradient>
+            <linearGradient id="rt" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffbdd4"/><stop offset="100%" stop-color="#ff7aaa"/></linearGradient>
+            <pattern id="stripe" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="20" stroke="white" stroke-width="1.5" opacity="0.3"/></pattern>
+          </defs>
+          <rect x="4" y="44" width="292" height="152" rx="14" fill="url(#bg)"/>
+          <rect x="4" y="44" width="292" height="152" rx="14" fill="url(#stripe)"/>
+          <polygon points="4,44 150,152 4,196" fill="url(#lt)" opacity="0.85"/>
+          <polygon points="296,44 150,152 296,196" fill="url(#rt)" opacity="0.85"/>
+          <rect id="envPaper" x="50" y="72" width="200" height="118" rx="8" fill="white" opacity="0.95" style="transition:transform 0.65s cubic-bezier(.4,0,.2,1);transform-origin:150px 190px;transform-box:fill-box;"/>
+          <text x="150" y="140" text-anchor="middle" font-size="22" opacity="0.3" style="pointer-events:none;">💌</text>
+          <polygon id="envFlap" points="4,44 150,158 296,44" fill="url(#fl)" style="transition:transform 0.65s cubic-bezier(.4,0,.2,1);transform-origin:150px 44px;transform-box:fill-box;"/>
+          <text id="envHeart" x="150" y="118" text-anchor="middle" font-size="26" style="transition:opacity 0.3s,transform 0.3s;transform-origin:150px 105px;transform-box:fill-box;">❤️</text>
+        </svg>
+        <div style="font-size:0.83rem;color:var(--mid);margin-top:6px;animation:tapPulse 2s ease infinite;">Tap the envelope to open 💌</div>
+      </button>
+      <button class="btn btn-outline" id="custBtnEnv" onclick="ripple(event);goTo('s-customize')" style="margin-top:14px;">✏️ Customize</button>
+    </div>
+  </div>
+  <div class="progress-dots"><div class="pdot done" onclick="dotNav('s-welcome')" style="cursor:pointer"></div><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 5: LETTER
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-letter">
+  <div class="card">
+    <div class="back-btn" onclick="goBack()">←</div>
+    <div class="card-inner" style="padding-top:52px;padding-bottom:18px;overflow-y:auto;max-height:calc(100vh - 40px);-webkit-overflow-scrolling:touch;">
+      <div class="letter-page">
+        <div class="letter-dear" id="letterDear">Dear,</div>
+        <div class="letter-body" id="letterBody">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you — for every laugh we share, every dream we build, and every small miracle of love between us. May our hearts stay close, today and always.</div>
+        <div class="letter-sign" id="letterSign">Forever yours 💕</div>
+        <div class="letter-sender-name" id="letterSenderName"></div>
+      </div>
+      <button class="btn btn-primary" id="custBtnLetter" onclick="ripple(event);goTo('s-customize')" style="margin-top:14px;">✨ Create Your Own Card</button>
+      <button class="btn btn-wa" id="shareCardBtn" onclick="shareWhatsApp()" style="margin-top:0;display:none;">🎁 Create &amp; Share Card</button>
+      <div id="receiverEndCTA" style="display:none;margin-top:14px;text-align:center;">
+        <div style="font-size:0.78rem;color:var(--mid);margin-bottom:10px;line-height:1.6;">Want to send someone a card like this? 💝</div>
+        <a href="https://wishyou.ai" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:50px;font-size:0.88rem;font-weight:600;text-decoration:none;box-shadow:0 4px 16px rgba(233,30,99,0.35);">Create your own on WishYou.ai ✨</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 6: CUSTOMIZE
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-customize">
+  <div class="customize-scroll" id="custScroll">
+    <div class="cust-header">
+      <div class="back-btn" style="position:relative;top:0;left:0;flex-shrink:0;" onclick="saveAndBack()">←</div>
+      <div class="cust-title">Edit Intimate Card ✏️</div>
+    </div>
+
+    <!-- AI Magic Fill -->
+    <div class="ai-magic-box">
+      <div class="ai-magic-title"><span>✨</span> Magic Fill — AI fills everything</div>
+      <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:10px;line-height:1.6;">Describe the occasion and AI will fill everything automatically.</div>
+      <input class="ai-occasion-input" id="aiOccasionInput" placeholder="e.g. my girlfriend Priya's birthday, we met in college 3 years ago..." maxlength="200">
+      <button class="btn-ai" onclick="runMagicFill()" id="magicFillBtn">✨ Fill My Card with AI</button>
+      <div class="ai-loading" id="magicFillLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI is personalising your card...</span></div>
+      <div class="ai-result-banner" id="magicFillResult"></div>
+    </div>
+
+    <!-- Their Name -->
+    <div class="field-group">
+      <label class="field-label">Their Name</label>
+      <input type="text" id="cName" placeholder="e.g. Priya" maxlength="30">
+    </div>
+
+    <!-- Card Title -->
+    <div class="field-group">
+      <label class="field-label">Card Title</label>
+      <input type="text" id="cTitle" value="Happy Birthday!" maxlength="60">
+    </div>
+
+    <!-- Relationship for AI -->
+    <div class="field-group">
+      <label class="field-label">Relationship Type</label>
+      <select id="relSelect" onchange="onRelChange(this.value)">
+        <option value="">Select relationship...</option>
+        <option value="Romantic Partner">💕 Romantic Partner</option>
+        <option value="Husband">💍 Husband</option>
+        <option value="Wife">💍 Wife</option>
+        <option value="Best Friend">🤝 Best Friend</option>
+        <option value="Mom">🌸 Mom</option>
+        <option value="Dad">💪 Dad</option>
+        <option value="Son">👦 Son</option>
+        <option value="Daughter">👧 Daughter</option>
+        <option value="Sister">👯 Sister</option>
+        <option value="Brother">🤜 Brother</option>
+        <option value="Grandmother">👵 Grandmother</option>
+        <option value="Grandfather">👴 Grandfather</option>
+        <option value="Cousin">🤗 Cousin</option>
+        <option value="Colleague">💼 Colleague</option>
+      </select>
+      <div class="ai-personalise-box" style="margin-top:10px;">
+        <div style="font-size:0.75rem;color:var(--mid);margin-bottom:8px;">AI will write a personalised letter based on your relationship</div>
+        <button id="aiPersonaliseBtn" style="display:none;width:100%;padding:11px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:50px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="runPersonalise()">💌 Write Letter with AI</button>
+        <div class="ai-loading" id="personaliseLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Writing a personalised letter...</span></div>
+      </div>
+    </div>
+
+    <!-- Letter -->
+    <div class="field-group">
+      <label class="field-label">Your Letter</label>
+      <textarea id="cMsg" rows="5" placeholder="Write something heartfelt..."></textarea>
+    </div>
+
+    <!-- Sign off -->
+    <div class="field-group">
+      <label class="field-label">Sign Off</label>
+      <input type="text" id="cSign" placeholder="e.g. Forever yours 💕" maxlength="60">
+    </div>
+
+    <!-- Sender name -->
+    <div class="field-group">
+      <label class="field-label">Your Name (Sender)</label>
+      <input type="text" id="cSender" placeholder="e.g. Aryan" maxlength="30">
+    </div>
+
+    <!-- Song subtitle -->
+    <div class="field-group">
+      <label class="field-label">Song Message</label>
+      <input type="text" id="cSongSub" placeholder="e.g. This song always reminds me of you." maxlength="80">
+    </div>
+
+    <!-- Photos -->
+    <div class="field-group">
+      <label class="field-label">Your Photos (up to 5)</label>
+      <div id="photoThumbs" class="photo-thumbs"></div>
+      <label style="display:flex;align-items:center;gap:8px;padding:12px 14px;background:rgba(233,30,99,0.06);border:1.5px dashed rgba(233,30,99,0.25);border-radius:14px;cursor:pointer;margin-top:8px;font-size:0.85rem;color:var(--mid);" id="photoUploadLabel">
+        📸 Tap to add photos
+        <input type="file" accept="image/*" multiple style="display:none;" id="photoInput" onchange="handlePhotos(this)">
+      </label>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:10px;font-size:0.78rem;color:var(--mid);">
+        <span>Photo effects</span>
+        <label style="position:relative;display:inline-block;width:40px;height:22px;">
+          <input type="checkbox" id="photoFxToggle" checked onchange="togglePhotoFx(this)" style="opacity:0;width:0;height:0;">
+          <span style="position:absolute;cursor:pointer;inset:0;background:#e0e0e0;border-radius:22px;transition:0.3s;"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Photos heading -->
+    <div class="field-group">
+      <label class="field-label">Photos Screen Title</label>
+      <select id="cMemoriesHeading">
+        <option value="Our Memories 📸">Our Memories 📸</option>
+        <option value="Moments We've Shared 🌸">Moments We've Shared 🌸</option>
+        <option value="Our Story 💕">Our Story 💕</option>
+        <option value="Through the Years ✨">Through the Years ✨</option>
+      </select>
+    </div>
+
+    <!-- Song search -->
+    <div class="field-group">
+      <label class="field-label">🎵 Search &amp; Pick a Song</label>
+      <div id="ytSelectedSong">
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-bottom:4px;">Now playing on your card:</div>
+        <div id="ytSelectedName" style="font-size:0.88rem;font-weight:600;color:white;"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input type="text" id="ytSearchInput" placeholder="Type song name e.g. Tum Hi Ho..." style="flex:1;" maxlength="100" onkeydown="if(event.key==='Enter')searchYouTube()">
+        <button onclick="searchYouTube()" style="padding:13px 18px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:14px;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;">🔍</button>
+      </div>
+      <div id="ytSearchResults" style="margin-bottom:8px;"></div>
+      <input type="hidden" id="cSpotify">
+
+      <!-- AI Song suggestions -->
+      <div class="ai-song-section">
+        <div style="font-size:0.75rem;font-weight:600;color:var(--dark);margin-bottom:8px;">🤖 AI Song Suggestions</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <select id="songLang" onchange="updateSongMood()" style="flex:1;padding:10px 12px;font-size:0.82rem;">
+            <option value="">Any language</option>
+            <option value="Hindi">Hindi</option>
+            <option value="English">English</option>
+            <option value="Marathi">Marathi</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Telugu">Telugu</option>
+            <option value="Punjabi">Punjabi</option>
+            <option value="Bengali">Bengali</option>
+          </select>
+          <select id="songVibes" onchange="updateSongMood()" style="flex:1;padding:10px 12px;font-size:0.82rem;">
+            <option value="">Any vibe</option>
+            <option value="Romantic">Romantic 💕</option>
+            <option value="Fun & Upbeat">Fun & Upbeat 🎉</option>
+            <option value="Emotional & Deep">Emotional 😢</option>
+            <option value="Nostalgic">Nostalgic 🌅</option>
+            <option value="Friendship">Friendship 🤝</option>
+          </select>
+        </div>
+        <input type="hidden" id="aiSongMood">
+        <button id="aiSongBtn" onclick="runSongSuggestions()" style="width:100%;padding:10px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:12px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">✨ Suggest Songs</button>
+        <div class="ai-loading" id="aiSongLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Finding perfect songs...</span></div>
+        <div id="aiSongResults" style="margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <!-- Card Theme -->
+    <div class="field-group">
+      <label class="field-label">🎨 Card Theme</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div onclick="setTheme('')" id="theme-rose" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid var(--pink);background:linear-gradient(135deg,#fde8f0,#fce4ec);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">🌹</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#4a0e2a;">Rose</div>
+          <div style="font-size:0.62rem;color:#8d3a5a;">Default</div>
+        </div>
+        <div onclick="setTheme('midnight')" id="theme-midnight" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#150d2e,#1e0a3c);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">🌙</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#e9d5ff;">Midnight</div>
+          <div style="font-size:0.62rem;color:#c084fc;">Dark & Romantic</div>
+        </div>
+        <div onclick="setTheme('golden')" id="theme-golden" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#fffbeb,#fef3c7);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">✨</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#78350f;">Golden</div>
+          <div style="font-size:0.62rem;color:#92400e;">Warm & Luxe</div>
+        </div>
+        <div onclick="setTheme('forest')" id="theme-forest" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#f0fdf4,#dcfce7);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">🌿</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#14532d;">Forest</div>
+          <div style="font-size:0.62rem;color:#166534;">Fresh & Calm</div>
+        </div>
+        <div onclick="setTheme('velvet')" id="theme-velvet" style="cursor:pointer;border-radius:14px;padding:12px 10px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#1a0a2e,#2d1048);transition:all 0.2s;">
+          <div style="font-size:1.3rem;margin-bottom:4px;">💜</div>
+          <div style="font-size:0.78rem;font-weight:700;color:#f3e8ff;">Velvet</div>
+          <div style="font-size:0.62rem;color:#d8b4fe;">Deep & Elegant</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-bar">
+      <button class="btn btn-primary" onclick="ripple(event);saveAndBack()" style="margin-bottom:8px;">💾 Save &amp; Preview</button>
+      <button class="btn btn-wa" onclick="shareWhatsApp()" id="shareCardBtnCust">🎁 Create &amp; Share Card</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- Photo expand modal -->
+<div class="photo-expand" id="photoExpand" onclick="closeExpand()">
+  <img id="expandImg" src="" alt="">
+  <div class="photo-expand-dots" id="expandNav"></div>
+</div>
+
+<!-- Share confirmation -->
+<div class="share-confirm" id="shareConfirm">
+  <div class="share-confirm-box">
+    <div style="font-size:2rem;margin-bottom:8px;">🎉</div>
+    <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--dark);margin-bottom:6px;">Card saved!</div>
+    <div style="font-size:0.82rem;color:var(--mid);margin-bottom:16px;line-height:1.6;">Share this link with the birthday person 💝</div>
+    <div class="expiry-notice">⏳ This card expires in <strong>3 days</strong> — share it soon!</div>
+    <div class="share-link-box" id="shareLinkBox">
+      <span id="shareLinkText" style="word-break:break-all;"></span>
+      <button class="copy-link-btn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="btn btn-wa" style="width:100%;margin-bottom:10px;" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
+    <button style="width:100%;padding:10px;background:none;border:1px solid rgba(233,30,99,0.2);border-radius:50px;font-size:0.82rem;color:var(--mid);cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="closeShare()">Done ✓</button>
+  </div>
+</div>
+
+<!-- Watermark -->
+<div class="wm"><a href="/">WishYou.ai</a></div>
+
+<script>
+// ════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════
+const FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const CLOUDINARY_CLOUD = 'dkvbjazfe';
+const CLOUDINARY_PRESET = 'wishyou-uploads';
+const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
+const CARD_TYPE = 'birthday-intimate';
+
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let cur = 's-welcome';
+let isReceiver = false;
+let photos = [];
+let spotifySrc = '';
+let envOpen = false;
+let currentTheme = '';
+let selectedRelationship = '';
+let shareLink = '';
+let expandIdx = 0;
+let bgmEnabled = false;
+
+const ALL = ['s-welcome','s-memories','s-song','s-envelope','s-letter','s-customize'];
+const BACK = {'s-memories':'s-welcome','s-song':'s-memories','s-envelope':'s-song','s-letter':'s-envelope','s-customize':'s-welcome'};
+const THEMES = ['','midnight','golden','forest','velvet'];
+const THEME_COLORS = {'':'#e91e63','midnight':'#7c3aed','golden':'#d97706','forest':'#16a34a','velvet':'#9333ea'};
+
+// ════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════
+function showScreen(id){
+  ALL.forEach(s => document.getElementById(s).classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  cur = id;
+  if(id === 's-memories' && photos.length) buildSlides();
+  if(id === 's-song' && spotifySrc){
+    const f = document.getElementById('spotifyFrame');
+    if(f.src !== spotifySrc) f.src = spotifySrc;
+    document.getElementById('spotifyWrap').style.display = 'block';
+    document.getElementById('songCardEl').style.display = 'none';
+  }
+}
+
+function goTo(id){
+  if(cur === id) return;
+  showScreen(id);
+  if(id === 's-customize') setTimeout(() => document.getElementById('custScroll').scrollTo(0,0), 50);
+  if(id === 's-letter') setTimeout(typewriterLetter, 400);
+}
+
+function goBack(){
+  const p = BACK[cur]; if(!p) return;
+  showScreen(p);
+  if(p === 's-envelope') resetEnv();
+}
+
+function dotNav(id){ if(id !== cur) goTo(id); }
+
+// ════════════════════════════════════════════════
+// THEMES
+// ════════════════════════════════════════════════
+function setTheme(name){
+  THEMES.forEach(t => { if(t) document.body.classList.remove('theme-'+t); });
+  if(name) document.body.classList.add('theme-'+name);
+  currentTheme = name;
+  THEMES.forEach(t => {
+    const el = document.getElementById('theme-'+(t||'rose'));
+    if(!el) return;
+    el.style.border = (t===name) ? '2px solid '+(THEME_COLORS[t]||THEME_COLORS['']) : '2px solid transparent';
+  });
+  if(!name){ const r=document.getElementById('theme-rose'); if(r) r.style.border='2px solid var(--pink)'; }
+}
+
+// ════════════════════════════════════════════════
+// FLOATING HEARTS
+// ════════════════════════════════════════════════
+(function(){
+  const bg = document.getElementById('heartsBg');
+  const em = ['❤️','🩷','💕','💖','🌸','✨','💝','💗'];
+  for(let i=0;i<16;i++){
+    const h = document.createElement('span');
+    h.className = 'hrt';
+    h.textContent = em[Math.floor(Math.random()*em.length)];
+    h.style.cssText = `left:${Math.random()*100}%;font-size:${9+Math.random()*10}px;animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*14}s;`;
+    bg.appendChild(h);
+  }
+})();
+
+// ════════════════════════════════════════════════
+// RIPPLE EFFECT
+// ════════════════════════════════════════════════
+function ripple(e){
+  const btn = e.currentTarget;
+  const r = document.createElement('span');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width,rect.height);
+  r.style.cssText = `position:absolute;width:${size}px;height:${size}px;left:${e.clientX-rect.left-size/2}px;top:${e.clientY-rect.top-size/2}px;background:rgba(255,255,255,0.3);border-radius:50%;transform:scale(0);animation:ripple 0.5s linear;pointer-events:none;`;
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 600);
+}
+
+// ════════════════════════════════════════════════
+// ENVELOPE
+// ════════════════════════════════════════════════
+function openEnvelope(btn){
+  if(envOpen) return; envOpen = true;
+  const flap=document.getElementById('envFlap'), heart=document.getElementById('envHeart'), paper=document.getElementById('envPaper');
+  if(flap) flap.style.transform='rotateX(180deg)';
+  if(heart){ heart.style.opacity='0'; heart.style.transform='scale(0)'; }
+  if(paper) paper.style.transform='translateY(-40%)';
+  if(btn) btn.style.transform='scale(0.95)';
+  heartBlast(btn);
+  setTimeout(() => { if(btn) btn.style.transform=''; goTo('s-letter'); }, 850);
+}
+
+function resetEnv(){
+  envOpen = false;
+  const flap=document.getElementById('envFlap'), heart=document.getElementById('envHeart'), paper=document.getElementById('envPaper'), btn=document.getElementById('envBtn');
+  if(flap) flap.style.transform='';
+  if(heart){ heart.style.opacity='1'; heart.style.transform=''; }
+  if(paper) paper.style.transform='';
+  if(btn) btn.style.transform='';
+}
+
+function heartBlast(btn){
+  const bg = document.getElementById('heartsBg');
+  const em = ['❤️','🩷','💕','💖','💗'];
+  for(let i=0;i<12;i++){
+    const h = document.createElement('span');
+    h.textContent = em[Math.floor(Math.random()*em.length)];
+    const rect = btn ? btn.getBoundingClientRect() : {left:window.innerWidth/2,top:window.innerHeight/2,width:0,height:0};
+    const startX = rect.left + rect.width/2;
+    const startY = rect.top + rect.height/2;
+    h.style.cssText = `position:fixed;left:${startX}px;top:${startY}px;font-size:${12+Math.random()*18}px;pointer-events:none;z-index:999;animation:hBlast${i%2} ${0.6+Math.random()*0.5}s ease-out forwards;`;
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 1200);
+  }
+}
+
+// Add heart blast keyframes
+(function(){
+  const s = document.createElement('style');
+  s.textContent = `@keyframes hBlast0{to{transform:translate(${-60+Math.random()*120}px,${-80-Math.random()*60}px) scale(0);opacity:0;}}@keyframes hBlast1{to{transform:translate(${-60+Math.random()*120}px,${-80-Math.random()*60}px) scale(0);opacity:0;}}`;
+  document.head.appendChild(s);
+})();
+
+// ════════════════════════════════════════════════
+// TYPEWRITER LETTER
+// ════════════════════════════════════════════════
+let _twTimer = null;
+function typewriterLetter(){
+  const el = document.getElementById('letterBody');
+  if(!el) return;
+  const full = el.getAttribute('data-full') || el.textContent;
+  if(!el.getAttribute('data-full')) el.setAttribute('data-full', full);
+  if(_twTimer){ clearTimeout(_twTimer); _twTimer=null; }
+  if(!isReceiver){ el.textContent = full; return; }
+  el.textContent = '';
+  let i = 0;
+  const speed = full.length > 300 ? 18 : 28;
+  function tick(){
+    if(i < full.length){ el.textContent = full.slice(0,++i); _twTimer = setTimeout(tick, speed); }
+  }
+  tick();
+}
+
+// ════════════════════════════════════════════════
+// PHOTOS
+// ════════════════════════════════════════════════
+function handlePhotos(inp){
+  const files = Array.from(inp.files);
+  if(!files.length) return;
+  const newUrls = files.map(f => URL.createObjectURL(f));
+  photos = [...photos, ...newUrls].slice(0,5);
+  buildThumbs();
+  if(cur === 's-memories') buildSlides();
+}
+
+function buildThumbs(){
+  const tb = document.getElementById('photoThumbs'); tb.innerHTML='';
+  photos.forEach((url,i) => {
+    const w = document.createElement('div'); w.className='thumb-wrap';
+    w.innerHTML = `<img src="${url}" alt="Photo ${i+1}"><button class="thumb-del" onclick="removePhoto(${i})">✕</button>`;
+    tb.appendChild(w);
+  });
+  document.getElementById('photoUploadLabel').style.display = photos.length >= 5 ? 'none' : '';
+}
+
+function removePhoto(i){
+  photos.splice(i,1); buildThumbs();
+  if(photos.length === 0){ document.getElementById('polWrap').style.display='none'; document.getElementById('photoPlaceholder').style.display='block'; }
+  else if(cur==='s-memories') buildSlides();
+}
+
+function buildSlides(){
+  const wrap = document.getElementById('polWrap');
+  wrap.innerHTML = '';
+  if(!photos.length) return;
+  document.getElementById('photoPlaceholder').style.display='none';
+  wrap.style.display='flex';
+  document.getElementById('photoTapHint').style.display='block';
+  wrap.className = 'pol-wrap count-'+photos.length;
+  const hasFx = !wrap.classList.contains('photo-fx-off');
+  photos.forEach((url,i) => {
+    const card = document.createElement('div');
+    card.className = 'pol-card';
+    card.innerHTML = `<img src="${url}" alt="Memory ${i+1}"><div class="pol-label">Memory ${i+1}</div>`;
+    card.addEventListener('click', () => openExpand(i));
+    wrap.appendChild(card);
+  });
+  const nav = document.getElementById('expandNav'); nav.innerHTML='';
+  photos.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'photo-expand-dot'+(i===0?' active':'');
+    d.onclick = e => { e.stopPropagation(); goExpand(i); };
+    nav.appendChild(d);
+  });
+}
+
+function togglePhotoFx(cb){
+  const wrap = document.getElementById('polWrap');
+  if(cb.checked) wrap.classList.remove('photo-fx-off');
+  else wrap.classList.add('photo-fx-off');
+}
+
+function openExpand(i){ expandIdx=i; goExpand(i); document.getElementById('photoExpand').classList.add('show'); }
+function closeExpand(){ document.getElementById('photoExpand').classList.remove('show'); }
+function goExpand(i){
+  expandIdx = i;
+  document.getElementById('expandImg').src = photos[i];
+  document.querySelectorAll('.photo-expand-dot').forEach((d,j) => d.classList.toggle('active',j===i));
+}
+
+// ════════════════════════════════════════════════
+// SONG / SPOTIFY
+// ════════════════════════════════════════════════
+function handleSpotify(val){
+  if(!val) return;
+  const wrap = document.getElementById('spotifyWrap'), card = document.getElementById('songCardEl');
+  const fallback = document.getElementById('ytFallbackLink');
+  if(fallback) fallback.style.display='none';
+  const ytMatch = val.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if(ytMatch){
+    const ytId = ytMatch[1];
+    const ytOrigUrl = 'https://www.youtube.com/watch?v='+ytId;
+    spotifySrc = 'https://www.youtube.com/embed/'+ytId+'?autoplay=0&rel=0';
+    document.getElementById('spotifyFrame').src = spotifySrc;
+    if(wrap) wrap.style.display='block';
+    if(card) card.style.display='none';
+    if(fallback){ fallback.href=ytOrigUrl; }
+    const t = setTimeout(() => { if(fallback) fallback.style.display='block'; }, 5000);
+    document.getElementById('spotifyFrame').onload = () => clearTimeout(t);
+    return;
+  }
+  const spMatch = val.match(/track\/([a-zA-Z0-9]+)/);
+  if(spMatch){
+    spotifySrc = `https://open.spotify.com/embed/track/${spMatch[1]}?utm_source=generator&theme=0`;
+    document.getElementById('spotifyFrame').src = spotifySrc;
+    if(wrap) wrap.style.display='block';
+    if(card) card.style.display='none';
+    return;
+  }
+  spotifySrc='';
+  document.getElementById('spotifyFrame').src='';
+  if(wrap) wrap.style.display='none';
+  if(card) card.style.display='block';
+}
+
+function togglePlay(){
+  const btn = document.getElementById('playBtn');
+  btn.textContent = btn.textContent === '▶' ? '⏸' : '▶';
+}
+
+function updateSongMood(){
+  const lang = document.getElementById('songLang').value;
+  const vibe = document.getElementById('songVibes').value;
+  document.getElementById('aiSongMood').value = [lang,vibe].filter(Boolean).join(' ');
+}
+
+// ════════════════════════════════════════════════
+// YOUTUBE SEARCH
+// ════════════════════════════════════════════════
+async function searchYouTube(){
+  const query = document.getElementById('ytSearchInput').value.trim();
+  if(!query){ alert('Please type a song name first.'); return; }
+  const resultsDiv = document.getElementById('ytSearchResults');
+  resultsDiv.innerHTML = '<div style="text-align:center;padding:16px;font-size:0.88rem;color:var(--pink);font-weight:600;background:var(--pink4);border-radius:12px;">🔍 Searching...</div>';
+  const cs = document.getElementById('custScroll');
+  if(cs){ setTimeout(() => { const r=document.getElementById('ytSearchResults'); if(r) cs.scrollTop=r.offsetTop-80; },100); }
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({type:'youtube_search',query}) });
+    const data = await res.json();
+    if(!data.items || !data.items.length){ resultsDiv.innerHTML='<div style="font-size:0.78rem;color:var(--mid);padding:8px;">No results. Try different keywords.</div>'; return; }
+    resultsDiv.innerHTML='';
+    data.items.forEach(item => {
+      const {videoId} = item.id, {title,channelTitle,thumbnails} = item.snippet;
+      const card = document.createElement('div');
+      card.className = 'yt-result-card';
+      card.innerHTML = `<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;color:var(--dark);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${title}</div><div style="font-size:0.7rem;color:var(--mid);margin-top:2px;">${channelTitle}</div></div><button class="yt-use-btn">✓ Use</button>`;
+      card.querySelector('button').onclick = e => { e.stopPropagation(); selectSong(videoId,title,channelTitle); };
+      resultsDiv.appendChild(card);
+    });
+    if(cs){ setTimeout(() => { const r=document.getElementById('ytSearchResults'); if(r) cs.scrollTop=r.offsetTop-80; },100); }
+  } catch(e){ resultsDiv.innerHTML='<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Search failed. Try again.</div>'; }
+}
+
+function selectSong(videoId, title, artist){
+  const ytUrl = 'https://www.youtube.com/watch?v='+videoId;
+  document.getElementById('cSpotify').value = ytUrl;
+  handleSpotify(ytUrl);
+  const sel = document.getElementById('ytSelectedSong'), nm = document.getElementById('ytSelectedName');
+  if(sel) sel.style.display='block';
+  if(nm) nm.textContent = title+' — '+artist;
+  document.getElementById('songName').textContent = title;
+  document.getElementById('songArtist').textContent = artist;
+  document.getElementById('ytSearchResults').innerHTML = `<div style="font-size:0.78rem;color:var(--pink);font-weight:600;padding:6px 2px;">✅ ${title} added!</div>`;
+  const cs = document.getElementById('custScroll');
+  if(cs && sel){ setTimeout(() => { cs.scrollTop=sel.offsetTop-80; },100); }
+}
+
+// ════════════════════════════════════════════════
+// SAVE & BACK
+// ════════════════════════════════════════════════
+function saveAndBack(){
+  const name = document.getElementById('cName').value.trim();
+  const title = document.getElementById('cTitle').value.trim();
+  const msg = document.getElementById('cMsg').value.trim();
+  const sign = document.getElementById('cSign').value.trim();
+  const sender = document.getElementById('cSender').value.trim();
+  const sub = document.getElementById('cSongSub').value.trim();
+
+  // Update welcome screen
+  document.getElementById('welcomeTitle').textContent = title || 'Happy Birthday!';
+  document.getElementById('welcomeSub').textContent = name ? `This is for you, ${name} 🌸` : 'Someone special made this just for you 🌸';
+
+  // Update letter
+  document.getElementById('letterDear').textContent = name ? `Dear ${name},` : 'Dear,';
+  const lb = document.getElementById('letterBody');
+  if(lb){ lb.textContent = msg||lb.getAttribute('data-full')||lb.textContent; lb.setAttribute('data-full', msg||lb.textContent); }
+  document.getElementById('letterSign').textContent = sign || 'Forever yours 💕';
+  const sn = document.getElementById('letterSenderName');
+  if(sn){ if(sender){ sn.textContent=sender; sn.style.display='block'; } else sn.style.display='none'; }
+
+  // Update song screen
+  document.getElementById('songSub').textContent = sub || 'This song always reminds me of you.';
+
+  // Update memories title
+  const mh = document.getElementById('cMemoriesHeading');
+  const mt = document.getElementById('memoriesTitle');
+  if(mh && mt) mt.textContent = mh.value || 'Our Memories 📸';
+
+  // Sender on memories screen
+  const msub = document.getElementById('memoriesSub'), msn = document.getElementById('memoriesSender');
+  if(msub && msn){ if(sender){ msn.textContent=sender; msub.style.display='block'; } else msub.style.display='none'; }
+
+  // Apply theme
+  setTheme(currentTheme);
+
+  // Show spotify if set
+  const sp = document.getElementById('cSpotify').value.trim();
+  if(sp && sp !== spotifySrc){ handleSpotify(sp); }
+
+  // Switch to saved state
+  document.getElementById('creatorBtns').style.display='none';
+  document.getElementById('savedBtns').style.display='block';
+  document.getElementById('shareWelcomeBtn').style.display='block';
+  document.getElementById('shareCardBtn').style.display='flex';
+
+  // Update custBtnLetter
+  const cl = document.getElementById('custBtnLetter');
+  if(cl) cl.textContent='✏️ Edit Letter';
+
+  resetEnv();
+  goBack();
+}
+
+// ════════════════════════════════════════════════
+// SHARE / FIREBASE
+// ════════════════════════════════════════════════
+async function shareWhatsApp(){
+  const btn = document.querySelector('.btn-wa');
+  if(btn) btn.textContent = 'Saving card... 💝';
+
+  // Upload photos to Cloudinary
+  let photoUrls = [];
+  for(let i=0;i<photos.length;i++){
+    try {
+      const url = await uploadPhoto(photos[i]);
+      if(url) photoUrls.push(url);
+    } catch(e){ console.error('Photo upload failed:', e); }
+  }
+
+  const now = Date.now();
+  const cardData = {
+    type: CARD_TYPE,
+    name: document.getElementById('cName').value.trim(),
+    sender: document.getElementById('cSender').value.trim(),
+    title: document.getElementById('cTitle').value.trim(),
+    msg: document.getElementById('cMsg').value.trim(),
+    sign: document.getElementById('cSign').value.trim(),
+    sub: document.getElementById('cSongSub').value.trim(),
+    spotify: document.getElementById('cSpotify').value.trim(),
+    photos: photoUrls,
+    memoriesHeading: document.getElementById('cMemoriesHeading').value,
+    theme: currentTheme,
+    created: now, createdAt: now,
+    expiresAt: now + 3*24*60*60*1000
+  };
+
+  try {
+    const res = await fetch(FIREBASE_URL+'.json', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(cardData) });
+    const data = await res.json();
+    const cardId = data.name;
+    shareLink = `https://wishyou.ai/birthday/intimate.html?card=${cardId}`;
+    document.getElementById('shareLinkText').textContent = shareLink;
+    document.getElementById('shareConfirm').classList.add('show');
+    // Track view
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json', { method:'PUT', headers:{'Content-Type':'application/json'}, body:'0' }).catch(()=>{});
+  } catch(e){
+    alert('Could not save card. Please try again.');
+  }
+  if(btn) btn.textContent='🎁 Create & Share Card';
+}
+
+async function uploadPhoto(blobUrl){
+  const blob = await fetch(blobUrl).then(r=>r.blob());
+  const fd = new FormData();
+  fd.append('file', blob);
+  fd.append('upload_preset', CLOUDINARY_PRESET);
+  fd.append('folder', 'wishyou');
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method:'POST', body:fd });
+  const data = await res.json();
+  return data.secure_url;
+}
+
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(() => {
+    const btn = document.querySelector('.copy-link-btn');
+    btn.textContent='Copied!'; setTimeout(() => btn.textContent='Copy', 2000);
+  });
+}
+function openWhatsApp(){ window.open('https://wa.me/?text='+encodeURIComponent('🎂 I made you a birthday card! Open it here: '+shareLink)); }
+function closeShare(){ document.getElementById('shareConfirm').classList.remove('show'); }
+
+// ════════════════════════════════════════════════
+// RELATIONSHIP / AI PERSONALISE
+// ════════════════════════════════════════════════
+function onRelChange(rel){
+  selectedRelationship = rel;
+  const btn = document.getElementById('aiPersonaliseBtn');
+  if(btn) btn.style.display = rel ? 'block' : 'none';
+}
+
+async function callClaude(prompt){
+  try {
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ model:'claude-haiku-4-5', max_tokens:1000, messages:[{role:'user',content:prompt}] }) });
+    const data = await res.json();
+    if(data.error) return '';
+    return data.content && data.content[0] ? data.content[0].text : '';
+  } catch(e){ return ''; }
+}
+
+function stripMarkdown(t){
+  return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();
+}
+
+async function runPersonalise(){
+  if(!selectedRelationship) return;
+  const name = document.getElementById('cName').value.trim()||'them';
+  const btn = document.getElementById('aiPersonaliseBtn'), loading = document.getElementById('personaliseLoading');
+  btn.disabled=true; loading.classList.add('show');
+  const text = await callClaude(`Write a short heartfelt birthday letter (3-4 sentences) for my ${selectedRelationship} named ${name}. Tone should match — romantic for partner/spouse, warm for friend, loving for family. Return ONLY the letter body, no greeting, no sign off.`);
+  if(text) document.getElementById('cMsg').value = stripMarkdown(text);
+  btn.disabled=false; loading.classList.remove('show');
+}
+
+async function runMagicFill(){
+  const input = document.getElementById('aiOccasionInput').value.trim();
+  if(!input){ alert('Please describe the occasion first.'); return; }
+  const btn = document.getElementById('magicFillBtn'), loading = document.getElementById('magicFillLoading'), result = document.getElementById('magicFillResult');
+  btn.disabled=true; loading.classList.add('show'); result.classList.remove('show');
+  const text = await callClaude(`Extract from: "${input}"\nReturn ONLY valid JSON (no markdown):\n{"name":"person name","title":"card title e.g. Happy Birthday!","msg":"3-4 sentence heartfelt letter body (no Dear X, no sign off)","sign":"sign off e.g. Forever yours 💕","songSearch":"song name + artist for YouTube search"}`);
+  try {
+    const d = JSON.parse(text.replace(/```json|```/g,'').trim());
+    if(d.name) document.getElementById('cName').value=d.name;
+    if(d.title) document.getElementById('cTitle').value=d.title;
+    if(d.msg) document.getElementById('cMsg').value=stripMarkdown(d.msg);
+    if(d.sign) document.getElementById('cSign').value=d.sign;
+    if(d.songSearch){ document.getElementById('ytSearchInput').value=d.songSearch; }
+    result.textContent='✅ Card filled! Review and edit as needed.'; result.classList.add('show');
+    document.getElementById('welcomeTitle').textContent=d.title||'Happy Birthday!';
+    document.getElementById('welcomeSub').textContent=d.name?`This is for you, ${d.name} 🌸`:'Someone special made this just for you 🌸';
+  } catch(e){ result.textContent='⚠️ Could not parse. Try again.'; result.classList.add('show'); }
+  btn.disabled=false; loading.classList.remove('show');
+}
+
+async function runSongSuggestions(){
+  const mood = document.getElementById('aiSongMood').value.trim()||'romantic birthday';
+  const lang = document.getElementById('songLang').value;
+  const btn=document.getElementById('aiSongBtn'), loading=document.getElementById('aiSongLoading'), results=document.getElementById('aiSongResults');
+  btn.disabled=true; loading.classList.add('show'); results.innerHTML='';
+  const text = await callClaude(`Suggest 4 real popular songs for a birthday card.\nLanguage: ${lang||'any'}\nMood: ${mood}\nReturn ONLY a JSON array, no markdown:\n[{"name":"Song Name","artist":"Artist Name"}]`);
+  try {
+    const songs = JSON.parse(text.replace(/```json|```/g,'').trim());
+    const header = document.createElement('div');
+    header.style.cssText='font-size:0.74rem;color:var(--mid);margin-bottom:10px;';
+    header.textContent='Tap any song to search it:';
+    results.appendChild(header);
+    songs.forEach(s => {
+      const el = document.createElement('div');
+      el.style.cssText='display:flex;align-items:center;gap:10px;background:white;border-radius:12px;padding:11px 13px;border:1.5px solid rgba(233,30,99,0.15);margin-bottom:8px;cursor:pointer;';
+      el.innerHTML=`<span style="font-size:1.3rem">🎵</span><div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;color:var(--dark);">${s.name}</div><div style="font-size:0.72rem;color:var(--mid);">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:700;color:var(--pink);">Search ›</span>`;
+      el.onclick=()=>{ document.getElementById('ytSearchInput').value=s.name+' '+s.artist; searchYouTube(); };
+      results.appendChild(el);
+    });
+  } catch(e){ results.innerHTML='<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Could not fetch suggestions. Try again.</div>'; }
+  btn.disabled=false; loading.classList.remove('show');
+}
+
+// ════════════════════════════════════════════════
+// LOAD CARD FROM URL (RECEIVER)
+// ════════════════════════════════════════════════
+function loadCardFromURL(){
+  const params = new URLSearchParams(window.location.search);
+  const cardId = params.get('card');
+  if(!cardId) return;
+
+  isReceiver = true;
+  document.getElementById('creatorBtns').style.display='none';
+  document.getElementById('savedBtns').style.display='none';
+  const rb = document.getElementById('receiverBtns');
+  if(rb) rb.style.display='block';
+  const ob = document.getElementById('openCardBtn');
+  if(ob){ ob.textContent='Loading... 💝'; ob.disabled=true; }
+
+  // Hide creator-only buttons
+  ['custBtnMem','custBtnSong','custBtnEnv','custBtnLetter','shareCardBtn'].forEach(id => {
+    const el=document.getElementById(id); if(el) el.style.display='none';
+  });
+  document.getElementById('receiverEndCTA').style.display='block';
+
+  // Sweep expired cards silently
+  fetch(FIREBASE_URL+'.json?orderBy="expiresAt"&endAt='+Date.now()+'&limitToLast=100')
+    .then(r=>r.json()).then(data=>{
+      if(!data) return;
+      Object.keys(data).forEach(id=>{
+        if(data[id].expiresAt && Date.now()>data[id].expiresAt){
+          fetch(FIREBASE_URL+'/'+id+'.json',{method:'DELETE'}).catch(()=>{});
+        }
+      });
+    }).catch(()=>{});
+
+  fetch(FIREBASE_URL+'/'+cardId+'.json')
+    .then(r=>r.json())
+    .then(d=>{
+      if(!d || (d.expiresAt && Date.now()>d.expiresAt)){
+        document.getElementById('openCardBtn').textContent='❌ Card Expired';
+        document.getElementById('openCardBtn').disabled=true;
+        return;
+      }
+
+      // Increment view count
+      fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((d.views||0)+1)}).catch(()=>{});
+      // Track opened
+      fetch(FIREBASE_URL+'/'+cardId+'/opened.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(Date.now())}).catch(()=>{});
+
+      // Apply card data
+      if(d.title){ document.getElementById('welcomeTitle').textContent=d.title; }
+      if(d.name){
+        document.getElementById('welcomeSub').textContent=`This is for you, ${d.name} 🌸`;
+        document.getElementById('letterDear').textContent=`Dear ${d.name},`;
+      }
+      if(d.msg){ const lb=document.getElementById('letterBody'); if(lb){ lb.textContent=d.msg; lb.setAttribute('data-full',d.msg); } }
+      if(d.sign){ document.getElementById('letterSign').textContent=d.sign; }
+      if(d.sub){ document.getElementById('songSub').textContent=d.sub; }
+      if(d.memoriesHeading){ document.getElementById('memoriesTitle').textContent=d.memoriesHeading; }
+      if(d.theme) setTheme(d.theme);
+      if(d.sender){
+        const sn=document.getElementById('letterSenderName');
+        if(sn){ sn.textContent=d.sender; sn.style.display='block'; }
+        const envT=document.getElementById('envTitle');
+        if(envT) envT.innerHTML=d.sender+' wrote a letter<br>for you... 💌';
+        const ms=document.getElementById('memoriesSub'), mn=document.getElementById('memoriesSender');
+        if(ms&&mn){ mn.textContent=d.sender; ms.style.display='block'; }
+      }
+      if(d.spotify) handleSpotify(d.spotify);
+      if(d.photos && d.photos.length){
+        photos=d.photos;
+        document.getElementById('photoPlaceholder').style.display='none';
+        document.getElementById('photoTapHint').style.display='block';
+        buildSlides();
+      }
+
+      if(ob){ ob.textContent='Open Card ✨'; ob.disabled=false; }
+    })
+    .catch(()=>{
+      if(ob){ ob.textContent='Open Card ✨'; ob.disabled=false; }
+    });
+}
+
+window.addEventListener('DOMContentLoaded', loadCardFromURL);
+</script>
+</body>
+</html>
