@@ -42,17 +42,19 @@ body.style-retro-active .wm a{color:#d90429!important;font-family:'Fredoka One',
 body.style-retro-active .song-card{background:#1a1a2e!important;border:3px solid #111!important;box-shadow:5px 5px 0 #111!important;border-radius:12px!important;}
 /* Retro comic photo layout */
 .retro-comic-wrap{display:flex;gap:0;width:100%;border:3px solid #111;border-radius:8px;overflow:hidden;box-shadow:4px 4px 0 #111;}
-.retro-comic-panel{flex:1;position:relative;border-right:3px solid #111;overflow:hidden;background:#f0f0f0;min-width:0;}
+.retro-comic-panel{flex:1;position:relative;border-right:3px solid #111;overflow:hidden;background:#f0f0f0;min-width:0;aspect-ratio:3/4;}
 .retro-comic-panel:last-child{border-right:none;}
-.retro-comic-panel img{width:100%;height:130px;object-fit:cover;display:block;}
-.retro-comic-caption{position:absolute;bottom:0;left:0;right:0;background:#FFE135;border-top:2px solid #111;font-family:'Patrick Hand',cursive;font-size:0.6rem;font-weight:700;color:#111;text-align:center;padding:2px 3px;line-height:1.2;}
-/* Retro jukebox */
-.retro-jukebox{background:linear-gradient(135deg,#1a1a2e,#16213e);border:4px solid #111;border-radius:16px;padding:20px;box-shadow:6px 6px 0 #111;text-align:center;position:relative;overflow:hidden;}
-.retro-jukebox::before{content:'★ JUKEBOX ★';position:absolute;top:8px;left:0;right:0;font-family:'Fredoka One',cursive;font-size:0.7rem;color:#FFE135;letter-spacing:0.2em;}
-.retro-record{width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 50%,#333 0%,#333 15%,#111 15%,#111 20%,#222 20%,#222 35%,#111 35%,#111 40%,#d90429 40%,#d90429 45%,#111 45%);margin:20px auto 12px;animation:vinylSpin 3s linear infinite;box-shadow:0 0 20px rgba(217,4,41,0.5);}
-.retro-record-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:#FFE135;border:2px solid #111;}
-.retro-song-name{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#FFE135;margin-bottom:4px;}
-.retro-artist{font-family:'Patrick Hand',cursive;font-size:0.85rem;color:rgba(255,225,53,0.7);}
+.retro-comic-panel img{width:100%;height:100%;object-fit:cover;display:block;position:absolute;top:0;left:0;}
+.retro-comic-caption{position:absolute;bottom:0;left:0;right:0;background:#FFE135;border-top:2px solid #111;font-family:'Patrick Hand',cursive;font-size:0.6rem;font-weight:700;color:#111;text-align:center;padding:3px 3px;line-height:1.2;z-index:1;}
+/* Retro turntable player */
+.retro-jukebox{background:linear-gradient(135deg,#1a0a00,#2d1500);border:4px solid #111;border-radius:16px;padding:16px 14px 14px;box-shadow:5px 5px 0 #111;text-align:center;position:relative;overflow:hidden;}
+.retro-jukebox::before{content:'★ NOW PLAYING ★';position:absolute;top:8px;left:0;right:0;font-family:'Fredoka One',cursive;font-size:0.62rem;color:#FFE135;letter-spacing:0.18em;}
+.retro-turntable{position:relative;width:110px;height:110px;margin:22px auto 10px;}
+.retro-platter{width:110px;height:110px;border-radius:50%;background:conic-gradient(#111 0deg,#222 20deg,#111 40deg,#222 60deg,#111 80deg,#222 100deg,#111 120deg,#222 140deg,#111 160deg,#222 180deg,#111 200deg,#222 220deg,#111 240deg,#222 260deg,#111 280deg,#222 300deg,#111 320deg,#222 340deg,#111 360deg);border:3px solid #333;animation:vinylSpin 3s linear infinite;position:relative;box-shadow:0 0 0 4px #222,0 0 0 6px #444,inset 0 0 20px rgba(0,0,0,0.5);}
+.retro-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#d90429,#ff4444);border:2px solid #111;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:white;font-family:'Fredoka One',cursive;text-align:center;line-height:1.2;z-index:2;}
+.retro-tonearm{position:absolute;top:-8px;right:-10px;width:50px;height:70px;pointer-events:none;}
+.retro-song-name{font-family:'Fredoka One',cursive;font-size:1rem;color:#FFE135;margin-bottom:3px;padding:0 8px;line-height:1.3;}
+.retro-artist{font-family:'Patrick Hand',cursive;font-size:0.82rem;color:rgba(255,225,53,0.65);}
 /* Retro balloon */
 .retro-balloon-wrap{text-align:center;cursor:pointer;padding:10px 0;touch-action:manipulation;}
 .retro-balloon{font-size:6rem;display:block;animation:balloonBounce 1s ease-in-out infinite;filter:drop-shadow(3px 3px 0 #111);}
@@ -422,23 +424,23 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
 
         <!-- Intimate card -->
-        <div onclick="startDemoIntimate()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:linear-gradient(150deg,#fde8f0,#fce4ec);border:2px solid rgba(233,30,99,0.25);transition:transform 0.2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform='scale(1)'">
-          <div style="font-size:2.2rem;margin-bottom:8px;">💌</div>
-          <div style="font-size:0.85rem;font-weight:700;color:#4a0e2a;margin-bottom:3px;">Intimate</div>
-          <div style="font-size:0.65rem;color:#8d3a5a;line-height:1.4;">Soft & emotional<br>envelope reveal</div>
-          <div style="margin-top:10px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:50px;padding:6px 0;font-size:0.72rem;font-weight:700;">Preview ›</div>
+        <div onclick="startDemoIntimate()" style="cursor:pointer;border-radius:16px;padding:18px 10px 14px;text-align:center;background:linear-gradient(150deg,#fde8f0,#fce4ec);border:2px solid rgba(233,30,99,0.2);transition:all 0.15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform='scale(1)'">
+          <div style="font-size:2rem;margin-bottom:7px;">💌</div>
+          <div style="font-size:0.82rem;font-weight:700;color:#4a0e2a;margin-bottom:3px;">Intimate</div>
+          <div style="font-size:0.62rem;color:#8d3a5a;line-height:1.4;">Soft & emotional<br>envelope reveal</div>
+          <div style="margin-top:9px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:50px;padding:6px 0;font-size:0.7rem;font-weight:700;">Preview ›</div>
         </div>
 
         <!-- Retro Party card -->
-        <div onclick="startDemoRetro()" style="cursor:pointer;border-radius:18px;padding:18px 10px 14px;text-align:center;background:#FFE135;border:3px solid #111;box-shadow:4px 4px 0 #111;transition:transform 0.1s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #111'" ontouchend="this.style.transform='translate(0,0)';this.style.boxShadow='4px 4px 0 #111'">
-          <div style="font-size:2.2rem;margin-bottom:8px;">🎊</div>
-          <div style="font-family:'Fredoka One',cursive;font-size:0.95rem;font-weight:700;color:#d90429;margin-bottom:3px;letter-spacing:0.02em;">Retro Party</div>
-          <div style="font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#333;line-height:1.4;">Comic style, balloon<br>pop & newspaper</div>
-          <div style="margin-top:10px;background:#d90429;color:white;border-radius:6px;border:2px solid #111;padding:6px 0;font-family:'Fredoka One',cursive;font-size:0.78rem;box-shadow:2px 2px 0 #111;">Preview ›</div>
+        <div onclick="startDemoRetro()" style="cursor:pointer;border-radius:16px;padding:18px 10px 14px;text-align:center;background:#FFE135;border:2px solid rgba(17,17,17,0.3);transition:all 0.15s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;" ontouchstart="this.style.transform='scale(0.96)'" ontouchend="this.style.transform='scale(1)'">
+          <div style="font-size:2rem;margin-bottom:7px;">🎊</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:0.88rem;font-weight:700;color:#d90429;margin-bottom:3px;">Retro Party</div>
+          <div style="font-family:'Patrick Hand',cursive;font-size:0.62rem;color:#333;line-height:1.4;">Comic style, balloon<br>pop & newspaper</div>
+          <div style="margin-top:9px;background:#d90429;color:white;border-radius:6px;padding:6px 0;font-family:'Fredoka One',cursive;font-size:0.72rem;">Preview ›</div>
         </div>
 
       </div>
-      <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')" style="margin-bottom:0;">✏️ Customize Card</button>
+      <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);openCustomize()" style="margin-bottom:0;">✏️ Customize Card</button>
       <div id="demoNotice" style="font-size:0.7rem;color:var(--mid);text-align:center;margin-top:6px;opacity:0.8;">👆 Add your photos, letter &amp; song</div>
     </div>
 
@@ -446,7 +448,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div id="savedBtns" style="display:none;">
       <button class="btn btn-primary" id="previewSavedBtn" onclick="ripple(event);goTo('s-memories')" style="margin-bottom:10px;">▶ Preview Card ✨</button>
       <button class="btn btn-wa" id="shareCardBtnWelcome" onclick="shareWhatsApp()" style="margin-bottom:10px;display:none;">🎁 Create &amp; Share Card</button>
-      <button class="btn btn-outline" onclick="ripple(event);goTo('s-customize')" style="margin-bottom:0;">✏️ Edit Card</button>
+      <button class="btn btn-outline" onclick="ripple(event);openCustomize()" style="margin-bottom:0;">✏️ Edit Card</button>
     </div>
 
     <!-- STATE 3: RECEIVER MODE -->
@@ -455,7 +457,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     </div>
 
   </div></div>
-  <div class="progress-dots"><div class="pdot active" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
+  <div class="progress-dots" style="visibility:hidden;">
 </div>
 
 <!-- MEMORIES -->
@@ -558,7 +560,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
       </div>
       <div id="photoTapHint" style="display:none;text-align:center;font-size:0.75rem;color:var(--mid);margin-top:-12px;margin-bottom:10px;opacity:0.8;">👆 Tap any photo to see it full screen</div>
       <button class="btn btn-primary" onclick="ripple(event);goTo('s-song')">Next ›</button>
-      <button class="btn btn-outline" id="custBtnMemories" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+      <button class="btn btn-outline" id="custBtnMemories" onclick="ripple(event);openCustomize()">✏️ Customize</button>
     </div>
   </div>
   <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
@@ -571,12 +573,18 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="card-inner">
       <div class="screen-title">Song for You 🎵</div>
       <div class="screen-sub" id="songSub">This song always reminds me of you.</div>
-      <!-- Retro jukebox (shown in retro mode) -->
+      <!-- Retro turntable player (shown in retro mode) -->
       <div class="retro-jukebox" id="retroJukebox" style="display:none;margin-bottom:14px;">
-        <div style="position:relative;display:inline-block;margin:8px auto 0;display:block;text-align:center;">
-          <div class="retro-record" style="position:relative;">
-            <div class="retro-record-center"></div>
+        <div class="retro-turntable">
+          <div class="retro-platter">
+            <div class="retro-label">🎵<br>HBD</div>
           </div>
+          <!-- Tonearm SVG -->
+          <svg class="retro-tonearm" viewBox="0 0 50 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="40" y1="5" x2="15" y2="55" stroke="#888" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="40" cy="5" r="5" fill="#555" stroke="#333" stroke-width="1.5"/>
+            <circle cx="14" cy="56" r="4" fill="#d90429" stroke="#111" stroke-width="1.5"/>
+          </svg>
         </div>
         <div class="retro-song-name" id="retroSongName">Your Party Anthem 🎵</div>
         <div class="retro-artist" id="retroArtist">Select a song below ↓</div>
@@ -604,11 +612,12 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <button class="song-play-btn" id="playBtn" onclick="togglePlay()">▶</button>
       </div>
       <div id="spotifyWrap" style="display:none;margin-bottom:16px;border-radius:14px;overflow:hidden;">
-        <iframe id="spotifyFrame" style="border-radius:14px" src="" width="100%" height="120" frameBorder="0" allow="autoplay;encrypted-media;fullscreen;picture-in-picture" loading="lazy" allowfullscreen></iframe>
-        <div style="font-size:0.78rem;color:var(--mid);text-align:center;margin-top:5px;">▶ Tap play inside the player above</div>
+        <iframe id="spotifyFrame" style="border-radius:14px" src="" width="100%" height="152" frameBorder="0" allow="autoplay;encrypted-media;fullscreen;picture-in-picture" loading="lazy" allowfullscreen></iframe>
+        <div style="font-size:0.78rem;color:var(--mid);text-align:center;margin-top:5px;" id="songPlayerHint">▶ Tap play inside the player above</div>
+        <a id="ytFallbackLink" href="#" target="_blank" rel="noopener" style="display:none;font-size:0.82rem;color:var(--pink);font-weight:600;text-align:center;margin-top:8px;padding:10px;background:rgba(233,30,99,0.08);border-radius:10px;text-decoration:none;border:1px solid rgba(233,30,99,0.2);">▶ Some videos can't play here — tap to open on YouTube</a>
       </div>
       <button class="btn btn-primary" onclick="ripple(event);pauseAudio();goTo('s-envelope')">Next ›</button>
-      <button class="btn btn-outline" id="custBtnSong" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+      <button class="btn btn-outline" id="custBtnSong" onclick="ripple(event);openCustomize()">✏️ Customize</button>
     </div>
   </div>
   <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
@@ -645,7 +654,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <span class="retro-balloon" id="retroBalloon">🎈</span>
         <div class="retro-balloon-hint">POP the balloon! 🎊</div>
       </div>
-      <button class="btn btn-outline" id="custBtnEnvelope" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
+      <button class="btn btn-outline" id="custBtnEnvelope" style="margin-top:14px" onclick="ripple(event);openCustomize()">✏️ Customize</button>
     </div>
   </div>
   <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
@@ -678,7 +687,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
           <div class="retro-newspaper-byline" id="retroByline">— Reported with love 💛</div>
         </div>
       </div>
-      <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✨ Create Your Own Card</button>
+      <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);openCustomize()">✨ Create Your Own Card</button>
       <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0;display:none;" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
       <div id="receiverEndCTA" style="display:none;margin-top:14px;text-align:center;">
         <div style="font-size:0.78rem;color:var(--mid);margin-bottom:10px;line-height:1.6;">Want to send someone a card like this? 💝</div>
@@ -1190,6 +1199,13 @@ function startDemoRetro(){
   goTo('s-memories'); // goTo calls updateRetroBg
 }
 
+function openCustomize(){
+  // setCardStyle already updates all visual states
+  // Just re-apply to ensure everything is in sync
+  setCardStyle(currentCardStyle);
+  goTo('s-customize');
+}
+
 var _confettiInterval = null;
 var _confettiPieces = [];
 var CONFETTI_COLORS = ['#ff6f00','#ff8f00','#ffca28','#ff5252','#69f0ae','#40c4ff','#e040fb','#ff4081'];
@@ -1590,13 +1606,31 @@ function togglePhotoFx(cb){
 function handleSpotify(val){
   if(!val) return;
   const wrap=document.getElementById('spotifyWrap'),card=document.getElementById('songCardEl');
+  var fallback=document.getElementById('ytFallbackLink');
+  var hint=document.getElementById('songPlayerHint');
+  if(fallback) fallback.style.display='none';
   var ytMatch = val.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
   if(ytMatch){
     var ytId = ytMatch[1];
+    var ytOrigUrl = 'https://www.youtube.com/watch?v=' + ytId;
     spotifySrc = 'https://www.youtube.com/embed/' + ytId + '?autoplay=0&rel=0';
     document.getElementById('spotifyFrame').src = spotifySrc;
     if(wrap) wrap.style.display='block';
     if(card) card.style.display='none';
+    // Set fallback link in case video is blocked
+    if(fallback){ fallback.href=ytOrigUrl; fallback.setAttribute('data-yt-url', ytOrigUrl); }
+    // Show fallback after 3s if video fails to load
+    var ytFallbackTimer = setTimeout(function(){
+      var fr=document.getElementById('spotifyFrame');
+      // Check if iframe loaded something meaningful
+      if(fallback) fallback.style.display='block';
+      if(hint) hint.style.display='none';
+    }, 4000);
+    // If iframe successfully loads, cancel fallback
+    document.getElementById('spotifyFrame').onload = function(){
+      clearTimeout(ytFallbackTimer);
+      // Keep fallback visible as extra option but less prominent
+    };
     return;
   }
   var spMatch = val.match(/track\/([a-zA-Z0-9]+)/);
@@ -2157,12 +2191,14 @@ function setCardStyle(style){
     var et2=document.getElementById('envTitle'); if(et2) et2.innerHTML='I wrote a letter<br>for you... \uD83D\uDC8C';
   }
 
-  // Update customize picker UI borders
+  // Update customize picker UI borders + opacity
   var ci=document.getElementById('cstyle-intimate');
   var cr=document.getElementById('cstyle-retro');
-  if(ci) ci.style.border = style==='intimate' ? '2px solid var(--pink)' : '2px solid transparent';
-  if(cr) cr.style.border = style==='retro' ? '3px solid #111' : '2px solid transparent';
-  if(cr) cr.style.boxShadow = style==='retro' ? '3px 3px 0 #111' : 'none';
+  if(ci){ ci.style.border = style==='intimate' ? '2px solid var(--pink)' : '2px solid transparent'; ci.style.opacity = style==='intimate' ? '1' : '0.45'; ci.style.pointerEvents = style==='intimate' ? 'auto' : 'none'; }
+  if(cr){ cr.style.border = style==='retro' ? '3px solid #111' : '2px solid transparent'; cr.style.boxShadow = style==='retro' ? '3px 3px 0 #111' : 'none'; cr.style.opacity = style==='retro' ? '1' : '0.45'; cr.style.pointerEvents = style==='retro' ? 'auto' : 'none'; }
+  // Update customize header title
+  var custTitle=document.querySelector('.cust-title');
+  if(custTitle) custTitle.textContent = style==='retro' ? 'Edit Retro Party Card \u270F\uFE0F' : 'Edit Intimate Card \u270F\uFE0F';
   // Switch placeholder illustration
   var ip=document.getElementById('intimatePlaceholder');
   var rp=document.getElementById('retroPlaceholder');
