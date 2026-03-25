@@ -27,19 +27,19 @@
 /* ══ RETRO PARTY CARD STYLE ═══════════════════════════ */
 body.style-retro-active{background:#FFE135!important;}
 @media(min-width:500px){body.style-retro-active{background:#FFE135!important;}}
-body.style-retro .app{background:transparent;}
-body.style-retro .card{background:#fff!important;border:4px solid #111!important;border-radius:12px!important;box-shadow:6px 6px 0 #111!important;}
-body.style-retro .screen-title{font-family:'Fredoka One',cursive!important;color:#d90429!important;font-size:clamp(1.6rem,6vw,2.2rem)!important;letter-spacing:0.02em!important;-webkit-text-stroke:1px #111;}
-body.style-retro .screen-sub{font-family:'Patrick Hand',cursive!important;color:#333!important;font-size:1rem!important;}
-body.style-retro .btn-primary{background:#d90429!important;color:#fff!important;border:3px solid #111!important;border-radius:8px!important;box-shadow:4px 4px 0 #111!important;font-family:'Fredoka One',cursive!important;font-size:1.1rem!important;letter-spacing:0.04em!important;transition:transform 0.1s,box-shadow 0.1s!important;}
-body.style-retro .btn-primary:active{transform:translate(3px,3px)!important;box-shadow:1px 1px 0 #111!important;}
-body.style-retro .btn-outline{border:3px solid #111!important;border-radius:8px!important;box-shadow:3px 3px 0 #111!important;font-family:'Fredoka One',cursive!important;color:#111!important;background:#fff!important;}
-body.style-retro .back-btn{border:3px solid #111!important;box-shadow:3px 3px 0 #111!important;border-radius:8px!important;font-weight:900!important;}
-body.style-retro .pdot{background:rgba(17,17,17,0.2)!important;border:2px solid #111!important;}
-body.style-retro .pdot.active{background:#d90429!important;}
-body.style-retro .pdot.done{background:#FFE135!important;border-color:#111!important;}
-body.style-retro .wm a{color:#d90429!important;font-family:'Fredoka One',cursive!important;}
-body.style-retro .song-card{background:#1a1a2e!important;border:3px solid #111!important;box-shadow:5px 5px 0 #111!important;border-radius:12px!important;}
+body.style-retro-active .app{background:transparent;}
+body.style-retro-active .card{background:#fff!important;border:4px solid #111!important;border-radius:12px!important;box-shadow:6px 6px 0 #111!important;}
+body.style-retro-active .screen-title{font-family:'Fredoka One',cursive!important;color:#d90429!important;font-size:clamp(1.6rem,6vw,2.2rem)!important;letter-spacing:0.02em!important;-webkit-text-stroke:1px #111;}
+body.style-retro-active .screen-sub{font-family:'Patrick Hand',cursive!important;color:#333!important;font-size:1rem!important;}
+body.style-retro-active .btn-primary{background:#d90429!important;color:#fff!important;border:3px solid #111!important;border-radius:8px!important;box-shadow:4px 4px 0 #111!important;font-family:'Fredoka One',cursive!important;font-size:1.1rem!important;letter-spacing:0.04em!important;transition:transform 0.1s,box-shadow 0.1s!important;}
+body.style-retro-active .btn-primary:active{transform:translate(3px,3px)!important;box-shadow:1px 1px 0 #111!important;}
+body.style-retro-active .btn-outline{border:3px solid #111!important;border-radius:8px!important;box-shadow:3px 3px 0 #111!important;font-family:'Fredoka One',cursive!important;color:#111!important;background:#fff!important;}
+body.style-retro-active .back-btn{border:3px solid #111!important;box-shadow:3px 3px 0 #111!important;border-radius:8px!important;font-weight:900!important;}
+body.style-retro-active .pdot{background:rgba(17,17,17,0.2)!important;border:2px solid #111!important;}
+body.style-retro-active .pdot.active{background:#d90429!important;}
+body.style-retro-active .pdot.done{background:#FFE135!important;border-color:#111!important;}
+body.style-retro-active .wm a{color:#d90429!important;font-family:'Fredoka One',cursive!important;}
+body.style-retro-active .song-card{background:#1a1a2e!important;border:3px solid #111!important;box-shadow:5px 5px 0 #111!important;border-radius:12px!important;}
 /* Retro comic photo layout */
 .retro-comic-wrap{display:flex;gap:0;width:100%;border:3px solid #111;border-radius:8px;overflow:hidden;box-shadow:4px 4px 0 #111;}
 .retro-comic-panel{flex:1;position:relative;border-right:3px solid #111;overflow:hidden;background:#f0f0f0;min-width:0;}
@@ -1175,12 +1175,12 @@ var currentCardStyle = 'intimate';
 
 function startDemoIntimate(){
   setCardStyle('intimate');
-  goTo('s-memories');
+  goTo('s-memories'); // goTo calls updateRetroBg
 }
 
 function startDemoRetro(){
   setCardStyle('retro');
-  goTo('s-memories');
+  goTo('s-memories'); // goTo calls updateRetroBg
 }
 
 var _confettiInterval = null;
@@ -2113,8 +2113,9 @@ function setTheme(name){
 
 function setCardStyle(style){
   currentCardStyle = style;
-  // Remove all style classes
-  document.body.classList.remove('style-retro');
+  // style-retro-active is managed by updateRetroBg() based on current screen
+  // Remove it now, updateRetroBg will re-add if needed
+  document.body.classList.remove('style-retro-active');
 
   // Reset all overlays to default
   var env=document.getElementById('envBtn'); if(env) env.style.display='block';
@@ -2127,7 +2128,6 @@ function setCardStyle(style){
   stopConfetti();
 
   if(style==='retro'){
-    document.body.classList.add('style-retro');
     if(bal) bal.style.display='block';
     if(env) env.style.display='none';
     if(rj) rj.style.display='block';
