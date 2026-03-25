@@ -262,6 +262,8 @@ body::before {
 .occ-valentine { background:linear-gradient(150deg,#1c0414 0%,#320820 55%,#1a0412 100%); box-shadow:0 6px 32px rgba(220,50,120,0.14); }
 .occ-friendship { background:linear-gradient(150deg,#071410 0%,#0b2018 55%,#081410 100%); box-shadow:0 6px 32px rgba(40,180,120,0.1); }
 .occ-mother  { background:linear-gradient(150deg,#130c06 0%,#221508 55%,#130c06 100%); box-shadow:0 6px 32px rgba(240,160,60,0.1); }
+.occ-farewell { background:linear-gradient(150deg,#060c14 0%,#0c1828 55%,#060c14 100%); box-shadow:0 6px 32px rgba(56,130,240,0.1); }
+.occ-work { background:linear-gradient(150deg,#0a0a08 0%,#161410 55%,#0a0a08 100%); box-shadow:0 6px 32px rgba(200,170,60,0.1); }
 .occ-custom  { background:linear-gradient(150deg,#0e0e0e 0%,#191919 55%,#0e0e0e 100%); box-shadow:0 6px 32px rgba(255,255,255,0.03); }
 
 /* Hover glow */
@@ -270,6 +272,8 @@ body::before {
 .occ-valentine:hover { box-shadow:0 20px 60px rgba(220,50,120,0.3); }
 .occ-friendship:hover { box-shadow:0 20px 60px rgba(40,180,120,0.22); }
 .occ-mother:hover  { box-shadow:0 20px 60px rgba(240,160,60,0.22); }
+.occ-farewell:hover { box-shadow:0 20px 60px rgba(56,130,240,0.22); }
+.occ-work:hover  { box-shadow:0 20px 60px rgba(200,170,60,0.22); }
 .occ-custom:hover  { box-shadow:0 20px 60px rgba(255,255,255,0.08); }
 
 /* Shimmer on hover */
@@ -286,6 +290,8 @@ body::before {
 .occ-valentine::before  { background:radial-gradient(ellipse at 50% 0%, rgba(255,80,140,0.2), transparent 68%); }
 .occ-friendship::before { background:radial-gradient(ellipse at 50% 0%, rgba(60,200,140,0.18), transparent 68%); }
 .occ-mother::before    { background:radial-gradient(ellipse at 50% 0%, rgba(240,180,80,0.18), transparent 68%); }
+.occ-farewell::before  { background:radial-gradient(ellipse at 50% 0%, rgba(56,130,240,0.18), transparent 68%); }
+.occ-work::before      { background:radial-gradient(ellipse at 50% 0%, rgba(200,170,60,0.18), transparent 68%); }
 .occ-custom::before    { background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.06), transparent 68%); }
 .occ-card:hover::before { opacity:1; }
 
@@ -304,6 +310,8 @@ body::before {
 .occ-valentine::after  { background:linear-gradient(90deg,transparent,rgba(255,80,140,0.7),transparent); }
 .occ-friendship::after { background:linear-gradient(90deg,transparent,rgba(60,200,140,0.7),transparent); }
 .occ-mother::after    { background:linear-gradient(90deg,transparent,rgba(240,180,80,0.7),transparent); }
+.occ-farewell::after  { background:linear-gradient(90deg,transparent,rgba(56,130,240,0.7),transparent); }
+.occ-work::after      { background:linear-gradient(90deg,transparent,rgba(200,170,60,0.7),transparent); }
 .occ-custom::after    { background:linear-gradient(90deg,transparent,rgba(200,200,200,0.4),transparent); }
 .occ-card:hover::after { opacity:1; }
 
@@ -367,11 +375,13 @@ body::before {
 
 /* Card stagger */
 .occ-card:nth-child(1){animation-delay:0.38s;}
-.occ-card:nth-child(2){animation-delay:0.46s;}
-.occ-card:nth-child(3){animation-delay:0.54s;}
-.occ-card:nth-child(4){animation-delay:0.62s;}
-.occ-card:nth-child(5){animation-delay:0.70s;}
-.occ-card:nth-child(6){animation-delay:0.78s;}
+.occ-card:nth-child(2){animation-delay:0.44s;}
+.occ-card:nth-child(3){animation-delay:0.50s;}
+.occ-card:nth-child(4){animation-delay:0.56s;}
+.occ-card:nth-child(5){animation-delay:0.62s;}
+.occ-card:nth-child(6){animation-delay:0.68s;}
+.occ-card:nth-child(7){animation-delay:0.74s;}
+.occ-card:nth-child(8){animation-delay:0.80s;}
 @keyframes cardPop{
   from{opacity:0;transform:translateY(28px) scale(0.94);}
   to{opacity:1;transform:translateY(0) scale(1);}
@@ -533,7 +543,13 @@ body::before {
       <div class="occ-card occ-anniversary coming-soon" onclick="showComingSoon(this)">
         <span class="occ-emoji">💍</span>
         <div class="occ-name">Anniversary</div>
-        <div class="occ-desc">Celebrate your forever</div>
+        <div class="occ-desc">Celebrate your forever together</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-mother coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🌸</span>
+        <div class="occ-name">Mother's Day</div>
+        <div class="occ-desc">Thank her the right way</div>
         <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
       <div class="occ-card occ-valentine coming-soon" onclick="showComingSoon(this)">
@@ -544,19 +560,25 @@ body::before {
       </div>
       <div class="occ-card occ-friendship coming-soon" onclick="showComingSoon(this)">
         <span class="occ-emoji">🤝</span>
-        <div class="occ-name">Friendship</div>
+        <div class="occ-name">Best Friend</div>
         <div class="occ-desc">Because friends deserve magic</div>
         <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-      <div class="occ-card occ-mother coming-soon" onclick="showComingSoon(this)">
-        <span class="occ-emoji">🌸</span>
-        <div class="occ-name">Mother's Day</div>
-        <div class="occ-desc">Thank her the right way</div>
+      <div class="occ-card occ-farewell coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🎓</span>
+        <div class="occ-name">Farewell</div>
+        <div class="occ-desc">Send them off with love</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-work coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🏆</span>
+        <div class="occ-name">Work Milestone</div>
+        <div class="occ-desc">Promotions, new jobs & wins</div>
         <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
       <div class="occ-card occ-custom coming-soon" onclick="showComingSoon(this)">
-        <span class="occ-emoji">✨</span>
-        <div class="occ-name">Custom</div>
+        <span class="occ-emoji">💫</span>
+        <div class="occ-name">Just Because</div>
         <div class="occ-desc">Any reason to celebrate</div>
         <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
@@ -582,14 +604,14 @@ body::before {
     <span style="color:rgba(245,238,240,0.15);">·</span>
     <a href="/refund.html">Refund Policy</a>
     <span style="color:rgba(245,238,240,0.15);">·</span>
-    <a href="mailto:hello@wishyou.ai">✉️ Contact</a>
+    <a href="/cdn-cgi/l/email-protection#f69e939a9a99b6819f859e8f9983d8979f">✉️ Contact</a>
   </div>
 </footer>
 
 <!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Floating hearts
 const hh = document.getElementById('heroHearts');
 const he = ['❤️','🩷','💕','💖','🌸','✨','💝','💗'];
@@ -612,9 +634,4 @@ function showComingSoon(el) {
   var toast = document.getElementById('toast');
   toast.textContent = name + ' cards coming soon! 🎂 Birthday cards are live now';
   toast.classList.add('show');
-  if(_toastTimer) clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 2800);
-}
-</script>
-</body>
-</html>
+  if(_t
