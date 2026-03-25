@@ -3,161 +3,639 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Cards — WishYou.ai</title>
+<title>WishYou.ai — Send Love, Beautifully</title>
+
+<!-- Favicon -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
-<meta name="description" content="Create a beautiful interactive birthday card with photos, music & a heartfelt letter.">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+
+<!-- SEO & OG tags for WhatsApp/social sharing -->
+<meta name="description" content="Send interactive birthday cards with photos, music & heartfelt letters. Make someone feel truly special with WishYou.ai">
+<meta name="keywords" content="birthday card, interactive card, digital card, birthday wishes, AI card">
+<meta property="og:title" content="WishYou.ai — Send Love, Beautifully">
+<meta property="og:description" content="Interactive cards that feel like a real gift — with photos, music, letters & moments that make them feel truly special.">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<meta property="og:url" content="https://wishyou.ai">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WishYou.ai — Send Love, Beautifully">
+<meta name="twitter:description" content="Interactive cards that feel like a real gift — with photos, music & letters.">
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+:root {
+  --bg: #080407;
+  --rose: #e8295a;
+  --rose2: #ff6b9d;
+  --rose-dim: rgba(232,41,90,0.12);
+  --gold: #f0c060;
+  --gold-dim: rgba(240,192,96,0.15);
+  --text-primary: #f5eef0;
+  --text-secondary: rgba(245,238,240,0.65);
+  --text-muted: rgba(245,238,240,0.38);
+  --card-border: rgba(255,255,255,0.08);
+  --card-border-hover: rgba(255,255,255,0.18);
+}
+
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{
+html{scroll-behavior:smooth;}
+
+body {
   font-family:'DM Sans',sans-serif;
-  background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 40%,#fdf0f5 100%);
-  display:flex;align-items:center;justify-content:center;
+  background:var(--bg);
+  color:var(--text-primary);
+  overflow-x:hidden;
   min-height:100vh;
 }
 
-/* Floating hearts */
-.hearts-bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
-.hrt{position:absolute;bottom:-20px;font-size:14px;animation:floatUp linear infinite;opacity:0;}
-@keyframes floatUp{
+/* ── Grain texture overlay ── */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1;
+}
+
+/* ── Background mesh ── */
+.bg-mesh {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.bg-mesh::before {
+  content:'';
+  position:absolute;
+  width:600px;height:600px;
+  top:-200px;left:-150px;
+  background:radial-gradient(circle, rgba(232,41,90,0.13) 0%, transparent 65%);
+  animation:meshDrift1 18s ease-in-out infinite;
+}
+.bg-mesh::after {
+  content:'';
+  position:absolute;
+  width:500px;height:500px;
+  bottom:-100px;right:-100px;
+  background:radial-gradient(circle, rgba(240,192,96,0.09) 0%, transparent 65%);
+  animation:meshDrift2 14s ease-in-out infinite;
+}
+.bg-mesh-mid {
+  position:fixed;
+  width:350px;height:350px;
+  top:40%;left:60%;
+  background:radial-gradient(circle, rgba(255,107,157,0.07) 0%, transparent 65%);
+  animation:meshDrift3 20s ease-in-out infinite;
+  pointer-events:none;
+  z-index:0;
+}
+
+@keyframes meshDrift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(60px,40px) scale(1.1);}}
+@keyframes meshDrift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,-60px) scale(1.08);}}
+@keyframes meshDrift3{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,50px);}}
+
+/* ── Floating hearts ── */
+.hero-hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.hh{position:absolute;bottom:-20px;animation:hhFloat linear infinite;opacity:0;}
+@keyframes hhFloat{
   0%{transform:translateY(0) rotate(-10deg);opacity:0;}
-  10%{opacity:0.6;}
-  90%{opacity:0.3;}
-  100%{transform:translateY(-110vh) rotate(10deg);opacity:0;}
+  8%{opacity:0.5;}
+  90%{opacity:0.25;}
+  100%{transform:translateY(-105vh) rotate(10deg);opacity:0;}
 }
 
-/* Card container */
-.card{
-  position:relative;z-index:1;
-  background:rgba(255,255,255,0.92);
-  border-radius:26px;
-  width:100%;max-width:390px;
-  margin:16px;
-  padding:32px 22px 28px;
-  box-shadow:0 20px 60px rgba(233,30,99,0.18);
-  border:1.5px solid rgba(255,255,255,0.95);
+/* ── Hero layout ── */
+.hero {
+  position:relative;
+  z-index:2;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:90px 24px 70px;
   text-align:center;
-  animation:fadeUp 0.6s cubic-bezier(.22,1,.36,1) both;
-}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
-
-.back-link{
-  position:absolute;top:16px;left:16px;
-  width:36px;height:36px;border-radius:50%;
-  background:rgba(233,30,99,0.08);
-  border:1px solid rgba(233,30,99,0.15);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;text-decoration:none;color:#8d3a5a;
-  transition:background 0.2s;
-}
-.back-link:hover{background:rgba(233,30,99,0.15);}
-
-.big-heart{font-size:2.4rem;display:block;margin-bottom:12px;animation:hb 2.4s ease infinite;}
-@keyframes hb{0%,100%{transform:scale(1);}14%{transform:scale(1.22);}28%{transform:scale(1);}42%{transform:scale(1.12);}}
-
-h1{
-  font-family:'Playfair Display',serif;
-  font-size:1.6rem;font-weight:700;
-  color:#4a0e2a;margin-bottom:6px;
-}
-.sub{font-size:0.88rem;color:#8d3a5a;margin-bottom:24px;line-height:1.5;}
-
-.label{
-  font-size:0.65rem;font-weight:600;letter-spacing:0.1em;
-  text-transform:uppercase;color:#8d3a5a;
-  margin-bottom:14px;
 }
 
-/* Style cards */
-.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+/* ── Logo ── */
+.logo {
+  margin-bottom:48px;
+  animation:fadeDown 0.9s cubic-bezier(.22,1,.36,1) both;
+}
+.logo-mark {
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 20px 10px 14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:100px;
+  backdrop-filter:blur(10px);
+}
+.logo-icon {
+  font-size:1.5rem;
+  animation:heartbeat 2.4s ease infinite;
+  display:block;
+}
+@keyframes heartbeat{
+  0%,100%{transform:scale(1);}
+  14%{transform:scale(1.22);}
+  28%{transform:scale(1);}
+  42%{transform:scale(1.12);}
+}
+.logo-wordmark {
+  display:flex;
+  align-items:baseline;
+  gap:2px;
+}
+.logo-text {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;
+  font-weight:600;
+  letter-spacing:0.01em;
+  color:var(--text-primary);
+}
+.logo-ai {
+  font-family:'DM Sans',sans-serif;
+  font-size:0.6rem;
+  font-weight:600;
+  color:var(--gold);
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  opacity:0.9;
+}
 
-.style-card{
-  border-radius:18px;padding:20px 12px 16px;
-  cursor:pointer;text-decoration:none;display:block;
-  transition:transform 0.18s,box-shadow 0.18s;
+/* ── Hero headline ── */
+.hero-headline {
+  margin-bottom:20px;
+  animation:fadeDown 0.9s 0.12s cubic-bezier(.22,1,.36,1) both;
+}
+.hero-h1 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3.2rem,9vw,6rem);
+  font-weight:300;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  color:var(--text-primary);
+}
+.hero-h1 em {
+  font-style:italic;
+  font-weight:300;
+  background:linear-gradient(135deg, #ff6b9d 0%, #e8295a 50%, #f0c060 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ── Hero subtitle ── */
+.hero-sub {
+  font-size:clamp(0.92rem,2.5vw,1.05rem);
+  color:var(--text-secondary);
+  max-width:440px;
+  line-height:1.75;
+  margin:0 auto 56px;
+  font-weight:300;
+  animation:fadeDown 0.9s 0.22s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ── Section label ── */
+.occasions {
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:920px;
+  margin:0 auto;
+  padding:0 16px;
+  animation:fadeUp 0.9s 0.35s cubic-bezier(.22,1,.36,1) both;
+}
+.occasions-label {
+  font-size:0.68rem;
+  font-weight:600;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+.occasions-label::before,
+.occasions-label::after {
+  content:'';
+  width:40px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(245,238,240,0.2), transparent);
+}
+
+/* ── Cards grid ── */
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:12px;
+}
+
+.occ-card {
+  position:relative;
+  border-radius:20px;
+  padding:28px 16px 22px;
+  cursor:pointer;
+  overflow:hidden;
+  border:1px solid var(--card-border);
+  transition:transform 0.32s cubic-bezier(.4,0,.2,1), box-shadow 0.32s, border-color 0.28s;
+  text-align:center;
+  animation:cardPop 0.7s cubic-bezier(.34,1.26,.64,1) both;
+  text-decoration:none;
+  display:block;
   touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
 }
-.style-card:active{transform:scale(0.95);}
-
-.style-card.intimate{
-  background:linear-gradient(150deg,#fde8f0,#fce4ec);
-  border:1.5px solid rgba(233,30,99,0.2);
+.occ-card:hover {
+  transform:translateY(-7px) scale(1.025);
+  border-color:var(--card-border-hover);
 }
-.style-card.intimate:hover{box-shadow:0 12px 32px rgba(233,30,99,0.2);transform:translateY(-4px);}
+.occ-card:active { transform:scale(0.96); }
 
-.style-card.retro{
-  background:#FFE135;
-  border:1.5px solid rgba(17,17,17,0.2);
+/* Card backgrounds — rich, deep, distinct */
+.occ-birthday  { background:linear-gradient(150deg,#1c0410 0%,#2e0b1c 55%,#1a0410 100%); box-shadow:0 6px 32px rgba(232,41,90,0.18); }
+.occ-anniversary { background:linear-gradient(150deg,#0b0d1e 0%,#161230 55%,#0e0b1c 100%); box-shadow:0 6px 32px rgba(100,80,220,0.12); }
+.occ-valentine { background:linear-gradient(150deg,#1c0414 0%,#320820 55%,#1a0412 100%); box-shadow:0 6px 32px rgba(220,50,120,0.14); }
+.occ-friendship { background:linear-gradient(150deg,#071410 0%,#0b2018 55%,#081410 100%); box-shadow:0 6px 32px rgba(40,180,120,0.1); }
+.occ-mother  { background:linear-gradient(150deg,#130c06 0%,#221508 55%,#130c06 100%); box-shadow:0 6px 32px rgba(240,160,60,0.1); }
+.occ-farewell { background:linear-gradient(150deg,#060c14 0%,#0c1828 55%,#060c14 100%); box-shadow:0 6px 32px rgba(56,130,240,0.1); }
+.occ-work { background:linear-gradient(150deg,#0a0a08 0%,#161410 55%,#0a0a08 100%); box-shadow:0 6px 32px rgba(200,170,60,0.1); }
+.occ-custom  { background:linear-gradient(150deg,#0e0e0e 0%,#191919 55%,#0e0e0e 100%); box-shadow:0 6px 32px rgba(255,255,255,0.03); }
+
+/* Hover glow */
+.occ-birthday:hover  { box-shadow:0 20px 60px rgba(232,41,90,0.35); }
+.occ-anniversary:hover { box-shadow:0 20px 60px rgba(100,80,220,0.28); }
+.occ-valentine:hover { box-shadow:0 20px 60px rgba(220,50,120,0.3); }
+.occ-friendship:hover { box-shadow:0 20px 60px rgba(40,180,120,0.22); }
+.occ-mother:hover  { box-shadow:0 20px 60px rgba(240,160,60,0.22); }
+.occ-farewell:hover { box-shadow:0 20px 60px rgba(56,130,240,0.22); }
+.occ-work:hover  { box-shadow:0 20px 60px rgba(200,170,60,0.22); }
+.occ-custom:hover  { box-shadow:0 20px 60px rgba(255,255,255,0.08); }
+
+/* Shimmer on hover */
+.occ-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity 0.35s;
+  border-radius:20px;
+  pointer-events:none;
 }
-.style-card.retro:hover{box-shadow:0 12px 32px rgba(0,0,0,0.12);transform:translateY(-4px);}
+.occ-birthday::before   { background:radial-gradient(ellipse at 50% 0%, rgba(232,41,90,0.22), transparent 68%); }
+.occ-anniversary::before { background:radial-gradient(ellipse at 50% 0%, rgba(130,100,255,0.18), transparent 68%); }
+.occ-valentine::before  { background:radial-gradient(ellipse at 50% 0%, rgba(255,80,140,0.2), transparent 68%); }
+.occ-friendship::before { background:radial-gradient(ellipse at 50% 0%, rgba(60,200,140,0.18), transparent 68%); }
+.occ-mother::before    { background:radial-gradient(ellipse at 50% 0%, rgba(240,180,80,0.18), transparent 68%); }
+.occ-farewell::before  { background:radial-gradient(ellipse at 50% 0%, rgba(56,130,240,0.18), transparent 68%); }
+.occ-work::before      { background:radial-gradient(ellipse at 50% 0%, rgba(200,170,60,0.18), transparent 68%); }
+.occ-custom::before    { background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.06), transparent 68%); }
+.occ-card:hover::before { opacity:1; }
 
-.style-emoji{font-size:2rem;display:block;margin-bottom:8px;}
-.style-name{font-size:0.88rem;font-weight:700;color:#4a0e2a;margin-bottom:4px;}
-.style-card.retro .style-name{font-family:'Fredoka One',cursive;color:#d90429;}
-.style-desc{font-size:0.62rem;color:#8d3a5a;line-height:1.4;}
-.style-card.retro .style-desc{font-family:'Patrick Hand',cursive;color:#555;}
-.style-btn{
-  margin-top:10px;border-radius:50px;padding:6px 0;
-  font-size:0.7rem;font-weight:700;color:white;
-  background:linear-gradient(135deg,#e91e63,#f06292);
+/* Top accent line */
+.occ-card::after {
+  content:'';
+  position:absolute;
+  top:0;left:20%;right:20%;
+  height:1px;
+  opacity:0;
+  transition:opacity 0.35s;
+  border-radius:1px;
+  pointer-events:none;
 }
-.style-card.retro .style-btn{
-  background:#d90429;border-radius:6px;
-  font-family:'Fredoka One',cursive;font-size:0.72rem;
+.occ-birthday::after   { background:linear-gradient(90deg,transparent,rgba(232,41,90,0.7),transparent); }
+.occ-anniversary::after { background:linear-gradient(90deg,transparent,rgba(130,100,255,0.7),transparent); }
+.occ-valentine::after  { background:linear-gradient(90deg,transparent,rgba(255,80,140,0.7),transparent); }
+.occ-friendship::after { background:linear-gradient(90deg,transparent,rgba(60,200,140,0.7),transparent); }
+.occ-mother::after    { background:linear-gradient(90deg,transparent,rgba(240,180,80,0.7),transparent); }
+.occ-farewell::after  { background:linear-gradient(90deg,transparent,rgba(56,130,240,0.7),transparent); }
+.occ-work::after      { background:linear-gradient(90deg,transparent,rgba(200,170,60,0.7),transparent); }
+.occ-custom::after    { background:linear-gradient(90deg,transparent,rgba(200,200,200,0.4),transparent); }
+.occ-card:hover::after { opacity:1; }
+
+/* Emoji */
+.occ-emoji {
+  font-size:2.4rem;
+  display:block;
+  margin-bottom:14px;
+  animation:emojiFloat 3.2s ease-in-out infinite;
+  position:relative;
+  z-index:1;
+}
+@keyframes emojiFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.occ-card:nth-child(2) .occ-emoji{animation-delay:0.5s;}
+.occ-card:nth-child(3) .occ-emoji{animation-delay:1s;}
+.occ-card:nth-child(4) .occ-emoji{animation-delay:0.3s;}
+.occ-card:nth-child(5) .occ-emoji{animation-delay:0.8s;}
+.occ-card:nth-child(6) .occ-emoji{animation-delay:1.3s;}
+
+/* Card text */
+.occ-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.12rem;
+  font-weight:600;
+  color:var(--text-primary);
+  margin-bottom:6px;
+  position:relative;
+  z-index:1;
+  letter-spacing:0.01em;
+}
+.occ-desc {
+  font-size:0.7rem;
+  color:var(--text-secondary);
+  line-height:1.55;
+  position:relative;
+  z-index:1;
+  font-weight:300;
+}
+.occ-badge {
+  display:inline-block;
+  margin-top:12px;
+  font-size:0.58rem;
+  font-weight:600;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  padding:4px 11px;
+  border-radius:100px;
+  position:relative;
+  z-index:1;
+}
+.badge-live {
+  background:rgba(232,41,90,0.18);
+  color:#ff8ab5;
+  border:1px solid rgba(232,41,90,0.3);
+}
+.badge-soon {
+  background:rgba(255,255,255,0.05);
+  color:var(--text-muted);
+  border:1px solid rgba(255,255,255,0.08);
 }
 
-.footer-note{font-size:0.68rem;color:#8d3a5a;opacity:0.7;margin-top:4px;}
+/* Card stagger */
+.occ-card:nth-child(1){animation-delay:0.38s;}
+.occ-card:nth-child(2){animation-delay:0.44s;}
+.occ-card:nth-child(3){animation-delay:0.50s;}
+.occ-card:nth-child(4){animation-delay:0.56s;}
+.occ-card:nth-child(5){animation-delay:0.62s;}
+.occ-card:nth-child(6){animation-delay:0.68s;}
+.occ-card:nth-child(7){animation-delay:0.74s;}
+.occ-card:nth-child(8){animation-delay:0.80s;}
+@keyframes cardPop{
+  from{opacity:0;transform:translateY(28px) scale(0.94);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
 
-/* Watermark */
-.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.62rem;color:rgba(233,30,99,0.5);font-weight:600;letter-spacing:0.04em;}
-.wm a{color:inherit;text-decoration:none;}
+.occ-card.coming-soon{cursor:default;}
+.occ-card.coming-soon:hover{transform:translateY(-3px) scale(1.01);}
+
+/* ── Tagline ── */
+.tagline {
+  margin-top:52px;
+  animation:fadeUp 0.9s 0.9s cubic-bezier(.22,1,.36,1) both;
+}
+.tagline p {
+  font-size:0.76rem;
+  color:var(--text-muted);
+  letter-spacing:0.1em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.tagline strong {
+  color:var(--text-secondary);
+  font-weight:500;
+}
+.tagline-dot {
+  width:3px;height:3px;
+  border-radius:50%;
+  background:var(--text-muted);
+  display:inline-block;
+}
+
+/* ── Footer ── */
+.footer {
+  position:relative;
+  z-index:2;
+  padding:28px 24px;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,0.05);
+  margin-top:48px;
+}
+.footer-logo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;
+  font-style:italic;
+  color:var(--text-muted);
+  margin-bottom:6px;
+  letter-spacing:0.03em;
+}
+.footer-sub {
+  font-size:0.68rem;
+  color:rgba(245,238,240,0.25);
+  letter-spacing:0.05em;
+}
+
+/* ── Animations ── */
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── Toast notification ── */
+.toast {
+  position:fixed;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:rgba(20,10,15,0.95);
+  border:1px solid rgba(232,41,90,0.3);
+  color:var(--text-primary);
+  padding:12px 22px;
+  border-radius:100px;
+  font-size:0.82rem;
+  font-weight:500;
+  z-index:1000;
+  white-space:nowrap;
+  backdrop-filter:blur(20px);
+  transition:transform 0.35s cubic-bezier(.34,1.26,.64,1), opacity 0.35s;
+  opacity:0;
+  pointer-events:none;
+}
+.toast.show {
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+/* ── Instagram link ── */
+.footer-links {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-top:10px;
+}
+.footer-links a {
+  font-size:0.68rem;
+  color:rgba(245,238,240,0.3);
+  text-decoration:none;
+  letter-spacing:0.05em;
+  transition:color 0.2s;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.footer-links a:hover { color:rgba(245,238,240,0.7); }
+@media(max-width:520px){
+  .grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .hero{padding:70px 16px 50px;}
+  .occ-card{padding:22px 12px 18px;}
+  .occ-emoji{font-size:2rem;}
+}
+@media(max-width:360px){
+  .hero-h1{font-size:2.8rem;}
+}
 </style>
 </head>
 <body>
 
-<div class="hearts-bg" id="heartsBg"></div>
+<div class="bg-mesh"></div>
+<div class="bg-mesh-mid"></div>
+<div class="hero-hearts" id="heroHearts"></div>
 
-<div class="card">
-  <a href="/" class="back-link">←</a>
+<main class="hero">
 
-  <span class="big-heart">🎂</span>
-  <h1>Birthday Cards</h1>
-  <p class="sub">Choose the style that feels right<br>for who you're celebrating</p>
-
-  <div class="label">Choose a style to preview</div>
-
-  <div class="style-grid">
-    <a href="intimate.html" class="style-card intimate">
-      <span class="style-emoji">💌</span>
-      <div class="style-name">Intimate</div>
-      <div class="style-desc">Soft & emotional<br>envelope reveal</div>
-      <div class="style-btn">Preview ›</div>
-    </a>
-
-    <a href="retro.html" class="style-card retro">
-      <span class="style-emoji">🎊</span>
-      <div class="style-name">Retro Party</div>
-      <div class="style-desc">Comic style, balloon<br>pop & newspaper</div>
-      <div class="style-btn">Preview ›</div>
-    </a>
+  <!-- Logo -->
+  <div class="logo">
+    <div class="logo-mark">
+      <span class="logo-icon">💝</span>
+      <div class="logo-wordmark">
+        <span class="logo-text">WishYou</span>
+        <span class="logo-ai">.ai</span>
+      </div>
+    </div>
   </div>
 
-  <div class="footer-note">👆 Preview either style for free • No sign up needed</div>
-</div>
+  <!-- Headline -->
+  <div class="hero-headline">
+    <h1 class="hero-h1">Send love,<br><em>beautifully.</em></h1>
+  </div>
 
-<div class="wm"><a href="/">WishYou.ai</a></div>
+  <!-- Subtitle -->
+  <p class="hero-sub">Interactive cards that feel like a real gift — with photos, music, letters &amp; moments that make them feel truly special.</p>
 
-<script>
+  <!-- Occasions -->
+  <div class="occasions">
+    <div class="occasions-label">Choose your occasion</div>
+    <div class="grid">
+      <a class="occ-card occ-birthday" href="wishyou-final.html" style="text-decoration:none;">
+        <span class="occ-emoji">🎂</span>
+        <div class="occ-name">Birthday</div>
+        <div class="occ-desc">Make their day unforgettable</div>
+        <span class="occ-badge badge-live">✦ Live Now</span>
+      </a>
+      <div class="occ-card occ-anniversary coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">💍</span>
+        <div class="occ-name">Anniversary</div>
+        <div class="occ-desc">Celebrate your forever together</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-mother coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🌸</span>
+        <div class="occ-name">Mother's Day</div>
+        <div class="occ-desc">Thank her the right way</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-valentine coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">💘</span>
+        <div class="occ-name">Valentine's</div>
+        <div class="occ-desc">Say it with your whole heart</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-friendship coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🤝</span>
+        <div class="occ-name">Best Friend</div>
+        <div class="occ-desc">Because friends deserve magic</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-farewell coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🎓</span>
+        <div class="occ-name">Farewell</div>
+        <div class="occ-desc">Send them off with love</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-work coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🏆</span>
+        <div class="occ-name">Work Milestone</div>
+        <div class="occ-desc">Promotions, new jobs & wins</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+      <div class="occ-card occ-custom coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">💫</span>
+        <div class="occ-name">Just Because</div>
+        <div class="occ-desc">Any reason to celebrate</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    <p>Made with love <span class="tagline-dot"></span> <strong>WishYou.ai</strong> <span class="tagline-dot"></span> Free to try</p>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-logo">WishYou.ai</div>
+  <div class="footer-sub">Interactive digital cards that feel real &nbsp;·&nbsp; 2026</div>
+  <div class="footer-links">
+    <a href="https://instagram.com/wishyou.ai" target="_blank" rel="noopener">📸 Instagram</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="/terms.html">Terms</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="/refund.html">Refund Policy</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="/cdn-cgi/l/email-protection#f69e939a9a99b6819f859e8f9983d8979f">✉️ Contact</a>
+  </div>
+</footer>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Floating hearts
-const hb = document.getElementById('heartsBg');
-['❤️','🩷','💕','💖','🌸','✨','💝'].forEach(function(e,i){
-  var h = document.createElement('span');
-  h.className = 'hrt';
-  h.textContent = e;
-  h.style.cssText = 'left:'+Math.random()*100+'%;font-size:'+(10+Math.random()*10)+'px;animation-duration:'+(12+Math.random()*14)+'s;animation-delay:'+(Math.random()*12)+'s;';
-  hb.appendChild(h);
-});
-</script>
-</body>
-</html>
+const hh = document.getElementById('heroHearts');
+const he = ['❤️','🩷','💕','💖','🌸','✨','💝','💗'];
+for(let i = 0; i < 16; i++){
+  const h = document.createElement('span');
+  h.className = 'hh';
+  h.textContent = he[Math.floor(Math.random() * he.length)];
+  h.style.cssText = `left:${Math.random()*100}%;font-size:${9+Math.random()*10}px;animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*14}s;`;
+  hh.appendChild(h);
+}
+
+function openBirthdayCard(){
+  window.location.href = 'wishyou-final.html';
+}
+
+// Toast for coming soon cards
+var _toastTimer = null;
+function showComingSoon(el) {
+  var name = el.querySelector('.occ-name') ? el.querySelector('.occ-name').textContent : 'This';
+  var toast = document.getElementById('toast');
+  toast.textContent = name + ' cards coming soon! 🎂 Birthday cards are live now';
+  toast.classList.add('show');
+  if(_t
