@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Cards — WishYou.ai</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+<meta name="description" content="Create a beautiful interactive birthday card with photos, music & a heartfelt letter.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 40%,#fdf0f5 100%);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;
+}
+
+/* Floating hearts */
+.hearts-bg{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.hrt{position:absolute;bottom:-20px;font-size:14px;animation:floatUp linear infinite;opacity:0;}
+@keyframes floatUp{
+  0%{transform:translateY(0) rotate(-10deg);opacity:0;}
+  10%{opacity:0.6;}
+  90%{opacity:0.3;}
+  100%{transform:translateY(-110vh) rotate(10deg);opacity:0;}
+}
+
+/* Card container */
+.card{
+  position:relative;z-index:1;
+  background:rgba(255,255,255,0.92);
+  border-radius:26px;
+  width:100%;max-width:390px;
+  margin:16px;
+  padding:32px 22px 28px;
+  box-shadow:0 20px 60px rgba(233,30,99,0.18);
+  border:1.5px solid rgba(255,255,255,0.95);
+  text-align:center;
+  animation:fadeUp 0.6s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+.back-link{
+  position:absolute;top:16px;left:16px;
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(233,30,99,0.08);
+  border:1px solid rgba(233,30,99,0.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;text-decoration:none;color:#8d3a5a;
+  transition:background 0.2s;
+}
+.back-link:hover{background:rgba(233,30,99,0.15);}
+
+.big-heart{font-size:2.4rem;display:block;margin-bottom:12px;animation:hb 2.4s ease infinite;}
+@keyframes hb{0%,100%{transform:scale(1);}14%{transform:scale(1.22);}28%{transform:scale(1);}42%{transform:scale(1.12);}}
+
+h1{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;font-weight:700;
+  color:#4a0e2a;margin-bottom:6px;
+}
+.sub{font-size:0.88rem;color:#8d3a5a;margin-bottom:24px;line-height:1.5;}
+
+.label{
+  font-size:0.65rem;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;color:#8d3a5a;
+  margin-bottom:14px;
+}
+
+/* Style cards */
+.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;}
+
+.style-card{
+  border-radius:18px;padding:20px 12px 16px;
+  cursor:pointer;text-decoration:none;display:block;
+  transition:transform 0.18s,box-shadow 0.18s;
+  touch-action:manipulation;
+}
+.style-card:active{transform:scale(0.95);}
+
+.style-card.intimate{
+  background:linear-gradient(150deg,#fde8f0,#fce4ec);
+  border:1.5px solid rgba(233,30,99,0.2);
+}
+.style-card.intimate:hover{box-shadow:0 12px 32px rgba(233,30,99,0.2);transform:translateY(-4px);}
+
+.style-card.retro{
+  background:#FFE135;
+  border:1.5px solid rgba(17,17,17,0.2);
+}
+.style-card.retro:hover{box-shadow:0 12px 32px rgba(0,0,0,0.12);transform:translateY(-4px);}
+
+.style-emoji{font-size:2rem;display:block;margin-bottom:8px;}
+.style-name{font-size:0.88rem;font-weight:700;color:#4a0e2a;margin-bottom:4px;}
+.style-card.retro .style-name{font-family:'Fredoka One',cursive;color:#d90429;}
+.style-desc{font-size:0.62rem;color:#8d3a5a;line-height:1.4;}
+.style-card.retro .style-desc{font-family:'Patrick Hand',cursive;color:#555;}
+.style-btn{
+  margin-top:10px;border-radius:50px;padding:6px 0;
+  font-size:0.7rem;font-weight:700;color:white;
+  background:linear-gradient(135deg,#e91e63,#f06292);
+}
+.style-card.retro .style-btn{
+  background:#d90429;border-radius:6px;
+  font-family:'Fredoka One',cursive;font-size:0.72rem;
+}
+
+.footer-note{font-size:0.68rem;color:#8d3a5a;opacity:0.7;margin-top:4px;}
+
+/* Watermark */
+.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.62rem;color:rgba(233,30,99,0.5);font-weight:600;letter-spacing:0.04em;}
+.wm a{color:inherit;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="card">
+  <a href="/" class="back-link">←</a>
+
+  <span class="big-heart">🎂</span>
+  <h1>Birthday Cards</h1>
+  <p class="sub">Choose the style that feels right<br>for who you're celebrating</p>
+
+  <div class="label">Choose a style to preview</div>
+
+  <div class="style-grid">
+    <a href="intimate.html" class="style-card intimate">
+      <span class="style-emoji">💌</span>
+      <div class="style-name">Intimate</div>
+      <div class="style-desc">Soft & emotional<br>envelope reveal</div>
+      <div class="style-btn">Preview ›</div>
+    </a>
+
+    <a href="retro.html" class="style-card retro">
+      <span class="style-emoji">🎊</span>
+      <div class="style-name">Retro Party</div>
+      <div class="style-desc">Comic style, balloon<br>pop & newspaper</div>
+      <div class="style-btn">Preview ›</div>
+    </a>
+  </div>
+
+  <div class="footer-note">👆 Preview either style for free • No sign up needed</div>
+</div>
+
+<div class="wm"><a href="/">WishYou.ai</a></div>
+
+<script>
+// Floating hearts
+const hb = document.getElementById('heartsBg');
+['❤️','🩷','💕','💖','🌸','✨','💝'].forEach(function(e,i){
+  var h = document.createElement('span');
+  h.className = 'hrt';
+  h.textContent = e;
+  h.style.cssText = 'left:'+Math.random()*100+'%;font-size:'+(10+Math.random()*10)+'px;animation-duration:'+(12+Math.random()*14)+'s;animation-delay:'+(Math.random()*12)+'s;';
+  hb.appendChild(h);
+});
+</script>
+</body>
+</html>
