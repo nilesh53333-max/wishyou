@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0049)file:///C:/Users/Nilesh/Downloads/intimate_3.html -->
+<!-- saved from url=(0049)file:///C:/Users/Nilesh/Downloads/intimate_4.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -219,6 +219,7 @@ input[type=text],input[type=url],textarea,select{
   font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;
   transition:border-color 0.2s;
 }
+input[type=text]::placeholder,input[type=url]::placeholder,textarea::placeholder{color:rgba(74,14,42,0.4);font-style:italic;}
 input:focus,textarea:focus,select:focus{border-color:var(--pink);}
 textarea{min-height:100px;resize:vertical;line-height:1.6;}
 .preview-bar{padding:16px 0 0;border-top:1px solid rgba(233,30,99,0.1);margin-top:8px;}
@@ -295,7 +296,15 @@ body.theme-velvet .letter-sign{color:#d8b4fe!important;}
 body.theme-velvet .pdot.active{background:#9333ea!important;}.theme-velvet .pdot.done{background:#a855f7!important;}
 body.theme-velvet .back-btn{background:rgba(147,51,234,0.12)!important;border-color:rgba(147,51,234,0.2)!important;color:#d8b4fe!important;}
 
-/* ── Share & modals ────────────────────────────────── */
+/* ── Save progress bar ──────────────────────────────── */
+.save-progress-overlay{position:fixed;inset:0;background:rgba(45,10,24,0.75);backdrop-filter:blur(8px);z-index:250;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-progress-overlay.show{display:flex;}
+.save-progress-box{background:white;border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;box-shadow:0 20px 60px rgba(233,30,99,0.25);}
+.save-progress-emoji{font-size:2.2rem;margin-bottom:10px;display:block;}
+.save-progress-label{font-size:0.95rem;font-weight:600;color:var(--dark);margin-bottom:16px;}
+.save-progress-bar-wrap{background:rgba(233,30,99,0.12);border-radius:50px;height:10px;overflow:hidden;width:100%;margin-bottom:8px;}
+.save-progress-bar{height:100%;border-radius:50px;background:linear-gradient(90deg,var(--pink),var(--pink2));width:0%;transition:width 0.4s ease;}
+.save-progress-step{font-size:0.75rem;color:var(--mid);}
 .share-confirm{position:fixed;inset:0;background:rgba(45,10,24,0.7);backdrop-filter:blur(12px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
 .share-confirm.show{display:flex;}
 .share-confirm-box{background:white;border-radius:24px;padding:28px 22px;width:100%;max-width:360px;text-align:center;}
@@ -332,10 +341,10 @@ body.theme-velvet .back-btn{background:rgba(147,51,234,0.12)!important;border-co
 .yt-result-card img{width:64px;height:48px;border-radius:7px;object-fit:cover;flex-shrink:0;}
 .yt-use-btn{padding:7px 12px;background:var(--pink);color:white;border:none;border-radius:20px;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;touch-action:manipulation;}
 </style>
-<style>@keyframes hBlast0{to{transform:translate(45.685045838158985px,-92.4359174670537px) scale(0);opacity:0;}}@keyframes hBlast1{to{transform:translate(52.701228305773654px,-91.47685434902841px) scale(0);opacity:0;}}</style></head>
+<style>@keyframes hBlast0{to{transform:translate(-24.61847801283477px,-100.22432751734213px) scale(0);opacity:0;}}@keyframes hBlast1{to{transform:translate(41.377184487244264px,-136.8810857909479px) scale(0);opacity:0;}}</style></head>
 <body>
 <div class="app" id="mainApp">
-<div class="hearts-bg" id="heartsBg"><span class="hrt" style="left: 67.5285%; font-size: 12.172px; animation-duration: 15.1231s; animation-delay: 2.22203s;">✨</span><span class="hrt" style="left: 1.59204%; font-size: 12.1779px; animation-duration: 25.3346s; animation-delay: 9.67041s;">💖</span><span class="hrt" style="left: 0.749474%; font-size: 10.8557px; animation-duration: 22.9672s; animation-delay: 13.5812s;">💝</span><span class="hrt" style="left: 72.5115%; font-size: 16.591px; animation-duration: 27.26s; animation-delay: 13.6065s;">💝</span><span class="hrt" style="left: 79.9684%; font-size: 10.5455px; animation-duration: 27.3706s; animation-delay: 10.1333s;">❤️</span><span class="hrt" style="left: 21.0543%; font-size: 17.7139px; animation-duration: 16.3749s; animation-delay: 1.83749s;">💝</span><span class="hrt" style="left: 76.2193%; font-size: 15.8588px; animation-duration: 19.0057s; animation-delay: 9.86943s;">💖</span><span class="hrt" style="left: 82.4124%; font-size: 16.633px; animation-duration: 12.4782s; animation-delay: 1.72698s;">✨</span><span class="hrt" style="left: 43.2667%; font-size: 14.7524px; animation-duration: 19.3044s; animation-delay: 10.9559s;">💕</span><span class="hrt" style="left: 9.81927%; font-size: 11.1978px; animation-duration: 16.0883s; animation-delay: 5.03255s;">✨</span><span class="hrt" style="left: 26.4786%; font-size: 14.5627px; animation-duration: 16.6766s; animation-delay: 9.53738s;">🩷</span><span class="hrt" style="left: 65.0441%; font-size: 18.2403px; animation-duration: 24.1155s; animation-delay: 9.4831s;">💕</span><span class="hrt" style="left: 90.3447%; font-size: 12.1369px; animation-duration: 27.4276s; animation-delay: 2.97039s;">💝</span><span class="hrt" style="left: 43.5589%; font-size: 16.1718px; animation-duration: 27.7148s; animation-delay: 9.44241s;">🌸</span><span class="hrt" style="left: 23.4851%; font-size: 14.4628px; animation-duration: 21.1465s; animation-delay: 1.76804s;">💗</span><span class="hrt" style="left: 28.093%; font-size: 10.0665px; animation-duration: 17.5088s; animation-delay: 6.44931s;">✨</span></div>
+<div class="hearts-bg" id="heartsBg"><span class="hrt" style="left: 18.6548%; font-size: 18.7556px; animation-duration: 22.0741s; animation-delay: 5.1152s;">💗</span><span class="hrt" style="left: 86.5509%; font-size: 17.8646px; animation-duration: 26.9262s; animation-delay: 5.36608s;">✨</span><span class="hrt" style="left: 45.3717%; font-size: 11.3113px; animation-duration: 20.4334s; animation-delay: 5.44853s;">💗</span><span class="hrt" style="left: 86.0513%; font-size: 15.5689px; animation-duration: 18.8493s; animation-delay: 4.55431s;">🩷</span><span class="hrt" style="left: 45.1917%; font-size: 12.6083px; animation-duration: 24.2392s; animation-delay: 11.3514s;">🩷</span><span class="hrt" style="left: 35.9081%; font-size: 18.1451px; animation-duration: 22.2172s; animation-delay: 2.21096s;">🩷</span><span class="hrt" style="left: 52.1035%; font-size: 17.2854px; animation-duration: 15.5638s; animation-delay: 8.46677s;">🌸</span><span class="hrt" style="left: 4.95274%; font-size: 11.2949px; animation-duration: 22.417s; animation-delay: 11.0275s;">❤️</span><span class="hrt" style="left: 65.6804%; font-size: 9.95556px; animation-duration: 27.6975s; animation-delay: 0.0268862s;">💝</span><span class="hrt" style="left: 88.9855%; font-size: 16.7882px; animation-duration: 22.7127s; animation-delay: 6.99893s;">💝</span><span class="hrt" style="left: 81.6002%; font-size: 9.48395px; animation-duration: 26.5925s; animation-delay: 2.8455s;">✨</span><span class="hrt" style="left: 14.0749%; font-size: 12.5837px; animation-duration: 21.0019s; animation-delay: 0.756955s;">💖</span><span class="hrt" style="left: 89.0547%; font-size: 18.9859px; animation-duration: 16.5155s; animation-delay: 3.58492s;">🌸</span><span class="hrt" style="left: 16.0928%; font-size: 18.6526px; animation-duration: 19.2451s; animation-delay: 2.8486s;">💖</span><span class="hrt" style="left: 62.6185%; font-size: 15.872px; animation-duration: 17.7535s; animation-delay: 4.76197s;">🩷</span><span class="hrt" style="left: 59.9269%; font-size: 15.9118px; animation-duration: 13.765s; animation-delay: 9.75867s;">💝</span></div>
 
 <!-- ═══════════════════════════════════════════
      SCREEN 1: WELCOME
@@ -423,7 +432,7 @@ body.theme-velvet .back-btn{background:rgba(147,51,234,0.12)!important;border-co
     <div class="back-btn" onclick="goBack()">←</div>
     <div class="card-inner">
       <div class="screen-title">Song for You 🎵</div>
-      <div class="screen-sub" id="songSub" style="color:var(--dark);font-weight:500;opacity:0.75;">This song always reminds me of you.</div>
+      <div class="screen-sub" id="songSub" style="color:var(--dark);font-weight:500;">This song always reminds me of you.</div>
       <div class="song-card" id="songCardEl">
         <div style="display:flex;align-items:center;gap:16px;">
           <div style="width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3a1a28,#1a0a14);box-shadow:0 4px 20px rgba(0,0,0,0.5);flex-shrink:0;position:relative;animation:vinylSpin 4s linear infinite;">
@@ -444,7 +453,7 @@ body.theme-velvet .back-btn{background:rgba(147,51,234,0.12)!important;border-co
       <div id="spotifyWrap" style="display:none;margin-bottom:16px;border-radius:14px;overflow:hidden;">
         <iframe id="spotifyFrame" style="border-radius:14px" src="./intimate_files/saved_resource.html" width="100%" height="152" frameborder="0" allow="autoplay;encrypted-media;fullscreen;picture-in-picture" loading="lazy" allowfullscreen=""></iframe>
         <div style="font-size:0.78rem;color:var(--mid);text-align:center;margin-top:5px;" id="songHint">▶ Tap play inside the player above</div>
-        <a id="ytFallbackLink" href="file:///C:/Users/Nilesh/Downloads/intimate_3.html#" target="_blank" rel="noopener" style="display:none;font-size:0.82rem;color:var(--pink);font-weight:600;text-align:center;margin-top:8px;padding:10px;background:rgba(233,30,99,0.08);border-radius:10px;text-decoration:none;border:1px solid rgba(233,30,99,0.2);">▶ Video blocked here — tap to open on YouTube</a>
+        <a id="ytFallbackLink" href="file:///C:/Users/Nilesh/Downloads/intimate_4.html#" target="_blank" rel="noopener" style="display:none;font-size:0.82rem;color:var(--pink);font-weight:600;text-align:center;margin-top:8px;padding:10px;background:rgba(233,30,99,0.08);border-radius:10px;text-decoration:none;border:1px solid rgba(233,30,99,0.2);">▶ Video blocked here — tap to open on YouTube</a>
       </div>
       <button class="btn btn-primary" onclick="ripple(event);goTo(&#39;s-envelope&#39;)">Next ›</button>
       <button class="btn btn-outline" id="custBtnSong" onclick="ripple(event);goTo(&#39;s-customize&#39;)">✏️ Customize</button>
@@ -708,8 +717,20 @@ body.theme-velvet .back-btn{background:rgba(147,51,234,0.12)!important;border-co
 
 <!-- Photo expand modal -->
 <div class="photo-expand" id="photoExpand" onclick="closeExpand()">
-  <img id="expandImg" src="file:///C:/Users/Nilesh/Downloads/intimate_3.html" alt="">
+  <img id="expandImg" src="file:///C:/Users/Nilesh/Downloads/intimate_4.html" alt="">
   <div class="photo-expand-dots" id="expandNav"></div>
+</div>
+
+<!-- Save progress overlay -->
+<div class="save-progress-overlay" id="saveProgressOverlay">
+  <div class="save-progress-box">
+    <span class="save-progress-emoji">💝</span>
+    <div class="save-progress-label" id="saveProgressLabel">Saving your card...</div>
+    <div class="save-progress-bar-wrap">
+      <div class="save-progress-bar" id="saveProgressBar"></div>
+    </div>
+    <div class="save-progress-step" id="saveProgressStep">Please wait a moment</div>
+  </div>
 </div>
 
 <!-- Share confirmation -->
@@ -1054,7 +1075,7 @@ async function searchYouTube(){
     const data = await res.json();
     if(!data.items || !data.items.length){ resultsDiv.innerHTML='<div style="font-size:0.78rem;color:var(--mid);padding:8px;">No results. Try different keywords.</div>'; return; }
     resultsDiv.innerHTML='';
-    data.items.forEach(item => {
+    data.items.slice(0,4).forEach(item => {
       const {videoId} = item.id, {title,channelTitle,thumbnails} = item.snippet;
       const card = document.createElement('div');
       card.className = 'yt-result-card';
@@ -1137,16 +1158,33 @@ function saveAndBack(){
 // SHARE / FIREBASE
 // ════════════════════════════════════════════════
 async function shareWhatsApp(){
-  const waBtns = document.querySelectorAll('.btn-wa');
-  waBtns.forEach(b => { b.textContent = 'Saving... 💝'; b.disabled = true; });
+  // Show progress overlay
+  const overlay = document.getElementById('saveProgressOverlay');
+  const bar = document.getElementById('saveProgressBar');
+  const label = document.getElementById('saveProgressLabel');
+  const step = document.getElementById('saveProgressStep');
 
+  function setProgress(pct, lbl, stp){
+    bar.style.width = pct + '%';
+    if(lbl) label.textContent = lbl;
+    if(stp) step.textContent = stp;
+  }
+
+  overlay.classList.add('show');
+  setProgress(10, 'Preparing your card... 💝', 'Getting everything ready');
+
+  // Upload photos to Cloudinary
   let photoUrls = [];
-  for(let i=0;i<photos.length;i++){
+  const total = photos.length;
+  for(let i=0;i<total;i++){
+    setProgress(10 + ((i/Math.max(total,1))*50), 'Uploading photos... 📸', `Photo ${i+1} of ${total}`);
     try {
       const url = await uploadPhoto(photos[i]);
       if(url) photoUrls.push(url);
     } catch(e){ console.error('Photo upload failed:', e); }
   }
+
+  setProgress(65, 'Saving your card... 💾', 'Almost there!');
 
   const now = Date.now();
   const cardData = {
@@ -1166,17 +1204,22 @@ async function shareWhatsApp(){
   };
 
   try {
+    setProgress(80, 'Saving your card... 💾', 'Storing in the cloud');
     const res = await fetch(FIREBASE_URL+'.json', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(cardData) });
     const data = await res.json();
     const cardId = data.name;
     shareLink = `https://wishyou.ai/birthday/intimate.html?card=${cardId}`;
-    document.getElementById('shareLinkText').textContent = 'wishyou.ai/birthday/intimate\n?card=' + cardId;
-    document.getElementById('shareConfirm').classList.add('show');
+    setProgress(100, 'Card saved! 🎉', 'Ready to share!');
     fetch(FIREBASE_URL+'/'+cardId+'/views.json', { method:'PUT', headers:{'Content-Type':'application/json'}, body:'0' }).catch(()=>{});
+    setTimeout(() => {
+      overlay.classList.remove('show');
+      document.getElementById('shareLinkText').textContent = 'wishyou.ai/birthday/intimate\n?card=' + cardId;
+      document.getElementById('shareConfirm').classList.add('show');
+    }, 600);
   } catch(e){
+    overlay.classList.remove('show');
     alert('Could not save card. Please try again.');
   }
-  waBtns.forEach(b => { b.textContent = '🎁 Create & Share Card'; b.disabled = false; });
 }
 
 async function uploadPhoto(blobUrl){
