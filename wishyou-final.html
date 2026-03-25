@@ -87,6 +87,41 @@ body.theme-velvet .pdot.done{background:#a855f7!important;}
 body.theme-velvet .back-btn{background:rgba(147,51,234,0.12)!important;border-color:rgba(147,51,234,0.2)!important;color:#d8b4fe!important;}
 body.theme-velvet .wm a{color:#d8b4fe!important;}
 @media(min-width:500px){body.theme-velvet{background:linear-gradient(135deg,#1a0a2e,#0f0520,#1a0a2e)!important;}}
+
+/* ══ CELEBRATION CARD STYLE ══════════════════════════ */
+body.style-celebration{background:linear-gradient(160deg,#fff9c4 0%,#ffe0b2 40%,#fce4ec 100%)!important;}
+@media(min-width:500px){body.style-celebration{background:linear-gradient(135deg,#fff9c4,#ffe0b2,#fce4ec)!important;}}
+body.style-celebration .card{background:rgba(255,255,255,0.92)!important;border-color:rgba(255,152,0,0.3)!important;box-shadow:0 20px 60px rgba(255,152,0,0.2)!important;}
+body.style-celebration .screen-title{font-family:'DM Sans',sans-serif!important;font-weight:800!important;color:#e65100!important;font-size:clamp(1.6rem,6vw,2.1rem)!important;letter-spacing:-0.02em!important;}
+body.style-celebration .screen-sub{color:#bf360c!important;}
+body.style-celebration .btn-primary{background:linear-gradient(135deg,#ff6f00,#ff8f00)!important;box-shadow:0 6px 24px rgba(255,111,0,0.45)!important;}
+body.style-celebration .btn-outline{color:#ff6f00!important;border-color:rgba(255,111,0,0.3)!important;}
+body.style-celebration .back-btn{border-color:rgba(255,111,0,0.2)!important;color:#ff6f00!important;}
+body.style-celebration .letter-page{border-top-color:#ff6f00!important;background:rgba(255,253,240,0.98)!important;}
+body.style-celebration .letter-dear{color:#e65100!important;font-family:'DM Sans',sans-serif!important;font-size:1.1rem!important;}
+body.style-celebration .letter-body{color:#4e342e!important;}
+body.style-celebration .letter-sign{color:#ff6f00!important;}
+body.style-celebration .song-card{background:linear-gradient(135deg,#1a0a00,#2d1500)!important;}
+body.style-celebration .pdot{background:rgba(255,111,0,0.2)!important;}
+body.style-celebration .pdot.active{background:#ff6f00!important;}
+body.style-celebration .pdot.done{background:#ff8f00!important;}
+body.style-celebration .wm a{color:#ff6f00!important;}
+/* Confetti elements */
+.confetti-piece{position:absolute;width:10px;height:10px;top:-10px;pointer-events:none;animation:confettiFall linear infinite;}
+@keyframes confettiFall{
+  0%{transform:translateY(-10px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:0;}
+}
+/* Ribbon button */
+.ribbon-btn{display:block;width:100%;background:none;border:none;cursor:pointer;padding:10px 0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.ribbon-wrap{position:relative;width:200px;height:200px;margin:0 auto;}
+.ribbon-box{width:160px;height:120px;margin:0 auto;background:linear-gradient(135deg,#ff6f00,#ff8f00);border-radius:16px;position:relative;box-shadow:0 12px 40px rgba(255,111,0,0.4);display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
+.ribbon-v{position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:28px;background:linear-gradient(135deg,#fff176,#ffee58);border-radius:4px;}
+.ribbon-h{position:absolute;top:50%;transform:translateY(-50%);left:0;right:0;height:28px;background:linear-gradient(135deg,#fff176,#ffee58);border-radius:4px;}
+.ribbon-bow-l{position:absolute;top:-22px;left:50%;margin-left:-40px;width:38px;height:38px;background:linear-gradient(135deg,#ffe57f,#ffca28);border-radius:50% 0 50% 50%;transform:rotate(-45deg);box-shadow:0 4px 12px rgba(255,202,40,0.4);}
+.ribbon-bow-r{position:absolute;top:-22px;left:50%;margin-left:2px;width:38px;height:38px;background:linear-gradient(135deg,#ffe57f,#ffca28);border-radius:0 50% 50% 50%;transform:rotate(45deg);box-shadow:0 4px 12px rgba(255,202,40,0.4);}
+.ribbon-hint{font-size:0.83rem;color:#bf360c;margin-top:12px;text-align:center;animation:tapPulse 2s ease infinite;}
+@keyframes tapPulse{0%,100%{opacity:0.7;}50%{opacity:1;}}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{height:100%;overflow:hidden;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;}
@@ -497,6 +532,7 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
     <div class="back-btn" onclick="goBack()">←</div>
     <div class="card-inner">
       <div class="screen-title" id="envTitle">I wrote a letter<br>for you... 💌</div>
+      <!-- Normal envelope (intimate style) -->
       <button id="envBtn" onclick="openEnvelope(this)">
         <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;display:block;margin:0 auto;filter:drop-shadow(0 14px 36px rgba(233,30,99,0.32));">
           <defs>
@@ -516,6 +552,19 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
           <text id="envHeart" x="150" y="118" text-anchor="middle" font-size="26" style="transition:opacity 0.3s,transform 0.3s;transform-origin:150px 105px;transform-box:fill-box;">❤️</text>
         </svg>
         <div style="font-size:0.83rem;color:var(--mid);margin-top:6px;animation:tapPulse 2s ease infinite;">Tap the envelope to open</div>
+      </button>
+      <!-- Ribbon pull (celebration style) -->
+      <button class="ribbon-btn" id="ribbonBtn" style="display:none;" onclick="openEnvelope(this)">
+        <div class="ribbon-wrap">
+          <div class="ribbon-bow-l"></div>
+          <div class="ribbon-bow-r"></div>
+          <div class="ribbon-box">
+            <div class="ribbon-v"></div>
+            <div class="ribbon-h"></div>
+            <span style="position:relative;z-index:1;">🎁</span>
+          </div>
+        </div>
+        <div class="ribbon-hint">Pull the ribbon to open! 🎀</div>
       </button>
       <button class="btn btn-outline" id="custBtnEnvelope" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
     </div>
@@ -726,6 +775,24 @@ textarea{resize:none;min-height:120px;line-height:1.7;}
         <div id="ytSelectedName" style="font-size:0.88rem;font-weight:600;color:white;"></div>
       </div>
       <input type="hidden" id="cSpotify">
+    </div>
+
+    <!-- CARD STYLE -->
+    <div class="field-group">
+      <label class="field-label">🎭 Card Style</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px;">
+        <div onclick="setCardStyle('intimate')" id="style-intimate" style="cursor:pointer;border-radius:16px;padding:16px 12px;text-align:center;border:2px solid var(--pink);background:linear-gradient(135deg,#fde8f0,#fce4ec);transition:all 0.2s;">
+          <div style="font-size:1.8rem;margin-bottom:6px;">💌</div>
+          <div style="font-size:0.85rem;font-weight:700;color:#4a0e2a;">Intimate</div>
+          <div style="font-size:0.68rem;color:#8d3a5a;margin-top:2px;line-height:1.4;">Soft, emotional<br>envelope reveal</div>
+        </div>
+        <div onclick="setCardStyle('celebration')" id="style-celebration" style="cursor:pointer;border-radius:16px;padding:16px 12px;text-align:center;border:2px solid transparent;background:linear-gradient(135deg,#fff9c4,#ffe0b2);transition:all 0.2s;">
+          <div style="font-size:1.8rem;margin-bottom:6px;">🎉</div>
+          <div style="font-size:0.85rem;font-weight:700;color:#e65100;">Celebration</div>
+          <div style="font-size:0.68rem;color:#bf360c;margin-top:2px;line-height:1.4;">Bold, fun & festive<br>ribbon pull reveal</div>
+        </div>
+      </div>
+      <div style="font-size:0.72rem;color:var(--mid);text-align:center;margin-top:4px;">Style changes the whole look & feel for the receiver</div>
     </div>
 
     <!-- CARD THEME -->
@@ -1419,6 +1486,7 @@ function saveAndBack(){
   if(mhEl&&mtEl) mtEl.textContent=mhEl.value||'Our Memories 📸';
   // Apply selected theme
   setTheme(currentTheme);
+  setCardStyle(currentCardStyle);
   document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
   var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Preview Card ✨';
   document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
@@ -1507,6 +1575,7 @@ function shareWhatsApp(){
         photos: photoUrls.filter(function(u){ return u; }),
         memoriesHeading: (document.getElementById('cMemoriesHeading')||{value:'Our Memories 📸'}).value||'Our Memories 📸',
         theme: currentTheme||'',
+        cardStyle: currentCardStyle||'intimate',
         created: now,
         createdAt: now,
         expiresAt: now + (3 * 24 * 60 * 60 * 1000)
@@ -1748,11 +1817,19 @@ function loadCardFromURL(){
       if(d.sub)  { var ss=document.getElementById('songSub'); if(ss) ss.textContent=d.sub; }
       if(d.memoriesHeading){ var mht=document.getElementById('memoriesTitle'); if(mht) mht.textContent=d.memoriesHeading; }
       if(d.theme){ setTheme(d.theme); }
+      if(d.cardStyle){ setCardStyle(d.cardStyle); }
       if(d.sender){
         var sn=document.getElementById('letterSenderName');
         var signText=(d.sign||'').toLowerCase();
         if(sn){if(signText.indexOf(d.sender.toLowerCase())===-1){sn.textContent=d.sender;sn.style.display='block';}else{sn.style.display='none';}}
-        var et=document.getElementById('envTitle'); if(et) et.innerHTML=d.sender+' wrote a letter<br>for you... \uD83D\uDC8C';
+        var et=document.getElementById('envTitle');
+        if(et){
+          if(d.cardStyle==='celebration'){
+            et.innerHTML=d.sender+' has a surprise<br>for you! \uD83C\uDF89';
+          } else {
+            et.innerHTML=d.sender+' wrote a letter<br>for you... \uD83D\uDC8C';
+          }
+        }
         // Show on memories screen
         var msub=document.getElementById('memoriesSenderSub');
         var msn2=document.getElementById('memoriesSenderName');
@@ -1785,7 +1862,71 @@ window.addEventListener('DOMContentLoaded', loadCardFromURL);
 // AI FEATURES — Anthropic API
 // ══════════════════════════════════════════════════════
 
-// ── THEMES ────────────────────────────────────────────
+// ── CARD STYLE ─────────────────────────────────────────
+var currentCardStyle = 'intimate'; // 'intimate' or 'celebration'
+
+function setCardStyle(style){
+  currentCardStyle = style;
+  // Update picker UI
+  var intimate = document.getElementById('style-intimate');
+  var celebration = document.getElementById('style-celebration');
+  if(intimate) intimate.style.border = style === 'intimate' ? '2px solid var(--pink)' : '2px solid transparent';
+  if(celebration) celebration.style.border = style === 'celebration' ? '2px solid #ff6f00' : '2px solid transparent';
+  // Apply/remove celebration class
+  if(style === 'celebration'){
+    document.body.classList.add('style-celebration');
+    // Switch envelope to ribbon
+    var env = document.getElementById('envBtn');
+    var rib = document.getElementById('ribbonBtn');
+    if(env) env.style.display = 'none';
+    if(rib) rib.style.display = 'block';
+    // Update envelope title
+    var et = document.getElementById('envTitle');
+    if(et) et.innerHTML = 'You\u2019ve got a surprise!<br>\uD83C\uDF89';
+    // Start confetti
+    startConfetti();
+  } else {
+    document.body.classList.remove('style-celebration');
+    var env2 = document.getElementById('envBtn');
+    var rib2 = document.getElementById('ribbonBtn');
+    if(env2) env2.style.display = 'block';
+    if(rib2) rib2.style.display = 'none';
+    var et2 = document.getElementById('envTitle');
+    if(et2) et2.innerHTML = 'I wrote a letter<br>for you... \uD83D\uDC8C';
+    stopConfetti();
+  }
+}
+
+var _confettiInterval = null;
+var _confettiPieces = [];
+var CONFETTI_COLORS = ['#ff6f00','#ff8f00','#ffca28','#ff5252','#69f0ae','#40c4ff','#e040fb','#ff4081'];
+
+function startConfetti(){
+  if(_confettiInterval) return;
+  var bg = document.getElementById('heartsBg');
+  if(!bg) return;
+  // Remove old hearts, add confetti
+  _confettiInterval = setInterval(function(){
+    if(_confettiPieces.length > 60) return;
+    var p = document.createElement('div');
+    p.className = 'confetti-piece';
+    var size = 6 + Math.random() * 8;
+    var color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    var isCircle = Math.random() > 0.5;
+    p.style.cssText = 'left:'+Math.random()*100+'%;width:'+size+'px;height:'+size+'px;background:'+color+';border-radius:'+(isCircle?'50%':'2px')+';animation-duration:'+(3+Math.random()*4)+'s;animation-delay:'+Math.random()*2+'s;';
+    bg.appendChild(p);
+    _confettiPieces.push(p);
+    setTimeout(function(){ if(p.parentNode) p.parentNode.removeChild(p); _confettiPieces = _confettiPieces.filter(function(x){return x!==p;}); }, 7000);
+  }, 120);
+}
+
+function stopConfetti(){
+  if(_confettiInterval){ clearInterval(_confettiInterval); _confettiInterval = null; }
+  _confettiPieces.forEach(function(p){ if(p.parentNode) p.parentNode.removeChild(p); });
+  _confettiPieces = [];
+}
+
+// ── THEMES ─────────────────────────────────────────────
 var currentTheme = '';
 var THEMES = ['','midnight','golden','forest','velvet'];
 var THEME_BORDERS = {
