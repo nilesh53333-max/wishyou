@@ -1,1862 +1,641 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>WishYou.ai</title>
+<!-- saved from url=(0046)file:///C:/Users/Nilesh/Downloads/index_1.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WishYou.ai — Send Love, Beautifully</title>
 
 <!-- Favicon -->
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
+<link rel="apple-touch-icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
 
-<!-- SEO & OG -->
-<meta name="description" content="Someone special made you an interactive birthday card with photos, music & a heartfelt letter. Open it on WishYou.ai">
-<meta property="og:title" content="You have a birthday surprise! 🎂">
-<meta property="og:description" content="Someone made you a special interactive card with photos, music & a heartfelt letter. Open it now!">
+<!-- SEO & OG tags for WhatsApp/social sharing -->
+<meta name="description" content="Send interactive birthday cards with photos, music &amp; heartfelt letters. Make someone feel truly special with WishYou.ai">
+<meta name="keywords" content="birthday card, interactive card, digital card, birthday wishes, AI card">
+<meta property="og:title" content="WishYou.ai — Send Love, Beautifully">
+<meta property="og:description" content="Interactive cards that feel like a real gift — with photos, music, letters &amp; moments that make them feel truly special.">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
 <meta property="og:url" content="https://wishyou.ai">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="twitter:title" content="WishYou.ai — Send Love, Beautifully">
+<meta name="twitter:description" content="Interactive cards that feel like a real gift — with photos, music &amp; letters.">
+
+<link href="./index_files/css2" rel="stylesheet">
 <style>
-:root{--pink:#e91e63;--pink2:#f06292;--pink3:#fce4ec;--pink4:#fff0f5;--dark:#4a0e2a;--mid:#8d3a5a;--bg:linear-gradient(160deg,#fde8f0 0%,#fce4ec 40%,#fdf0f5 100%);--card-bg:rgba(255,255,255,0.88);--shadow:0 20px 60px rgba(233,30,99,0.18);--r:26px;}
+:root {
+  --bg: #080407;
+  --rose: #e8295a;
+  --rose2: #ff6b9d;
+  --rose-dim: rgba(232,41,90,0.12);
+  --gold: #f0c060;
+  --gold-dim: rgba(240,192,96,0.15);
+  --text-primary: #f5eef0;
+  --text-secondary: rgba(245,238,240,0.65);
+  --text-muted: rgba(245,238,240,0.38);
+  --card-border: rgba(255,255,255,0.08);
+  --card-border-hover: rgba(255,255,255,0.18);
+}
+
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);height:100%;width:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.hearts-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
-.heart-fly{position:absolute;animation:heartFly linear infinite;opacity:0;}
-@keyframes heartFly{0%{transform:translateY(110vh) scale(0.5) rotate(-15deg);opacity:0;}10%{opacity:0.75;}90%{opacity:0.6;}100%{transform:translateY(-10vh) scale(1.1) rotate(15deg);opacity:0;}}
-.app{position:relative;z-index:1;width:100%;max-width:430px;height:100vh;overflow:hidden;}@media(min-width:500px){body{background:linear-gradient(135deg,#f8d7e3,#fce4ec,#f3d0e8)!important;}.app{height:90vh;max-height:900px;border-radius:40px;box-shadow:0 40px 100px rgba(233,30,99,0.25);outline:10px solid rgba(255,255,255,0.5);}}
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 18px 30px;opacity:0;pointer-events:none;transition:opacity 0.4s ease,transform 0.4s ease;transform:translateX(40px) scale(0.97);}
-.screen.active{opacity:1;pointer-events:all;transform:translateX(0) scale(1);}
-#s-customize{justify-content:flex-start;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.card{background:var(--card-bg);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);border-radius:var(--r);width:100%;box-shadow:var(--shadow);border:1.5px solid rgba(255,255,255,0.95);position:relative;}
-.card-inner{padding:32px 24px 28px;text-align:center;}
-.back-btn{position:absolute;top:16px;left:16px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.95);border:1.5px solid rgba(233,30,99,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;color:var(--mid);z-index:10;box-shadow:0 3px 12px rgba(0,0,0,0.09);touch-action:manipulation;}
-.back-btn:active{transform:scale(0.92);}
-.screen-title{font-family:'Playfair Display',serif;font-weight:700;color:var(--dark);font-size:clamp(1.5rem,5.5vw,1.9rem);line-height:1.2;margin-bottom:8px;animation:fadeUp 0.5s 0.1s both;}
-.screen-sub{font-size:0.92rem;color:var(--mid);margin-bottom:20px;line-height:1.5;animation:fadeUp 0.5s 0.2s both;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-.big-heart{font-size:3.5rem;display:block;margin:0 auto 20px;animation:heartbeat 1.6s ease infinite,fadeUp 0.5s both;}
-@keyframes heartbeat{0%,100%{transform:scale(1);}15%{transform:scale(1.18);}30%{transform:scale(1);}45%{transform:scale(1.12);}}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:16px 24px;border-radius:50px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;transition:transform 0.18s ease,box-shadow 0.18s;touch-action:manipulation;margin-bottom:10px;position:relative;overflow:hidden;animation:fadeUp 0.5s 0.3s both;}
-.btn:last-child{margin-bottom:0;}
-.btn:active{transform:scale(0.96);}
-.btn-primary{background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;box-shadow:0 6px 24px rgba(233,30,99,0.4);}
-.btn-outline{background:rgba(255,255,255,0.8);color:var(--pink);border:1.5px solid rgba(233,30,99,0.25);}
-.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.4);transform:scale(0);animation:rippleAnim 0.6s linear;pointer-events:none;}
-@keyframes rippleAnim{to{transform:scale(4);opacity:0;}}
+html{scroll-behavior:smooth;}
 
-/* PHOTO GALLERY - fan spread */
-.photo-frame{width:100%;margin-bottom:20px;background:transparent;position:relative;animation:fadeUp 0.5s 0.15s both;min-height:180px;}
-.photo-placeholder{width:100%;border-radius:20px;background:rgba(255,255,255,0.5);padding:8px 4px 4px;display:flex;flex-direction:column;align-items:center;}
-.photo-placeholder span{font-size:3rem;animation:bounce 2s ease infinite;}
-@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text-primary);
+  overflow-x:hidden;
+  min-height:100vh;
+}
 
-/* fan wrap */
-/* ── BALLOON PHOTO ANIMATION ── */
-.balloon-wrap{position:relative;width:100%;min-height:220px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:10px 4px 4px;}
-.balloon-card{
-  flex:0 0 auto;
-  width:calc(33% - 8px);
-  position:relative;
-  cursor:pointer;
-  animation:balloonFloat ease-in-out infinite;
-  touch-action:manipulation;
+/* ── Grain texture overlay ── */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:1;
 }
-.balloon-card:nth-child(1){animation-duration:3.2s;animation-delay:0s;}
-.balloon-card:nth-child(2){animation-duration:2.8s;animation-delay:0.4s;}
-.balloon-card:nth-child(3){animation-duration:3.5s;animation-delay:0.2s;}
-.balloon-card:nth-child(4){animation-duration:3.0s;animation-delay:0.6s;}
-.balloon-card:nth-child(5){animation-duration:2.6s;animation-delay:0.3s;}
-@keyframes balloonFloat{
-  0%,100%{transform:translateY(0) rotate(-2deg);}
-  50%{transform:translateY(-10px) rotate(2deg);}
-}
-.balloon-string{
-  width:2px;height:24px;
-  background:linear-gradient(to bottom,rgba(233,30,99,0.4),transparent);
-  margin:0 auto;
-  border-radius:1px;
-}
-.balloon-photo{
-  width:100%;
-  aspect-ratio:3/4;
-  border-radius:50% 50% 45% 45%;
+
+/* ── Background mesh ── */
+.bg-mesh {
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
   overflow:hidden;
-  box-shadow:0 8px 24px rgba(233,30,99,0.25);
-  border:3px solid white;
-  position:relative;
 }
-.balloon-photo img{
-  width:100%;height:100%;object-fit:cover;
-  filter:sepia(0.3) saturate(1.4) brightness(1.06);
-}
-.balloon-photo::after{
+.bg-mesh::before {
   content:'';
   position:absolute;
-  top:8%;left:15%;
-  width:30%;height:20%;
-  background:rgba(255,255,255,0.35);
-  border-radius:50%;
-  transform:rotate(-30deg);
-  pointer-events:none;
+  width:600px;height:600px;
+  top:-200px;left:-150px;
+  background:radial-gradient(circle, rgba(232,41,90,0.13) 0%, transparent 65%);
+  animation:meshDrift1 18s ease-in-out infinite;
 }
-.balloon-card:nth-child(odd) .balloon-photo{background:linear-gradient(135deg,#ff6b9d,#e91e63);}
-.balloon-card:nth-child(even) .balloon-photo{background:linear-gradient(135deg,#f48fb1,#e91e63);}
-.photo-fx-off .balloon-photo img{filter:none;}
-.photo-fx-off .balloon-card{animation:none;}
-/* 1 photo */
-.balloon-wrap.count-1 .balloon-card{width:55%;}
-/* 2 photos */
-.balloon-wrap.count-2 .balloon-card{width:44%;}
+.bg-mesh::after {
+  content:'';
+  position:absolute;
+  width:500px;height:500px;
+  bottom:-100px;right:-100px;
+  background:radial-gradient(circle, rgba(240,192,96,0.09) 0%, transparent 65%);
+  animation:meshDrift2 14s ease-in-out infinite;
+}
+.bg-mesh-mid {
+  position:fixed;
+  width:350px;height:350px;
+  top:40%;left:60%;
+  background:radial-gradient(circle, rgba(255,107,157,0.07) 0%, transparent 65%);
+  animation:meshDrift3 20s ease-in-out infinite;
+  pointer-events:none;
+  z-index:0;
+}
 
-.pol-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:4px 0;width:100%;box-sizing:border-box;}
-.pol-card{
-  flex:0 0 auto;
-  width:calc(33% - 6px);
-  aspect-ratio:3/4;
-  background:white;
-  border-radius:10px;
-  padding:5px 5px 20px;
-  box-shadow:0 4px 16px rgba(0,0,0,0.15);
+@keyframes meshDrift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(60px,40px) scale(1.1);}}
+@keyframes meshDrift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,-60px) scale(1.08);}}
+@keyframes meshDrift3{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,50px);}}
+
+/* ── Floating hearts ── */
+.hero-hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0;}
+.hh{position:absolute;bottom:-20px;animation:hhFloat linear infinite;opacity:0;}
+@keyframes hhFloat{
+  0%{transform:translateY(0) rotate(-10deg);opacity:0;}
+  8%{opacity:0.5;}
+  90%{opacity:0.25;}
+  100%{transform:translateY(-105vh) rotate(10deg);opacity:0;}
+}
+
+/* ── Hero layout ── */
+.hero {
+  position:relative;
+  z-index:2;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:90px 24px 70px;
+  text-align:center;
+}
+
+/* ── Logo ── */
+.logo {
+  margin-bottom:48px;
+  animation:fadeDown 0.9s cubic-bezier(.22,1,.36,1) both;
+}
+.logo-mark {
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 20px 10px 14px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:100px;
+  backdrop-filter:blur(10px);
+}
+.logo-icon {
+  font-size:1.5rem;
+  animation:heartbeat 2.4s ease infinite;
+  display:block;
+}
+@keyframes heartbeat{
+  0%,100%{transform:scale(1);}
+  14%{transform:scale(1.22);}
+  28%{transform:scale(1);}
+  42%{transform:scale(1.12);}
+}
+.logo-wordmark {
+  display:flex;
+  align-items:baseline;
+  gap:2px;
+}
+.logo-text {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.25rem;
+  font-weight:600;
+  letter-spacing:0.01em;
+  color:var(--text-primary);
+}
+.logo-ai {
+  font-family:'DM Sans',sans-serif;
+  font-size:0.6rem;
+  font-weight:600;
+  color:var(--gold);
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  opacity:0.9;
+}
+
+/* ── Hero headline ── */
+.hero-headline {
+  margin-bottom:20px;
+  animation:fadeDown 0.9s 0.12s cubic-bezier(.22,1,.36,1) both;
+}
+.hero-h1 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3.2rem,9vw,6rem);
+  font-weight:300;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  color:var(--text-primary);
+}
+.hero-h1 em {
+  font-style:italic;
+  font-weight:300;
+  background:linear-gradient(135deg, #ff6b9d 0%, #e8295a 50%, #f0c060 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ── Hero subtitle ── */
+.hero-sub {
+  font-size:clamp(0.92rem,2.5vw,1.05rem);
+  color:var(--text-secondary);
+  max-width:440px;
+  line-height:1.75;
+  margin:0 auto 56px;
+  font-weight:300;
+  animation:fadeDown 0.9s 0.22s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ── Section label ── */
+.occasions {
+  position:relative;
+  z-index:2;
+  width:100%;
+  max-width:920px;
+  margin:0 auto;
+  padding:0 16px;
+  animation:fadeUp 0.9s 0.35s cubic-bezier(.22,1,.36,1) both;
+}
+.occasions-label {
+  font-size:0.68rem;
+  font-weight:600;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+}
+.occasions-label::before,
+.occasions-label::after {
+  content:'';
+  width:40px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(245,238,240,0.2), transparent);
+}
+
+/* ── Cards grid ── */
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+  gap:12px;
+}
+
+.occ-card {
+  position:relative;
+  border-radius:20px;
+  padding:28px 16px 22px;
   cursor:pointer;
+  overflow:hidden;
+  border:1px solid var(--card-border);
+  transition:transform 0.32s cubic-bezier(.4,0,.2,1), box-shadow 0.32s, border-color 0.28s;
+  text-align:center;
+  animation:cardPop 0.7s cubic-bezier(.34,1.26,.64,1) both;
+  text-decoration:none;
+  display:block;
   touch-action:manipulation;
   -webkit-tap-highlight-color:transparent;
-  transition:transform 0.25s cubic-bezier(.4,0,.2,1),box-shadow 0.25s;
-  position:relative;
-  overflow:hidden;
 }
-.pol-card:nth-child(odd){transform:rotate(-1.5deg);}
-.pol-card:nth-child(even){transform:rotate(1.5deg);}
-.pol-card:active{transform:scale(0.93) rotate(0deg) !important;box-shadow:0 2px 8px rgba(0,0,0,0.12);}
-.pol-card img{
-  width:100%;height:100%;object-fit:cover;border-radius:5px;display:block;
-  filter:sepia(0.45) saturate(1.6) brightness(1.08) contrast(1.1) hue-rotate(-10deg);
-  animation:kenBurns 8s ease-in-out infinite alternate;
-  transform-origin:center center;
+.occ-card:hover {
+  transform:translateY(-7px) scale(1.025);
+  border-color:var(--card-border-hover);
 }
-@keyframes kenBurns{
-  from{transform:scale(1) translate(0%,0%);}
-  to{transform:scale(1.15) translate(-3%,-2%);}
-}
-.pol-card::before{
-  content:'';position:absolute;inset:5px 5px 20px 5px;z-index:2;border-radius:5px;
-  background:radial-gradient(ellipse at center,transparent 40%,rgba(80,0,20,0.35) 100%);
+.occ-card:active { transform:scale(0.96); }
+
+/* Card backgrounds — rich, deep, distinct */
+.occ-birthday  { background:linear-gradient(150deg,#1c0410 0%,#2e0b1c 55%,#1a0410 100%); box-shadow:0 6px 32px rgba(232,41,90,0.18); }
+.occ-anniversary { background:linear-gradient(150deg,#0b0d1e 0%,#161230 55%,#0e0b1c 100%); box-shadow:0 6px 32px rgba(100,80,220,0.12); }
+.occ-valentine { background:linear-gradient(150deg,#1c0414 0%,#320820 55%,#1a0412 100%); box-shadow:0 6px 32px rgba(220,50,120,0.14); }
+.occ-friendship { background:linear-gradient(150deg,#071410 0%,#0b2018 55%,#081410 100%); box-shadow:0 6px 32px rgba(40,180,120,0.1); }
+.occ-mother  { background:linear-gradient(150deg,#130c06 0%,#221508 55%,#130c06 100%); box-shadow:0 6px 32px rgba(240,160,60,0.1); }
+.occ-farewell { background:linear-gradient(150deg,#060c14 0%,#0c1828 55%,#060c14 100%); box-shadow:0 6px 32px rgba(56,130,240,0.1); }
+.occ-work { background:linear-gradient(150deg,#0a0a08 0%,#161410 55%,#0a0a08 100%); box-shadow:0 6px 32px rgba(200,170,60,0.1); }
+.occ-custom  { background:linear-gradient(150deg,#0e0e0e 0%,#191919 55%,#0e0e0e 100%); box-shadow:0 6px 32px rgba(255,255,255,0.03); }
+
+/* Hover glow */
+.occ-birthday:hover  { box-shadow:0 20px 60px rgba(232,41,90,0.35); }
+.occ-anniversary:hover { box-shadow:0 20px 60px rgba(100,80,220,0.28); }
+.occ-valentine:hover { box-shadow:0 20px 60px rgba(220,50,120,0.3); }
+.occ-friendship:hover { box-shadow:0 20px 60px rgba(40,180,120,0.22); }
+.occ-mother:hover  { box-shadow:0 20px 60px rgba(240,160,60,0.22); }
+.occ-farewell:hover { box-shadow:0 20px 60px rgba(56,130,240,0.22); }
+.occ-work:hover  { box-shadow:0 20px 60px rgba(200,170,60,0.22); }
+.occ-custom:hover  { box-shadow:0 20px 60px rgba(255,255,255,0.08); }
+
+/* Shimmer on hover */
+.occ-card::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:opacity 0.35s;
+  border-radius:20px;
   pointer-events:none;
 }
-.photo-fx-off .pol-card img{
-  filter:none !important;
-  animation:none !important;
-  transform:scale(1) !important;
+.occ-birthday::before   { background:radial-gradient(ellipse at 50% 0%, rgba(232,41,90,0.22), transparent 68%); }
+.occ-anniversary::before { background:radial-gradient(ellipse at 50% 0%, rgba(130,100,255,0.18), transparent 68%); }
+.occ-valentine::before  { background:radial-gradient(ellipse at 50% 0%, rgba(255,80,140,0.2), transparent 68%); }
+.occ-friendship::before { background:radial-gradient(ellipse at 50% 0%, rgba(60,200,140,0.18), transparent 68%); }
+.occ-mother::before    { background:radial-gradient(ellipse at 50% 0%, rgba(240,180,80,0.18), transparent 68%); }
+.occ-farewell::before  { background:radial-gradient(ellipse at 50% 0%, rgba(56,130,240,0.18), transparent 68%); }
+.occ-work::before      { background:radial-gradient(ellipse at 50% 0%, rgba(200,170,60,0.18), transparent 68%); }
+.occ-custom::before    { background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.06), transparent 68%); }
+.occ-card:hover::before { opacity:1; }
+
+/* Top accent line */
+.occ-card::after {
+  content:'';
+  position:absolute;
+  top:0;left:20%;right:20%;
+  height:1px;
+  opacity:0;
+  transition:opacity 0.35s;
+  border-radius:1px;
+  pointer-events:none;
 }
-.photo-fx-off .pol-card::before{display:none !important;}
-.pol-card .pol-label{position:absolute;bottom:3px;left:0;right:0;text-align:center;font-family:'Playfair Display',serif;font-size:0.62rem;color:var(--mid);font-style:italic;}
-.pol-wrap.count-1 .pol-card{width:80%;aspect-ratio:4/3;}
-.pol-wrap.count-2 .pol-card{width:calc(50% - 6px);}
-.pol-wrap.count-4 .pol-card,.pol-wrap.count-5 .pol-card{width:calc(33% - 6px);}
+.occ-birthday::after   { background:linear-gradient(90deg,transparent,rgba(232,41,90,0.7),transparent); }
+.occ-anniversary::after { background:linear-gradient(90deg,transparent,rgba(130,100,255,0.7),transparent); }
+.occ-valentine::after  { background:linear-gradient(90deg,transparent,rgba(255,80,140,0.7),transparent); }
+.occ-friendship::after { background:linear-gradient(90deg,transparent,rgba(60,200,140,0.7),transparent); }
+.occ-mother::after    { background:linear-gradient(90deg,transparent,rgba(240,180,80,0.7),transparent); }
+.occ-farewell::after  { background:linear-gradient(90deg,transparent,rgba(56,130,240,0.7),transparent); }
+.occ-work::after      { background:linear-gradient(90deg,transparent,rgba(200,170,60,0.7),transparent); }
+.occ-custom::after    { background:linear-gradient(90deg,transparent,rgba(200,200,200,0.4),transparent); }
+.occ-card:hover::after { opacity:1; }
 
-/* expanded photo overlay */
-.photo-expand{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0);display:none;align-items:center;justify-content:center;pointer-events:none;transition:background 0.4s;}
-.photo-expand.open{background:rgba(0,0,0,0.88);pointer-events:all;display:flex;}
-.photo-expand-inner{width:88vw;max-width:380px;background:white;border-radius:16px;padding:10px 10px 36px;transform:scale(0.5) translateY(60px);opacity:0;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1),opacity 0.35s;box-shadow:0 30px 80px rgba(0,0,0,0.5);position:relative;}
-.photo-expand.open .photo-expand-inner{transform:scale(1) translateY(0);opacity:1;}
-.photo-expand-inner img{width:100%;border-radius:8px;display:block;max-height:55vh;object-fit:contain;filter:sepia(0.4) saturate(1.5) brightness(1.08) contrast(1.1) hue-rotate(-10deg);}
-.photo-expand-close{position:absolute;top:-14px;right:-14px;width:34px;height:34px;border-radius:50%;background:var(--pink);color:white;border:none;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(233,30,99,0.45);touch-action:manipulation;font-weight:700;}
-.photo-expand-nav{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px;}
-.photo-expand-dot{width:7px;height:7px;border-radius:50%;background:rgba(233,30,99,0.2);transition:all 0.3s;cursor:pointer;border:none;}
-.photo-expand-dot.active{background:var(--pink);transform:scale(1.3);}
-.photo-count{display:none;}
+/* Emoji */
+.occ-emoji {
+  font-size:2.4rem;
+  display:block;
+  margin-bottom:14px;
+  animation:emojiFloat 3.2s ease-in-out infinite;
+  position:relative;
+  z-index:1;
+}
+@keyframes emojiFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+.occ-card:nth-child(2) .occ-emoji{animation-delay:0.5s;}
+.occ-card:nth-child(3) .occ-emoji{animation-delay:1s;}
+.occ-card:nth-child(4) .occ-emoji{animation-delay:0.3s;}
+.occ-card:nth-child(5) .occ-emoji{animation-delay:0.8s;}
+.occ-card:nth-child(6) .occ-emoji{animation-delay:1.3s;}
 
-/* SONG */
-.song-card{background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:20px;padding:20px;margin-bottom:18px;text-align:left;position:relative;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.3);animation:fadeUp 0.5s 0.15s both;}
-.song-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 50%,rgba(233,30,99,0.2),transparent 60%);}
-.song-cover{width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg,var(--pink),var(--pink2));margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:2rem;}
-.song-name{font-weight:700;color:white;font-size:1rem;margin-bottom:2px;}
-.song-artist{color:rgba(255,255,255,0.55);font-size:0.82rem;}
-.song-play-btn{position:absolute;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;background:white;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#1a0a2e;touch-action:manipulation;}
-.song-play-btn.playing{background:var(--pink);color:white;}
-.music-bars{display:none;align-items:flex-end;gap:3px;height:20px;position:absolute;right:70px;bottom:24px;}
-.music-bars.playing{display:flex;}
-.bar{width:3px;border-radius:3px;background:rgba(255,255,255,0.6);animation:barDance 0.8s ease infinite;}
-.bar:nth-child(2){animation-delay:0.15s;height:14px;}.bar:nth-child(3){animation-delay:0.3s;height:8px;}.bar:nth-child(4){animation-delay:0.1s;height:18px;}
-@keyframes barDance{0%,100%{transform:scaleY(0.3);}50%{transform:scaleY(1);}}
-@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-@keyframes progressPulse{0%,100%{width:25%;}50%{width:65%;}}
+/* Card text */
+.occ-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.12rem;
+  font-weight:600;
+  color:var(--text-primary);
+  margin-bottom:6px;
+  position:relative;
+  z-index:1;
+  letter-spacing:0.01em;
+}
+.occ-desc {
+  font-size:0.7rem;
+  color:var(--text-secondary);
+  line-height:1.55;
+  position:relative;
+  z-index:1;
+  font-weight:300;
+}
+.occ-badge {
+  display:inline-block;
+  margin-top:12px;
+  font-size:0.58rem;
+  font-weight:600;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  padding:4px 11px;
+  border-radius:100px;
+  position:relative;
+  z-index:1;
+}
+.badge-live {
+  background:rgba(232,41,90,0.18);
+  color:#ff8ab5;
+  border:1px solid rgba(232,41,90,0.3);
+}
+.badge-soon {
+  background:rgba(255,255,255,0.05);
+  color:var(--text-muted);
+  border:1px solid rgba(255,255,255,0.08);
+}
 
-/* ENVELOPE */
-#envBtn{display:block;width:100%;background:none;border:none;cursor:pointer;padding:10px 0 6px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
-.heart-blast{position:fixed;pointer-events:none;z-index:9999;animation:blastAnim 1s cubic-bezier(.2,0,.8,1) forwards;}
-@keyframes blastAnim{0%{transform:translate(-50%,-50%) scale(0);opacity:1;}60%{opacity:1;}100%{transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(1.2);opacity:0;}}
+/* Card stagger */
+.occ-card:nth-child(1){animation-delay:0.38s;}
+.occ-card:nth-child(2){animation-delay:0.44s;}
+.occ-card:nth-child(3){animation-delay:0.50s;}
+.occ-card:nth-child(4){animation-delay:0.56s;}
+.occ-card:nth-child(5){animation-delay:0.62s;}
+.occ-card:nth-child(6){animation-delay:0.68s;}
+.occ-card:nth-child(7){animation-delay:0.74s;}
+.occ-card:nth-child(8){animation-delay:0.80s;}
+@keyframes cardPop{
+  from{opacity:0;transform:translateY(28px) scale(0.94);}
+  to{opacity:1;transform:translateY(0) scale(1);}
+}
 
-/* LETTER */
-.letter-page{width:100%;background:white;border-radius:20px;padding:22px 20px 18px;text-align:left;box-shadow:0 6px 30px rgba(233,30,99,0.12);border-top:4px solid var(--pink);position:relative;animation:letterReveal 0.7s cubic-bezier(.4,0,.2,1) both;}
-@keyframes letterReveal{from{transform:scale(0.8) translateY(40px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
-.letter-page::after{content:'💌';position:absolute;right:14px;top:12px;font-size:1.3rem;opacity:0.3;}
-.letter-dear{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--dark);margin-bottom:10px;font-weight:700;}
-.letter-body{font-size:0.87rem;line-height:1.72;color:var(--dark);white-space:pre-wrap;}
-.letter-cursor{display:inline-block;width:2px;height:1em;background:var(--pink);margin-left:1px;vertical-align:text-bottom;animation:cursorBlink 0.7s step-end infinite;}
-@keyframes cursorBlink{0%,100%{opacity:1;}50%{opacity:0;}}
-.letter-sign{font-family:'Playfair Display',serif;font-style:italic;color:var(--pink);font-size:0.95rem;text-align:right;margin-top:12px;}
-.letter-sender-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--dark);font-weight:700;text-align:right;margin-top:3px;display:none;}
+.occ-card.coming-soon{cursor:default;}
+.occ-card.coming-soon:hover{transform:translateY(-3px) scale(1.01);}
 
-/* DOTS */
-.progress-dots{display:flex;gap:7px;justify-content:center;margin-top:18px;}
-.pdot{width:8px;height:8px;border-radius:50%;background:rgba(233,30,99,0.25);transition:all 0.3s;}
-.pdot.active{background:var(--pink);transform:scale(1.3);}
-.pdot.done{background:var(--pink2);}
+/* ── Tagline ── */
+.tagline {
+  margin-top:52px;
+  animation:fadeUp 0.9s 0.9s cubic-bezier(.22,1,.36,1) both;
+}
+.tagline p {
+  font-size:0.76rem;
+  color:var(--text-muted);
+  letter-spacing:0.1em;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.tagline strong {
+  color:var(--text-secondary);
+  font-weight:500;
+}
+.tagline-dot {
+  width:3px;height:3px;
+  border-radius:50%;
+  background:var(--text-muted);
+  display:inline-block;
+}
 
-/* CUSTOMIZE */
-.customize-scroll{width:100%;max-width:430px;padding:0 18px 40px;overflow-y:auto;-webkit-overflow-scrolling:touch;height:100vh;}
-.cust-header{position:sticky;top:0;background:linear-gradient(to bottom,rgba(253,232,240,0.98) 90%,transparent);padding:16px 0 12px;display:flex;align-items:center;gap:12px;z-index:10;margin-bottom:8px;}
-.cust-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--dark);font-weight:700;}
-.field-group{margin-bottom:18px;}
-.field-label{font-size:0.76rem;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;display:block;}
-.field-hint{font-size:0.74rem;color:var(--mid);margin-top:4px;}
-input[type=text],textarea{width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
-input:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(233,30,99,0.1);}
-textarea{resize:none;min-height:120px;line-height:1.7;}
+/* ── Footer ── */
+.footer {
+  position:relative;
+  z-index:2;
+  padding:28px 24px;
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,0.05);
+  margin-top:48px;
+}
+.footer-logo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;
+  font-style:italic;
+  color:var(--text-muted);
+  margin-bottom:6px;
+  letter-spacing:0.03em;
+}
+.footer-sub {
+  font-size:0.68rem;
+  color:rgba(245,238,240,0.25);
+  letter-spacing:0.05em;
+}
 
-/* UPLOAD BUTTON - not a box with hidden input, just a styled button */
-.upload-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;border:2px dashed rgba(233,30,99,0.35);border-radius:16px;background:var(--pink4);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.88rem;color:var(--mid);font-weight:500;touch-action:manipulation;transition:all 0.2s;}
-.upload-btn:active{background:var(--pink3);}
+/* ── Animations ── */
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-18px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px);}
+  to{opacity:1;transform:translateY(0);}
+}
 
-.bgm-toggle{display:flex;border:1.5px solid rgba(233,30,99,0.2);border-radius:12px;overflow:hidden;margin-bottom:12px;}
-.bgm-tab{flex:1;padding:11px;text-align:center;font-size:0.88rem;font-weight:600;cursor:pointer;color:var(--mid);transition:all 0.2s;touch-action:manipulation;}
-.bgm-tab.active{background:var(--pink);color:white;}
-.song-chip{display:flex;align-items:center;gap:12px;background:white;border-radius:14px;padding:12px 14px;border:1.5px solid rgba(233,30,99,0.15);margin-bottom:8px;cursor:pointer;touch-action:manipulation;transition:all 0.2s;}
-.song-chip.active{border-color:var(--pink);background:var(--pink4);}
-.song-chip-name{font-size:0.88rem;font-weight:600;color:var(--dark);}
-.song-chip-tag{font-size:0.72rem;color:var(--pink);font-weight:700;text-transform:uppercase;margin-top:2px;}
-.spotify-wrap{position:relative;}
-.spotify-wrap input{padding-left:42px;}
-.spotify-prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1.1rem;z-index:1;pointer-events:none;}
-.preview-bar{position:sticky;bottom:0;background:linear-gradient(to top,rgba(253,232,240,0.98) 80%,transparent);padding:16px 0 10px;}
-.btn-wa{background:linear-gradient(135deg,#25d366,#128c4e);color:white;box-shadow:0 6px 20px rgba(37,211,102,0.35);}
-.wm{position:fixed;bottom:10px;right:12px;font-size:0.78rem;color:var(--pink);opacity:0.55;pointer-events:all;z-index:10;font-family:'Playfair Display',serif;letter-spacing:0.04em;text-shadow:0 1px 4px rgba(233,30,99,0.2);}
-.thumb-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
-.thumb-row img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:2px solid var(--pink2);}
-.clear-btn{display:none;margin:8px auto 0;background:none;border:1px solid rgba(233,30,99,0.3);border-radius:20px;padding:5px 14px;font-size:0.76rem;color:var(--pink);cursor:pointer;touch-action:manipulation;font-family:'DM Sans',sans-serif;}
-/* ── AI FEATURES ── */
-.ai-magic-box{background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:18px;padding:18px 16px;margin-bottom:18px;border:1.5px solid rgba(233,30,99,0.3);}
-.ai-magic-title{font-size:0.78rem;font-weight:700;color:#ff6b9d;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.ai-magic-title span{font-size:1rem;}
-.ai-occasion-input{width:100%;border:1.5px solid rgba(233,30,99,0.3);border-radius:12px;padding:11px 14px;font-size:0.9rem;font-family:'DM Sans',sans-serif;color:white;background:rgba(255,255,255,0.08);outline:none;}
-.ai-occasion-input::placeholder{color:rgba(255,255,255,0.35);}
-.ai-occasion-input:focus{border-color:rgba(233,30,99,0.7);}
-.btn-ai{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:50px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;background:linear-gradient(135deg,#e91e63,#9c27b0);color:white;box-shadow:0 4px 20px rgba(233,30,99,0.35);margin-top:10px;touch-action:manipulation;transition:opacity 0.2s;}
-.btn-ai:disabled{opacity:0.55;cursor:not-allowed;}
-.ai-loading{display:none;align-items:center;justify-content:center;gap:8px;padding:10px;font-size:0.82rem;color:#ff6b9d;}
-.ai-loading.show{display:flex;}
-.ai-dot{width:6px;height:6px;border-radius:50%;background:#ff6b9d;animation:aiPulse 1.2s ease infinite;}
-.ai-dot:nth-child(2){animation-delay:0.2s;}
-.ai-dot:nth-child(3){animation-delay:0.4s;}
-@keyframes aiPulse{0%,100%{transform:scale(0.6);opacity:0.4;}50%{transform:scale(1.2);opacity:1;}}
-.rel-chips{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 4px;}
-.rel-chip{padding:6px 13px;border-radius:100px;font-size:0.76rem;font-weight:600;border:1.5px solid rgba(233,30,99,0.25);color:var(--mid);background:white;cursor:pointer;touch-action:manipulation;transition:all 0.18s;}
-.rel-chip.selected{background:var(--pink);color:white;border-color:var(--pink);}
-.song-suggestion{display:flex;align-items:center;gap:10px;background:white;border-radius:12px;padding:11px 13px;border:1.5px solid rgba(233,30,99,0.15);margin-bottom:8px;cursor:pointer;touch-action:manipulation;transition:all 0.18s;}
-.song-suggestion:hover,.song-suggestion:active{border-color:var(--pink);background:var(--pink4);}
-.song-suggestion-info{flex:1;min-width:0;}
-.song-suggestion-name{font-size:0.85rem;font-weight:600;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.song-suggestion-artist{font-size:0.72rem;color:var(--mid);}
-.song-suggestion-use{font-size:0.7rem;font-weight:700;color:var(--pink);white-space:nowrap;}
-.ai-result-banner{background:rgba(233,30,99,0.08);border:1px solid rgba(233,30,99,0.2);border-radius:10px;padding:10px 13px;font-size:0.78rem;color:var(--mid);margin-top:8px;display:none;}
-.ai-result-banner.show{display:block;}
+/* ── Toast notification ── */
+.toast {
+  position:fixed;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:rgba(20,10,15,0.95);
+  border:1px solid rgba(232,41,90,0.3);
+  color:var(--text-primary);
+  padding:12px 22px;
+  border-radius:100px;
+  font-size:0.82rem;
+  font-weight:500;
+  z-index:1000;
+  white-space:nowrap;
+  backdrop-filter:blur(20px);
+  transition:transform 0.35s cubic-bezier(.34,1.26,.64,1), opacity 0.35s;
+  opacity:0;
+  pointer-events:none;
+}
+.toast.show {
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
 
-@keyframes hb1{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
-@keyframes float1{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
-.demo-pol{animation:demoFloat ease-in-out infinite;}
-.demo-pol:nth-child(1){animation-duration:3s;}
-.demo-pol:nth-child(2){animation-duration:3.4s;animation-delay:0.3s;}
-.demo-pol:nth-child(3){animation-duration:2.8s;animation-delay:0.6s;}
-.demo-pol:nth-child(4){animation-duration:3.2s;animation-delay:0.2s;}
-.demo-pol:nth-child(5){animation-duration:3.6s;animation-delay:0.5s;}
-@keyframes demoFloat{0%,100%{transform:translateY(0) rotate(-1.5deg);}50%{transform:translateY(-5px) rotate(0.5deg);}}
-/* Share confirmation overlay */
-.share-confirm{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.6);display:none;align-items:flex-end;justify-content:center;}
-.share-confirm.open{display:flex;}
-.share-confirm-box{background:white;border-radius:28px 28px 0 0;padding:28px 24px 44px;width:100%;max-width:430px;animation:slideUp 0.35s cubic-bezier(.4,0,.2,1);}
-@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.share-link-box{background:var(--pink4);border:1.5px solid rgba(233,30,99,0.2);border-radius:12px;padding:12px 50px 12px 14px;font-size:0.75rem;color:var(--mid);word-break:break-all;margin-bottom:14px;position:relative;line-height:1.5;}
-.copy-link-btn{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--pink);color:white;border:none;border-radius:8px;padding:5px 10px;font-size:0.7rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
-.expiry-notice{font-size:0.74rem;color:#c0392b;background:rgba(255,100,100,0.08);border:1px solid rgba(255,100,100,0.2);border-radius:8px;padding:8px 12px;margin-bottom:14px;text-align:center;}
-/* Upsell modal */
-.upsell-modal{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;padding:20px;}
-.upsell-modal.open{display:flex;}
-.upsell-box{background:white;border-radius:24px;padding:28px 22px;width:100%;max-width:360px;text-align:center;animation:popIn 0.4s cubic-bezier(.34,1.26,.64,1);}
-@keyframes popIn{from{transform:scale(0.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+/* ── Instagram link ── */
+.footer-links {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  margin-top:10px;
+}
+.footer-links a {
+  font-size:0.68rem;
+  color:rgba(245,238,240,0.3);
+  text-decoration:none;
+  letter-spacing:0.05em;
+  transition:color 0.2s;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.footer-links a:hover { color:rgba(245,238,240,0.7); }
+@media(max-width:520px){
+  .grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .hero{padding:70px 16px 50px;}
+  .occ-card{padding:22px 12px 18px;}
+  .occ-emoji{font-size:2rem;}
+}
+@media(max-width:360px){
+  .hero-h1{font-size:2.8rem;}
+}
 </style>
 </head>
 <body>
 
-<div class="hearts-bg" id="heartsBg"></div>
-<audio id="theAudio" loop></audio>
+<div class="bg-mesh"></div>
+<div class="bg-mesh-mid"></div>
+<div class="hero-hearts" id="heroHearts"></div>
 
-<div class="app" id="mainApp">
+<main class="hero">
 
-<!-- WELCOME -->
-<div class="screen active" id="s-welcome">
-  <div class="card"><div class="card-inner">
-    <span class="big-heart">💝</span>
-    <div class="screen-title" id="welcomeTitle">Happy Birthday!</div>
-    <div class="screen-sub" id="welcomeSub">Someone special made this just for you 🌸</div>
-    <div id="birthdayTodayBanner" style="display:none;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.82rem;font-weight:600;text-align:center;animation:fadeUp 0.5s both;">🎂 Today is the special day! Happy Birthday! 🎉</div>
-    <button class="btn btn-primary" id="openCardBtn" onclick="ripple(event);goTo('s-memories')">Demo Card ✨</button>
-    <button class="btn btn-outline" id="custBtnWelcome" onclick="ripple(event);goTo('s-customize')">✏️ Customize Card</button>
-    <div id="demoNotice" style="font-size:0.72rem;color:var(--mid);text-align:center;margin-top:8px;opacity:0.8;">👆 Customize first to add your photos, letter &amp; song</div>
-  </div></div>
-  <div class="progress-dots"><div class="pdot active" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
-</div>
-
-<!-- MEMORIES -->
-<div class="screen" id="s-memories">
-  <div class="card">
-    <div class="back-btn" onclick="goBack()">←</div>
-    <div class="card-inner">
-      <div class="screen-title" id="memoriesTitle">Our Memories 📸</div>
-      <div id="memoriesSenderSub" style="display:none;font-size:0.75rem;color:var(--mid);font-style:italic;margin-top:-6px;margin-bottom:8px;text-align:center;">— chosen by <span id="memoriesSenderName"></span> with love</div>
-      <div class="photo-frame" id="photoFrame">
-        <div class="photo-placeholder" id="photoPlaceholder">
-          <!-- 5 animated couple illustration polaroids -->
-          <div class="pol-wrap count-5" style="display:flex;padding:4px 0;">
-
-            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#ffd6e7,#ffb3cc);">
-              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;">
-                <circle cx="40" cy="40" r="38" fill="#fff5f8"/>
-                <!-- two hearts -->
-                <text x="22" y="48" font-size="22" style="animation:hb1 1.4s ease infinite;">❤️</text>
-                <text x="44" y="44" font-size="16" style="animation:hb1 1.6s 0.2s ease infinite;">🩷</text>
-                <text x="30" y="30" font-size="12" opacity="0.5">✨</text>
-              </svg>
-              <div class="pol-label">Us ❤️</div>
-            </div>
-
-            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#e8f4fd,#c8e6ff);">
-              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;">
-                <circle cx="40" cy="40" r="38" fill="#f0f8ff"/>
-                <!-- couple holding hands -->
-                <text x="18" y="52" font-size="38">👫</text>
-                <text x="54" y="26" font-size="14" style="animation:float1 2s ease infinite;">⭐</text>
-              </svg>
-              <div class="pol-label">Together 👫</div>
-            </div>
-
-            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);">
-              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;">
-                <circle cx="40" cy="40" r="38" fill="#fffaf0"/>
-                <text x="20" y="50" font-size="36">🌹</text>
-                <text x="50" y="30" font-size="16" style="animation:float1 1.8s 0.3s ease infinite;">💕</text>
-                <text x="14" y="28" font-size="12" opacity="0.6">🌸</text>
-              </svg>
-              <div class="pol-label">Love 🌹</div>
-            </div>
-
-            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7);">
-              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;">
-                <circle cx="40" cy="40" r="38" fill="#fdf5ff"/>
-                <text x="16" y="52" font-size="38">💑</text>
-                <text x="54" y="28" font-size="14" style="animation:hb1 2s 0.5s ease infinite;">💗</text>
-              </svg>
-              <div class="pol-label">Forever 💑</div>
-            </div>
-
-            <div class="pol-card demo-pol" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
-              <svg viewBox="0 0 80 80" style="width:100%;height:100%;display:block;">
-                <circle cx="40" cy="40" r="38" fill="#f0fff4"/>
-                <text x="16" y="52" font-size="36">🌟</text>
-                <text x="46" y="48" font-size="24">💖</text>
-                <text x="28" y="24" font-size="12" opacity="0.5" style="animation:float1 2.2s ease infinite;">✨</text>
-              </svg>
-              <div class="pol-label">Magic ✨</div>
-            </div>
-
-          </div>
-          <div style="font-size:0.75rem;color:var(--mid);margin-top:8px;text-align:center;opacity:0.7;">Upload your real photos in Customize ↗</div>
-        </div>
-        <div class="pol-wrap" id="polWrap" style="display:none"></div>
-      </div>
-      <div id="photoTapHint" style="display:none;text-align:center;font-size:0.75rem;color:var(--mid);margin-top:-12px;margin-bottom:10px;opacity:0.8;">👆 Tap any photo to see it full screen</div>
-      <button class="btn btn-primary" onclick="ripple(event);goTo('s-song')">Next ›</button>
-      <button class="btn btn-outline" id="custBtnMemories" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
-    </div>
-  </div>
-  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
-</div>
-
-<!-- SONG -->
-<div class="screen" id="s-song">
-  <div class="card">
-    <div class="back-btn" onclick="goBack()">←</div>
-    <div class="card-inner">
-      <div class="screen-title">Song for You 🎵</div>
-      <div class="screen-sub" id="songSub">This song always reminds me of you.</div>
-      <div class="song-card" id="songCardEl">
-        <!-- vinyl record animation -->
-        <div style="display:flex;align-items:center;gap:16px;">
-          <div id="vinylDisc" style="width:68px;height:68px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#3a1a28,#1a0a14);box-shadow:0 4px 20px rgba(0,0,0,0.5);flex-shrink:0;position:relative;animation:vinylSpin 4s linear infinite;">
-            <div style="position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,transparent,transparent 4px,rgba(255,255,255,0.04) 4px,rgba(255,255,255,0.04) 5px);"></div>
-            <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--pink2));box-shadow:0 0 8px rgba(233,30,99,0.6);display:flex;align-items:center;justify-content:center;font-size:0.5rem;">❤️</div>
-          </div>
-          <div style="flex:1;">
-            <div class="song-name" id="songName" style="font-size:0.95rem;">Your Special Song</div>
-            <div class="song-artist" id="songArtist" style="font-size:0.78rem;margin-top:3px;">Add a Spotify link below ↓</div>
-            <div style="margin-top:8px;display:flex;align-items:center;gap:6px;">
-              <div style="height:3px;flex:1;border-radius:3px;background:rgba(255,255,255,0.15);overflow:hidden;">
-                <div style="height:100%;width:35%;background:linear-gradient(90deg,var(--pink),var(--pink2));border-radius:3px;animation:progressPulse 3s ease infinite;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="music-bars" id="musicBars">
-          <div class="bar" style="height:10px"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-        </div>
-        <button class="song-play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-      </div>
-      <div id="spotifyWrap" style="display:none;margin-bottom:16px;border-radius:14px;overflow:hidden;">
-        <iframe id="spotifyFrame" style="border-radius:14px" src="" width="100%" height="120" frameBorder="0" allow="autoplay;encrypted-media;fullscreen;picture-in-picture" loading="lazy" allowfullscreen></iframe>
-        <div style="font-size:0.78rem;color:var(--mid);text-align:center;margin-top:5px;">▶ Tap play inside the player above</div>
-      </div>
-      <button class="btn btn-primary" onclick="ripple(event);pauseAudio();goTo('s-envelope')">Next ›</button>
-      <button class="btn btn-outline" id="custBtnSong" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
-    </div>
-  </div>
-  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
-</div>
-
-<!-- ENVELOPE -->
-<div class="screen" id="s-envelope">
-  <div class="card">
-    <div class="back-btn" onclick="goBack()">←</div>
-    <div class="card-inner">
-      <div class="screen-title" id="envTitle">I wrote a letter<br>for you... 💌</div>
-      <button id="envBtn" onclick="openEnvelope(this)">
-        <svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:300px;display:block;margin:0 auto;filter:drop-shadow(0 14px 36px rgba(233,30,99,0.32));">
-          <defs>
-            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffd6e7"/><stop offset="100%" stop-color="#ffaac8"/></linearGradient>
-            <linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff80aa"/><stop offset="100%" stop-color="#ffb3cc"/></linearGradient>
-            <linearGradient id="lt" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffbdd4"/><stop offset="100%" stop-color="#ff8fb5"/></linearGradient>
-            <linearGradient id="rt" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffbdd4"/><stop offset="100%" stop-color="#ff7aaa"/></linearGradient>
-            <pattern id="stripe" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="20" stroke="white" stroke-width="1.5" opacity="0.3"/></pattern>
-          </defs>
-          <rect x="4" y="44" width="292" height="152" rx="14" fill="url(#bg)"/>
-          <rect x="4" y="44" width="292" height="152" rx="14" fill="url(#stripe)"/>
-          <polygon points="4,44 150,152 4,196" fill="url(#lt)" opacity="0.85"/>
-          <polygon points="296,44 150,152 296,196" fill="url(#rt)" opacity="0.85"/>
-          <rect id="envPaper" x="50" y="72" width="200" height="118" rx="8" fill="white" opacity="0.95" style="transition:transform 0.65s cubic-bezier(.4,0,.2,1);transform-origin:150px 190px;transform-box:fill-box;"/>
-          <text x="150" y="140" text-anchor="middle" font-size="22" opacity="0.3" style="pointer-events:none;">💌</text>
-          <polygon id="envFlap" points="4,44 150,158 296,44" fill="url(#fl)" style="transition:transform 0.65s cubic-bezier(.4,0,.2,1);transform-origin:150px 44px;transform-box:fill-box;"/>
-          <text id="envHeart" x="150" y="118" text-anchor="middle" font-size="26" style="transition:opacity 0.3s,transform 0.3s;transform-origin:150px 105px;transform-box:fill-box;">❤️</text>
-        </svg>
-        <div style="font-size:0.83rem;color:var(--mid);margin-top:6px;animation:tapPulse 2s ease infinite;">Tap the envelope to open</div>
-      </button>
-      <button class="btn btn-outline" id="custBtnEnvelope" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✏️ Customize</button>
-    </div>
-  </div>
-  <div class="progress-dots"><div class="pdot done" onclick="dotClick('s-welcome')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-memories')" style="cursor:pointer"></div><div class="pdot done" onclick="dotClick('s-song')" style="cursor:pointer"></div><div class="pdot active" onclick="dotClick('s-envelope')" style="cursor:pointer"></div></div>
-</div>
-
-<!-- LETTER -->
-<div class="screen" id="s-letter">
-  <div class="card">
-    <div class="back-btn" onclick="goBack()">←</div>
-    <div class="card-inner" style="padding-top:52px;padding-bottom:18px;overflow-y:auto;max-height:calc(100vh - 40px);-webkit-overflow-scrolling:touch;">
-      <div class="letter-page">
-        <div class="letter-dear" id="letterDear">Dear,</div>
-        <div class="letter-body" id="letterBody">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you - for every laugh we share, every dream we build, and every small miracle of love between us. May our hearts stay close, today and always, wherever life leads us.</div>
-        <div class="letter-sign" id="letterSign">Forever yours 💕</div>
-        <div class="letter-sender-name" id="letterSenderName"></div>
-      </div>
-      <button class="btn btn-primary" id="custBtnLetter" style="margin-top:14px" onclick="ripple(event);goTo('s-customize')">✨ Create Your Own Card</button>
-      <button class="btn btn-wa" id="shareCardBtn" style="margin-top:0;display:none;" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
-      <div id="receiverEndCTA" style="display:none;margin-top:14px;text-align:center;">
-        <div style="font-size:0.78rem;color:var(--mid);margin-bottom:10px;line-height:1.6;">Want to send someone a card like this? 💝</div>
-        <a href="https://wishyou.ai" style="display:inline-block;padding:12px 28px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border-radius:50px;font-size:0.88rem;font-weight:600;text-decoration:none;box-shadow:0 4px 16px rgba(233,30,99,0.35);">Create your own on WishYou.ai ✨</a>
+  <!-- Logo -->
+  <div class="logo">
+    <div class="logo-mark">
+      <span class="logo-icon">💝</span>
+      <div class="logo-wordmark">
+        <span class="logo-text">WishYou</span>
+        <span class="logo-ai">.ai</span>
       </div>
     </div>
   </div>
-</div>
 
-<!-- CUSTOMIZE -->
-<div class="screen" id="s-customize">
-  <div class="customize-scroll" id="custScroll">
-    <div class="cust-header">
-      <div class="back-btn" style="position:relative;top:0;left:0;flex-shrink:0" onclick="saveAndBack()">←</div>
-      <div class="cust-title">Edit Your Card ✏️</div>
-    </div>
-    <!-- ✨ FEATURE 4: AI OCCASION DETECTOR -->
-    <div class="ai-magic-box" style="margin-bottom:20px;">
-      <div class="ai-magic-title"><span>✨</span> Magic Fill — AI fills everything</div>
-      <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:10px;line-height:1.6;">Describe the occasion in your own words and AI will fill the name, title, letter and suggest a song automatically.</div>
-      <input class="ai-occasion-input" id="aiOccasionInput" placeholder="e.g. my girlfriend Priya's birthday, we met in college 3 years ago..." maxlength="200">
-      <button class="btn-ai" onclick="runOccasionDetector()" id="aiOccasionBtn">✨ Fill My Card with AI</button>
-      <div class="ai-loading" id="aiOccasionLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>AI is personalising your card...</span></div>
-      <div class="ai-result-banner" id="aiOccasionResult"></div>
-    </div>
+  <!-- Headline -->
+  <div class="hero-headline">
+    <h1 class="hero-h1">Send love,<br><em>beautifully.</em></h1>
+  </div>
 
-    <div class="field-group">
-      <label class="field-label">Their Name</label>
-      <input type="text" id="cName" placeholder="e.g. Priya" maxlength="30">
-    </div>
-    <div class="field-group">
-      <label class="field-label">Card Title</label>
-      <input type="text" id="cTitle" value="Happy Birthday!" maxlength="60">
-    </div>
+  <!-- Subtitle -->
+  <p class="hero-sub">Interactive cards that feel like a real gift — with photos, music, letters &amp; moments that make them feel truly special.</p>
 
-    <!-- ✨ FEATURE 3: AI CARD PERSONALISATION -->
-    <div class="field-group">
-      <label class="field-label">Relationship Type</label>
-      <select id="relSelect" onchange="onRelChange(this.value)" style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 15px center;">
-        <option value="">Select relationship...</option>
-        <option value="Romantic Partner">💕 Romantic Partner</option>
-        <option value="Husband">💍 Husband</option>
-        <option value="Wife">💍 Wife</option>
-        <option value="Best Friend">🤝 Best Friend</option>
-        <option value="Mom">🌸 Mom</option>
-        <option value="Dad">👨 Dad</option>
-        <option value="Son">👦 Son</option>
-        <option value="Daughter">👧 Daughter</option>
-        <option value="Sibling">👫 Sibling</option>
-        <option value="Cousin">🤗 Cousin</option>
-        <option value="Grandfather">👴 Grandfather</option>
-        <option value="Grandmother">👵 Grandmother</option>
-        <option value="Colleague">💼 Colleague</option>
-        <option value="Childhood Friend">🧒 Childhood Friend</option>
-        <option value="Teacher">📚 Teacher</option>
-      </select>
-      <button class="btn-ai" id="aiPersonaliseBtn" onclick="runPersonalisation()" style="display:none;margin-top:8px;">🪄 Personalise Letter for this Relationship</button>
-      <div class="ai-loading" id="aiPersonaliseLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Writing a personalised letter...</span></div>
-    </div>
-
-    <div class="field-group">
-      <label class="field-label">Your Letter</label>
-      <textarea id="cMsg" rows="5">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you - for every laugh we share, every dream we build, and every small miracle of love between us. May our hearts stay close, today and always, wherever life leads us.</textarea>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Sign Off</label>
-      <input type="text" id="cSign" value="Forever yours 💕" maxlength="50">
-    </div>
-    <div class="field-group">
-      <label class="field-label">Your Name (Sender)</label>
-      <input type="text" id="cSender" placeholder="e.g. Aryan" maxlength="30" oninput="var et=document.getElementById('envTitle');if(et)et.innerHTML=this.value.trim()?this.value.trim()+' wrote a letter<br>for you... 💌':'I wrote a letter<br>for you... 💌';">
-    </div>
-
-    <!-- PHOTOS -->
-    <div class="field-group">
-      <label class="field-label">Memories Photos (up to 5)</label>
-      <label style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;padding:28px 16px;border:2px dashed rgba(233,30,99,0.4);border-radius:18px;background:var(--pink4);cursor:pointer;position:relative;overflow:hidden;transition:background 0.2s;">
-        <span style="font-size:2.2rem">📸</span>
-        <span id="photoUploadText" style="font-size:0.9rem;color:var(--mid);font-weight:500;text-align:center;">Tap to select photos<br><span style="font-size:0.78rem;opacity:0.7;">You can add one at a time or select multiple</span></span>
-        <input type="file" accept="image/*" multiple onchange="handlePhotos(this)" style="position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;">
-      </label>
-      <div class="thumb-row" id="photoThumbs" style="margin-top:10px;"></div>
-      <button class="clear-btn" id="clearPhotosBtn" onclick="clearPhotos()">✕ Clear all photos</button>
-    </div>
-
-    <!-- PHOTO SCREEN TITLE -->
-    <div class="field-group">
-      <label class="field-label">Photos Screen Title</label>
-      <select id="cMemoriesHeading" style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 15px center;">
-        <option value="Our Memories 📸">Our Memories 📸</option>
-        <option value="Photos for You 💝">Photos for You 💝</option>
-        <option value="Moments We've Shared ✨">Moments We've Shared ✨</option>
-        <option value="Photos I Treasure 🎞️">Photos I Treasure 🎞️</option>
-      </select>
-    </div>
-
-    <!-- PHOTO ANIMATION TOGGLE -->
-    <div class="field-group">
-      <label class="field-label">Photo Effects &amp; Animation</label>
-      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--pink4);border-radius:14px;padding:14px 16px;border:1.5px solid rgba(233,30,99,0.15);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.4rem">✨</span>
-          <div>
-            <div style="font-size:0.88rem;font-weight:600;color:var(--dark);">Vintage Filter &amp; Zoom</div>
-            <div style="font-size:0.72rem;color:var(--mid);">Warm tone, vignette &amp; slow zoom effect</div>
-          </div>
-        </div>
-        <label style="display:flex;align-items:center;cursor:pointer;gap:8px;touch-action:manipulation;">
-          <span style="font-size:0.78rem;color:var(--mid);" id="photoFxLabel">ON</span>
-          <div style="position:relative;width:44px;height:24px;">
-            <input type="checkbox" id="photoFxToggle" checked onchange="togglePhotoFx(this)" style="opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer;z-index:2;">
-            <div id="photoFxTrack" style="position:absolute;inset:0;border-radius:12px;background:var(--pink);transition:background 0.2s;"></div>
-            <div id="photoFxThumb" style="position:absolute;top:3px;left:23px;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 1px 4px rgba(0,0,0,0.2);transition:left 0.2s;"></div>
-          </div>
-        </label>
+  <!-- Occasions -->
+  <div class="occasions">
+    <div class="occasions-label">Choose your occasion</div>
+    <div class="grid">
+      <a class="occ-card occ-birthday" href="file:///C:/birthday/" style="text-decoration:none;">
+        <span class="occ-emoji">🎂</span>
+        <div class="occ-name">Birthday</div>
+        <div class="occ-desc">Make their day unforgettable</div>
+        <span class="occ-badge badge-live">✦ Live Now</span>
+      </a>
+      <div class="occ-card occ-anniversary coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">💍</span>
+        <div class="occ-name">Anniversary</div>
+        <div class="occ-desc">Celebrate your forever together</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-    </div>
-
-    <!-- BGM -->
-    <div class="field-group">
-      <label class="field-label">Background Music</label>
-      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--pink4);border-radius:14px;padding:14px 16px;border:1.5px solid rgba(233,30,99,0.15);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.4rem">🎹</span>
-          <div>
-            <div style="font-size:0.88rem;font-weight:600;color:var(--dark);">Soft Piano BGM</div>
-            <div style="font-size:0.72rem;color:var(--mid);">Plays softly throughout the card</div>
-          </div>
-        </div>
-        <label style="display:flex;align-items:center;cursor:pointer;gap:8px;touch-action:manipulation;">
-          <span style="font-size:0.78rem;color:var(--mid);" id="bgmToggleLabel">OFF</span>
-          <div style="position:relative;width:44px;height:24px;">
-            <input type="checkbox" id="bgmToggle" onchange="toggleBGMEnabled(this)" style="opacity:0;position:absolute;inset:0;width:100%;height:100%;cursor:pointer;z-index:2;">
-            <div id="bgmTrack" style="position:absolute;inset:0;border-radius:12px;background:#ccc;transition:background 0.2s;"></div>
-            <div id="bgmThumb" style="position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 1px 4px rgba(0,0,0,0.2);transition:left 0.2s;"></div>
-          </div>
-        </label>
+      <a class="occ-card occ-mother" href="file:///C:/mothers-day/" style="text-decoration:none;">
+        <span class="occ-emoji">🌸</span>
+        <div class="occ-name">Mother's Day</div>
+        <div class="occ-desc">Thank her the right way</div>
+        <span class="occ-badge badge-live">✦ Live Now</span>
+      </a>
+      <div class="occ-card occ-valentine coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">💘</span>
+        <div class="occ-name">Valentine's</div>
+        <div class="occ-desc">Say it with your whole heart</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-    </div>
-
-    <!-- ✨ FEATURE 2: AI SONG RECOMMENDATION -->
-    <div class="field-group">
-      <label class="field-label">🎵 AI Song Suggestions</label>
-      <div style="display:flex;gap:10px;margin-bottom:10px;">
-        <select id="songLang" onchange="updateSongMood()" style="flex:1;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:12px 14px;font-size:0.88rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
-          <option value="">Language...</option>
-          <option value="Hindi">🇮🇳 Hindi</option>
-          <option value="English">🌍 English</option>
-          <option value="Punjabi">🎺 Punjabi</option>
-          <option value="Tamil">🌸 Tamil</option>
-          <option value="Telugu">🌺 Telugu</option>
-          <option value="Marathi">🟠 Marathi</option>
-          <option value="Bengali">🌼 Bengali</option>
-        </select>
-        <select id="songVibes" onchange="updateSongMood()" style="flex:1;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:12px 14px;font-size:0.88rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%228%22 viewBox=%220 0 12 8%22><path d=%22M1 1l5 5 5-5%22 stroke=%22%23e91e63%22 stroke-width=%221.5%22 fill=%22none%22/></svg>');background-repeat:no-repeat;background-position:right 12px center;">
-          <option value="">Vibe...</option>
-          <option value="Romantic">💕 Romantic</option>
-          <option value="Happy & Celebratory">🎉 Happy</option>
-          <option value="Gazal">🎶 Gazal</option>
-          <option value="Sad & Emotional">🥺 Emotional</option>
-          <option value="Party & Dance">🔥 Party</option>
-          <option value="Soft & Peaceful">🌙 Soft</option>
-          <option value="Devotional">🙏 Devotional</option>
-          <option value="Pop">✨ Pop</option>
-        </select>
+      <div class="occ-card occ-friendship coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🤝</span>
+        <div class="occ-name">Best Friend</div>
+        <div class="occ-desc">Because friends deserve magic</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-      <input type="text" id="aiSongMood" placeholder="Or type your own e.g. Marathi romantic..." style="width:100%;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.95rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;" maxlength="100">
-      <button class="btn-ai" onclick="runSongSuggestions()" id="aiSongBtn" style="margin-top:8px;">🎵 Suggest Songs with AI</button>
-      <div class="ai-loading" id="aiSongLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Finding perfect songs...</span></div>
-      <div id="aiSongResults" style="margin-top:10px;"></div>
-    </div>
-
-    <!-- SPOTIFY -->
-    <div class="field-group">
-      <label class="field-label">💬 Message on Song Screen</label>
-      <input type="text" id="cSongSub" placeholder="e.g. This song always reminds me of you." value="This song always reminds me of you." maxlength="80">
-      <div class="field-hint">This appears below the song title on the card</div>
-    </div>
-
-    <div class="field-group">
-      <label class="field-label">🎵 Search & Pick a Song</label>
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <input type="text" id="ytSearchInput" placeholder="Type song name e.g. Tum Hi Ho..." style="flex:1;border:1.5px solid rgba(233,30,99,0.2);border-radius:14px;padding:13px 15px;font-size:0.9rem;font-family:'DM Sans',sans-serif;color:var(--dark);background:white;outline:none;" maxlength="100" onkeydown="if(event.key==='Enter')searchYouTube()">
-        <button onclick="searchYouTube()" style="padding:13px 18px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:14px;font-size:0.88rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;touch-action:manipulation;">🔍 Search</button>
+      <div class="occ-card occ-farewell coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🎓</span>
+        <div class="occ-name">Farewell</div>
+        <div class="occ-desc">Send them off with love</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-      <div id="ytSearchResults" style="margin-bottom:8px;"></div>
-      <div id="ytSelectedSong" style="display:none;background:linear-gradient(135deg,#1a0a2e,#2d1048);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
-        <div style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-bottom:4px;">NOW PLAYING ON CARD</div>
-        <div id="ytSelectedName" style="font-size:0.88rem;font-weight:600;color:white;"></div>
+      <div class="occ-card occ-work coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">🏆</span>
+        <div class="occ-name">Work Milestone</div>
+        <div class="occ-desc">Promotions, new jobs &amp; wins</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
       </div>
-      <input type="hidden" id="cSpotify">
-    </div>
-
-    <div class="preview-bar">
-      <button class="btn btn-primary" onclick="ripple(event);saveAndBack()" style="margin-bottom:8px">👁️ Preview Card</button>
-      <button class="btn btn-wa" style="margin-bottom:0" onclick="shareWhatsApp()">🎁 Create & Share Card</button>
+      <div class="occ-card occ-custom coming-soon" onclick="showComingSoon(this)">
+        <span class="occ-emoji">💫</span>
+        <div class="occ-name">Just Because</div>
+        <div class="occ-desc">Any reason to celebrate</div>
+        <span class="occ-badge badge-soon">Coming Soon</span>
+      </div>
     </div>
   </div>
-</div>
 
-</div><!-- /app -->
-
-<!-- SHARE CONFIRMATION -->
-<div class="share-confirm" id="shareConfirm">
-  <div class="share-confirm-box">
-    <div style="font-size:2rem;margin-bottom:8px;">🎉</div>
-    <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--dark);margin-bottom:6px;">Card saved successfully!</div>
-    <div style="font-size:0.82rem;color:var(--mid);margin-bottom:16px;line-height:1.6;">Share the link below on WhatsApp, Instagram, or anywhere!</div>
-    <div class="expiry-notice">⏳ This card expires in <strong>3 days</strong> — share it soon!</div>
-    <div class="share-link-box" id="shareLinkBox">
-      <span id="shareLinkText"></span>
-      <button class="copy-link-btn" onclick="copyShareLink()">Copy</button>
-    </div>
-    <button class="btn btn-wa" style="width:100%;margin-bottom:10px;" onclick="openWhatsAppShare()">💬 Share on WhatsApp</button>
-    <button style="width:100%;padding:12px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:white;border:none;border-radius:50px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;" onclick="shareInstagram()">📸 Share to Instagram</button>
-    <button style="width:100%;padding:10px;background:none;border:1px solid rgba(233,30,99,0.2);border-radius:50px;font-size:0.82rem;color:var(--mid);cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="closeShareConfirm()">Done</button>
+  <!-- Tagline -->
+  <div class="tagline">
+    <p>Made with love <span class="tagline-dot"></span> <strong>WishYou.ai</strong> <span class="tagline-dot"></span> Free to try</p>
   </div>
-</div>
 
-<!-- UPSELL MODAL -->
-<div class="upsell-modal" id="upsellModal">
-  <div class="upsell-box">
-    <span style="font-size:2.5rem;display:block;margin-bottom:12px;">✨</span>
-    <div style="font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--dark);margin-bottom:8px;">Make it even more special</div>
-    <div style="font-size:0.82rem;color:var(--mid);margin-bottom:16px;line-height:1.6;">Upgrade this card for the full experience</div>
-    <div style="text-align:left;margin-bottom:18px;">
-      <div style="font-size:0.8rem;color:var(--dark);padding:5px 0;display:flex;align-items:center;gap:8px;">✅ Card stays active for <strong>30 days</strong></div>
-      <div style="font-size:0.8rem;color:var(--dark);padding:5px 0;display:flex;align-items:center;gap:8px;">✅ Remove WishYou.ai watermark</div>
-      <div style="font-size:0.8rem;color:var(--dark);padding:5px 0;display:flex;align-items:center;gap:8px;">✅ Know when receiver opens the card</div>
-      <div style="font-size:0.8rem;color:var(--dark);padding:5px 0;display:flex;align-items:center;gap:8px;">✅ Premium card themes</div>
-    </div>
-    <button style="width:100%;padding:14px;background:linear-gradient(135deg,var(--pink),var(--pink2));color:white;border:none;border-radius:50px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;box-shadow:0 6px 20px rgba(233,30,99,0.35);" onclick="closeUpsell()">Coming Soon 🚀</button>
-    <button style="width:100%;padding:10px;background:none;border:none;color:var(--mid);font-size:0.82rem;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="closeUpsell()">No thanks, continue free</button>
+</main>
+
+<footer class="footer">
+  <div class="footer-logo">WishYou.ai</div>
+  <div class="footer-sub">Interactive digital cards that feel real &nbsp;·&nbsp; 2026</div>
+  <div class="footer-links">
+    <a href="https://instagram.com/wishyou.ai" target="_blank" rel="noopener">📸 Instagram</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="file:///C:/privacy-policy.html">Privacy Policy</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="file:///C:/terms.html">Terms</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="file:///C:/refund.html">Refund Policy</a>
+    <span style="color:rgba(245,238,240,0.15);">·</span>
+    <a href="file:///C:/cdn-cgi/l/email-protection#f69e939a9a99b6819f859e8f9983d8979f">✉️ Contact</a>
   </div>
-</div>
+</footer>
 
-<!-- PHOTO EXPAND OVERLAY -->
-<div class="photo-expand" id="photoExpand" onclick="closeExpand(event)" ontouchstart="swipeStart(event)" ontouchend="swipeEnd(event)">
-  <div class="photo-expand-inner" id="expandInner">
-    <button class="photo-expand-close" onclick="closeExpandBtn()">✕</button>
-    <img id="expandImg" src="" alt="">
-    <div class="photo-expand-nav" id="expandNav"></div>
-  </div>
-</div>
-<div class="wm"><a href="/" style="color:var(--pink);text-decoration:none;opacity:0.55;">WishYou.ai</a></div>
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
 
-<script>
-// ── SWIPE NAVIGATION ─────────────────────────────────────
-var SCREEN_ORDER = ['s-welcome','s-memories','s-song','s-envelope','s-letter'];
-var _swStartX = 0, _swStartY = 0, _swStartTime = 0;
-var isReceiver = false; // true when card is loaded from a shared URL
-
-function _onTouchStart(e) {
-  if(e.touches.length !== 1) return;
-  _swStartX = e.touches[0].clientX;
-  _swStartY = e.touches[0].clientY;
-  _swStartTime = Date.now();
+<script data-cfasync="false" src="file:///C:/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// Floating hearts
+const hh = document.getElementById('heroHearts');
+const he = ['❤️','🩷','💕','💖','🌸','✨','💝','💗'];
+for(let i = 0; i < 16; i++){
+  const h = document.createElement('span');
+  h.className = 'hh';
+  h.textContent = he[Math.floor(Math.random() * he.length)];
+  h.style.cssText = `left:${Math.random()*100}%;font-size:${9+Math.random()*10}px;animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*14}s;`;
+  hh.appendChild(h);
 }
 
-function _onTouchEnd(e) {
-  if(typeof cur === 'undefined') return;
-  if(cur === 's-customize') return;
-  if(!e.changedTouches.length) return;
-  var dx = e.changedTouches[0].clientX - _swStartX;
-  var dy = e.changedTouches[0].clientY - _swStartY;
-  var dt = Date.now() - _swStartTime;
-  // Must be fast enough, horizontal enough, and long enough
-  if(dt > 500) return;
-  if(Math.abs(dx) < 40) return;
-  if(Math.abs(dx) < Math.abs(dy) * 1.2) return;
-  var idx = SCREEN_ORDER.indexOf(cur);
-  if(idx === -1) return;
-  if(dx < 0) {
-    // swipe left = go forward
-    var next = SCREEN_ORDER[idx + 1];
-    if(next && next !== 's-letter') goTo(next);
-  } else {
-    // swipe right = go back
-    if(idx > 0) goBack();
-  }
+function openBirthdayCard(){
+  window.location.href = 'wishyou-final.html';
 }
 
-// Make dots clickable
-function dotClick(screenId) {
-  if(typeof cur === 'undefined' || screenId === cur) return;
-  if(screenId === 's-letter') return;
-  if(screenId === 's-customize') return;
-  var curIdx = SCREEN_ORDER.indexOf(cur);
-  var targetIdx = SCREEN_ORDER.indexOf(screenId);
-  if(targetIdx > curIdx) goTo(screenId);
-  else goBack();
-}
-
-window.addEventListener('DOMContentLoaded', function() {
-  var app = document.getElementById('mainApp');
-  if(app) {
-    app.addEventListener('touchstart', _onTouchStart, {passive: true});
-    app.addEventListener('touchend',   _onTouchEnd,   {passive: true});
-  }
-});
-// ─────────────────────────────────────────────────────────
-
-// HEARTS
-const hb=document.getElementById('heartsBg');
-['❤️','🩷','💕','💗','💖','💓','💝'].forEach(e=>{
-  for(let i=0;i<3;i++){
-    const h=document.createElement('span');h.className='heart-fly';h.textContent=e;
-    h.style.cssText=`left:${Math.random()*100}%;font-size:${12+Math.random()*14}px;animation-duration:${8+Math.random()*14}s;animation-delay:${Math.random()*10}s;`;
-    hb.appendChild(h);
-  }
-});
-
-// BGM - soft romantic melody
-const SOFT_BGM=null;
-let bgmCtx=null, bgmInterval=null, bgmEnabled=false;
-let noteStep=0;
-var MELODY=[261.6,329.6,392,523.3,493.9,440,392,329.6,293.7,349.2,440,587.3,523.3,493.9,440,392,329.6,392,523.3,659.3,587.3,523.3,493.9,392,261.6,293.7,329.6,392,440,392,329.6,293.7,392,440,523.3,587.3,659.3,587.3,523.3,440,392,349.2,329.6,293.7,261.6,329.6,392,523.3];
-var VEL=[0.8,0.5,0.6,1.0,0.7,0.55,0.65,0.5,0.75,0.5,0.65,0.9,0.7,0.6,0.55,0.5,0.7,0.55,0.8,1.0,0.75,0.65,0.6,0.5,0.6,0.5,0.65,0.8,0.9,0.7,0.55,0.5,0.7,0.8,0.95,1.0,1.0,0.85,0.7,0.6,0.65,0.55,0.5,0.45,0.4,0.5,0.6,0.7];
-
-function createReverb(ctx){
-  var conv=ctx.createConvolver();
-  var len=ctx.sampleRate*2.5;
-  var buf=ctx.createBuffer(2,len,ctx.sampleRate);
-  for(var c=0;c<2;c++){
-    var d=buf.getChannelData(c);
-    for(var i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3)*0.4;
-  }
-  conv.buffer=buf;
-  return conv;
-}
-
-var reverbNode=null, dryGain=null, masterGain=null;
-
-function startBGM(){
-  if(!bgmEnabled) return;
-  try{
-    var AC=window.AudioContext||window.webkitAudioContext;
-    if(!AC) return;
-    if(!bgmCtx){
-      bgmCtx=new AC();
-      masterGain=bgmCtx.createGain();
-      masterGain.gain.value=0.15;
-      masterGain.connect(bgmCtx.destination);
-      reverbNode=createReverb(bgmCtx);
-      reverbNode.connect(masterGain);
-      dryGain=bgmCtx.createGain();
-      dryGain.gain.value=0.5;
-      dryGain.connect(masterGain);
-    }
-    // iOS requires explicit resume every time
-    var p=bgmCtx.resume();
-    if(p && p.then){
-      p.then(function(){
-        if(bgmInterval){clearInterval(bgmInterval);bgmInterval=null;}
-        noteStep=noteStep||0;
-        playNote();
-        bgmInterval=setInterval(playNote,1500);
-        audioPlaying=true;
-      });
-    } else {
-      if(bgmInterval){clearInterval(bgmInterval);bgmInterval=null;}
-      noteStep=noteStep||0;
-      playNote();
-      bgmInterval=setInterval(playNote,1500);
-      audioPlaying=true;
-    }
-  }catch(e){}
-}
-
-function playNote(){
-  if(!bgmCtx||!bgmEnabled) return;
-  var idx=noteStep%MELODY.length;
-  var freq=MELODY[idx];
-  var vel=VEL[idx]||0.7;
-  noteStep++;
-  var now=bgmCtx.currentTime;
-  var osc=bgmCtx.createOscillator();
-  var g=bgmCtx.createGain();
-  osc.type='triangle';
-  osc.frequency.value=freq;
-  osc.connect(g);
-  g.connect(dryGain);
-  g.connect(reverbNode);
-  g.gain.setValueAtTime(0,now);
-  g.gain.linearRampToValueAtTime(vel,now+0.08);
-  g.gain.exponentialRampToValueAtTime(0.001,now+2.5);
-  osc.start(now);
-  osc.stop(now+2.6);
-  if(idx%4===0){
-    var bass=bgmCtx.createOscillator();
-    var gb=bgmCtx.createGain();
-    bass.type='sine';
-    bass.frequency.value=freq/2;
-    bass.connect(gb);
-    gb.connect(dryGain);
-    gb.gain.setValueAtTime(0,now);
-    gb.gain.linearRampToValueAtTime(vel*0.3,now+0.1);
-    gb.gain.exponentialRampToValueAtTime(0.001,now+2.0);
-    bass.start(now);
-    bass.stop(now+2.1);
-  }
-}
-
-function stopBGM(){
-  if(bgmInterval){clearInterval(bgmInterval);bgmInterval=null;}
-  audioPlaying=false;
-}
-
-// NAV
-const ALL=['s-welcome','s-memories','s-song','s-envelope','s-letter','s-customize'];
-const BACK={'s-memories':'s-welcome','s-song':'s-memories','s-envelope':'s-song','s-letter':'s-envelope','s-customize':'s-welcome'};
-let cur='s-welcome';
-
-function showScreen(id){
-  const prev=cur;
-  ALL.forEach(s=>document.getElementById(s).classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  cur=id;
-  if(id==='s-song'&&spotifySrc){
-    const f=document.getElementById('spotifyFrame');
-    if(f.src!==spotifySrc)f.src=spotifySrc;
-    document.getElementById('spotifyWrap').style.display='block';
-    document.getElementById('songCardEl').style.display='none';
-  }
-  // BGM: pause on song screen and memories screen, play everywhere else
-  if(id==='s-song'||id==='s-memories'){
-    stopBGM();
-  } else if(id!=='s-welcome'&&bgmCtx&&bgmCtx.state==='suspended'&&bgmEnabled){
-    bgmCtx.resume();
-  }
-  if(id==='s-memories'&&photos.length) buildSlides();
-}
-
-function goTo(id){
-  if(cur===id)return;
-  if(bgmEnabled&&id!=='s-song'&&id!=='s-memories') startBGM();
-  showScreen(id);
-  if(id==='s-customize')setTimeout(function(){document.getElementById('custScroll').scrollTo(0,0);},50);
-  if(id==='s-letter') setTimeout(typewriterLetter, 400);
-}
-function goBack(){
-  var p=BACK[cur];if(!p)return;
-  if(bgmEnabled&&p!=='s-song'&&p!=='s-memories') startBGM();
-  showScreen(p);
-  if(p==='s-envelope')resetEnv();
-}
-
-// TYPEWRITER LETTER ANIMATION
-var _twTimer = null;
-function typewriterLetter(){
-  var el = document.getElementById('letterBody');
-  if(!el) return;
-  var fullText = el.getAttribute('data-full') || el.textContent;
-  if(!el.getAttribute('data-full')) el.setAttribute('data-full', fullText);
-  if(_twTimer){ clearTimeout(_twTimer); _twTimer = null; }
-
-  // Demo mode — show instantly, no animation
-  if(!isReceiver){
-    el.textContent = fullText;
-    return;
-  }
-
-  // Real card — typewriter animation
-  el.textContent = '';
-  var cursor = document.createElement('span');
-  cursor.className = 'letter-cursor';
-  el.appendChild(cursor);
-  var i = 0;
-  var speed = Math.max(18, Math.min(38, Math.floor(2200 / fullText.length)));
-  function type(){
-    if(i < fullText.length){
-      el.insertBefore(document.createTextNode(fullText[i]), cursor);
-      i++;
-      _twTimer = setTimeout(type, speed);
-    } else {
-      setTimeout(function(){ if(cursor.parentNode) cursor.parentNode.removeChild(cursor); }, 800);
-    }
-  }
-  type();
-}
-
-// RIPPLE
-function ripple(e){
-  try{
-    const b=e.currentTarget,r=document.createElement('span');r.className='ripple';
-    const rc=b.getBoundingClientRect(),sz=Math.max(rc.width,rc.height)*2;
-    const touch=e.touches&&e.touches.length>0?e.touches[0]:null;
-    const x=(touch?touch.clientX:e.clientX||rc.left+rc.width/2)-rc.left-sz/2;
-    const y=(touch?touch.clientY:e.clientY||rc.top+rc.height/2)-rc.top-sz/2;
-    r.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+x+'px;top:'+y+'px';
-    b.appendChild(r);setTimeout(function(){r.remove();},700);
-  }catch(ex){}
-}
-
-// HEART BLAST
-function heartBlast(cx,cy){
-  const hs=['❤️','💕','💗','🩷','💖','🌸','✨','💝'];
-  for(let i=0;i<20;i++){
-    const h=document.createElement('div');h.className='heart-blast';
-    h.textContent=hs[Math.floor(Math.random()*hs.length)];
-    const a=(Math.PI*2/20)*i+(Math.random()-0.5)*0.4,d=70+Math.random()*130;
-    h.style.cssText=`left:${cx}px;top:${cy}px;--bx:${Math.cos(a)*d}px;--by:${Math.sin(a)*d}px;animation-delay:${Math.random()*0.12}s;font-size:${14+Math.random()*16}px;`;
-    document.body.appendChild(h);setTimeout(()=>h.remove(),1300);
-  }
-}
-
-// ENVELOPE
-let envOpen=false;
-function openEnvelope(btn){
-  if(envOpen)return;envOpen=true;
-  const flap=document.getElementById('envFlap'),heart=document.getElementById('envHeart'),paper=document.getElementById('envPaper');
-  if(flap)flap.style.transform='rotateX(180deg)';
-  if(heart){heart.style.opacity='0';heart.style.transform='scale(0)';}
-  if(paper)paper.style.transform='translateY(-40%)';
-  if(btn)btn.style.transform='scale(0.95)';
-  const rc=btn?btn.getBoundingClientRect():{left:window.innerWidth/2,top:window.innerHeight/2,width:0,height:0};
-  heartBlast(rc.left+rc.width/2,rc.top+rc.height/2);
-  setTimeout(()=>{if(btn)btn.style.transform='';goTo('s-letter');},850);
-}
-function resetEnv(){
-  envOpen=false;
-  const flap=document.getElementById('envFlap'),heart=document.getElementById('envHeart'),paper=document.getElementById('envPaper'),btn=document.getElementById('envBtn');
-  if(flap)flap.style.transform='';if(heart){heart.style.opacity='1';heart.style.transform='';}
-  if(paper)paper.style.transform='';if(btn)btn.style.transform='';
-}
-
-// PHOTO GALLERY
-let photos=[];
-let expandIdx=0;
-
-function handlePhotos(inp){
-  const files=Array.from(inp.files);
-  if(!files.length)return;
-  const newUrls=files.map(f=>URL.createObjectURL(f));
-  photos=[...photos,...newUrls].slice(0,5);
-  const tb=document.getElementById('photoThumbs');tb.innerHTML='';
-  photos.forEach(u=>{const i=document.createElement('img');i.src=u;tb.appendChild(i);});
-  document.getElementById('photoUploadText').innerHTML=`DONE ${photos.length} photo${photos.length>1?'s':''} added - tap to add more`;
-  document.getElementById('clearPhotosBtn').style.display='block';
-  buildSlides();
-  inp.value='';
-}
-
-function clearPhotos(){
-  photos=[];
-  document.getElementById('photoThumbs').innerHTML='';
-  document.getElementById('photoUploadText').innerHTML='Tap to select photos<br><span style="font-size:0.78rem;opacity:0.7;">You can add one at a time or select multiple</span>';
-  document.getElementById('clearPhotosBtn').style.display='none';
-  document.getElementById('polWrap').style.display='none';
-  document.getElementById('polWrap').innerHTML='';
-  document.getElementById('photoPlaceholder').style.display='flex';
-  document.getElementById('photoTapHint').style.display='none';
-  slideIdx=0;
-}
-
-function buildSlides(){
-  const wrap=document.getElementById('polWrap');
-  wrap.innerHTML='';
-  if(!photos.length)return;
-  document.getElementById('photoPlaceholder').style.display='none';
-  wrap.style.display='flex';
-  var hasFxOff=wrap.classList.contains('photo-fx-off');
-  wrap.className='pol-wrap count-'+photos.length;
-  if(hasFxOff) wrap.classList.add('photo-fx-off');
-  document.getElementById('photoTapHint').style.display= photos.length ? 'block' : 'none';
-  photos.forEach((url,i)=>{
-    const card=document.createElement('div');
-    card.className='pol-card';
-    card.innerHTML='<img src="'+url+'" alt="Memory '+(i+1)+'"><div class="pol-label">Memory '+(i+1)+'</div>';
-    card.addEventListener('click',()=>openExpand(i));
-    wrap.appendChild(card);
-  });
-  const nav=document.getElementById('expandNav');
-  nav.innerHTML='';
-  photos.forEach((_,i)=>{
-    const d=document.createElement('div');
-    d.className='photo-expand-dot'+(i===0?' active':'');
-    d.onclick=e=>{e.stopPropagation();goExpand(i);};
-    nav.appendChild(d);
-  });
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function openExpand(i){
-  expandIdx=i;
-  document.getElementById('expandImg').src=photos[i];
-  updateExpandDots();
-  updateExpandArrows();
-  document.getElementById('photoExpand').classList.add('open');
-}
-
-function closeExpand(e){
-  if(e.target===document.getElementById('photoExpand')) closeExpandBtn();
-}
-function closeExpandBtn(){
-  document.getElementById('photoExpand').classList.remove('open');
-}
-
-function expandNav(dir){
-  var next=(expandIdx+dir+photos.length)%photos.length;
-  goExpand(next);
-}
-
-function goExpand(i){
-  expandIdx=i;
-  var img=document.getElementById('expandImg');
-  var dir=i>expandIdx?1:-1;
-  img.style.opacity='0';
-  img.style.transform='translateX('+(dir*30)+'px) scale(0.95)';
-  img.style.transition='opacity 0.2s,transform 0.2s';
-  setTimeout(function(){
-    img.src=photos[i];
-    img.style.transform='translateX('+(dir*-20)+'px) scale(0.95)';
-    setTimeout(function(){
-      img.style.transform='translateX(0) scale(1)';
-      img.style.opacity='1';
-    },20);
-    updateExpandDots();
-    updateExpandArrows();
-  },200);
-}
-
-function updateExpandArrows(){
-  var prev=document.getElementById('expandPrev');
-  var next=document.getElementById('expandNext');
-  if(!prev||!next) return;
-  var show=photos.length>1;
-  prev.style.display=show?'flex':'none';
-  next.style.display=show?'flex':'none';
-}
-
-var swipeX=0;
-function swipeStart(e){if(e.touches&&e.touches.length>0)swipeX=e.touches[0].clientX;}
-function swipeEnd(e){
-  if(!e.changedTouches||!e.changedTouches.length) return;
-  var dx=e.changedTouches[0].clientX-swipeX;
-  if(Math.abs(dx)>50){
-    if(dx<0) expandNav(1); else expandNav(-1);
-  }
-}
-
-function updateExpandDots(){
-  document.querySelectorAll('.photo-expand-dot').forEach((d,i)=>d.classList.toggle('active',i===expandIdx));
-}
-
-// These functions are kept for compatibility but do nothing now
-function startSlides(){}
-function stopSlides(){}
-function nextSlide(){}
-
-// AUDIO - single element
-let audioPlaying=false;
-let spotifySrc='';
-
-function getAudio(){return document.getElementById('theAudio');}
-
-function pauseAudio(){
-  const a=getAudio();a.pause();audioPlaying=false;
-  const btn=document.getElementById('playBtn'),bars=document.getElementById('musicBars');
-  if(btn){btn.textContent='▶';btn.classList.remove('playing');}
-  if(bars)bars.classList.remove('playing');
-  const f=document.getElementById('spotifyFrame');
-  if(f&&f.src&&f.src!==''&&f.src!==window.location.href){spotifySrc=f.src;f.src='';}
-}
-
-function togglePlay(){
-  const a=getAudio(),btn=document.getElementById('playBtn'),bars=document.getElementById('musicBars');
-  if(!a.src||a.src===window.location.href)return;
-  if(audioPlaying){
-    a.pause();audioPlaying=false;
-    btn.textContent='▶';btn.classList.remove('playing');bars.classList.remove('playing');
-  } else {
-    a.play().then(()=>{
-      audioPlaying=true;
-      btn.textContent='⏸';btn.classList.add('playing');bars.classList.add('playing');
-    }).catch(()=>{});
-  }
-}
-
-function handleAudio(inp){
-  const f=inp.files[0];if(!f)return;
-  getAudio().src=URL.createObjectURL(f);
-  document.getElementById('songName').textContent=f.name.replace(/\.[^.]+$/,'');
-  document.getElementById('songArtist').textContent='Your upload';
-  document.getElementById('audioUploadText').textContent='OK: '+f.name;
-}
-
-function toggleBGMEnabled(cb){
-  bgmEnabled=cb.checked;
-  document.getElementById('bgmToggleLabel').textContent=bgmEnabled?'ON':'OFF';
-  document.getElementById('bgmTrack').style.background=bgmEnabled?'var(--pink)':'#ccc';
-  document.getElementById('bgmThumb').style.left=bgmEnabled?'23px':'3px';
-  if(bgmEnabled) startBGM(); else stopBGM();
-}
-
-function togglePhotoFx(cb){
-  const on=cb.checked;
-  document.getElementById('photoFxLabel').textContent=on?'ON':'OFF';
-  document.getElementById('photoFxTrack').style.background=on?'var(--pink)':'#ccc';
-  document.getElementById('photoFxThumb').style.left=on?'23px':'3px';
-  // Apply to real photos wrap
-  const wrap=document.getElementById('polWrap');
-  if(wrap) wrap.classList.toggle('photo-fx-off',!on);
-  // Apply to placeholder demo cards wrap too
-  document.querySelectorAll('.pol-wrap').forEach(function(w){
-    w.classList.toggle('photo-fx-off',!on);
-  });
-}
-
-function handleSpotify(val){
-  if(!val) return;
-  const wrap=document.getElementById('spotifyWrap'),card=document.getElementById('songCardEl');
-  var ytMatch = val.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-  if(ytMatch){
-    var ytId = ytMatch[1];
-    spotifySrc = 'https://www.youtube.com/embed/' + ytId + '?autoplay=0&rel=0';
-    document.getElementById('spotifyFrame').src = spotifySrc;
-    if(wrap) wrap.style.display='block';
-    if(card) card.style.display='none';
-    return;
-  }
-  var spMatch = val.match(/track\/([a-zA-Z0-9]+)/);
-  if(spMatch){
-    spotifySrc=`https://open.spotify.com/embed/track/${spMatch[1]}?utm_source=generator&theme=0`;
-    document.getElementById('spotifyFrame').src=spotifySrc;
-    if(wrap) wrap.style.display='block';
-    if(card) card.style.display='none';
-    return;
-  }
-  spotifySrc='';
-  document.getElementById('spotifyFrame').src='';
-  if(wrap) wrap.style.display='none';
-  if(card) card.style.display='block';
-}
-
-// ── YouTube Search ────────────────────────────────────
-async function searchYouTube() {
-  var query = document.getElementById('ytSearchInput').value.trim();
-  if(!query) { alert('Please type a song name first.'); return; }
-  var resultsDiv = document.getElementById('ytSearchResults');
-  resultsDiv.innerHTML = '<div style="text-align:center;padding:16px 12px;font-size:0.88rem;color:var(--pink);font-weight:600;background:var(--pink4);border-radius:12px;border:1.5px solid rgba(233,30,99,0.15);">🔍 Searching YouTube...<br><span style="font-size:0.72rem;color:var(--mid);font-weight:400;">Results will appear here</span></div>';
-  // Scroll to results immediately so user sees the loading state
-  setTimeout(function(){ resultsDiv.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
-  try {
-    var res = await fetch('https://wild-fog-b15e.nilesh53333.workers.dev/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'youtube_search', query: query })
-    });
-    var data = await res.json();
-    console.log('YouTube response:', JSON.stringify(data).substring(0,300));
-    if(data.error) {
-      resultsDiv.innerHTML = '<div style="font-size:0.78rem;color:red;padding:8px;">Error: ' + (data.error.message || JSON.stringify(data.error)) + '</div>';
-      return;
-    }
-    if(!data.items || !data.items.length) {
-      resultsDiv.innerHTML = '<div style="font-size:0.78rem;color:var(--mid);padding:8px;">No results found. Try a different search.</div>';
-      return;
-    }
-    resultsDiv.innerHTML = '';
-    data.items.forEach(function(item) {
-      var videoId = item.id.videoId;
-      var title   = item.snippet.title;
-      var channel = item.snippet.channelTitle;
-      var thumb   = item.snippet.thumbnails.default.url;
-      var card = document.createElement('div');
-      card.style.cssText = 'display:flex;align-items:center;gap:10px;background:white;border-radius:12px;padding:10px 12px;border:1.5px solid rgba(233,30,99,0.12);margin-bottom:8px;transition:all 0.18s;';
-      card.innerHTML =
-        '<img src="' + thumb + '" style="width:64px;height:48px;border-radius:7px;object-fit:cover;flex-shrink:0;">' +
-        '<div style="flex:1;min-width:0;">' +
-          '<div style="font-size:0.8rem;font-weight:600;color:var(--dark);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">' + title + '</div>' +
-          '<div style="font-size:0.7rem;color:var(--mid);margin-top:2px;">' + channel + '</div>' +
-        '</div>' +
-        '<button style="padding:7px 12px;background:var(--pink);color:white;border:none;border-radius:20px;font-size:0.7rem;font-weight:700;cursor:pointer;white-space:nowrap;font-family:\'DM Sans\',sans-serif;flex-shrink:0;touch-action:manipulation;">✓ Use</button>';
-      card.querySelector('button').onclick = function(e) {
-        e.stopPropagation();
-        selectYouTubeSong(videoId, title, channel);
-      };
-      resultsDiv.appendChild(card);
-    });
-    // Scroll to results now that they're loaded
-    setTimeout(function(){ resultsDiv.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
-  } catch(e) {
-    console.error('Search error:', e.message);
-    resultsDiv.innerHTML = '<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Search failed. Please try again.</div>';
-  }
-}
-
-function selectYouTubeSong(videoId, title, artist) {
-  var ytUrl = 'https://www.youtube.com/watch?v=' + videoId;
-  document.getElementById('cSpotify').value = ytUrl;
-  handleSpotify(ytUrl);
-  // Show selected song name display
-  var sel = document.getElementById('ytSelectedSong');
-  var nm  = document.getElementById('ytSelectedName');
-  if(sel) { sel.style.display='block'; }
-  if(nm)  { nm.textContent = title + ' — ' + artist; }
-  // Update song screen display
-  var sn = document.getElementById('songName');
-  var sa = document.getElementById('songArtist');
-  if(sn) sn.textContent = title;
-  if(sa) sa.textContent = artist;
-  // Clear search results and show confirmation
-  document.getElementById('ytSearchResults').innerHTML =
-    '<div style="font-size:0.78rem;color:var(--pink);font-weight:600;padding:6px 2px;">✅ ' + title + ' added to your card!</div>';
-}
-// ─────────────────────────────────────────────────────
-
-function saveAndBack(){
-  const name=document.getElementById('cName').value.trim();
-  const title=document.getElementById('cTitle').value.trim();
-  const msg=document.getElementById('cMsg').value.trim();
-  const sign=document.getElementById('cSign').value.trim();
-  const sender=document.getElementById('cSender').value.trim();
-  const sub=document.getElementById('cSongSub').value.trim();
-  document.getElementById('welcomeTitle').textContent=title||"Happy Birthday!";
-  // Update photos screen title
-  var mhEl=document.getElementById('cMemoriesHeading');
-  var mtEl=document.getElementById('memoriesTitle');
-  if(mhEl&&mtEl) mtEl.textContent=mhEl.value||'Our Memories 📸';
-  document.getElementById('welcomeSub').textContent=name?`This is for you, ${name} 🌸`:'Someone special made this just for you 🌸';
-  var ob=document.getElementById('openCardBtn');if(ob)ob.textContent='Preview Card ✨';
-  document.getElementById('letterDear').textContent=name?`Dear ${name},`:'Dear,';
-  var lb = document.getElementById('letterBody');
-  if(lb){ lb.textContent=msg||''; lb.setAttribute('data-full', msg||''); }
-  document.getElementById('letterSign').textContent=sign||'Forever yours 💕';
-  document.getElementById('songSub').textContent=sub||'This song always reminds me of you.';
-  const sel=document.getElementById('letterSenderName');
-  if(sender){sel.textContent=sender;sel.style.display='block';}else sel.style.display='none';
-  // Show sender name on memories screen
-  var msub=document.getElementById('memoriesSenderSub');
-  var msn=document.getElementById('memoriesSenderName');
-  if(msub&&msn){if(sender){msn.textContent=sender;msub.style.display='block';}else{msub.style.display='none';}}
-  if(spotifySrc){document.getElementById('spotifyFrame').src=spotifySrc;document.getElementById('spotifyWrap').style.display='block';document.getElementById('songCardEl').style.display='none';}
-  if(photos.length){
-    document.getElementById('photoTapHint').style.display='block';
-  }
-  resetEnv();
-  startBGM();
-  // Show Create & Share Card now that user has customized
-  var scb = document.getElementById('shareCardBtn');
-  if(scb) scb.style.display = 'flex';
-  // Update letter button from "Create Your Own" to "Edit Letter" now that card is customised
-  var clb = document.getElementById('custBtnLetter');
-  if(clb) clb.textContent = '\u270F\uFE0F Edit Letter';
-  goBack();
-}
-
-// BGM starts when user taps Preview Card (browser requires user interaction)
-var FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
-var CLOUDINARY_CLOUD = 'dkvbjazfe';
-var CLOUDINARY_PRESET = 'wishyou-uploads';
-
-// Upload a single photo blob URL to Cloudinary, returns promise with secure_url
-function uploadPhotoToCloudinary(blobUrl){
-  return fetch(blobUrl)
-    .then(function(r){ return r.blob(); })
-    .then(function(blob){
-      var fd = new FormData();
-      fd.append('file', blob);
-      fd.append('upload_preset', CLOUDINARY_PRESET);
-      return fetch('https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload', {
-        method: 'POST',
-        body: fd
-      });
-    })
-    .then(function(r){ return r.json(); })
-    .then(function(d){ return d.secure_url; });
-}
-
-function shareWhatsApp(){
-  var name   = ((document.getElementById('cName')   ||{value:''}).value||'').trim();
-  var sender = ((document.getElementById('cSender') ||{value:''}).value||'').trim();
-  var title  = ((document.getElementById('cTitle')  ||{value:'Happy Birthday!'}).value||'Happy Birthday!').trim();
-  var msg    = ((document.getElementById('cMsg')    ||{value:''}).value||'').trim();
-  var sign   = ((document.getElementById('cSign')   ||{value:'Forever yours'}).value||'Forever yours').trim();
-  var sub    = ((document.getElementById('cSongSub')||{value:''}).value||'').trim();
-
-  var btn = document.querySelector('.btn-wa');
-  var totalPhotos = (photos && photos.length) ? photos.length : 0;
-  if(btn){ btn.textContent = totalPhotos > 0 ? 'Uploading '+totalPhotos+' photo'+(totalPhotos>1?'s':'')+'... (0/'+totalPhotos+')' : 'Saving card...'; btn.disabled = true; }
-
-  var uploadedCount = 0;
-
-  // Upload all photos to Cloudinary first with progress
-  var photoPromises = (photos && photos.length)
-    ? photos.map(function(url){
-        return uploadPhotoToCloudinary(url).then(function(result){
-          uploadedCount++;
-          if(btn && totalPhotos > 0){
-            btn.textContent = 'Uploading photos... (' + uploadedCount + '/' + totalPhotos + ')';
-          }
-          return result;
-        });
-      })
-    : [Promise.resolve(null)];
-
-  Promise.all(photoPromises)
-    .then(function(photoUrls){
-      var spotifyInput = document.getElementById('cSpotify');
-      var now = Date.now();
-      var cardData = {
-        name: name, sender: sender, title: title,
-        msg: msg, sign: sign, sub: sub,
-        spotify: spotifyInput ? spotifyInput.value.trim() : '',
-        photos: photoUrls.filter(function(u){ return u; }),
-        memoriesHeading: (document.getElementById('cMemoriesHeading')||{value:'Our Memories 📸'}).value||'Our Memories 📸',
-        created: now,
-        createdAt: now,
-        expiresAt: now + (3 * 24 * 60 * 60 * 1000)
-      };
-
-      if(btn) btn.textContent = 'Saving card...';
-
-      return fetch(FIREBASE_URL + '.json', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(cardData)
-      });
-    })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var cardId = data.name;
-      var base = window.location.href.split('?')[0];
-      if(base.indexOf('wishyou-final') === -1){
-        base = base.replace(/\/+$/, '') + '/wishyou-final.html';
-      }
-      var shareUrl = base + '?card=' + cardId;
-
-      if(btn) btn.textContent = 'Shortening link...';
-
-      // Shorten URL via Cloudflare worker → is.gd (no CORS issues)
-      fetch('https://wild-fog-b15e.nilesh53333.workers.dev/', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ type: 'shorten', url: shareUrl })
-      })
-        .then(function(r){ return r.json(); })
-        .then(function(j){ return (j && j.short) ? j.short : shareUrl; })
-        .catch(function(){ return shareUrl; })
-        .then(function(shortUrl){
-          shortUrl = (shortUrl && shortUrl.indexOf('http') === 0) ? shortUrl : shareUrl;
-
-          // Store globally for re-share
-          window._lastShortUrl = shortUrl;
-          window._lastShareName = name;
-          window._lastShareSender = sender;
-
-          // Change button to Open Card now that card is created
-          var ob = document.getElementById('openCardBtn');
-          if(ob) ob.textContent = 'Open Card \u2728';
-
-          // Show share confirmation modal
-          document.getElementById('shareLinkText').textContent = shortUrl;
-          document.getElementById('shareConfirm').classList.add('open');
-
-          // Show upsell after 2 seconds — creator only, never receiver
-          if(!isReceiver){
-            setTimeout(function(){
-              document.getElementById('upsellModal').classList.add('open');
-            }, 2000);
-          }
-
-          if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
-
-          // Fix 12: Analytics — increment card view count
-          fetch(FIREBASE_URL + '/' + cardId + '/views.json', {
-            method: 'PUT',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify(0)
-          }).catch(function(){});
-        });
-    })
-    .catch(function(err){
-      alert('Error: ' + err.message + '. Please check your internet connection.');
-      if(btn){ btn.textContent = '💬 Share on WhatsApp'; btn.disabled = false; }
-    });
-}
-
-function openWhatsAppShare(){
-  var shortUrl = window._lastShortUrl || '';
-  var name = window._lastShareName || '';
-  var sender = window._lastShareSender || '';
-  var greeting = name ? 'Happy Birthday, ' + name + '!' : 'Happy Birthday!';
-  var fromLine = sender ? 'From ' + sender + ', with love \uD83D\uDC95' : 'Someone special made this for you \uD83D\uDC95';
-  var waMsg = '\uD83C\uDF82 ' + greeting + '\n\n' +
-    fromLine + '\n\n' +
-    '\uD83C\uDF81 Open your birthday surprise:\n' +
-    shortUrl + '\n\n' +
-    '\u2728 Made with WishYou.ai';
-  var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if(isIOS){
-    // On iOS whatsapp:// opens the app with message pre-filled
-    window.location.href = 'whatsapp://send?text=' + encodeURIComponent(waMsg);
-  } else {
-    // On Android and desktop use wa.me in new tab
-    window.open('https://wa.me/?text=' + encodeURIComponent(waMsg), '_blank');
-  }
-}
-
-function shareInstagram(){
-  // Instagram doesn't support pre-filled links — copy to clipboard instead
-  var shortUrl = window._lastShortUrl || '';
-  navigator.clipboard.writeText(shortUrl).then(function(){
-    alert('Link copied! Open Instagram and paste it in your story or DM.');
-  }).catch(function(){
-    alert('Your card link: ' + shortUrl + '\n\nCopy it and share on Instagram!');
-  });
-}
-
-function copyShareLink(){
-  var shortUrl = window._lastShortUrl || document.getElementById('shareLinkText').textContent;
-  navigator.clipboard.writeText(shortUrl).then(function(){
-    var btn = document.querySelector('.copy-link-btn');
-    if(btn){ btn.textContent = 'Copied!'; setTimeout(function(){ btn.textContent = 'Copy'; }, 2000); }
-  }).catch(function(){});
-}
-
-function closeShareConfirm(){
-  document.getElementById('shareConfirm').classList.remove('open');
-}
-
-function closeUpsell(){
-  document.getElementById('upsellModal').classList.remove('open');
-}
-
-// ── AUTO-DELETE: expired card screen ──────────────────────
-function showExpiredScreen(){
-  document.querySelector('.app').innerHTML = [
-    '<div style="min-height:100vh;display:flex;flex-direction:column;',
-    'align-items:center;justify-content:center;text-align:center;',
-    'padding:40px 24px;background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);">',
-    '<div style="font-size:72px;margin-bottom:24px;">🕯️</div>',
-    '<div style="font-family:\'Playfair Display\',serif;font-size:1.7rem;font-weight:700;',
-    'color:#4a0e2a;margin-bottom:12px;">This card has faded away</div>',
-    '<p style="font-size:0.95rem;color:#8d3a5a;line-height:1.7;max-width:300px;margin:0 auto 28px;">',
-    'Cards on WishYou.ai live for 3 days, then disappear — like a real moment.</p>',
-    '<a href="https://wishyou.ai" style="display:inline-block;padding:14px 32px;',
-    'background:linear-gradient(135deg,#e91e63,#f06292);color:white;',
-    'border-radius:50px;text-decoration:none;font-weight:600;font-size:0.95rem;',
-    'box-shadow:0 6px 24px rgba(233,30,99,0.4);">Create a new card ✨</a>',
-    '</div>'
-  ].join('');
-}
-
-// ── AUTO-DELETE: background sweep of all expired cards ────
-function sweepExpiredCards(){
-  fetch(FIREBASE_URL + '.json?orderBy=%22expiresAt%22&endAt=' + Date.now() + '&limitToLast=50')
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if(!data) return;
-      var updates = {};
-      Object.keys(data).forEach(function(key){
-        updates[key] = null;
-      });
-      if(Object.keys(updates).length === 0) return;
-      return fetch(FIREBASE_URL + '.json', {
-        method: 'PATCH',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(updates)
-      });
-    })
-    .catch(function(){}); // silent — never break the card experience
-}
-
-function loadCardFromURL(){
-  var params = new URLSearchParams(window.location.search);
-  var cardId = params.get('card');
-  if(!cardId) return;
-
-  // Immediately hide creator-only UI to prevent flash
-  isReceiver = true;
-  var ob = document.getElementById('openCardBtn');
-  if(ob){ ob.textContent = 'Loading... \uD83D\uDC9D'; ob.disabled = true; }
-  var cw = document.getElementById('custBtnWelcome');
-  if(cw) cw.style.display = 'none';
-  var dn = document.getElementById('demoNotice');
-  if(dn) dn.style.display = 'none';
-
-  // Run sweep silently in background
-  sweepExpiredCards();
-
-  fetch(FIREBASE_URL + '/' + cardId + '.json')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if(!d){ showExpiredScreen(); return; }
-      if(d.expiresAt && Date.now() > d.expiresAt){
-        fetch(FIREBASE_URL + '/' + cardId + '.json', { method: 'DELETE' }).catch(function(){});
-        showExpiredScreen();
-        return;
-      }
-
-      // ── Fix 12: Analytics — increment view count ──────────
-      var views = (d.views || 0) + 1;
-      fetch(FIREBASE_URL + '/' + cardId + '/views.json', {
-        method: 'PUT',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(views)
-      }).catch(function(){});
-
-      // ── Fix 13: Notify sender when receiver opens card ────
-      if(d.sender && views === 1 && d.senderPhone){
-        // First open — notify sender via WhatsApp (if they saved phone)
-        var notifyMsg = '🎉 ' + (d.name || 'Someone') + ' just opened your birthday card on WishYou.ai!';
-        // We store the notification URL, sender can tap it themselves
-        fetch(FIREBASE_URL + '/' + cardId + '/opened.json', {
-          method: 'PUT',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify(Date.now())
-        }).catch(function(){});
-      }
-
-      if(d.title){ var t=document.getElementById('welcomeTitle'); if(t) t.textContent=d.title; }
-      if(d.name){
-        var sb=document.getElementById('welcomeSub'); if(sb) sb.textContent='This is for you, '+d.name+' \uD83C\uDF38';
-        var ld=document.getElementById('letterDear'); if(ld) ld.textContent='Dear '+d.name+',';
-        var ob=document.getElementById('openCardBtn'); if(ob){ ob.textContent='Open Card \u2728'; ob.disabled=false; }
-
-        // ── Fix 11: Birthday today detection ─────────────────
-        var today = new Date();
-        var todayStr = (today.getMonth()+1) + '/' + today.getDate();
-        if(d.birthdayDate && d.birthdayDate === todayStr){
-          var banner = document.getElementById('birthdayTodayBanner');
-          if(banner) banner.style.display = 'block';
-        }
-      }
-
-      // ── Receiver mode — hide customize + share buttons ────
-      ['custBtnWelcome','custBtnMemories','custBtnSong','custBtnEnvelope','custBtnLetter','shareCardBtn'].forEach(function(id){
-        var el=document.getElementById(id); if(el) el.style.display='none';
-      });
-      var demo = document.getElementById('demoNotice');
-      if(demo) demo.style.display = 'none';
-      // Show receiver end CTA on letter screen
-      var rCTA = document.getElementById('receiverEndCTA');
-      if(rCTA) rCTA.style.display = 'block';
-      // Change button from Demo Card to Open Card for receiver
-      var ob2 = document.getElementById('openCardBtn');
-      if(ob2){ ob2.textContent = 'Open Card \u2728'; ob2.disabled = false; }
-
-      if(d.msg)  { var lb=document.getElementById('letterBody');  if(lb){ lb.textContent=d.msg; lb.setAttribute('data-full',d.msg); } }
-      if(d.sign) { var ls=document.getElementById('letterSign');  if(ls) ls.textContent=d.sign; }
-      if(d.sub)  { var ss=document.getElementById('songSub'); if(ss) ss.textContent=d.sub; }
-      if(d.memoriesHeading){ var mht=document.getElementById('memoriesTitle'); if(mht) mht.textContent=d.memoriesHeading; }
-      if(d.sender){
-        var sn=document.getElementById('letterSenderName');
-        var signText=(d.sign||'').toLowerCase();
-        if(sn){if(signText.indexOf(d.sender.toLowerCase())===-1){sn.textContent=d.sender;sn.style.display='block';}else{sn.style.display='none';}}
-        var et=document.getElementById('envTitle'); if(et) et.innerHTML=d.sender+' wrote a letter<br>for you... \uD83D\uDC8C';
-        // Show on memories screen
-        var msub=document.getElementById('memoriesSenderSub');
-        var msn2=document.getElementById('memoriesSenderName');
-        if(msub&&msn2){msn2.textContent=d.sender;msub.style.display='block';}
-      }
-      if(d.photos && d.photos.length){
-        photos = d.photos;
-        document.getElementById('photoPlaceholder').style.display='none';
-        buildSlides();
-        var hint=document.getElementById('photoTapHint');
-        if(hint)hint.style.display='block';
-      }
-      function sv(id,v){var e=document.getElementById(id);if(e&&v)e.value=v;}
-      sv('cName',d.name);sv('cTitle',d.title);sv('cMsg',d.msg);
-      sv('cSign',d.sign);sv('cSender',d.sender);sv('cSongSub',d.sub);
-      if(d.spotify){
-        sv('cSpotify',d.spotify);
-        handleSpotify(d.spotify);
-      }
-    })
-    .catch(function(){
-      var ob=document.getElementById('openCardBtn');
-      if(ob){ ob.textContent='Open Card \u2728'; ob.disabled=false; }
-    });
-}
-
-window.addEventListener('DOMContentLoaded', loadCardFromURL);
-
-// ══════════════════════════════════════════════════════
-// AI FEATURES — Anthropic API
-// ══════════════════════════════════════════════════════
-
-var selectedRelationship = '';
-
-function useYouTubeSong(encodedName, encodedArtist) {
-  var name   = decodeURIComponent(encodedName);
-  var artist = decodeURIComponent(encodedArtist);
-  // Set a YouTube search URL as the song link
-  var searchQuery = encodeURIComponent(name + ' ' + artist + ' official');
-  var ytUrl = 'https://www.youtube.com/results?search_query=' + searchQuery;
-  // Update song name display on card
-  var sn = document.getElementById('songName');
-  var sa = document.getElementById('songArtist');
-  if(sn) sn.textContent = name;
-  if(sa) sa.textContent = artist;
-  // Set in the link field and show hint
-  var inp = document.getElementById('cSpotify');
-  if(inp) inp.value = '';
-  // Show a message to user
-  var results = document.getElementById('aiSongResults');
-  var msg = document.createElement('div');
-  msg.style.cssText = 'font-size:0.78rem;color:var(--pink);font-weight:600;padding:8px 12px;background:var(--pink4);border-radius:10px;margin-top:8px;';
-  msg.innerHTML = '✅ <strong>' + name + '</strong> selected! Now tap ▶ Preview to get the YouTube link, copy it and paste below.';
-  results.appendChild(msg);
-  window.open(ytUrl, '_blank');
-}
-
-function updateSongMood() {
-  var lang  = document.getElementById('songLang').value;
-  var vibe  = document.getElementById('songVibes').value;
-  if(lang || vibe) {
-    var mood = [lang, vibe].filter(Boolean).join(' ');
-    document.getElementById('aiSongMood').value = mood;
-  }
-}
-
-function onRelChange(rel) {
-  selectedRelationship = rel;
-  var btn = document.getElementById('aiPersonaliseBtn');
-  if(btn) btn.style.display = rel ? 'flex' : 'none';
-}
-
-async function callClaude(prompt) {
-  try {
-    var res = await fetch('https://wild-fog-b15e.nilesh53333.workers.dev/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-    var text = await res.text();
-    console.log('Worker response:', text);
-    var data = JSON.parse(text);
-    if(data.error) { console.error('Claude error:', data.error); return ''; }
-    return data.content && data.content[0] ? data.content[0].text : '';
-  } catch(e) {
-    console.error('callClaude failed:', e.message);
-    return '';
-  }
-}
-
-// ── FEATURE 4: Occasion Detector ──────────────────────
-async function runOccasionDetector() {
-  var input = document.getElementById('aiOccasionInput').value.trim();
-  if(!input) { alert('Please describe the occasion first.'); return; }
-  var btn = document.getElementById('aiOccasionBtn');
-  var loading = document.getElementById('aiOccasionLoading');
-  var result = document.getElementById('aiOccasionResult');
-  btn.disabled = true;
-  loading.classList.add('show');
-  result.classList.remove('show');
-  try {
-    var text = await callClaude(
-      'You are helping create a birthday card. Based on this description: "' + input + '"\n\n' +
-      'Return ONLY a JSON object with these exact keys (no markdown, no explanation):\n' +
-      '{"name":"receiver first name","title":"card title like Happy Birthday Priya!","letter":"3-4 sentence heartfelt birthday letter","sign":"sign off line","songMood":"2-3 word mood for song search e.g. romantic Bollywood"}'
-    );
-    var clean = text.replace(/```json|```/g,'').trim();
-    var d = JSON.parse(clean);
-    if(d.name)   document.getElementById('cName').value  = d.name;
-    if(d.title)  document.getElementById('cTitle').value = d.title;
-    if(d.letter) document.getElementById('cMsg').value = stripMarkdown(d.letter);
-    if(d.sign)   document.getElementById('cSign').value  = d.sign;
-    if(d.songMood) document.getElementById('aiSongMood').value = d.songMood;
-    result.textContent = '✅ Card filled! Review and edit anything you want below.';
-    result.classList.add('show');
-  } catch(e) {
-    result.textContent = '⚠️ Something went wrong. Please try again.';
-    result.classList.add('show');
-  }
-  btn.disabled = false;
-  loading.classList.remove('show');
-}
-
-// ── FEATURE 3: Letter Personalisation ─────────────────
-function stripMarkdown(text){
-  return text
-    .replace(/^#+\s.*$/gm, '')        // remove # heading lines
-    .replace(/\*\*(.*?)\*\*/g, '$1')  // remove **bold**
-    .replace(/\*(.*?)\*/g, '$1')      // remove *italic*
-    .replace(/^[-*]\s/gm, '')         // remove bullet points
-    .replace(/\n{3,}/g, '\n\n')       // collapse excess blank lines
-    .trim();
-}
-
-async function runPersonalisation() {
-  if(!selectedRelationship) return;
-  var name    = document.getElementById('cName').value.trim() || 'them';
-  var btn     = document.getElementById('aiPersonaliseBtn');
-  var loading = document.getElementById('aiPersonaliseLoading');
-  btn.disabled = true;
-  loading.classList.add('show');
-  try {
-    var text = await callClaude(
-      'Write a short, heartfelt birthday letter (3-4 sentences) for my ' + selectedRelationship +
-      ' named ' + name + '. The tone should match the relationship — romantic and deep for a partner, warm and fun for a best friend, grateful for mom/dad. Return ONLY the letter text, no greeting line like Dear X, no sign off, just the body.'
-    );
-    if(text) document.getElementById('cMsg').value = stripMarkdown(text);
-  } catch(e) {
-    alert('Could not personalise. Please try again.');
-  }
-  btn.disabled = false;
-  loading.classList.remove('show');
-}
-
-// ── FEATURE 2: Song Suggestions ───────────────────────
-async function runSongSuggestions() {
-  var mood = document.getElementById('aiSongMood').value.trim();
-  if(!mood) { alert('Please select a language and vibe first.'); return; }
-  var btn     = document.getElementById('aiSongBtn');
-  var loading = document.getElementById('aiSongLoading');
-  var results = document.getElementById('aiSongResults');
-  btn.disabled = true;
-  loading.classList.add('show');
-  results.innerHTML = '';
-  try {
-    var lang = document.getElementById('songLang') ? document.getElementById('songLang').value : '';
-    var vibe = document.getElementById('songVibes') ? document.getElementById('songVibes').value : '';
-    // Get song names from AI
-    var text = await callClaude(
-      'Suggest 4 real popular songs for a birthday card.\n' +
-      'Language: ' + (lang || 'any') + '\n' +
-      'Mood: ' + (vibe || mood) + '\n' +
-      'STRICT RULE: Only suggest songs where lyrics are in ' + (lang || 'any language') + '. Do NOT mix languages.\n' +
-      'Return ONLY a JSON array, no markdown:\n' +
-      '[{"name":"Song Name","artist":"Artist Name"}]'
-    );
-    var clean = text.replace(/```json|```/g,'').trim();
-    var songs = JSON.parse(clean);
-    var header = document.createElement('div');
-    header.style.cssText = 'font-size:0.74rem;color:var(--mid);margin-bottom:10px;';
-    header.textContent = 'Tap any song to search and use it on your card:';
-    results.appendChild(header);
-    songs.forEach(function(s) {
-      var el = document.createElement('div');
-      el.style.cssText = 'display:flex;align-items:center;gap:10px;background:white;border-radius:12px;padding:11px 13px;border:1.5px solid rgba(233,30,99,0.15);margin-bottom:8px;cursor:pointer;transition:all 0.18s;';
-      el.innerHTML =
-        '<span style="font-size:1.3rem">🎵</span>' +
-        '<div style="flex:1;min-width:0;">' +
-          '<div style="font-size:0.85rem;font-weight:600;color:var(--dark);">' + s.name + '</div>' +
-          '<div style="font-size:0.72rem;color:var(--mid);">' + s.artist + '</div>' +
-        '</div>' +
-        '<span style="font-size:0.7rem;font-weight:700;color:var(--pink);white-space:nowrap;">Search ›</span>';
-      el.onclick = function() {
-        // Auto-fill the search box and search
-        document.getElementById('ytSearchInput').value = s.name + ' ' + s.artist;
-        searchYouTube();
-        // searchYouTube now handles scrolling automatically
-      };
-      results.appendChild(el);
-    });
-  } catch(e) {
-    results.innerHTML = '<div style="font-size:0.78rem;color:var(--mid);padding:8px;">Could not fetch suggestions. Try again.</div>';
-  }
-  btn.disabled = false;
-  loading.classList.remove('show');
-}
-
-
-</script>
-</body>
-</html>
+// Toast for coming soon cards
+var _toastTimer = null;
+function showComingSoon(el) {
+  var name = el.querySelector('.occ-name') ? el.querySelector('.occ-name').textContent : 'This';
+  var toast = document.getElementById('toast');
+  toast.textContent = name + ' cards coming soon! 🎂 Birthday cards are live now';
+  toast.classList.add('show');
+  if(_t</script></body></html>
