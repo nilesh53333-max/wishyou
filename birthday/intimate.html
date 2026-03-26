@@ -10,19 +10,22 @@
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
 <style>
-/* ── BASE — WEBSITE VERSION ── */
+/* ── BASE ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:#111;margin:0;padding:0;}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:#fde8f0;}
 
-/* ── SCREEN SYSTEM — one screen at a time, full viewport ── */
-.screen{display:none;flex-direction:column;width:100%;height:100dvh;min-height:100svh;position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;}
+/* ── SCREEN SYSTEM ── */
+/* Each screen fills exactly the viewport — only .active shows */
+.screen{display:none;flex-direction:column;width:100%;height:100dvh;overflow:hidden;position:relative;}
 .screen.active{display:flex;}
 .screen.slide-out{display:none;}
-/* app container just holds overlays */
 
-/* center constraint for fixed screens on desktop */
-.screen.active{display:flex;max-width:480px;left:50%;transform:translateX(-50%);}
+/* Desktop: center screens with max-width */
+@media(min-width:500px){
+  body{display:flex;align-items:center;justify-content:center;background:#111;}
+  .screen{max-width:430px;height:90dvh;border-radius:40px;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
+}
 
 /* ── CREATOR SCREENS ── */
 .creator-screen{padding:0;align-items:stretch;justify-content:flex-start;background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
@@ -123,17 +126,17 @@ body{font-family:'DM Sans',sans-serif;background:#111;margin:0;padding:0;}
 /* ── RECEIVER SCREENS ── */
 /* FIX: all receiver screens fill 100% — no black edges */
 /* receiver screens each fill full viewport */
-#rv-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);align-items:center;justify-content:center;flex-direction:column;}
+#rv-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;align-items:center;justify-content:center;flex-direction:column;}
 .rv-loading-heart{font-size:3rem;animation:hb 1.2s ease-in-out infinite;}
 @keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
 .rv-loading-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#8d3a5a;margin-top:14px;opacity:0.6;}
 
-#rv-error{background:linear-gradient(160deg,#fde8f0,#fce4ec);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
+#rv-error{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
 .rv-error-emoji{font-size:3rem;margin-bottom:16px;display:block;}
 .rv-error-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#8d3a5a;line-height:1.7;}
 
 /* WELCOME */
-#rv-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#rv-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .petals-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
 .petal{position:absolute;animation:pf linear infinite;opacity:0;}
 @keyframes pf{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:0.4;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
@@ -155,7 +158,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;margin:0;padding:0;}
 .rv-back:active{background:rgba(233,30,99,0.2);}
 
 /* PHOTOS */
-#rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);flex-direction:column;padding:0;}
+#rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;padding:0;}
 .rv-sec-hdr{padding:52px 24px 14px;text-align:center;flex-shrink:0;}
 .rv-sec-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(233,30,99,0.5);margin-bottom:6px;display:block;}
 .rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#4a0e2a;}
@@ -173,7 +176,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;margin:0;padding:0;}
 .rv-next-btn:active{transform:scale(0.97);}
 
 /* SONG — Beautiful vinyl */
-#rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);flex-direction:column;align-items:center;justify-content:center;padding:36px 28px 20px;overflow-y:auto;}
+#rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 28px 20px;overflow-y:auto;}
 .vinyl-wrap{width:170px;height:170px;margin:0 auto 20px;position:relative;}
 .vinyl{
   width:100%;height:100%;border-radius:50%;position:relative;
@@ -216,7 +219,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;margin:0;padding:0;}
 .rv-song-nav{display:flex;gap:8px;width:100%;margin-top:4px;}
 
 /* ENVELOPE */
-#rv-envelope{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);align-items:center;justify-content:center;flex-direction:column;}
+#rv-envelope{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;align-items:center;justify-content:center;flex-direction:column;}
 .env-inner{text-align:center;padding:28px;}
 .env-t{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;margin-bottom:8px;}
 .env-h{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:#8d3a5a;opacity:0.6;margin-bottom:28px;}
@@ -225,7 +228,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;margin:0;padding:0;}
 .env-icon:active{transform:scale(0.9)!important;}
 
 /* LETTER — full screen, centered, nice paper */
-#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);flex-direction:column;}
+#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
 .letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 100px;min-height:0;}
 .letter-paper{background:white;border-radius:16px;padding:22px 20px;box-shadow:0 4px 20px rgba(74,14,42,0.08);border-top:3px solid #e91e63;}
@@ -244,7 +247,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;margin:0;padding:0;}
 </style>
 </head>
 <body>
-<div class="app" id="mainApp">
+<!-- screens -->
 
 <!-- ══ CREATOR SCREENS ══ -->
 <div class="screen creator-screen theme-intimate" id="s-name">
@@ -458,7 +461,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   </div>
 </div>
 
-</div><!-- /app -->
+<!-- /screens -->
 
 <!-- Save overlay -->
 <div class="save-overlay" id="saveOverlay">
@@ -551,7 +554,7 @@ function goTo(id, fromPreview=false){
     const iframe=document.querySelector('#rvYtWrap iframe');
     if(iframe) iframe.src=iframe.src; // pause by reassigning
   }
-  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTop=0;},50);
+  setTimeout(()=>{const el=document.getElementById(id);if(el){el.scrollTop=0;const sc=el.querySelector('.step-content');if(sc)sc.scrollTop=0;}},50);
 }
 
 const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter','s-preview'];
