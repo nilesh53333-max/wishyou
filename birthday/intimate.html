@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_12.html -->
+<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_15.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>WishYou.ai — Intimate Birthday Card</title>
@@ -146,7 +147,6 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .rv-open-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 8px 28px rgba(233,30,99,0.4);transition:transform 0.2s;touch-action:manipulation;animation:bp 2.5s ease-in-out infinite;}
 @keyframes bp{0%,100%{box-shadow:0 8px 28px rgba(233,30,99,0.4);}50%{box-shadow:0 12px 36px rgba(233,30,99,0.6);}}
 .rv-open-btn:active{transform:scale(0.97);}
-/* FIX: Create card like this button */
 .rv-create-btn{margin-top:14px;background:none;border:1.5px solid rgba(233,30,99,0.3);color:#e91e63;border-radius:50px;padding:10px 28px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:all 0.2s;}
 .rv-create-btn:active{background:rgba(233,30,99,0.08);}
 
@@ -171,39 +171,40 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .rv-next-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
 .rv-next-btn:active{transform:scale(0.97);}
 
-/* SONG — FIX: nicer vinyl, full screen */
+/* SONG — Beautiful vinyl */
 #rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 20px;}
-/* FIX: Beautiful vinyl record */
-.vinyl-wrap{width:160px;height:160px;margin:0 auto 20px;position:relative;}
-.vinyl{width:100%;height:100%;border-radius:50%;position:relative;
-  background:
-    radial-gradient(circle at 50% 50%, #f8e8f0 0%, #f8e8f0 12%, transparent 12%),
-    radial-gradient(circle at 50% 50%, #3a1a2a 13%, #3a1a2a 14%, transparent 14%),
-    repeating-conic-gradient(#1a0812 0deg 2deg, #2d1020 2deg 4deg, #1a0812 4deg 6deg, #3a1520 6deg 8deg);
-  box-shadow:0 16px 48px rgba(74,14,42,0.35),0 0 0 3px rgba(233,30,99,0.15);
+.vinyl-wrap{width:170px;height:170px;margin:0 auto 20px;position:relative;}
+.vinyl{
+  width:100%;height:100%;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 50% 50%,
+    #fce4ec 0%,#fce4ec 14%,
+    #1a0812 15%,#1a0812 17%,
+    #2d1020 18%,#2d1020 22%,
+    #1a0812 23%,#1a0812 27%,
+    #2d1020 28%,#2d1020 32%,
+    #1a0812 33%,#1a0812 37%,
+    #2d1020 38%,#2d1020 42%,
+    #1a0812 43%,#1a0812 47%,
+    #2d1020 48%,#2d1020 52%,
+    #1a0812 53%,#1a0812 100%
+  );
+  box-shadow:0 16px 48px rgba(74,14,42,0.4),0 0 0 4px rgba(233,30,99,0.2),inset 0 2px 8px rgba(255,255,255,0.05);
   display:flex;align-items:center;justify-content:center;
-}
-.vinyl::before{
-  content:'';position:absolute;inset:20%;border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,rgba(255,255,255,0.08),transparent 60%);
-  pointer-events:none;
-}
-.vinyl-groove{
-  position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,0.04);
 }
 .vinyl-label{
-  width:52px;height:52px;border-radius:50%;
-  background:radial-gradient(circle at 40% 35%,#f48fb1,#e91e63,#c2185b);
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 2px 8px rgba(0,0,0,0.4),inset 0 1px 2px rgba(255,255,255,0.2);
+  width:56px;height:56px;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#f48fb1,#e91e63 50%,#c2185b);
+  box-shadow:0 3px 10px rgba(0,0,0,0.5),inset 0 1px 3px rgba(255,255,255,0.25);
   position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:center;
 }
 .vinyl-label::after{
-  content:'';position:absolute;width:8px;height:8px;border-radius:50%;
-  background:rgba(255,255,255,0.9);
+  content:'';position:absolute;
+  width:9px;height:9px;border-radius:50%;
+  background:rgba(255,255,255,0.95);
   box-shadow:0 0 0 2px rgba(0,0,0,0.3);
 }
-.vinyl-spin{animation:vsr 2.5s linear infinite;}
+.vinyl-spin{animation:vsr 2.8s linear infinite;}
 @keyframes vsr{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .vinyl-pause{animation-play-state:paused;}
 .rv-song-t{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;}
@@ -387,6 +388,8 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
     <button class="rv-open-btn" onclick="goTo(&#39;rv-photos&#39;)">Open Your Card ✨</button>
     <br>
     <button class="rv-create-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">💝 Create a card like this</button>
+    <br>
+    <button class="rv-create-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">💝 Create a card like this</button>
   </div>
 </div>
 
@@ -394,7 +397,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   <button class="rv-back" onclick="goTo(&#39;rv-welcome&#39;)">←</button>
   <div class="rv-sec-hdr">
     <span class="rv-sec-tag" id="rvPhotoTag">Your Memories 📸</span>
-    <div class="rv-sec-title">Moments just for you</div>
+    <div class="rv-sec-title" id="rvPhotoTitle">Moments just for you</div>
   </div>
   <div class="pol-strip" id="polStrip"></div>
   <div class="rv-nav-row">
@@ -402,14 +405,17 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   </div>
 </div>
 
+<!-- Lightbox -->
+<div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;" onclick="closeLightbox()">
+  <img id="lightboxImg" style="max-width:95%;max-height:85vh;border-radius:8px;object-fit:contain;" src="file:///C:/Users/Nilesh/Downloads/intimate_15.html">
+  <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;">Tap to close</div>
+</div>
+
 <div class="screen" id="rv-song">
   <button class="rv-back" onclick="goTo(&#39;rv-photos&#39;)">←</button>
   <span class="rv-sec-tag" style="margin-top:52px;margin-bottom:12px;display:block;text-align:center;">Your Song 🎵</span>
   <div class="vinyl-wrap">
     <div class="vinyl vinyl-spin vinyl-pause" id="rvVinyl">
-      <div class="vinyl-groove" style="inset:8%;"></div>
-      <div class="vinyl-groove" style="inset:20%;"></div>
-      <div class="vinyl-groove" style="inset:32%;"></div>
       <div class="vinyl-label"></div>
     </div>
   </div>
@@ -862,14 +868,20 @@ function renderCard(d){
   document.getElementById('rvName').textContent=name?`Happy Birthday, ${name}! 🎂`:'Happy Birthday! 🎂';
   document.getElementById('rvSub').textContent=sender?`${sender} made this just for you 🌸`:'Someone special made this just for you 🌸';
   document.getElementById('rvFrom').textContent=sender?`With love from ${sender} 💕`:'';
-  // Photos heading
-  const heading=d.memoriesHeading||'Your Memories';
+  // FIX: Photos heading used as TITLE on photo screen
+  const heading=d.memoriesHeading||'Our Memories';
   document.getElementById('rvPhotoTag').textContent=heading+' 📸';
-  // Photos
+  document.getElementById('rvPhotoTitle').textContent='Moments just for you';
+  // FIX: Photos - no labels, tap to open lightbox
   const strip=document.getElementById('polStrip');strip.innerHTML='';
-  const labels=['A memory 💕','Just us 🌸','Together ✨','Always 💖','Forever 🌷'];
   if(d.photos&&d.photos.length>0){
-    d.photos.forEach((url,i)=>{const pol=document.createElement('div');pol.className='pol';pol.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="pol-lbl">${labels[i]||'💕'}</div>`;strip.appendChild(pol);});
+    d.photos.forEach((url,i)=>{
+      const pol=document.createElement('div');pol.className='pol';
+      pol.style.cursor='pointer';
+      pol.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'">`;
+      pol.onclick=()=>openLightbox(url);
+      strip.appendChild(pol);
+    });
   }else{strip.innerHTML='<div class="no-photo">💕 A card made with love</div>';}
   // Song
   const sn=d.songName||'';
@@ -882,6 +894,15 @@ function renderCard(d){
   document.getElementById('rvLBody').textContent=d.msg||'';
   document.getElementById('rvLSign').textContent=d.sign||(sender?`With love, ${sender} 💕`:'With love 💕');
   goTo('rv-welcome');
+}
+
+function openLightbox(url){
+  const lb=document.getElementById('photoLightbox');
+  document.getElementById('lightboxImg').src=url;
+  lb.style.display='flex';
+}
+function closeLightbox(){
+  document.getElementById('photoLightbox').style.display='none';
 }
 
 function openLetter(){
