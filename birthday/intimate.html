@@ -30,7 +30,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 
 .step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 16px;overflow:hidden;min-height:0;}
 .step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
-.step-actions{padding-top:12px;flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom));}
+.step-actions{padding-top:12px;flex-shrink:0;padding-bottom:max(24px,env(safe-area-inset-bottom));}
 
 .step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.15);}
 .step-progress-fill{height:100%;transition:width 0.5s ease;}
@@ -159,8 +159,8 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 /* PHOTOS */
 #rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;padding:0;}
 .rv-sec-hdr{padding:52px 24px 14px;text-align:center;flex-shrink:0;}
-.rv-sec-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(233,30,99,0.5);margin-bottom:6px;display:block;}
-.rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#4a0e2a;}
+.rv-sec-tag{display:none;}
+.rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;}
 .pol-strip{flex:1;padding:8px 16px 8px;display:flex;gap:12px;overflow-x:auto;align-items:center;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
 .pol-strip::-webkit-scrollbar{display:none;}
 .pol{flex-shrink:0;scroll-snap-align:center;background:white;padding:8px 8px 28px;box-shadow:0 8px 24px rgba(74,14,42,0.12);border-radius:2px;}
@@ -229,7 +229,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 /* LETTER — full screen, centered, nice paper */
 #rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;overflow:hidden;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
-.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 100px;}
+.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:48px 16px 100px;}
 .letter-paper{background:white;border-radius:16px;padding:22px 20px;box-shadow:0 4px 20px rgba(74,14,42,0.08);border-top:3px solid #e91e63;}
 .l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}
 .l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;color:#3d1c2e;line-height:2.1;white-space:pre-wrap;}
@@ -515,6 +515,7 @@ const CFG = {
 // ── STATE ──
 let curScreen = '';
 let photos = [];
+let uploadedUrls = {}; // slot index -> cloudinary URL (pre-uploaded)
 let currentSlotIdx = 0;
 let shareLink = '';
 let returnToPreview = false;
@@ -637,28 +638,49 @@ function triggerUpload(idx){currentSlotIdx=idx;document.getElementById('photoFil
 function handlePhotoUpload(inp){
   const files=Array.from(inp.files);if(!files.length)return;
   files.forEach((file,offset)=>{
-    // find next empty slot starting from currentSlotIdx
-    let targetIdx = -1;
+    let targetIdx=-1;
     for(let i=0;i<5;i++){
-      const checkIdx=(currentSlotIdx+offset+i)%5;
-      // if slot already has photo, skip unless this is first file
-      if(offset===0 && i===0){ targetIdx=currentSlotIdx; break; }
-      if(!photos[(currentSlotIdx+offset)%5] || offset>0){
-        targetIdx=(currentSlotIdx+offset)%5;
-        break;
-      }
+      if(offset===0&&i===0){targetIdx=currentSlotIdx;break;}
+      if(!photos[(currentSlotIdx+offset)%5]||offset>0){targetIdx=(currentSlotIdx+offset)%5;break;}
     }
-    if(targetIdx<0||targetIdx>4) return;
+    if(targetIdx<0||targetIdx>4)return;
     const url=URL.createObjectURL(file);
     photos[targetIdx]=url;
+    delete uploadedUrls[targetIdx]; // clear any old upload for this slot
     const slot=document.getElementById('slot'+targetIdx);
-    if(slot) slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${targetIdx})">✕</button>`;
+    if(slot){
+      slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${targetIdx})">✕</button>`;
+      // show upload indicator
+      const ind=document.createElement('div');
+      ind.id='upind'+targetIdx;
+      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(233,30,99,0.3);border-radius:2px;overflow:hidden;';
+      ind.innerHTML='<div style="height:100%;background:#e91e63;width:0%;transition:width 0.3s;" id="upbar'+targetIdx+'"></div>';
+      slot.appendChild(ind);
+    }
+    // Upload in background immediately
+    uploadPhotoInBackground(file, targetIdx);
   });
   inp.value='';
 }
 
+async function uploadPhotoInBackground(file, idx){
+  try{
+    const bar=document.getElementById('upbar'+idx);
+    if(bar)bar.style.width='40%';
+    const blob=await fetch(URL.createObjectURL(file)).then(r=>r.blob());
+    const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    if(bar)bar.style.width='70%';
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+    const d=await res.json();
+    if(d.secure_url){
+      uploadedUrls[idx]=d.secure_url;
+      if(bar){bar.style.width='100%';setTimeout(()=>{const ind=document.getElementById('upind'+idx);if(ind)ind.remove();},600);}
+    }
+  }catch(e){console.error('Background upload failed for slot',idx,e);}
+}
+
 function removePhoto(e,idx){
-  e.stopPropagation();photos[idx]=null;
+  e.stopPropagation();photos[idx]=null;delete uploadedUrls[idx];
   const slot=document.getElementById('slot'+idx);
   slot.innerHTML='<span style="opacity:0.4;">+</span>';
   slot.onclick=()=>triggerUpload(idx);
@@ -816,17 +838,26 @@ async function saveAndShare(){
   overlay.classList.add('show');
   setProgress(10,'Creating your card... '+CFG.emoji);
   let photoUrls=[];
-  const realPhotos=photos.filter(Boolean);
-  for(let i=0;i<realPhotos.length;i++){
-    setProgress(10+((i+1)/Math.max(realPhotos.length,1)*55),'Creating your card... '+CFG.emoji);
-    try{
-      const blob=await fetch(realPhotos[i]).then(r=>r.blob());
-      const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
-      const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-      const d=await res.json();if(d.secure_url)photoUrls.push(d.secure_url);
-    }catch(e){console.error(e);}
+  // Use pre-uploaded URLs where available, upload any remaining ones
+  const slots=photos.map((p,i)=>({blob:p,idx:i})).filter(s=>s.blob);
+  let uploaded=0;
+  for(const s of slots){
+    if(uploadedUrls[s.idx]){
+      photoUrls.push(uploadedUrls[s.idx]);
+      uploaded++;
+      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Preparing your card... '+CFG.emoji);
+    } else {
+      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Uploading photo '+(uploaded+1)+'...');
+      try{
+        const blob=await fetch(s.blob).then(r=>r.blob());
+        const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+        const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+        const d=await res.json();if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
+      }catch(e){console.error(e);}
+      uploaded++;
+    }
   }
-  setProgress(70,'Creating your card... '+CFG.emoji);
+  setProgress(70,'Almost ready... '+CFG.emoji);
   const now=Date.now();
   const cardData={
     type:CFG.cardType,
