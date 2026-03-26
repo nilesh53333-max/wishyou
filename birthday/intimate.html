@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_15.html -->
+<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_16.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -223,18 +224,18 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 @keyframes ef{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
 .env-icon:active{transform:scale(0.9)!important;}
 
-/* LETTER — FIX: proper scroll + typewriter style + fits screen */
+/* LETTER — full screen, centered, nice paper */
 #rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
-.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:28px 24px 120px;}
-/* FIX: typewriter-style letter */
-.letter-paper{background:white;border-radius:16px;padding:24px 22px;box-shadow:0 4px 20px rgba(74,14,42,0.08);border-top:3px solid #e91e63;}
-.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:#4a0e2a;margin-bottom:16px;}
-.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1rem;color:#3d1c2e;line-height:2;white-space:pre-wrap;}
-.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.95rem;color:#e91e63;margin-top:20px;display:block;}
-.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,rgba(253,232,240,1) 60%,rgba(253,232,240,0));}
+.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 100px;display:flex;flex-direction:column;}
+.letter-paper{background:white;border-radius:16px;padding:28px 24px;box-shadow:0 6px 24px rgba(74,14,42,0.1);border-top:3px solid #e91e63;flex:1;}
+.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}
+.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.02rem;color:#3d1c2e;line-height:1.95;white-space:pre-wrap;}
+.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#e91e63;margin-top:22px;display:block;}
+.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px 16px;background:linear-gradient(to top,rgba(253,232,240,1) 65%,rgba(253,232,240,0));}
 .letter-foot-row{display:flex;gap:8px;}
 .replay-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
+.create-again-btn{background:none;border:1.5px solid rgba(233,30,99,0.35);color:#e91e63;border-radius:50px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;}
 
 .wm{position:fixed;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(74,14,42,0.18);}
 @keyframes ripple{to{transform:scale(4);opacity:0;}}
@@ -388,15 +389,13 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
     <button class="rv-open-btn" onclick="goTo(&#39;rv-photos&#39;)">Open Your Card ✨</button>
     <br>
     <button class="rv-create-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">💝 Create a card like this</button>
-    <br>
-    <button class="rv-create-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">💝 Create a card like this</button>
   </div>
 </div>
 
 <div class="screen" id="rv-photos">
   <button class="rv-back" onclick="goTo(&#39;rv-welcome&#39;)">←</button>
   <div class="rv-sec-hdr">
-    <span class="rv-sec-tag" id="rvPhotoTag">Your Memories 📸</span>
+    <span class="rv-sec-tag">Your Memories 📸</span>
     <div class="rv-sec-title" id="rvPhotoTitle">Moments just for you</div>
   </div>
   <div class="pol-strip" id="polStrip"></div>
@@ -405,10 +404,13 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   </div>
 </div>
 
-<!-- Lightbox -->
-<div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;align-items:center;justify-content:center;flex-direction:column;" onclick="closeLightbox()">
-  <img id="lightboxImg" style="max-width:95%;max-height:85vh;border-radius:8px;object-fit:contain;" src="file:///C:/Users/Nilesh/Downloads/intimate_15.html">
-  <div style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;">Tap to close</div>
+<!-- Lightbox with swipe/arrows -->
+<div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
+  <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
+  <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
+  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;" src="file:///C:/Users/Nilesh/Downloads/intimate_16.html">
+  <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
+  <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
 </div>
 
 <div class="screen" id="rv-song">
@@ -448,7 +450,8 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   </div>
   <div class="letter-foot">
     <div class="letter-foot-row">
-      <button class="replay-btn" onclick="goTo(&#39;rv-welcome&#39;)">💝 Replay from start</button>
+      <button class="replay-btn" onclick="goTo(&#39;rv-welcome&#39;)">💝 Replay</button>
+      <button class="create-again-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">✨ Make one</button>
     </div>
   </div>
 </div>
@@ -868,26 +871,28 @@ function renderCard(d){
   document.getElementById('rvName').textContent=name?`Happy Birthday, ${name}! 🎂`:'Happy Birthday! 🎂';
   document.getElementById('rvSub').textContent=sender?`${sender} made this just for you 🌸`:'Someone special made this just for you 🌸';
   document.getElementById('rvFrom').textContent=sender?`With love from ${sender} 💕`:'';
-  // FIX: Photos heading used as TITLE on photo screen
+  // Photos heading = main title only
   const heading=d.memoriesHeading||'Our Memories';
-  document.getElementById('rvPhotoTag').textContent=heading+' 📸';
-  document.getElementById('rvPhotoTitle').textContent='Moments just for you';
-  // FIX: Photos - no labels, tap to open lightbox
+  document.getElementById('rvPhotoTitle').textContent=heading;
+  // Photos - no pol-lbl, tap opens lightbox
   const strip=document.getElementById('polStrip');strip.innerHTML='';
   if(d.photos&&d.photos.length>0){
+    lbPhotos=d.photos;
     d.photos.forEach((url,i)=>{
       const pol=document.createElement('div');pol.className='pol';
       pol.style.cursor='pointer';
       pol.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'">`;
-      pol.onclick=()=>openLightbox(url);
+      pol.onclick=()=>openLightbox(i);
       strip.appendChild(pol);
     });
   }else{strip.innerHTML='<div class="no-photo">💕 A card made with love</div>';}
   // Song
   const sn=d.songName||'';
   if(sn&&sn!=='—'){
-    document.getElementById('rvSongT').textContent=sn;document.getElementById('rvSongA').textContent='A song chosen just for you';
-    const sp=d.spotify||'';if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
+    document.getElementById('rvSongT').textContent=sn;
+    document.getElementById('rvSongA').textContent='A song chosen just for you';
+    const sp=d.spotify||'';
+    if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
   }
   // Letter
   document.getElementById('rvLGreet').textContent=name?`Dear ${name},`:'Dear you,';
@@ -896,11 +901,34 @@ function renderCard(d){
   goTo('rv-welcome');
 }
 
-function openLightbox(url){
+// ── LIGHTBOX with left/right navigation ──
+let lbPhotos=[];
+let lbIdx=0;
+
+function openLightbox(idx){
+  lbIdx=idx;
   const lb=document.getElementById('photoLightbox');
-  document.getElementById('lightboxImg').src=url;
+  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
+  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+  document.getElementById('lbPrev').style.display=lbPhotos.length>1?'block':'none';
+  document.getElementById('lbNext').style.display=lbPhotos.length>1?'block':'none';
   lb.style.display='flex';
+  // swipe inside lightbox
+  let _lx=0;
+  lb.ontouchstart=e=>{_lx=e.changedTouches[0].clientX;};
+  lb.ontouchend=e=>{
+    const dx=e.changedTouches[0].clientX-_lx;
+    if(Math.abs(dx)>40){lbNav(dx<0?1:-1);e.stopPropagation();}
+  };
 }
+
+function lbNav(dir){
+  if(lbPhotos.length<=1) return;
+  lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
+  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
+  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+}
+
 function closeLightbox(){
   document.getElementById('photoLightbox').style.display='none';
 }
