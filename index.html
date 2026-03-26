@@ -20,8 +20,8 @@ body{font-family:'DM Sans',sans-serif;background:#060409;color:white;overflow-x:
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:white;text-decoration:none;letter-spacing:0.04em;}
 .nav-logo span{color:#e83878;}
-.nav-cta{font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.55);text-decoration:none;border:1px solid rgba(255,255,255,0.1);padding:8px 18px;border-radius:50px;transition:all 0.2s;}
-.nav-cta:hover{color:white;border-color:rgba(255,255,255,0.25);}
+
+
 
 /* ── HERO ── */
 .hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 32px;position:relative;overflow:hidden;}
@@ -42,12 +42,12 @@ h1 .l2{display:block;font-style:italic;background:linear-gradient(120deg,#e83878
 
 .hero-p{display:none;}
 
-.hero-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;animation:fu 0.8s 0.18s ease both;}
-.btn-p{display:inline-flex;align-items:center;gap:7px;padding:14px 28px;border-radius:50px;background:linear-gradient(135deg,#e83878,#f5604a);color:white;font-size:0.88rem;font-weight:600;border:none;cursor:pointer;text-decoration:none;box-shadow:0 0 40px rgba(232,56,120,0.25);transition:all 0.22s;touch-action:manipulation;}
-.btn-p:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(232,56,120,0.38);}
-.btn-p:active{transform:scale(0.97);}
-.btn-s{display:inline-flex;align-items:center;gap:7px;padding:14px 24px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.55);font-size:0.88rem;font-weight:500;cursor:pointer;text-decoration:none;transition:all 0.22s;touch-action:manipulation;}
-.btn-s:hover{background:rgba(255,255,255,0.09);color:white;}
+
+
+
+
+
+
 
 /* ── OCCASIONS ── */
 .occasions{padding:20px 24px 60px;max-width:1000px;margin:0 auto;}
@@ -97,14 +97,14 @@ h1 .l2{display:block;font-style:italic;background:linear-gradient(120deg,#e83878
 .chip{font-size:0.58rem;color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:50px;padding:2px 8px;}
 
 /* ── HOW IT WORKS — ultra minimal ── */
-.how{padding:60px 24px 90px;max-width:560px;margin:0 auto;text-align:center;}
-.how-steps{display:flex;flex-direction:column;gap:0;margin-top:44px;text-align:left;}
-.step{display:flex;gap:18px;padding:22px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-.step:last-child{border-bottom:none;}
-.step-n{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:rgba(255,255,255,0.08);line-height:1;flex-shrink:0;width:28px;padding-top:2px;}
-.step-body{}
-.step-t{font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.75);margin-bottom:4px;}
-.step-d{font-size:0.78rem;color:rgba(255,255,255,0.28);line-height:1.6;}
+
+
+
+
+
+
+
+
 
 /* ── FOOTER ── */
 footer{border-top:1px solid rgba(255,255,255,0.04);padding:24px 32px;}
@@ -131,7 +131,6 @@ footer{border-top:1px solid rgba(255,255,255,0.04);padding:24px 32px;}
 <!-- NAV -->
 <nav class="nav">
   <a href="/" class="nav-logo">Wish<span>You</span>.ai</a>
-  <a href="/birthday/" class="nav-cta">Make a card →</a>
 </nav>
 
 <!-- HERO -->
@@ -151,16 +150,6 @@ footer{border-top:1px solid rgba(255,255,255,0.04);padding:24px 32px;}
       <span class="l1">Send love,</span>
       <span class="l2">beautifully.</span>
     </h1>
-
-    <p class="hero-p">
-      Not just a message — an experience.<br>
-      Photos, music &amp; a letter written from the heart.
-    </p>
-
-    <div class="hero-btns">
-      <a href="/birthday/" class="btn-p">🎂 Birthday Cards</a>
-      <a href="/mothers-day/" class="btn-s">🌸 Mother's Day</a>
-    </div>
   </div>
 
 
@@ -319,37 +308,6 @@ footer{border-top:1px solid rgba(255,255,255,0.04);padding:24px 32px;}
       </div>
     </div>
 
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<hr style="border:none;border-top:1px solid rgba(255,255,255,0.04);max-width:1000px;margin:0 auto;">
-<section class="how">
-  <span class="sec-label" style="display:block;text-align:center;margin-bottom:10px;">How it works</span>
-  <div class="sec-title">Three steps.</div>
-
-  <div class="how-steps">
-    <div class="step">
-      <div class="step-n">01</div>
-      <div class="step-body">
-        <div class="step-t">Add photos, a song &amp; a letter</div>
-        <div class="step-d">Upload up to 5 photos, pick any YouTube song, and write a letter — or let AI write it for you in Hindi, Marathi, or any language.</div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-n">02</div>
-      <div class="step-body">
-        <div class="step-t">Get a link in seconds</div>
-        <div class="step-d">Your card is saved instantly. Share via WhatsApp, Instagram, or anywhere.</div>
-      </div>
-    </div>
-    <div class="step">
-      <div class="step-n">03</div>
-      <div class="step-body">
-        <div class="step-t">They open an experience</div>
-        <div class="step-d">Polaroid photos, spinning vinyl, envelope reveal, typewriter letter — designed to make them feel it.</div>
-      </div>
-    </div>
   </div>
 </section>
 
