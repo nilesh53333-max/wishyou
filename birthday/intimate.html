@@ -472,12 +472,6 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   <div class="save-box soft-save" id="saveBox">
     <div class="save-spinner">
       <div class="save-ring"></div>
-
-<!-- Share modal -->
-<div class="share-modal" id="shareModal">
-  <div class="share-box soft-share" id="shareBox">
-    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">💝</div>
-</div><!-- /app -->
       <span class="save-emoji" id="saveEmoji">💝</span>
     </div>
     <div class="save-label" id="saveLabel">Creating your card...</div>
@@ -485,6 +479,11 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
     <div class="save-step" id="saveStep"></div>
   </div>
 </div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box soft-share" id="shareBox">
+    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">💝</div>
     <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Card is ready! 🎉</div>
     <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;">Send this link to them 💝</div>
     <div style="font-size:0.72rem;opacity:0.5;border-radius:10px;padding:7px 12px;margin-bottom:12px;" id="expiryNote">⏳ Card expires in 3 days</div>
@@ -498,6 +497,8 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 </div>
 
 <div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+
+</div><!-- /app -->
 
 <script>
 // ── CONFIG ──
@@ -584,6 +585,8 @@ window.addEventListener('DOMContentLoaded',function(){
     },{passive:true});
     document.getElementById('mainApp').addEventListener('touchend',function(e){
       if(curScreen==='rv-welcome'||curScreen==='rv-loading'||curScreen==='rv-error') return;
+      // Don't swipe-navigate on photos screen — let user scroll polaroids freely
+      if(curScreen==='rv-photos') return;
       const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
       if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
       const idx=RV_ORDER.indexOf(curScreen);if(idx===-1) return;
@@ -892,10 +895,18 @@ function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn
 function openWhatsApp(){
   const name=document.getElementById('cName')?.value.trim()||'';
   const sender=document.getElementById('cSender')?.value.trim()||'';
-  const text=encodeURIComponent(CFG.shareMsg(name,sender,shareLink));
+  const msg=CFG.shareMsg(name,sender,shareLink);
   const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if(isMobile){window.location.href='whatsapp://send?text='+text;}
-  else{window.open('https://web.whatsapp.com/send?text='+text,'_blank');}
+  // Try native Web Share API first (best on mobile — opens native share sheet)
+  if(navigator.share && isMobile){
+    navigator.share({text:msg}).catch(()=>{
+      // Fallback to WhatsApp deep link if share cancelled or fails
+      window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+    });
+  } else {
+    // Desktop or no share API
+    window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+  }
 }
 function closeShare(){document.getElementById('shareModal').classList.remove('show');}
 
