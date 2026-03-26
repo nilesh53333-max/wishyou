@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_17.html -->
+<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_18.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -31,7 +32,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 
 .step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 16px;overflow:hidden;min-height:0;}
 .step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
-.step-actions{padding-top:12px;flex-shrink:0;padding-bottom:8px;}
+.step-actions{padding-top:12px;flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom));}
 
 .step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.15);}
 .step-progress-fill{height:100%;transition:width 0.5s ease;}
@@ -43,7 +44,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 
 .step-counter{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0.5;}
 .step-counter.dark{color:#333;}
-.step-emoji{font-size:2.8rem;margin-bottom:14px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
+.step-emoji{font-size:2.2rem;margin-bottom:10px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
 @keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 .step-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,5vw,1.9rem);font-weight:700;line-height:1.2;margin-bottom:6px;word-break:break-word;}
 .step-sub{font-size:0.82rem;line-height:1.6;margin-bottom:20px;opacity:0.6;}
@@ -97,7 +98,10 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .save-overlay.show{display:flex;}
 .save-box{border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;}
 .save-box.soft-save{background:white;box-shadow:0 20px 60px rgba(233,30,99,0.2);}
-.save-emoji{font-size:2.2rem;margin-bottom:10px;display:block;}
+.save-spinner{position:relative;width:64px;height:64px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
+.save-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(233,30,99,0.15);border-top-color:#e91e63;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.save-emoji{font-size:1.8rem;position:relative;z-index:1;}
 .save-label{font-size:1rem;font-weight:600;margin-bottom:14px;}
 .save-bar-wrap{height:8px;border-radius:50px;overflow:hidden;width:100%;margin-bottom:8px;}
 .soft-bar-wrap{background:rgba(233,30,99,0.12);}
@@ -168,7 +172,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .pol img{width:180px;height:200px;object-fit:cover;display:block;}
 .pol-lbl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.72rem;color:#8d3a5a;text-align:center;margin-top:6px;opacity:0.55;}
 .no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
-.rv-nav-row{display:flex;gap:8px;padding:10px 16px 16px;flex-shrink:0;}
+.rv-nav-row{display:flex;gap:8px;padding:10px 16px max(16px,env(safe-area-inset-bottom));flex-shrink:0;}
 .rv-next-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
 .rv-next-btn:active{transform:scale(0.97);}
 
@@ -225,14 +229,14 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .env-icon:active{transform:scale(0.9)!important;}
 
 /* LETTER — full screen, centered, nice paper */
-#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;}
+#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;overflow:hidden;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
-.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 90px;}
-.letter-paper{background:white;border-radius:16px;padding:28px 24px;box-shadow:0 6px 24px rgba(74,14,42,0.1);border-top:3px solid #e91e63;}
+.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 100px;}
+.letter-paper{background:white;border-radius:16px;padding:22px 20px;box-shadow:0 4px 20px rgba(74,14,42,0.08);border-top:3px solid #e91e63;}
 .l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}
 .l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;color:#3d1c2e;line-height:2.1;white-space:pre-wrap;}
 .l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#e91e63;margin-top:22px;display:block;}
-.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px 16px;background:linear-gradient(to top,rgba(253,232,240,1) 65%,rgba(253,232,240,0));}
+.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(253,232,240,1) 70%,rgba(253,232,240,0));}
 .letter-foot-row{display:flex;gap:8px;}
 .replay-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
 .create-again-btn{background:none;border:1.5px solid rgba(233,30,99,0.35);color:#e91e63;border-radius:50px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;}
@@ -240,6 +244,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .wm{position:fixed;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(74,14,42,0.18);}
 @keyframes ripple{to{transform:scale(4);opacity:0;}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes letterFade{to{opacity:1;}}
 </style>
 </head>
 <body>
@@ -280,7 +285,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
         <input id="photosHeading" class="regular-input" value="Our Memories" maxlength="30" style="flex:1;font-size:0.85rem;padding:8px 12px;">
       </div>
       <div class="photos-grid" id="photosGrid"><div class="photo-slot soft-slot" id="slot0"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot1"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot2"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot3"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot4"><span style="opacity:0.4;">+</span></div></div>
-      <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+      <input type="file" accept="image/*" multiple="" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
     </div>
     <div class="step-actions">
       <button class="btn-next btn-intimate" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
@@ -409,7 +414,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
   <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
   <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
-  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;" src="file:///C:/Users/Nilesh/Downloads/intimate_17.html" alt="">
+  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;" src="./intimate_files/saved_resource" alt="">
   <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
   <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
 </div>
@@ -462,7 +467,10 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <!-- Save overlay -->
 <div class="save-overlay" id="saveOverlay">
   <div class="save-box soft-save" id="saveBox">
-    <span class="save-emoji" id="saveEmoji">💝</span>
+    <div class="save-spinner">
+      <div class="save-ring"></div>
+      <span class="save-emoji" id="saveEmoji">💝</span>
+    </div>
     <div class="save-label" id="saveLabel">Creating your card...</div>
     <div class="save-bar-wrap soft-bar-wrap" id="saveBarWrap"><div class="save-bar soft-bar" id="saveBar"></div></div>
     <div class="save-step" id="saveStep"></div>
@@ -629,12 +637,25 @@ function buildPhotoSlots(){
 function triggerUpload(idx){currentSlotIdx=idx;document.getElementById('photoFileInput').click();}
 
 function handlePhotoUpload(inp){
-  const file=inp.files[0];if(!file)return;
-  const url=URL.createObjectURL(file);
-  photos[currentSlotIdx]=url;
-  const idx=currentSlotIdx;
-  const slot=document.getElementById('slot'+idx);
-  slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${idx})">✕</button>`;
+  const files=Array.from(inp.files);if(!files.length)return;
+  files.forEach((file,offset)=>{
+    // find next empty slot starting from currentSlotIdx
+    let targetIdx = -1;
+    for(let i=0;i<5;i++){
+      const checkIdx=(currentSlotIdx+offset+i)%5;
+      // if slot already has photo, skip unless this is first file
+      if(offset===0 && i===0){ targetIdx=currentSlotIdx; break; }
+      if(!photos[(currentSlotIdx+offset)%5] || offset>0){
+        targetIdx=(currentSlotIdx+offset)%5;
+        break;
+      }
+    }
+    if(targetIdx<0||targetIdx>4) return;
+    const url=URL.createObjectURL(file);
+    photos[targetIdx]=url;
+    const slot=document.getElementById('slot'+targetIdx);
+    if(slot) slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${targetIdx})">✕</button>`;
+  });
   inp.value='';
 }
 
@@ -892,10 +913,12 @@ function renderCard(d){
     const sp=d.spotify||'';
     if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
   }
-  // Letter
+  // Letter — stored for typewriter reveal
   document.getElementById('rvLGreet').textContent=name?`Dear ${name},`:'Dear you,';
-  document.getElementById('rvLBody').textContent=d.msg||'';
-  document.getElementById('rvLSign').textContent=d.sign||(sender?`With love, ${sender} 💕`:'With love 💕');
+  rvLetterText = d.msg||'';
+  rvLetterSign = d.sign||(sender?`With love, ${sender} 💕`:'With love 💕');
+  document.getElementById('rvLBody').textContent=rvLetterText;
+  document.getElementById('rvLSign').textContent=rvLetterSign;
   goTo('rv-welcome');
 }
 
@@ -932,10 +955,38 @@ function closeLightbox(){
   document.getElementById('photoLightbox').style.display='none';
 }
 
+let rvLetterText='';
+let rvLetterSign='';
+
 function openLetter(){
   const e=document.querySelector('.env-icon');
   e.style.transform='scale(1.3) rotate(15deg)';
-  setTimeout(()=>{e.style.transform='';goTo('rv-letter');},380);
+  setTimeout(()=>{e.style.transform='';goTo('rv-letter');setTimeout(typewriteLetter,300);},380);
+}
+
+function typewriteLetter(){
+  const el=document.getElementById('rvLBody');
+  const signEl=document.getElementById('rvLSign');
+  if(!el||!rvLetterText) return;
+  el.textContent='';
+  signEl.style.opacity='0';
+  const chars=rvLetterText.split('');
+  let i=0;
+  // Fast typewriter — each char 18ms
+  function next(){
+    if(i<chars.length){
+      el.textContent+=chars[i];
+      i++;
+      setTimeout(next,18);
+    } else {
+      // Fade in sign after text done
+      setTimeout(()=>{
+        signEl.style.transition='opacity 0.6s ease';
+        signEl.style.opacity='1';
+      },200);
+    }
+  }
+  next();
 }
 </script>
 
