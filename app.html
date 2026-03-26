@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_7.html -->
+<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_8.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -341,8 +341,17 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 
 .step-wrap{
   flex:1;display:flex;flex-direction:column;
-  padding:56px 22px 28px;
+  padding:56px 22px 16px;
   overflow-y:auto;-webkit-overflow-scrolling:touch;
+  min-height:0;
+}
+.step-content{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding-bottom:8px;
+}
+.step-actions{
+  padding-top:12px;
+  flex-shrink:0;
 }
 
 /* Progress bar */
@@ -603,14 +612,16 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
   <div class="step-progress"><div class="step-progress-fill" id="prog-name" style="width:20%"></div></div>
   <button class="step-back dark" id="back-name" onclick="goBackCreator()">←</button>
   <div class="step-wrap">
-    <div class="step-counter dark" id="counter-name">Step 1 of 4</div>
-    <span class="step-emoji" id="emoji-name">🎂</span>
-    <div class="step-title" id="title-name">Who is this card for?</div>
-    <div class="step-sub" id="sub-name">Make it personal from the very start</div>
-    <div class="input-wrap" id="nameInputWrap">
-      <!-- Injected by style -->
+    <div class="step-content">
+      <div class="step-counter dark" id="counter-name">Step 1 of 4</div>
+      <span class="step-emoji" id="emoji-name">🎂</span>
+      <div class="step-title" id="title-name">Who is this card for?</div>
+      <div class="step-sub" id="sub-name">Make it personal from the very start</div>
+      <div class="input-wrap" id="nameInputWrap"></div>
     </div>
-    <button class="btn-next" id="btn-name" onclick="goTo(&#39;s-photos&#39;)">Continue → Photos</button>
+    <div class="step-actions">
+      <button class="btn-next" id="btn-name" onclick="goTo(&#39;s-photos&#39;)">Continue → Photos</button>
+    </div>
   </div>
 </div>
 
@@ -621,14 +632,18 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
   <div class="step-progress"><div class="step-progress-fill" id="prog-photos" style="width:40%"></div></div>
   <button class="step-back dark" id="back-photos" onclick="goBackCreator()">←</button>
   <div class="step-wrap">
-    <div class="step-counter dark">Step 2 of 4</div>
-    <span class="step-emoji">📸</span>
-    <div class="step-title" id="title-photos">Your memories together</div>
-    <div class="step-sub">Add up to 5 photos — tap any caption to edit it</div>
-    <div class="photos-grid" id="photosGrid"></div>
-    <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
-    <button class="btn-next" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
-    <button class="btn-skip" onclick="goTo(&#39;s-song&#39;)">Skip for now</button>
+    <div class="step-content">
+      <div class="step-counter dark">Step 2 of 4</div>
+      <span class="step-emoji">📸</span>
+      <div class="step-title" id="title-photos">Your memories together</div>
+      <div class="step-sub">Tap any caption below a photo to rename it</div>
+      <div class="photos-grid" id="photosGrid"></div>
+      <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
+      <button class="btn-skip" onclick="goTo(&#39;s-song&#39;)">Skip for now</button>
+    </div>
   </div>
 </div>
 
@@ -639,30 +654,34 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
   <div class="step-progress"><div class="step-progress-fill" id="prog-song" style="width:60%"></div></div>
   <button class="step-back dark" id="back-song" onclick="goBackCreator()">←</button>
   <div class="step-wrap">
-    <div class="step-counter dark">Step 3 of 4</div>
-    <span class="step-emoji">🎵</span>
-    <div class="step-title" id="title-song">A song just for them</div>
-    <div class="step-sub">Search for a song or let AI suggest one</div>
-    <div class="song-selected-box" id="songSelectedBox">
-      <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Now playing:</div>
-      <div style="font-size:0.9rem;font-weight:600;color:white;" id="songSelectedName">—</div>
+    <div class="step-content">
+      <div class="step-counter dark">Step 3 of 4</div>
+      <span class="step-emoji">🎵</span>
+      <div class="step-title" id="title-song">A song just for them</div>
+      <div class="step-sub">Search by name or describe what you want</div>
+      <div class="song-selected-box" id="songSelectedBox">
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Selected:</div>
+        <div style="font-size:0.88rem;font-weight:600;color:white;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="ytSearchInput" placeholder="Search song name..." style="flex:1;" onkeydown="if(event.key===&#39;Enter&#39;)searchSong()" maxlength="100">
+        <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;">🔍</button>
+      </div>
+      <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
+      <!-- AI suggestions -->
+      <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(233,30,99,0.15);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ AI Song Suggestions</div>
+        <input id="aiSongContext" class="regular-input" placeholder="Describe what you want: e.g. romantic Hindi, 90s nostalgic, fun party song..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
+        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;">Suggest Songs</button>
+        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span style="font-size:0.78rem;color:#8d3a5a;">Finding songs...</span></div>
+        <div id="songAiResults" style="margin-top:6px;"></div>
+      </div>
+      <input type="hidden" id="cSpotify">
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <input id="ytSearchInput" placeholder="Search song name..." style="flex:1;" onkeydown="if(event.key===&#39;Enter&#39;)searchSong()" maxlength="100">
-      <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;">🔍</button>
+    <div class="step-actions">
+      <button class="btn-next" id="btn-song" onclick="goTo(&#39;s-letter&#39;)">Continue → Letter</button>
+      <button class="btn-skip" onclick="goTo(&#39;s-letter&#39;)">Skip for now</button>
     </div>
-    <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
-    <!-- AI suggestions with context -->
-    <div style="background:rgba(233,30,99,0.05);border:1px solid rgba(233,30,99,0.12);border-radius:14px;padding:12px 14px;margin-bottom:10px;" id="aiSongBox">
-      <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;margin-bottom:8px;">AI Song Suggestions</div>
-      <input id="aiSongContext" placeholder="e.g. romantic Hindi, nostalgic 90s, fun English..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="80">
-      <button class="btn-ai" id="aiSongBtn" onclick="suggestSongs()">✨ Suggest Songs for Me</button>
-      <div class="ai-loading" id="songAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span>Finding perfect songs...</span></div>
-      <div id="songAiResults"></div>
-    </div>
-    <input type="hidden" id="cSpotify">
-    <button class="btn-next" id="btn-song" onclick="goTo(&#39;s-letter&#39;)" style="margin-top:4px;">Continue → Letter</button>
-    <button class="btn-skip" onclick="goTo(&#39;s-letter&#39;)">Skip for now</button>
   </div>
 </div>
 
@@ -673,32 +692,36 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
   <div class="step-progress"><div class="step-progress-fill" id="prog-letter" style="width:80%"></div></div>
   <button class="step-back dark" id="back-letter" onclick="goBackCreator()">←</button>
   <div class="step-wrap">
-    <div class="step-counter dark">Step 4 of 4</div>
-    <span class="step-emoji">💌</span>
-    <div class="step-title" id="title-letter">Write from the heart</div>
-    <div class="step-sub">A few honest words mean everything</div>
-    <!-- AI letter with language + regenerate -->
-    <div style="background:rgba(233,30,99,0.05);border:1px solid rgba(233,30,99,0.12);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
-      <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;margin-bottom:8px;">AI Write Letter</div>
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <select id="letterLang" style="flex:1;font-size:0.85rem;padding:10px 12px;border:1.5px solid rgba(233,30,99,0.2);border-radius:10px;background:white;color:#4a0e2a;outline:none;">
-          <option value="English">English</option>
-          <option value="Hindi">Hindi</option>
-          <option value="Marathi">Marathi</option>
-          <option value="Tamil">Tamil</option>
-          <option value="Telugu">Telugu</option>
-          <option value="Bengali">Bengali</option>
-          <option value="Punjabi">Punjabi</option>
-          <option value="Gujarati">Gujarati</option>
-        </select>
-        <input id="letterTone" placeholder="e.g. funny, emotional..." style="flex:1;font-size:0.85rem;" maxlength="40">
+    <div class="step-content">
+      <div class="step-counter dark">Step 4 of 4</div>
+      <span class="step-emoji">💌</span>
+      <div class="step-title" id="title-letter">Write from the heart</div>
+      <div class="step-sub">A few honest words mean everything</div>
+      <!-- AI letter -->
+      <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(233,30,99,0.15);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ Write Letter with AI</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <select id="letterLang" class="regular-input" style="flex:1;font-size:0.85rem;padding:10px 12px;">
+            <option value="English">English</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Marathi">Marathi</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Telugu">Telugu</option>
+            <option value="Bengali">Bengali</option>
+            <option value="Punjabi">Punjabi</option>
+            <option value="Gujarati">Gujarati</option>
+          </select>
+          <input id="letterTone" class="regular-input" placeholder="Tone: funny, emotional..." style="flex:1;" maxlength="40">
+        </div>
+        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;">✨ Write Letter with AI</button>
+        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span style="font-size:0.78rem;color:#8d3a5a;" id="letterAiText">Writing your letter...</span></div>
+        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#8d3a5a;margin-top:6px;">↑ Tap again for a different letter</div>
       </div>
-      <button class="btn-ai" id="aiLetterBtn" onclick="runAILetter()" style="margin-bottom:0;">✨ Write Letter with AI</button>
-      <div class="ai-loading" id="letterAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span id="letterAiText">Writing your letter...</span></div>
-      <div id="letterAiResult" style="display:none;font-size:0.72rem;margin-top:6px;opacity:0.6;">Tap again to get a different letter ↑</div>
+      <div id="letterInputWrap"></div>
     </div>
-    <div id="letterInputWrap"></div>
-    <button class="btn-next" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)" style="margin-top:8px;">Preview My Card →</button>
+    <div class="step-actions">
+      <button class="btn-next" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)">Preview My Card →</button>
+    </div>
   </div>
 </div>
 
@@ -708,14 +731,15 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 <div class="screen creator-screen" id="s-preview">
   <div class="step-progress"><div class="step-progress-fill" id="prog-preview" style="width:100%"></div></div>
   <button class="step-back dark" onclick="goBackCreator()">←</button>
-  <div class="step-wrap" style="padding-top:56px;">
-    <div class="step-title" style="margin-bottom:4px;">Almost there! 🎉</div>
-    <div class="step-sub" style="margin-bottom:16px;">Review each page of your card</div>
-
-    <!-- Page by page preview -->
-    <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
-
-    <button class="btn-next" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-title" style="margin-bottom:4px;padding-top:4px;">Almost there! 🎉</div>
+      <div class="step-sub" style="margin-bottom:16px;">Review each page — tap Edit to change anything</div>
+      <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
+    </div>
   </div>
 </div>
 
@@ -836,19 +860,47 @@ let currentStyleConfig = null;
 // ════════════════════════════════════════════════
 // NAVIGATION
 // ════════════════════════════════════════════════
-function goTo(id){
+let returnToPreview = false;
+
+function goTo(id, fromPreview=false){
   const prev = document.getElementById(curScreen);
   const next = document.getElementById(id);
   if(!next||curScreen===id) return;
   if(prev){ prev.classList.remove('active'); prev.classList.add('slide-out'); setTimeout(()=>prev.classList.remove('slide-out'),500); }
   next.classList.add('active');
   curScreen = id;
+  returnToPreview = fromPreview;
   if(id==='s-letter'){ aiLetterCount=0; const btn=document.getElementById('aiLetterBtn'); if(btn) btn.textContent='✨ Write Letter with AI'; const h=document.getElementById('letterAiResult'); if(h) h.style.display='none'; }
   if(id==='s-preview') buildPreview();
+  // Reset continue buttons to normal flow if not coming from preview
+  if(!fromPreview && id !== 's-preview'){
+    const normalFlow = {
+      's-name': {btn:'btn-name', label:'Continue → Photos', dest:'s-photos'},
+      's-photos': {btn:'btn-photos', label:'Continue → Song', dest:'s-song'},
+      's-song': {btn:'btn-song', label:'Continue → Letter', dest:'s-letter'},
+      's-letter': {btn:'btn-letter', label:'Preview My Card →', dest:'s-preview'},
+    };
+    const flow = normalFlow[id];
+    if(flow){ const b=document.getElementById(flow.btn); if(b){ b.textContent=flow.label; b.onclick=()=>goTo(flow.dest); } }
+  }
+  // If coming from preview, update that screen's Continue button
+  if(fromPreview){
+    const btnMap = {'s-name':'btn-name','s-photos':'btn-photos','s-song':'btn-song','s-letter':'btn-letter'};
+    const btnId = btnMap[id];
+    if(btnId){ const b=document.getElementById(btnId); if(b){ b.textContent='Done → Back to Preview ✓'; b.onclick=()=>goTo('s-preview'); } }
+  }
   setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollTo(0,0); },50);
+  // If coming from preview, update Continue buttons to say "Done → Back to Preview"
+  if(fromPreview){
+    ['btn-name','btn-photos','btn-song','btn-letter'].forEach(btnId=>{
+      const b=document.getElementById(btnId);
+      if(b) b.onclick = ()=>goTo('s-preview');
+    });
+  }
 }
 
 function goBackCreator(){
+  if(returnToPreview){ goTo('s-preview'); return; }
   const order = ['s-occasion','s-style','s-name','s-photos','s-song','s-letter','s-preview'];
   const idx = order.indexOf(curScreen);
   if(idx>0) goTo(order[idx-1]);
@@ -1274,28 +1326,32 @@ async function suggestSongs(){
   const cfg=currentStyleConfig;
   const loading=document.getElementById('songAiLoading');
   const results=document.getElementById('songAiResults');
-  loading.classList.add('show'); results.innerHTML='';
-  // Get user context from the input field
+  const btn=document.getElementById('aiSongBtn');
+  loading.classList.add('show'); results.innerHTML=''; btn.disabled=true;
   const context = document.getElementById('aiSongContext')?.value.trim()||'';
   const name = document.getElementById('cName')?.value.trim()||'';
   const occ = cfg.cardType.includes('mothersday')?"Mother's Day":cfg.occasion;
   let prompt = `Suggest 4 real popular songs for a ${occ} card`;
-  if(name) prompt += ` for ${name}`;
-  if(context) prompt += `. User wants: "${context}"`;
-  else prompt += `. Mix Hindi and English, emotional and upbeat`;
-  prompt += `. Return ONLY JSON array: [{"name":"Song","artist":"Artist"}]`;
+  if(name) prompt += ` for someone named ${name}`;
+  if(context){
+    prompt += `. User specifically wants: "${context}". Follow this exactly — if they say Marathi, give ONLY Marathi songs. If they say romantic Hindi, give romantic Hindi songs only.`;
+  } else {
+    prompt += `. Mix languages, include emotional and upbeat options`;
+  }
+  prompt += `. Return ONLY a JSON array, no markdown: [{"name":"Song Name","artist":"Artist Name"}]`;
   const text=await callClaude(prompt);
   try{
     const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    if(!songs.length){ results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Try being more specific.</div>'; return; }
     songs.forEach(s=>{
       const el=document.createElement('div');
-      el.style.cssText=`display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.6);border:1px solid rgba(233,30,99,0.1);`;
-      el.innerHTML=`<span>🎵</span><div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;color:#4a0e2a;">${s.name}</div><div style="font-size:0.72rem;opacity:0.5;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#e91e63;">Search ›</span>`;
-      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
+      el.style.cssText='display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.7);border:1px solid rgba(233,30,99,0.1);touch-action:manipulation;';
+      el.innerHTML=`<span style="font-size:1.1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:600;color:#4a0e2a;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;">${s.name}</div><div style="font-size:0.72rem;color:#8d3a5a;opacity:0.7;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#e91e63;white-space:nowrap;">Search ›</span>`;
+      el.onclick=()=>{ document.getElementById('ytSearchInput').value=s.name+' '+s.artist; searchSong(); };
       results.appendChild(el);
     });
-  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;">Could not fetch. Try again.</div>';}
-  loading.classList.remove('show');
+  }catch(e){ results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Could not fetch. Try again.</div>'; }
+  loading.classList.remove('show'); btn.disabled=false;
 }
 
 // ════════════════════════════════════════════════
@@ -1314,8 +1370,12 @@ async function runAILetter(){
   aiLetterCount++;
   btn.disabled=true; loading.classList.add('show');
   const occ = cfg.cardType.includes('mothersday')?"Mother's Day":cfg.occasion;
-  const variationHint = aiLetterCount>1 ? ` Write a DIFFERENT letter from the previous one. Variation ${aiLetterCount}.` : '';
-  const prompt = `Write a short ${occ} letter in ${lang} language from ${sender} to ${name} (3-4 sentences). Tone: ${tone}.${variationHint} Return ONLY the letter body — no greeting line, no sign off.`;
+  const variationHint = aiLetterCount>1 ? ` This is attempt #${aiLetterCount} — write a COMPLETELY DIFFERENT letter with different words and ideas.` : '';
+  let langNote = '';
+  if(lang !== 'English'){
+    langNote = ` CRITICAL: Write ONLY in ${lang} script. Use simple natural everyday ${lang} — exactly how a real person texts or talks to someone they love. NOT formal, NOT poetic, NOT literary. NOT translated English sentences. Real ${lang} like "अरे यार, आज तुझा वाढदिवस आहे" not "तुझ्या जन्मदिनाच्या दिवशी माझे हृदय आनंदाने भरून जाते".`;
+  }
+  const prompt = `Write a short ${occ} letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone}.${langNote}${variationHint} Return ONLY the letter body — no greeting, no sign off.`;
   const text=await callClaude(prompt);
   if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
   btn.disabled=false; loading.classList.remove('show');
@@ -1360,7 +1420,7 @@ function buildPreview(){
           <span style="font-size:1.1rem;">${icon}</span>
           <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.5;">${label}</span>
         </div>
-        <button onclick="goTo('${editScreen}')" style="font-size:0.68rem;font-weight:600;color:${accentColor};background:none;border:1px solid ${accentColor};border-radius:20px;padding:4px 10px;cursor:pointer;opacity:0.8;">Edit</button>
+        <button onclick="goTo('${editScreen}', true)" style="font-size:0.68rem;font-weight:600;color:${accentColor};background:none;border:1px solid ${accentColor};border-radius:20px;padding:4px 10px;cursor:pointer;opacity:0.8;">Edit</button>
       </div>
       ${content}
     `;
