@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_16.html -->
+<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_17.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -165,6 +164,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .pol{flex-shrink:0;scroll-snap-align:center;background:white;padding:8px 8px 28px;box-shadow:0 8px 24px rgba(74,14,42,0.12);border-radius:2px;}
 .pol:nth-child(odd){transform:rotate(-2.5deg);}
 .pol:nth-child(even){transform:rotate(2deg);}
+.pol-strip:has(.pol:only-child) .pol{transform:rotate(0deg) !important;}
 .pol img{width:180px;height:200px;object-fit:cover;display:block;}
 .pol-lbl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.72rem;color:#8d3a5a;text-align:center;margin-top:6px;opacity:0.55;}
 .no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
@@ -208,7 +208,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .vinyl-spin{animation:vsr 2.8s linear infinite;}
 @keyframes vsr{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .vinyl-pause{animation-play-state:paused;}
-.rv-song-t{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;}
+.rv-song-t{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .rv-song-a{font-size:0.75rem;color:#8d3a5a;opacity:0.55;text-align:center;margin-bottom:16px;width:100%;}
 .yt-wrap{width:100%;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(74,14,42,0.12);margin-bottom:14px;display:none;}
 .yt-wrap iframe{width:100%;height:180px;border:none;display:block;}
@@ -227,10 +227,10 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 /* LETTER — full screen, centered, nice paper */
 #rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
-.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 100px;display:flex;flex-direction:column;}
-.letter-paper{background:white;border-radius:16px;padding:28px 24px;box-shadow:0 6px 24px rgba(74,14,42,0.1);border-top:3px solid #e91e63;flex:1;}
+.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 90px;}
+.letter-paper{background:white;border-radius:16px;padding:28px 24px;box-shadow:0 6px 24px rgba(74,14,42,0.1);border-top:3px solid #e91e63;}
 .l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}
-.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.02rem;color:#3d1c2e;line-height:1.95;white-space:pre-wrap;}
+.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;color:#3d1c2e;line-height:2.1;white-space:pre-wrap;}
 .l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#e91e63;margin-top:22px;display:block;}
 .letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px 16px;background:linear-gradient(to top,rgba(253,232,240,1) 65%,rgba(253,232,240,0));}
 .letter-foot-row{display:flex;gap:8px;}
@@ -376,6 +376,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div class="screen" id="rv-error">
   <span class="rv-error-emoji">💔</span>
   <div class="rv-error-text">This card has expired<br>or couldn't be found.</div>
+  <button onclick="window.location.href=&#39;/birthday/intimate.html&#39;" style="margin-top:28px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,99,0.35);">💝 Create your own card</button>
 </div>
 
 <div class="screen" id="rv-welcome">
@@ -408,7 +409,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
   <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
   <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
-  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;" src="file:///C:/Users/Nilesh/Downloads/intimate_16.html">
+  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;" src="file:///C:/Users/Nilesh/Downloads/intimate_17.html" alt="">
   <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
   <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
 </div>
@@ -484,7 +485,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   </div>
 </div>
 
-<div class="wm">WishYou.ai</div>
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
 
 <script>
 // ── CONFIG ──
@@ -508,9 +509,7 @@ const CFG = {
 // ── STATE ──
 let curScreen = '';
 let photos = [];
-let photoCaptions = ['Memory 1','Memory 2','Memory 3','Memory 4','Memory 5'];
 let currentSlotIdx = 0;
-let spotifySrc = '';
 let shareLink = '';
 let returnToPreview = false;
 let aiLetterCount = 0;
@@ -543,10 +542,10 @@ function goTo(id, fromPreview=false){
   // FIX: vinyl spin only on song screen
   const v=document.getElementById('rvVinyl');
   if(v){if(id==='rv-song')v.classList.remove('vinyl-pause');else v.classList.add('vinyl-pause');}
-  // FIX: stop YouTube iframe when leaving song screen
+  // Stop YouTube when leaving song screen (permanently blank until re-entered)
   if(id!=='rv-song'){
     const iframe=document.querySelector('#rvYtWrap iframe');
-    if(iframe){const s=iframe.src;iframe.src='';setTimeout(()=>iframe.src=s,10);}
+    if(iframe) iframe.src=iframe.src; // pause by reassigning
   }
   setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
 }
@@ -618,7 +617,6 @@ window.addEventListener('DOMContentLoaded',function(){
 function buildPhotoSlots(){
   const grid=document.getElementById('photosGrid');
   grid.innerHTML='';photos=[];
-  photoCaptions=['Memory 1','Memory 2','Memory 3','Memory 4','Memory 5'];
   for(let i=0;i<5;i++){
     const slot=document.createElement('div');
     slot.className='photo-slot soft-slot';slot.id='slot'+i;
@@ -915,10 +913,11 @@ function openLightbox(idx){
   lb.style.display='flex';
   // swipe inside lightbox
   let _lx=0;
-  lb.ontouchstart=e=>{_lx=e.changedTouches[0].clientX;};
+  lb.ontouchstart=e=>{_lx=e.changedTouches[0].clientX;e.stopPropagation();};
   lb.ontouchend=e=>{
+    e.stopPropagation();
     const dx=e.changedTouches[0].clientX-_lx;
-    if(Math.abs(dx)>40){lbNav(dx<0?1:-1);e.stopPropagation();}
+    if(Math.abs(dx)>40) lbNav(dx<0?1:-1);
   };
 }
 
