@@ -3,91 +3,163 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>You have a birthday surprise! 💝</title>
+<title>WishYou.ai — Intimate Birthday Card</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
 <meta property="og:title" content="You have a birthday surprise! 💝">
 <meta property="og:description" content="Someone made you a special interactive card with photos, music & a heartfelt letter.">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ── BASE ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;}
-
 .app{position:relative;width:100%;max-width:430px;height:100vh;overflow:hidden;margin:0 auto;}
 @media(min-width:500px){
   .app{height:90vh;max-height:900px;border-radius:40px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
 }
 
+/* ── SCREEN SYSTEM ── */
 .screen{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:absolute;inset:0;display:flex;flex-direction:column;
   opacity:0;pointer-events:none;
-  transition:opacity 0.6s ease,transform 0.6s cubic-bezier(.4,0,.2,1);
-  transform:translateY(30px);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);
+  transform:translateX(60px);overflow-y:auto;-webkit-overflow-scrolling:touch;
 }
-.screen.active{opacity:1;pointer-events:all;transform:translateY(0);}
-.screen.out{opacity:0;transform:translateY(-30px);}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.screen.slide-out{opacity:0;transform:translateX(-60px);}
 
-/* LOADING */
-#s-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);}
-.loading-heart{font-size:3rem;animation:hb 1.2s ease-in-out infinite;}
-@keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
-.loading-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#8d3a5a;margin-top:14px;opacity:0.6;}
+/* ── THEME ── */
+.theme-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
 
-/* ERROR */
-#s-error{background:linear-gradient(160deg,#fde8f0,#fce4ec);text-align:center;padding:40px;}
-.error-emoji{font-size:3rem;margin-bottom:16px;display:block;}
-.error-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#8d3a5a;line-height:1.7;}
+/* ── STEP WRAP (creator) ── */
+.creator-screen{padding:0;align-items:stretch;justify-content:flex-start;}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 28px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.15);}
+.step-progress-fill{height:100%;transition:width 0.5s ease;}
+.intimate-progress{background:linear-gradient(90deg,#e91e63,#f06292);}
+.step-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;touch-action:manipulation;transition:background 0.2s;z-index:5;}
+.step-back.dark{background:rgba(0,0,0,0.1);color:#333;}
+.step-back.dark:active{background:rgba(0,0,0,0.18);}
+.step-counter{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0.5;}
+.step-counter.dark{color:#333;}
+.step-emoji{font-size:2.8rem;margin-bottom:14px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
+@keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,6vw,2.2rem);font-weight:700;line-height:1.2;margin-bottom:6px;color:#4a0e2a;}
+.step-sub{font-size:0.85rem;line-height:1.6;margin-bottom:24px;opacity:0.6;color:#4a0e2a;}
 
-/* WELCOME */
-#s-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);padding:40px 28px;}
+/* ── INPUTS (intimate) ── */
+.field-label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;opacity:0.5;color:#4a0e2a;}
+.big-input{width:100%;border:none;border-bottom:2px solid rgba(233,30,99,0.25);background:transparent;padding:10px 0;font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;outline:none;transition:border-color 0.3s;text-align:center;color:#4a0e2a;}
+.big-input::placeholder{opacity:0.25;font-style:italic;}
+.big-input:focus{border-color:rgba(233,30,99,0.6);}
+.regular-input{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:rgba(255,255,255,0.7);outline:none;transition:border-color 0.3s;margin-bottom:12px;backdrop-filter:blur(10px);}
+.regular-input::placeholder{opacity:0.35;font-style:italic;}
+.regular-input:focus{border-color:rgba(233,30,99,0.4);background:rgba(255,255,255,0.9);}
+.letter-area{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:16px;padding:16px;font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.8;background:rgba(255,255,255,0.7);outline:none;resize:none;min-height:160px;transition:border-color 0.3s;backdrop-filter:blur(10px);}
+.letter-area:focus{border-color:rgba(233,30,99,0.4);}
+.letter-area::placeholder{opacity:0.35;font-style:italic;}
+
+/* ── BUTTONS (intimate) ── */
+.btn-next{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;touch-action:manipulation;margin-top:8px;transition:transform 0.15s,box-shadow 0.15s;}
+.btn-next:active{transform:scale(0.97);}
+.btn-intimate{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 8px 24px rgba(233,30,99,0.35);}
+.btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.5;font-family:'DM Sans',sans-serif;}
+.btn-wa{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(37,211,102,0.3);margin-top:8px;touch-action:manipulation;}
+.btn-ai{width:100%;padding:12px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;margin-bottom:10px;touch-action:manipulation;transition:background 0.2s;background:rgba(233,30,99,0.07);border:1.5px solid rgba(233,30,99,0.2);color:#e91e63;}
+.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;margin:6px 0;color:#4a0e2a;}
+.ai-loading.show{display:flex;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#e91e63;animation:aiPulse 1s ease-in-out infinite;}
+@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+
+/* ── PHOTOS ── */
+.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;font-size:1.3rem;background:rgba(233,30,99,0.07);border:1.5px dashed rgba(233,30,99,0.25);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#e91e63;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+
+/* ── SONG ── */
+.song-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;background:rgba(255,255,255,0.6);border:1.5px solid rgba(233,30,99,0.1);}
+.song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.song-use-btn{padding:6px 12px;border:none;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#e91e63,#f06292);color:white;}
+.song-selected-box{border-radius:14px;padding:12px 14px;margin-bottom:10px;display:none;background:linear-gradient(135deg,#2d1048,#1a0a2e);}
+
+/* ── SAVE OVERLAY ── */
+.save-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay.show{display:flex;}
+.save-box{border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;background:white;box-shadow:0 20px 60px rgba(233,30,99,0.2);}
+.save-emoji{font-size:2.2rem;margin-bottom:10px;display:block;}
+.save-label{font-size:1rem;font-weight:600;margin-bottom:14px;color:#4a0e2a;}
+.save-bar-wrap{height:8px;border-radius:50px;overflow:hidden;width:100%;margin-bottom:8px;background:rgba(233,30,99,0.12);}
+.save-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s ease;background:linear-gradient(90deg,#e91e63,#f06292);}
+.save-step{font-size:0.75rem;opacity:0.6;color:#4a0e2a;}
+
+/* ── SHARE MODAL ── */
+.share-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;background:white;}
+.share-link-row{border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(233,30,99,0.06);border:1px solid rgba(233,30,99,0.15);}
+.share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;color:#4a0e2a;}
+.copy-btn{padding:6px 12px;border:none;border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;background:#e91e63;color:white;}
+.modal-close{width:100%;padding:12px;background:none;border:1.5px solid rgba(233,30,99,0.2);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:6px;color:#8d3a5a;}
+
+/* ── PREVIEW ── */
+#previewMiniCard{width:100%;border-radius:18px;padding:20px;margin-bottom:16px;text-align:left;}
+
+/* ── WATERMARK ── */
+.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.6rem;color:rgba(74,14,42,0.2);font-weight:600;}
+
+/* ════════════════════════════════
+   RECEIVER SCREENS
+════════════════════════════════ */
+/* Welcome */
+#rv-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);padding:40px 28px;align-items:center;justify-content:center;}
 .petals-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
 .petal{position:absolute;animation:pf linear infinite;opacity:0;}
 @keyframes pf{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:0.4;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
-.welcome-inner{position:relative;z-index:2;text-align:center;width:100%;}
-.w-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(233,30,99,0.45);margin-bottom:22px;display:block;}
-.w-emoji{font-size:4rem;margin-bottom:18px;display:block;animation:hb2 1.8s ease-in-out infinite;}
-@keyframes hb2{0%,100%{transform:scale(1);}14%{transform:scale(1.15);}28%{transform:scale(1);}42%{transform:scale(1.08);}56%{transform:scale(1);}}
-.w-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,7vw,2.6rem);font-weight:700;color:#4a0e2a;line-height:1.1;margin-bottom:8px;}
-.w-sub{font-size:0.85rem;color:#8d3a5a;opacity:0.65;margin-bottom:8px;line-height:1.5;}
-.w-from{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:rgba(74,14,42,0.45);margin-bottom:36px;}
+.rv-inner{position:relative;z-index:2;text-align:center;width:100%;}
+.rv-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(233,30,99,0.45);margin-bottom:22px;display:block;}
+.rv-emoji{font-size:4rem;margin-bottom:18px;display:block;animation:hb 1.8s ease-in-out infinite;}
+@keyframes hb{0%,100%{transform:scale(1);}14%{transform:scale(1.15);}28%{transform:scale(1);}42%{transform:scale(1.08);}56%{transform:scale(1);}}
+.rv-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,7vw,2.6rem);font-weight:700;color:#4a0e2a;line-height:1.1;margin-bottom:8px;}
+.rv-sub{font-size:0.85rem;color:#8d3a5a;opacity:0.65;margin-bottom:8px;line-height:1.5;}
+.rv-from{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:rgba(74,14,42,0.45);margin-bottom:36px;}
 .open-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 8px 28px rgba(233,30,99,0.4);transition:transform 0.2s;touch-action:manipulation;animation:bp 2.5s ease-in-out infinite;}
 @keyframes bp{0%,100%{box-shadow:0 8px 28px rgba(233,30,99,0.4);}50%{box-shadow:0 12px 36px rgba(233,30,99,0.6);}}
 .open-btn:active{transform:scale(0.97);}
 
-/* PHOTOS */
-#s-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);padding:0;align-items:stretch;justify-content:flex-start;}
-.sec-hdr{padding:48px 24px 18px;text-align:center;}
-.sec-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(233,30,99,0.5);margin-bottom:6px;display:block;}
-.sec-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#4a0e2a;}
+/* Photos */
+#rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);padding:0;align-items:stretch;justify-content:flex-start;}
+.rv-sec-hdr{padding:48px 24px 18px;text-align:center;}
+.rv-sec-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(233,30,99,0.5);margin-bottom:6px;display:block;}
+.rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#4a0e2a;}
 .pol-strip{flex:1;padding:8px 16px 16px;display:flex;gap:12px;overflow-x:auto;align-items:center;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
 .pol-strip::-webkit-scrollbar{display:none;}
 .pol{flex-shrink:0;scroll-snap-align:center;background:white;padding:8px 8px 28px;box-shadow:0 8px 24px rgba(74,14,42,0.12);border-radius:2px;}
 .pol:nth-child(odd){transform:rotate(-2.5deg);}
 .pol:nth-child(even){transform:rotate(2deg);}
-.pol:nth-child(3n+1){transform:rotate(-1deg);}
 .pol img{width:190px;height:210px;object-fit:cover;display:block;}
 .pol-lbl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.72rem;color:#8d3a5a;text-align:center;margin-top:6px;opacity:0.55;}
-.no-photo{text-align:center;padding:40px 20px;color:rgba(74,14,42,0.35);font-style:italic;flex:1;display:flex;align-items:center;justify-content:center;}
-.next-btn{margin:0 24px 24px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;touch-action:manipulation;width:calc(100% - 48px);box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
-.next-btn:active{transform:scale(0.97);}
+.no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
+.rv-next-btn{margin:0 24px 24px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;touch-action:manipulation;width:calc(100% - 48px);box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
+.rv-next-btn:active{transform:scale(0.97);}
 
-/* SONG */
-#s-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);padding:36px 28px;}
+/* Song */
+#rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);padding:36px 28px;align-items:center;justify-content:center;}
 .vinyl-wrap{width:140px;height:140px;margin:0 auto 24px;position:relative;}
 .vinyl{width:100%;height:100%;border-radius:50%;background:conic-gradient(#1a0a1a 0deg,#2d1430 18deg,#1a0a1a 36deg,#2d1430 54deg,#1a0a1a 72deg,#2d1430 90deg,#1a0a1a 108deg,#2d1430 126deg,#1a0a1a 144deg,#2d1430 162deg,#1a0a1a 180deg,#2d1430 198deg,#1a0a1a 216deg,#2d1430 234deg,#1a0a1a 252deg,#2d1430 270deg,#1a0a1a 288deg,#2d1430 306deg,#1a0a1a 324deg,#2d1430 342deg,#1a0a1a 360deg);box-shadow:0 8px 32px rgba(74,14,42,0.2),0 0 0 4px rgba(233,30,99,0.1);display:flex;align-items:center;justify-content:center;}
 .vinyl-center{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#f06292,#e91e63);display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
-.vs{animation:vs 3s linear infinite;}
-@keyframes vs{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.vs{animation:vsr 3s linear infinite;}
+@keyframes vsr{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .vp{animation-play-state:paused;}
-.song-t{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:4px;}
-.song-a{font-size:0.78rem;color:#8d3a5a;opacity:0.55;text-align:center;margin-bottom:24px;}
+.song-t{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:4px;width:100%;}
+.song-a{font-size:0.78rem;color:#8d3a5a;opacity:0.55;text-align:center;margin-bottom:24px;width:100%;}
 .yt-wrap{width:100%;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(74,14,42,0.12);margin-bottom:20px;display:none;}
 .yt-wrap iframe{width:100%;height:190px;border:none;display:block;}
 .yt-wrap.show{display:block;}
 
-/* ENVELOPE */
-#s-envelope{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
+/* Envelope */
+#rv-envelope{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);align-items:center;justify-content:center;}
 .env-inner{text-align:center;padding:28px;}
 .env-t{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;margin-bottom:8px;}
 .env-h{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:#8d3a5a;opacity:0.6;margin-bottom:28px;}
@@ -95,193 +167,494 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 @keyframes ef{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
 .env-icon:active{transform:scale(0.9)!important;}
 
-/* LETTER */
-#s-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);padding:0;align-items:stretch;justify-content:flex-start;}
+/* Letter */
+#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);padding:0;align-items:stretch;justify-content:flex-start;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
 .letter-scroll{flex:1;padding:32px 28px 110px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .l-greet{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:#4a0e2a;margin-bottom:16px;}
 .l-body{font-family:'Cormorant Garamond',serif;font-size:1.02rem;color:#5a1e32;line-height:1.9;white-space:pre-wrap;}
 .l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.95rem;color:#e91e63;margin-top:20px;}
-.letter-foot{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:16px 24px;background:linear-gradient(to top,rgba(253,232,240,1) 55%,rgba(253,232,240,0));}
-.replay-btn{width:100%;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
-.replay-btn:active{transform:scale(0.97);}
+.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(to top,rgba(253,232,240,1) 55%,rgba(253,232,240,0));}
+.replay-btn{width:100%;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
 
-.wm{position:fixed;bottom:10px;right:14px;font-size:0.58rem;color:rgba(74,14,42,0.18);letter-spacing:0.08em;z-index:999;}
+/* Loading / Error */
+#rv-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);align-items:center;justify-content:center;}
+.loading-heart{font-size:3rem;animation:hb 1.2s ease-in-out infinite;}
+.loading-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#8d3a5a;margin-top:14px;opacity:0.6;}
+#rv-error{background:linear-gradient(160deg,#fde8f0,#fce4ec);align-items:center;justify-content:center;text-align:center;padding:40px;}
+.error-emoji{font-size:3rem;margin-bottom:16px;display:block;}
+.error-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#8d3a5a;line-height:1.7;}
 </style>
 </head>
 <body>
-<div class="app">
+<div class="app" id="mainApp">
 
-  <div class="screen active" id="s-loading">
-    <span class="loading-heart">💝</span>
-    <div class="loading-text">Opening your card...</div>
+<!-- ══════════════════════════════════════
+     CREATOR SCREENS (no ?card= in URL)
+══════════════════════════════════════ -->
+
+<!-- STEP 1: NAME -->
+<div class="screen creator-screen theme-intimate" id="s-name">
+  <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-name" style="width:20%"></div></div>
+  <button class="step-back dark" onclick="window.location.href='/'">←</button>
+  <div class="step-wrap">
+    <div class="step-counter dark">Step 1 of 4</div>
+    <span class="step-emoji">💝</span>
+    <div class="step-title">Who is this card for?</div>
+    <div class="step-sub">Make it personal from the very start</div>
+    <label class="field-label">Their Name</label>
+    <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+    <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+    <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">
+    <button class="btn-next btn-intimate" onclick="goTo('s-photos')">Continue → Photos</button>
   </div>
-
-  <div class="screen" id="s-error">
-    <span class="error-emoji">💔</span>
-    <div class="error-text">This card has expired<br>or couldn't be found.</div>
-  </div>
-
-  <!-- WELCOME -->
-  <div class="screen" id="s-welcome">
-    <div class="petals-bg" id="petals"></div>
-    <div class="welcome-inner">
-      <span class="w-tag">WishYou.ai</span>
-      <span class="w-emoji">💝</span>
-      <div class="w-name" id="wName">Happy Birthday!</div>
-      <div class="w-sub" id="wSub">Someone special made this just for you 🌸</div>
-      <div class="w-from" id="wFrom"></div>
-      <button class="open-btn" onclick="goTo('s-photos')">Open Your Card ✨</button>
-    </div>
-  </div>
-
-  <!-- PHOTOS -->
-  <div class="screen" id="s-photos">
-    <div class="sec-hdr">
-      <span class="sec-tag">Your Memories 📸</span>
-      <div class="sec-title">Moments just for you</div>
-    </div>
-    <div class="pol-strip" id="polStrip"></div>
-    <button class="next-btn" onclick="goTo('s-song')">Next → Your Special Song 🎵</button>
-  </div>
-
-  <!-- SONG -->
-  <div class="screen" id="s-song">
-    <span class="sec-tag" style="margin-bottom:18px;">Your Song 🎵</span>
-    <div class="vinyl-wrap">
-      <div class="vinyl vs" id="vinyl">
-        <div class="vinyl-center">🎵</div>
-      </div>
-    </div>
-    <div class="song-t" id="songT">A song just for you</div>
-    <div class="song-a" id="songA"></div>
-    <div class="yt-wrap" id="ytWrap"><div id="ytEmbed"></div></div>
-    <button class="next-btn" style="width:calc(100% - 48px);margin:0 24px;" onclick="goTo('s-envelope')">Next → Your Letter 💌</button>
-  </div>
-
-  <!-- ENVELOPE -->
-  <div class="screen" id="s-envelope">
-    <div class="env-inner">
-      <div class="env-t">A letter from the heart</div>
-      <div class="env-h">Tap the envelope to open it</div>
-      <span class="env-icon" onclick="openLetter()">💌</span>
-    </div>
-  </div>
-
-  <!-- LETTER -->
-  <div class="screen" id="s-letter">
-    <div class="letter-bar"></div>
-    <div class="letter-scroll">
-      <div class="l-greet" id="lGreet">Dear you,</div>
-      <div class="l-body" id="lBody"></div>
-      <div class="l-sign" id="lSign"></div>
-    </div>
-    <div class="letter-foot">
-      <button class="replay-btn" onclick="goTo('s-welcome')">💝 Replay from start</button>
-    </div>
-  </div>
-
 </div>
+
+<!-- STEP 2: PHOTOS -->
+<div class="screen creator-screen theme-intimate" id="s-photos">
+  <div class="step-progress"><div class="step-progress-fill intimate-progress" style="width:40%"></div></div>
+  <button class="step-back dark" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-counter dark">Step 2 of 4</div>
+    <span class="step-emoji">📸</span>
+    <div class="step-title">Your memories together</div>
+    <div class="step-sub">Add up to 5 photos — they'll look beautiful on the card</div>
+    <div class="photos-grid" id="photosGrid"></div>
+    <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+    <button class="btn-next btn-intimate" onclick="goTo('s-song')">Continue → Song</button>
+    <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
+  </div>
+</div>
+
+<!-- STEP 3: SONG -->
+<div class="screen creator-screen theme-intimate" id="s-song">
+  <div class="step-progress"><div class="step-progress-fill intimate-progress" style="width:60%"></div></div>
+  <button class="step-back dark" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-counter dark">Step 3 of 4</div>
+    <span class="step-emoji">🎵</span>
+    <div class="step-title">A song that reminds you of them</div>
+    <div class="step-sub">Search or let AI find the perfect song</div>
+    <div class="song-selected-box" id="songSelectedBox">
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Now playing:</div>
+      <div style="font-size:0.9rem;font-weight:600;color:white;" id="songSelectedName">—</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
+      <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;background:linear-gradient(135deg,#e91e63,#f06292);">🔍</button>
+    </div>
+    <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
+    <button class="btn-ai" onclick="suggestSongs()">✨ AI Suggest Songs</button>
+    <div class="ai-loading" id="songAiLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Finding perfect songs...</span></div>
+    <div id="songAiResults"></div>
+    <input type="hidden" id="cSpotify">
+    <button class="btn-next btn-intimate" onclick="goTo('s-letter')" style="margin-top:10px;">Continue → Letter</button>
+    <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
+  </div>
+</div>
+
+<!-- STEP 4: LETTER -->
+<div class="screen creator-screen theme-intimate" id="s-letter">
+  <div class="step-progress"><div class="step-progress-fill intimate-progress" style="width:80%"></div></div>
+  <button class="step-back dark" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-counter dark">Step 4 of 4</div>
+    <span class="step-emoji">💌</span>
+    <div class="step-title">Write from the heart</div>
+    <div class="step-sub">A few honest words mean everything</div>
+    <button class="btn-ai" onclick="runAILetter()">✨ Help me find the words</button>
+    <div class="ai-loading" id="letterAiLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Writing a heartfelt letter...</span></div>
+    <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words...">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.</textarea>
+    <label class="field-label" style="margin-top:12px;">Sign Off</label>
+    <input class="regular-input" id="cSign" value="Forever yours 💕" maxlength="60">
+    <button class="btn-next btn-intimate" onclick="goTo('s-preview')" style="margin-top:8px;">Preview My Card →</button>
+  </div>
+</div>
+
+<!-- STEP 5: PREVIEW -->
+<div class="screen creator-screen theme-intimate" id="s-preview">
+  <div class="step-progress"><div class="step-progress-fill intimate-progress" style="width:100%"></div></div>
+  <button class="step-back dark" onclick="goBackCreator()">←</button>
+  <div class="step-wrap" style="align-items:center;text-align:center;">
+    <span class="step-emoji">🎉</span>
+    <div class="step-title">Your card is ready!</div>
+    <div class="step-sub">Here's a preview — looks beautiful 💝</div>
+    <div id="previewMiniCard"></div>
+    <button class="btn-next btn-intimate" onclick="saveAndShare()">🎁 Create & Share Card</button>
+    <button class="btn-skip" onclick="goTo('s-name')" style="margin-top:4px;">✏️ Edit card</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     RECEIVER SCREENS (?card= in URL)
+══════════════════════════════════════ -->
+<div class="screen" id="rv-loading">
+  <span class="loading-heart">💝</span>
+  <div class="loading-text">Opening your card...</div>
+</div>
+
+<div class="screen" id="rv-error">
+  <span class="error-emoji">💔</span>
+  <div class="error-text">This card has expired<br>or couldn't be found.</div>
+</div>
+
+<div class="screen" id="rv-welcome">
+  <div class="petals-bg" id="petals"></div>
+  <div class="rv-inner">
+    <span class="rv-tag">WishYou.ai</span>
+    <span class="rv-emoji">💝</span>
+    <div class="rv-name" id="rvName">Happy Birthday!</div>
+    <div class="rv-sub" id="rvSub">Someone special made this just for you 🌸</div>
+    <div class="rv-from" id="rvFrom"></div>
+    <button class="open-btn" onclick="goTo('rv-photos')">Open Your Card ✨</button>
+  </div>
+</div>
+
+<div class="screen" id="rv-photos">
+  <div class="rv-sec-hdr">
+    <span class="rv-sec-tag">Your Memories 📸</span>
+    <div class="rv-sec-title">Moments just for you</div>
+  </div>
+  <div class="pol-strip" id="polStrip"></div>
+  <button class="rv-next-btn" onclick="goTo('rv-song')">Next → Your Special Song 🎵</button>
+</div>
+
+<div class="screen" id="rv-song" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 28px;">
+  <span class="rv-sec-tag" style="margin-bottom:18px;">Your Song 🎵</span>
+  <div class="vinyl-wrap">
+    <div class="vinyl vs vp" id="rvVinyl">
+      <div class="vinyl-center">🎵</div>
+    </div>
+  </div>
+  <div class="song-t" id="rvSongT">A song just for you</div>
+  <div class="song-a" id="rvSongA"></div>
+  <div class="yt-wrap" id="rvYtWrap"><div id="rvYtEmbed"></div></div>
+  <button class="rv-next-btn" style="width:calc(100% - 48px);margin:0 24px;" onclick="goTo('rv-envelope')">Next → Your Letter 💌</button>
+</div>
+
+<div class="screen" id="rv-envelope">
+  <div class="env-inner">
+    <div class="env-t">A letter from the heart</div>
+    <div class="env-h">Tap the envelope to open it</div>
+    <span class="env-icon" onclick="openLetter()">💌</span>
+  </div>
+</div>
+
+<div class="screen" id="rv-letter">
+  <div class="letter-bar"></div>
+  <div class="letter-scroll">
+    <div class="l-greet" id="rvLGreet">Dear you,</div>
+    <div class="l-body" id="rvLBody"></div>
+    <div class="l-sign" id="rvLSign"></div>
+  </div>
+  <div class="letter-foot">
+    <button class="replay-btn" onclick="goTo('rv-welcome')">💝 Replay from start</button>
+  </div>
+</div>
+
+</div><!-- /app -->
+
+<!-- Save overlay -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-box">
+    <span class="save-emoji" id="saveEmoji">💝</span>
+    <div class="save-label" id="saveLabel">Saving your card...</div>
+    <div class="save-bar-wrap"><div class="save-bar" id="saveBar"></div></div>
+    <div class="save-step" id="saveStep">Please wait</div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:2rem;margin-bottom:8px;">💝</div>
+    <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;color:#4a0e2a;">Card Saved!</div>
+    <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;color:#4a0e2a;">Share this link with them</div>
+    <div style="font-size:0.72rem;opacity:0.5;border-radius:10px;padding:7px 12px;margin-bottom:12px;color:#4a0e2a;">⏳ Card expires in 3 days</div>
+    <div class="share-link-row">
+      <span class="share-link-txt" id="shareLinkTxt"></span>
+      <button class="copy-btn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
+    <button class="modal-close" onclick="closeShare()">Done ✓</button>
+  </div>
+</div>
+
 <div class="wm">WishYou.ai</div>
 
 <script>
+// ── CONFIG ──
 const FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
-let curScreen = 's-loading';
+const CLOUDINARY_CLOUD = 'dkvbjazfe';
+const CLOUDINARY_PRESET = 'wishyou-uploads';
+const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
+const SHARE_URL = id => `https://wishyou.ai/birthday/intimate.html?card=${id}`;
+const SHARE_MSG = (name,sender,link) => `💝 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a special card 💌\n\n':'Someone made you a special card 💌\n\n'}👆 Open here:\n${link}`;
 
+// ── STATE ──
+let curScreen = '';
+let photos = [];
+let currentSlotIdx = 0;
+let shareLink = '';
+
+// ── DETECT MODE ──
+const IS_RECEIVER = new URLSearchParams(window.location.search).has('card');
+
+// ── NAVIGATION ──
 function goTo(id){
   const prev = document.getElementById(curScreen);
   const next = document.getElementById(id);
   if(!next || curScreen === id) return;
-  if(prev){ prev.classList.remove('active'); prev.classList.add('out'); setTimeout(()=>prev.classList.remove('out'),600); }
+  if(prev){ prev.classList.remove('active'); prev.classList.add('slide-out'); setTimeout(()=>prev.classList.remove('slide-out'),500); }
   next.classList.add('active');
   curScreen = id;
-  const v = document.getElementById('vinyl');
-  if(id === 's-song') v.classList.remove('vp'); else v.classList.add('vp');
+  if(id === 's-preview') buildPreview();
+  // vinyl spin
+  const v = document.getElementById('rvVinyl');
+  if(v){ if(id==='rv-song') v.classList.remove('vp'); else v.classList.add('vp'); }
+  setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollTo(0,0); },50);
 }
 
+const CREATOR_ORDER = ['s-name','s-photos','s-song','s-letter','s-preview'];
+function goBackCreator(){
+  const idx = CREATOR_ORDER.indexOf(curScreen);
+  if(idx > 0) goTo(CREATOR_ORDER[idx-1]);
+  else window.location.href='/';
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', function(){
+  if(IS_RECEIVER){
+    goTo('rv-loading');
+    initPetals();
+    loadCard();
+  } else {
+    initPhotoSlots();
+    goTo('s-name');
+  }
+});
+
+// ════════════════════════════════
+// CREATOR LOGIC
+// ════════════════════════════════
+
+function initPhotoSlots(){
+  const grid = document.getElementById('photosGrid');
+  grid.innerHTML='';
+  photos = [];
+  for(let i=0;i<5;i++){
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot';
+    slot.id = 'slot'+i;
+    slot.innerHTML = '<span style="opacity:0.4;">+</span>';
+    slot.onclick = ()=>triggerUpload(i);
+    grid.appendChild(slot);
+  }
+}
+
+function triggerUpload(idx){ currentSlotIdx=idx; document.getElementById('photoFileInput').click(); }
+
+function handlePhotoUpload(inp){
+  const file=inp.files[0]; if(!file) return;
+  const url=URL.createObjectURL(file);
+  photos[currentSlotIdx]=url;
+  const slot=document.getElementById('slot'+currentSlotIdx);
+  slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="event.stopPropagation();removePhoto(${currentSlotIdx})">✕</button>`;
+  inp.value='';
+}
+
+function removePhoto(idx){ photos[idx]=null; const slot=document.getElementById('slot'+idx); slot.innerHTML='<span style="opacity:0.4;">+</span>'; }
+
+// Song search via YouTube
+async function searchSong(){
+  const q = document.getElementById('ytSearchInput').value.trim(); if(!q) return;
+  const results = document.getElementById('songResults');
+  results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Searching...</div>';
+  try{
+    const res = await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({youtube_search:q})});
+    const data = await res.json();
+    results.innerHTML='';
+    if(data.items && data.items.length){
+      data.items.slice(0,4).forEach(item=>{
+        const el=document.createElement('div');
+        el.className='song-result';
+        el.innerHTML=`<img src="${item.thumbnail||''}" onerror="this.style.display='none'"><div style="flex:1;"><div style="font-size:0.82rem;font-weight:600;">${item.title}</div><div style="font-size:0.7rem;opacity:0.5;">${item.channel||''}</div></div><button class="song-use-btn" onclick="selectSong('${item.videoId}','${item.title.replace(/'/g,"\\'")}')">Use</button>`;
+        results.appendChild(el);
+      });
+    } else { results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>'; }
+  } catch(e){ results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>'; }
+}
+
+function selectSong(videoId, title){
+  document.getElementById('cSpotify').value = `https://www.youtube.com/watch?v=${videoId}`;
+  document.getElementById('songSelectedName').textContent = title;
+  const box = document.getElementById('songSelectedBox'); box.style.display='block';
+  document.getElementById('songResults').innerHTML='';
+  document.getElementById('songAiResults').innerHTML='';
+}
+
+async function suggestSongs(){
+  const results = document.getElementById('songAiResults');
+  const loading = document.getElementById('songAiLoading');
+  results.innerHTML=''; loading.classList.add('show');
+  const name = document.getElementById('cName').value.trim()||'them';
+  const text = await callClaude(`Suggest 4 real popular emotional songs perfect for a Birthday card for ${name}. Mix Hindi and English. Return ONLY JSON array: [{"name":"Song","artist":"Artist"}]`);
+  try{
+    const songs = JSON.parse(text.replace(/```json|```/g,'').trim());
+    songs.forEach(s=>{
+      const el=document.createElement('div');
+      el.className='song-result';
+      el.style.cursor='pointer';
+      el.innerHTML=`<span>🎵</span><div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;">${s.name}</div><div style="font-size:0.72rem;opacity:0.5;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;opacity:0.6;">Search ›</span>`;
+      el.onclick=()=>{ document.getElementById('ytSearchInput').value=s.name+' '+s.artist; searchSong(); };
+      results.appendChild(el);
+    });
+  } catch(e){ results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;">Could not fetch. Try again.</div>'; }
+  loading.classList.remove('show');
+}
+
+async function runAILetter(){
+  const btn=document.getElementById('letterAiLoading');
+  btn.classList.add('show');
+  const name=document.getElementById('cName').value.trim()||'them';
+  const sender=document.getElementById('cSender').value.trim()||'someone';
+  const text=await callClaude(`Write a short heartfelt Birthday letter from ${sender} to ${name} (3-4 sentences). Make it warm and genuine. Return ONLY the letter body — no greeting, no sign off.`);
+  if(text){ const el=document.getElementById('cMsg'); if(el) el.value=stripMarkdown(text); }
+  btn.classList.remove('show');
+}
+
+async function callClaude(prompt){
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json(); if(data.error) return '';
+    return data.content&&data.content[0]?data.content[0].text:'';
+  } catch(e){ return ''; }
+}
+function stripMarkdown(t){ return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim(); }
+
+function buildPreview(){
+  const name=document.getElementById('cName').value.trim()||'';
+  const msg=document.getElementById('cMsg').value.trim()||'';
+  const songName=document.getElementById('songSelectedName').textContent||'';
+  const box=document.getElementById('previewMiniCard');
+  box.style.cssText='background:linear-gradient(135deg,#fde8f0,#fce4ec);border:1.5px solid rgba(233,30,99,0.15);box-shadow:0 8px 24px rgba(233,30,99,0.12);border-radius:18px;padding:20px;';
+  box.innerHTML=`
+    <div style="text-align:center;font-size:1.4rem;margin-bottom:6px;">💝</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:8px;">Happy Birthday${name?', '+name:''}!</div>
+    <div style="display:flex;gap:5px;justify-content:center;margin-bottom:8px;">${photos.filter(Boolean).slice(0,3).map(u=>`<img src="${u}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:2px solid rgba(233,30,99,0.2);">`).join('')}</div>
+    ${songName&&songName!=='—'?`<div style="font-size:0.75rem;text-align:center;margin-bottom:6px;opacity:0.6;">🎵 ${songName}</div>`:''}
+    ${msg?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.88rem;line-height:1.6;opacity:0.8;color:#4a0e2a;">${msg.length>120?msg.slice(0,120)+'...':msg}</div>`:'<div style="font-size:0.82rem;opacity:0.4;font-style:italic;color:#4a0e2a;">No letter yet</div>'}
+  `;
+}
+
+async function saveAndShare(){
+  const overlay=document.getElementById('saveOverlay');
+  const bar=document.getElementById('saveBar');
+  const label=document.getElementById('saveLabel');
+  const step=document.getElementById('saveStep');
+  function setP(pct,lbl,stp){ bar.style.width=pct+'%'; if(lbl) label.textContent=lbl; if(stp) step.textContent=stp; }
+  overlay.classList.add('show');
+  setP(10,'Preparing your card... 💝','Getting everything ready');
+  let photoUrls=[];
+  const realPhotos=photos.filter(Boolean);
+  for(let i=0;i<realPhotos.length;i++){
+    setP(10+((i/Math.max(realPhotos.length,1))*50),'Uploading photos... 📸',`Photo ${i+1} of ${realPhotos.length}`);
+    try{
+      const blob=await fetch(realPhotos[i]).then(r=>r.blob());
+      const fd=new FormData(); fd.append('file',blob); fd.append('upload_preset',CLOUDINARY_PRESET); fd.append('folder','wishyou');
+      const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+      const d=await res.json(); if(d.secure_url) photoUrls.push(d.secure_url);
+    } catch(e){ console.error(e); }
+  }
+  setP(70,'Saving your card... 💾','Almost there!');
+  const now=Date.now();
+  const cardData={
+    type:'birthday-intimate',
+    name:document.getElementById('cName').value.trim()||'',
+    sender:document.getElementById('cSender').value.trim()||'',
+    msg:document.getElementById('cMsg').value.trim()||'',
+    sign:document.getElementById('cSign').value.trim()||'',
+    spotify:document.getElementById('cSpotify').value.trim()||'',
+    songName:document.getElementById('songSelectedName').textContent||'',
+    photos:photoUrls,
+    created:now,createdAt:now,
+    expiresAt:now+3*24*60*60*1000
+  };
+  try{
+    setP(85,'Saving...','Storing in the cloud');
+    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
+    const data=await res.json();
+    const cardId=data.name;
+    shareLink=SHARE_URL(cardId);
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
+    setP(100,'Card saved! 🎉','Ready to share!');
+    setTimeout(()=>{ overlay.classList.remove('show'); document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://',''); document.getElementById('shareModal').classList.add('show'); },600);
+  } catch(e){ overlay.classList.remove('show'); alert('Could not save card. Please try again.'); }
+}
+
+function copyLink(){ navigator.clipboard.writeText(shareLink).then(()=>{ const btn=document.querySelector('.copy-btn'); btn.textContent='Copied! ✓'; setTimeout(()=>btn.textContent='Copy',2000); }); }
+function openWhatsApp(){ const name=document.getElementById('cName').value.trim()||''; const sender=document.getElementById('cSender').value.trim()||''; window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(SHARE_MSG(name,sender,shareLink)),'_blank'); }
+function closeShare(){ document.getElementById('shareModal').classList.remove('show'); }
+
+// ════════════════════════════════
+// RECEIVER LOGIC
+// ════════════════════════════════
+
 function initPetals(){
-  const wrap = document.getElementById('petals');
-  const emojis = ['🌸','💕','✨','🌷','💖','🎀'];
+  const wrap=document.getElementById('petals'); if(!wrap) return;
+  const emojis=['🌸','💕','✨','🌷','💖','🎀'];
   for(let i=0;i<16;i++){
-    const p = document.createElement('div');
-    p.className = 'petal';
-    p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    const s = 0.7+Math.random()*0.8;
+    const p=document.createElement('div'); p.className='petal';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    const s=0.7+Math.random()*0.8;
     p.style.cssText=`font-size:${s}rem;left:${Math.random()*100}%;animation-duration:${8+Math.random()*10}s;animation-delay:${Math.random()*10}s;`;
     wrap.appendChild(p);
   }
 }
 
 async function loadCard(){
-  const params = new URLSearchParams(window.location.search);
-  const cardId = params.get('card');
-  if(!cardId){ goTo('s-error'); return; }
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){ goTo('rv-error'); return; }
   try{
-    const res = await fetch(`${FIREBASE_URL}/${cardId}.json`);
-    const d = await res.json();
-    if(!d){ goTo('s-error'); return; }
-    if(d.expiresAt && Date.now() > d.expiresAt){ goTo('s-error'); return; }
-    // views
+    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
+    const d=await res.json();
+    if(!d){ goTo('rv-error'); return; }
+    if(d.expiresAt && Date.now()>d.expiresAt){ goTo('rv-error'); return; }
     fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
       fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
     }).catch(()=>{});
     renderCard(d);
-  } catch(e){ goTo('s-error'); }
+  } catch(e){ goTo('rv-error'); }
 }
 
 function renderCard(d){
-  const name = d.name||'';
-  const sender = d.sender||'';
-  document.getElementById('wName').textContent = name ? `Happy Birthday, ${name}! 🎂` : 'Happy Birthday! 🎂';
-  document.getElementById('wSub').textContent = sender ? `${sender} made this just for you 🌸` : 'Someone special made this just for you 🌸';
-  document.getElementById('wFrom').textContent = sender ? `With love from ${sender} 💕` : '';
-
+  const name=d.name||''; const sender=d.sender||'';
+  document.getElementById('rvName').textContent=name?`Happy Birthday, ${name}! 🎂`:'Happy Birthday! 🎂';
+  document.getElementById('rvSub').textContent=sender?`${sender} made this just for you 🌸`:'Someone special made this just for you 🌸';
+  document.getElementById('rvFrom').textContent=sender?`With love from ${sender} 💕`:'';
   // Photos
-  const strip = document.getElementById('polStrip');
-  strip.innerHTML = '';
-  const labels = ['A memory 💕','Just us 🌸','Together ✨','Always 💖','Forever 🌷'];
-  if(d.photos && d.photos.length > 0){
-    d.photos.forEach((url,i)=>{
-      const pol = document.createElement('div');
-      pol.className = 'pol';
-      pol.innerHTML = `<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="pol-lbl">${labels[i]||'💕'}</div>`;
-      strip.appendChild(pol);
-    });
-  } else {
-    strip.innerHTML = '<div class="no-photo">💕 A card made with love</div>';
-  }
-
+  const strip=document.getElementById('polStrip'); strip.innerHTML='';
+  const labels=['A memory 💕','Just us 🌸','Together ✨','Always 💖','Forever 🌷'];
+  if(d.photos&&d.photos.length>0){
+    d.photos.forEach((url,i)=>{ const pol=document.createElement('div'); pol.className='pol'; pol.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="pol-lbl">${labels[i]||'💕'}</div>`; strip.appendChild(pol); });
+  } else { strip.innerHTML='<div class="no-photo">💕 A card made with love</div>'; }
   // Song
-  const sn = d.songName||'';
-  if(sn && sn !== '—'){
-    document.getElementById('songT').textContent = sn;
-    document.getElementById('songA').textContent = 'A song chosen just for you';
-    const sp = d.spotify||'';
-    if(sp){
-      const ytM = sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-      if(ytM){
-        const w = document.getElementById('ytWrap'); w.classList.add('show');
-        document.getElementById('ytEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;
-      }
-    }
+  const sn=d.songName||'';
+  if(sn&&sn!=='—'){ document.getElementById('rvSongT').textContent=sn; document.getElementById('rvSongA').textContent='A song chosen just for you';
+    const sp=d.spotify||''; if(sp){ const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/); if(ytM){ document.getElementById('rvYtWrap').classList.add('show'); document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`; } }
   }
-
   // Letter
-  document.getElementById('lGreet').textContent = name ? `Dear ${name},` : 'Dear you,';
-  document.getElementById('lBody').textContent = d.msg||'';
-  document.getElementById('lSign').textContent = d.sign||(sender?`With love, ${sender} 💕`:'With love 💕');
-
-  goTo('s-welcome');
+  document.getElementById('rvLGreet').textContent=name?`Dear ${name},`:'Dear you,';
+  document.getElementById('rvLBody').textContent=d.msg||'';
+  document.getElementById('rvLSign').textContent=d.sign||(sender?`With love, ${sender} 💕`:'With love 💕');
+  goTo('rv-welcome');
 }
 
 function openLetter(){
-  const e = document.querySelector('.env-icon');
-  e.style.transform = 'scale(1.3) rotate(15deg)';
-  setTimeout(()=>{ e.style.transform=''; goTo('s-letter'); }, 380);
+  const e=document.querySelector('.env-icon');
+  e.style.transform='scale(1.3) rotate(15deg)';
+  setTimeout(()=>{ e.style.transform=''; goTo('rv-letter'); },380);
 }
-
-initPetals();
-loadCard();
 </script>
 </body>
 </html>
