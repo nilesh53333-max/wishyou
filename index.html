@@ -14,83 +14,87 @@
 html{scroll-behavior:smooth;}
 body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;min-height:100vh;overflow-x:hidden;}
 
-/* ── AMBIENT GLOW ── */
-body::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(20,160,140,0.08) 0%,transparent 65%);pointer-events:none;z-index:0;}
-body::after{content:'';position:fixed;bottom:-200px;right:-100px;width:600px;height:500px;background:radial-gradient(ellipse,rgba(240,192,64,0.05) 0%,transparent 65%);pointer-events:none;z-index:0;}
+/* ambient glows */
+body::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:600px;background:radial-gradient(ellipse,rgba(20,160,140,0.07) 0%,transparent 65%);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;bottom:-150px;right:-80px;width:500px;height:400px;background:radial-gradient(ellipse,rgba(240,192,64,0.05) 0%,transparent 65%);pointer-events:none;z-index:0;}
 
 /* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:22px 36px;display:flex;align-items:center;justify-content:space-between;}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.6);text-decoration:none;transition:color 0.2s;}
-.nav-logo:hover{color:rgba(160,220,210,0.9);}
-.nav-tag{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,192,64,0.45);border:1px solid rgba(240,192,64,0.18);border-radius:50px;padding:5px 12px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 36px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.55);text-decoration:none;}
+.nav-tag{font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,192,64,0.4);border:1px solid rgba(240,192,64,0.15);border-radius:50px;padding:5px 12px;}
 
 /* ── HERO ── */
-.hero{position:relative;z-index:1;padding:130px 36px 48px;max-width:920px;margin:0 auto;}
-.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:24px;}
-.hero-eyebrow-line{width:28px;height:1px;background:rgba(240,192,64,0.4);}
-.hero-eyebrow-txt{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,192,64,0.55);}
-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,7vw,5.2rem);font-weight:300;line-height:1.05;letter-spacing:-0.02em;color:rgba(224,240,238,0.92);}
-h1 em{font-style:italic;font-weight:300;color:#f0c040;}
-.hero-rule{width:100%;height:1px;background:linear-gradient(to right,rgba(20,160,140,0.25),rgba(240,192,64,0.1),transparent);margin-top:44px;}
+.hero{position:relative;z-index:1;padding:110px 36px 36px;max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;text-align:center;}
+.hero-left{flex:1;}
+.hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;}
+.hero-eyebrow-line{width:24px;height:1px;background:rgba(240,192,64,0.4);}
+.hero-eyebrow-txt{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,192,64,0.5);}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:300;line-height:1.05;letter-spacing:-0.02em;color:rgba(224,240,238,0.9);}
+h1 em{font-style:italic;color:#f0c040;}
+.hero-sub{margin-top:16px;font-size:0.8rem;color:rgba(160,220,210,0.35);letter-spacing:0.04em;max-width:320px;line-height:1.7;margin-left:auto;margin-right:auto;}
 
-/* ── OCCASIONS ── */
-.occasions{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:0 36px 80px;}
+/* ── OCCASIONS GRID ── */
+.occasions{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:40px 36px 80px;}
 
-.occ-header{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid rgba(20,160,140,0.12);margin-bottom:0;}
-.occ-header-label{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(160,220,210,0.3);}
-.occ-header-count{font-size:0.6rem;letter-spacing:0.12em;color:rgba(160,220,210,0.2);}
+.occ-top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.occ-label{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(160,220,210,0.28);}
+.occ-count{font-size:0.6rem;letter-spacing:0.1em;color:rgba(160,220,210,0.18);}
 
-/* Each row */
-.occ-row{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid rgba(20,160,140,0.08);text-decoration:none;cursor:pointer;transition:all 0.22s ease;position:relative;gap:12px;}
-.occ-row.live:hover .occ-name{color:#f0c040;transform:translateX(8px);}
-.occ-row.live:hover .occ-arrow{opacity:1;transform:translateX(0);}
-.occ-row.live:active{opacity:0.7;}
+/* 3 col grid desktop, 2 mobile */
+.occ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:700px){.occ-grid{grid-template-columns:repeat(2,1fr);gap:8px;}}
+@media(max-width:420px){.occ-grid{grid-template-columns:repeat(2,1fr);gap:6px;}}
 
-.occ-left{display:flex;align-items:center;gap:18px;}
-.occ-num{font-family:'Cormorant Garamond',serif;font-size:0.78rem;color:rgba(160,220,210,0.18);width:22px;flex-shrink:0;letter-spacing:0.04em;}
-.occ-emoji{font-size:1.3rem;width:28px;flex-shrink:0;}
-.occ-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3vw,1.85rem);font-weight:300;color:rgba(224,240,238,0.72);letter-spacing:-0.01em;transition:color 0.22s ease,transform 0.25s cubic-bezier(.2,0,.2,1);line-height:1;}
+/* Each card */
+.occ-card{background:rgba(255,255,255,0.03);border:1px solid rgba(20,160,140,0.1);border-radius:16px;padding:20px 18px;text-decoration:none;display:block;transition:all 0.22s ease;position:relative;overflow:hidden;cursor:pointer;}
+.occ-card.live{border-color:rgba(240,192,64,0.12);cursor:pointer;}
+.occ-card.live:hover{background:rgba(240,192,64,0.06);border-color:rgba(240,192,64,0.28);transform:translateY(-3px);}
+.occ-card.live:active{transform:scale(0.97);}
+.occ-card.soon{cursor:default;opacity:0.45;}
 
-.occ-right{display:flex;align-items:center;gap:12px;flex-shrink:0;}
-.occ-tag-live{font-size:0.56rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,192,64,0.65);border:1px solid rgba(240,192,64,0.22);border-radius:50px;padding:3px 10px;}
-.occ-tag-soon{font-size:0.56rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(160,220,210,0.22);border:1px solid rgba(160,220,210,0.1);border-radius:50px;padding:3px 10px;}
-.occ-arrow{font-size:0.9rem;color:#f0c040;opacity:0;transform:translateX(-8px);transition:all 0.22s ease;}
+/* card glow top-right for live */
+.occ-card.live::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(240,192,64,0.1),transparent 65%);pointer-events:none;}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.card-emoji{font-size:1.6rem;line-height:1;}
+.card-badge-live{font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,192,64,0.7);border:1px solid rgba(240,192,64,0.25);border-radius:50px;padding:3px 8px;margin-top:4px;}
+.card-badge-soon{font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(160,220,210,0.22);border:1px solid rgba(160,220,210,0.1);border-radius:50px;padding:3px 8px;margin-top:4px;}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:rgba(224,240,238,0.75);line-height:1.2;}
+.occ-card.live .card-name{color:rgba(224,240,238,0.88);}
 
 /* ── FOOTER ── */
-footer{position:relative;z-index:1;border-top:1px solid rgba(20,160,140,0.1);padding:24px 36px;}
-.foot{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-.foot-logo{font-family:'Cormorant Garamond',serif;font-size:0.82rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(160,220,210,0.22);}
-.foot-links{display:flex;gap:22px;}
-.foot-link{font-size:0.7rem;color:rgba(160,220,210,0.2);text-decoration:none;letter-spacing:0.04em;transition:color 0.2s;}
-.foot-link:hover{color:rgba(160,220,210,0.5);}
+footer{position:relative;z-index:1;border-top:1px solid rgba(20,160,140,0.08);padding:22px 36px;}
+.foot{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.foot-logo{font-family:'Cormorant Garamond',serif;font-size:0.8rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(160,220,210,0.2);}
+.foot-links{display:flex;gap:20px;}
+.foot-link{font-size:0.68rem;color:rgba(160,220,210,0.18);text-decoration:none;transition:color 0.2s;}
+.foot-link:hover{color:rgba(160,220,210,0.48);}
 
 /* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-.hero-eyebrow{animation:fadeUp 0.9s ease both;}
-h1{animation:fadeUp 0.9s 0.1s ease both;}
-.hero-rule{animation:fadeUp 0.9s 0.2s ease both;}
-.occ-header{animation:fadeUp 0.8s 0.25s ease both;}
-.occ-row:nth-child(1){animation:fadeUp 0.7s 0.3s ease both;}
-.occ-row:nth-child(2){animation:fadeUp 0.7s 0.36s ease both;}
-.occ-row:nth-child(3){animation:fadeUp 0.7s 0.42s ease both;}
-.occ-row:nth-child(4){animation:fadeUp 0.7s 0.48s ease both;}
-.occ-row:nth-child(5){animation:fadeUp 0.7s 0.54s ease both;}
-.occ-row:nth-child(6){animation:fadeUp 0.7s 0.6s ease both;}
-.occ-row:nth-child(7){animation:fadeUp 0.7s 0.66s ease both;}
-.occ-row:nth-child(8){animation:fadeUp 0.7s 0.72s ease both;}
-.occ-row:nth-child(9){animation:fadeUp 0.7s 0.78s ease both;}
+.hero-eyebrow{animation:fadeUp 0.8s ease both;}
+h1{animation:fadeUp 0.8s 0.08s ease both;}
+.hero-sub{animation:fadeUp 0.8s 0.16s ease both;}
+.occ-top-bar{animation:fadeUp 0.8s 0.2s ease both;}
+.occ-card:nth-child(1){animation:fadeUp 0.6s 0.25s ease both;}
+.occ-card:nth-child(2){animation:fadeUp 0.6s 0.3s ease both;}
+.occ-card:nth-child(3){animation:fadeUp 0.6s 0.35s ease both;}
+.occ-card:nth-child(4){animation:fadeUp 0.6s 0.4s ease both;}
+.occ-card:nth-child(5){animation:fadeUp 0.6s 0.45s ease both;}
+.occ-card:nth-child(6){animation:fadeUp 0.6s 0.5s ease both;}
+.occ-card:nth-child(7){animation:fadeUp 0.6s 0.55s ease both;}
+.occ-card:nth-child(8){animation:fadeUp 0.6s 0.6s ease both;}
+.occ-card:nth-child(9){animation:fadeUp 0.6s 0.65s ease both;}
 
 /* ── MOBILE ── */
-@media(max-width:600px){
+@media(max-width:700px){
   nav{padding:16px 20px;}
   .nav-tag{display:none;}
-  .hero{padding:100px 20px 36px;}
-  .occasions{padding:0 20px 60px;}
-  h1{font-size:clamp(2.2rem,10vw,2.8rem);}
-  .occ-name{font-size:clamp(1.1rem,5vw,1.4rem);}
-  .occ-emoji{display:none;}
-  .occ-left{gap:12px;}
+  .hero{padding:90px 20px 28px;flex-direction:column;gap:0;}
+  .hero-sub{display:none;}
+  .occasions{padding:24px 20px 60px;}
   footer{padding:20px;}
+  h1{font-size:clamp(2.2rem,9vw,3rem);}
 }
 </style>
 </head>
@@ -102,131 +106,97 @@ h1{animation:fadeUp 0.9s 0.1s ease both;}
 </nav>
 
 <section class="hero">
-  <div class="hero-eyebrow">
-    <span class="hero-eyebrow-line"></span>
-    <span class="hero-eyebrow-txt">Interactive Birthday Cards</span>
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-line"></span>
+      <span class="hero-eyebrow-txt">Interactive Cards</span>
+    </div>
+    <h1>Send wish,<br><em>beautifully.</em></h1>
+    <p class="hero-sub">Photos, music & a heartfelt letter.<br>One link. Shared in seconds.</p>
   </div>
-  <h1>Send love,<br><em>beautifully.</em></h1>
-  <div class="hero-rule"></div>
 </section>
 
 <section class="occasions">
-
-  <div class="occ-header">
-    <span class="occ-header-label">Choose your occasion</span>
-    <span class="occ-header-count">09 occasions</span>
+  <div class="occ-top-bar">
+    <span class="occ-label">Choose your occasion</span>
+    <span class="occ-count">09 occasions</span>
   </div>
 
-  <!-- BIRTHDAY — live -->
-  <a href="/birthday/" class="occ-row live">
-    <div class="occ-left">
-      <span class="occ-num">01</span>
-      <span class="occ-emoji">🎂</span>
-      <span class="occ-name">Birthday</span>
-    </div>
-    <div class="occ-right">
-      <span class="occ-tag-live">Live</span>
-      <span class="occ-arrow">→</span>
-    </div>
-  </a>
+  <div class="occ-grid">
 
-  <!-- MOTHER'S DAY — live -->
-  <a href="/mothers-day/" class="occ-row live">
-    <div class="occ-left">
-      <span class="occ-num">02</span>
-      <span class="occ-emoji">🌸</span>
-      <span class="occ-name">Mother's Day</span>
-    </div>
-    <div class="occ-right">
-      <span class="occ-tag-live">Live</span>
-      <span class="occ-arrow">→</span>
-    </div>
-  </a>
+    <a href="/birthday/" class="occ-card live">
+      <div class="card-top">
+        <span class="card-emoji">🎂</span>
+        <span class="card-badge-live">Live</span>
+      </div>
+      <div class="card-name">Birthday</div>
+    </a>
 
-  <!-- VALENTINE'S DAY -->
-  <div class="occ-row">
-    <div class="occ-left">
-      <span class="occ-num">03</span>
-      <span class="occ-emoji">❤️</span>
-      <span class="occ-name">Valentine's Day</span>
+    <a href="/mothers-day/" class="occ-card live">
+      <div class="card-top">
+        <span class="card-emoji">🌸</span>
+        <span class="card-badge-live">Live</span>
+      </div>
+      <div class="card-name">Mother's Day</div>
+    </a>
+
+    <div class="occ-card soon">
+      <div class="card-top">
+        <span class="card-emoji">❤️</span>
+        <span class="card-badge-soon">Soon</span>
+      </div>
+      <div class="card-name">Valentine's Day</div>
     </div>
-    <div class="occ-right">
-      <span class="occ-tag-soon">Soon</span>
+
+    <div class="occ-card soon">
+      <div class="card-top">
+        <span class="card-emoji">💍</span>
+        <span class="card-badge-soon">Soon</span>
+      </div>
+      <div class="card-name">Anniversary</div>
     </div>
+
+    <div class="occ-card soon">
+      <div class="card-top">
+        <span class="card-emoji">🤝</span>
+        <span class="card-badge-soon">Soon</span>
+      </div>
+      <div class="card-name">Friendship Day</div>
+    </div>
+
+    <div class="occ-card soon">
+      <div class="card-top">
+        <span class="card-emoji">👨</span>
+        <span class="card-badge-soon">Soon</span>
+      </div>
+      <div class="card-name">Father's Day</div>
+    </div>
+
+    <div class="occ-card soon">
+      <div class="card-top">
+        <span class="card-emoji">🎓</span>
+        <span class="card-badge-soon">Soon</span>
+      </div>
+      <div class="card-name">Graduation</div>
+    </div>
+
+    <div class="occ-card soon">
+      <div class="card-top">
+        <span class="card-emoji">👶</span>
+        <span class="card-badge-soon">Soon</span>
+      </div>
+      <div class="card-name">New Baby</div>
+    </div>
+
+    <div class="occ-card soon">
+      <div class="card-top">
+        <span class="card-emoji">🎄</span>
+        <span class="card-badge-soon">Soon</span>
+      </div>
+      <div class="card-name">Christmas</div>
+    </div>
+
   </div>
-
-  <!-- ANNIVERSARY -->
-  <div class="occ-row">
-    <div class="occ-left">
-      <span class="occ-num">04</span>
-      <span class="occ-emoji">💍</span>
-      <span class="occ-name">Anniversary</span>
-    </div>
-    <div class="occ-right">
-      <span class="occ-tag-soon">Soon</span>
-    </div>
-  </div>
-
-  <!-- FRIENDSHIP DAY -->
-  <div class="occ-row">
-    <div class="occ-left">
-      <span class="occ-num">05</span>
-      <span class="occ-emoji">🤝</span>
-      <span class="occ-name">Friendship Day</span>
-    </div>
-    <div class="occ-right">
-      <span class="occ-tag-soon">Soon</span>
-    </div>
-  </div>
-
-  <!-- FATHER'S DAY -->
-  <div class="occ-row">
-    <div class="occ-left">
-      <span class="occ-num">06</span>
-      <span class="occ-emoji">👨</span>
-      <span class="occ-name">Father's Day</span>
-    </div>
-    <div class="occ-right">
-      <span class="occ-tag-soon">Soon</span>
-    </div>
-  </div>
-
-  <!-- GRADUATION -->
-  <div class="occ-row">
-    <div class="occ-left">
-      <span class="occ-num">07</span>
-      <span class="occ-emoji">🎓</span>
-      <span class="occ-name">Graduation</span>
-    </div>
-    <div class="occ-right">
-      <span class="occ-tag-soon">Soon</span>
-    </div>
-  </div>
-
-  <!-- NEW BABY -->
-  <div class="occ-row">
-    <div class="occ-left">
-      <span class="occ-num">08</span>
-      <span class="occ-emoji">👶</span>
-      <span class="occ-name">New Baby</span>
-    </div>
-    <div class="occ-right">
-      <span class="occ-tag-soon">Soon</span>
-    </div>
-  </div>
-
-  <!-- CHRISTMAS -->
-  <div class="occ-row" style="border-bottom:none;">
-    <div class="occ-left">
-      <span class="occ-num">09</span>
-      <span class="occ-emoji">🎄</span>
-      <span class="occ-name">Christmas</span>
-    </div>
-    <div class="occ-right">
-      <span class="occ-tag-soon">Soon</span>
-    </div>
-  </div>
-
 </section>
 
 <footer>
