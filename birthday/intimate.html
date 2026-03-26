@@ -12,26 +12,49 @@
 <style>
 /* ── BASE ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:#fde8f0;}
+html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#111;}
+body{font-family:'DM Sans',sans-serif;}
+
+/* ── APP WRAPPER ── */
+/* Single container — screens stack inside it, only .active shows */
+#appWrap{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#fde8f0;
+}
 
 /* ── SCREEN SYSTEM ── */
-/* Each screen fills exactly the viewport — only .active shows */
-.screen{display:none;flex-direction:column;width:100%;height:100dvh;overflow:hidden;position:relative;}
+/* display:none hides completely — only .active screen is flex */
+.screen{
+  display:none;
+  flex-direction:column;
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
 .screen.active{display:flex;}
 .screen.slide-out{display:none;}
 
-/* Desktop: center screens with max-width */
+/* Desktop: centered card look */
 @media(min-width:500px){
-  body{display:flex;align-items:center;justify-content:center;background:#111;}
-  .screen{max-width:430px;height:90dvh;border-radius:40px;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
+  body{display:flex;align-items:center;justify-content:center;}
+  #appWrap{
+    width:430px;
+    height:90dvh;
+    max-height:900px;
+    border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.8);
+    overflow:hidden;
+  }
 }
 
 /* ── CREATOR SCREENS ── */
 .creator-screen{padding:0;align-items:stretch;justify-content:flex-start;background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
 .theme-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
 
-.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;position:relative;}
 .step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px;min-height:0;}
 .step-actions{flex-shrink:0;padding:12px 0 max(20px,env(safe-area-inset-bottom));}
 
@@ -247,7 +270,7 @@ body{font-family:'DM Sans',sans-serif;background:#fde8f0;}
 </style>
 </head>
 <body>
-<!-- screens -->
+<div id="appWrap">
 
 <!-- ══ CREATOR SCREENS ══ -->
 <div class="screen creator-screen theme-intimate" id="s-name">
@@ -461,7 +484,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   </div>
 </div>
 
-<!-- /screens -->
+</div><!-- /appWrap -->
 
 <!-- Save overlay -->
 <div class="save-overlay" id="saveOverlay">
@@ -554,7 +577,7 @@ function goTo(id, fromPreview=false){
     const iframe=document.querySelector('#rvYtWrap iframe');
     if(iframe) iframe.src=iframe.src; // pause by reassigning
   }
-  setTimeout(()=>{const el=document.getElementById(id);if(el){el.scrollTop=0;const sc=el.querySelector('.step-content');if(sc)sc.scrollTop=0;}},50);
+  setTimeout(()=>{const sc=document.querySelector('#'+id+' .step-content');if(sc)sc.scrollTop=0;},50);
 }
 
 const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter','s-preview'];
