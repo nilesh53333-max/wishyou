@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_5.html -->
+<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_6.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -45,27 +45,26 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 .screen.slide-out{opacity:0;transform:translateX(-60px);}
 
 /* ══════════════════════════════════════════════
-   SCREEN 1: OCCASION PICKER
+   SCREEN 1: OCCASION PICKER — minimal premium
 ══════════════════════════════════════════════ */
 #s-occasion{
-  background:linear-gradient(160deg,#0a0008 0%,#140010 50%,#0a0008 100%);
-  padding:0;align-items:stretch;justify-content:flex-start;
-}
-.occ-header{
-  padding:52px 28px 24px;text-align:center;
-  position:relative;
+  background:linear-gradient(170deg,#0a0008 0%,#120010 60%,#0a0008 100%);
+  padding:0;align-items:center;justify-content:center;
 }
 .occ-logo{
   font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem;letter-spacing:0.15em;
-  color:rgba(255,255,255,0.4);font-weight:400;
-  text-transform:uppercase;margin-bottom:28px;
-  display:block;
+  font-size:0.75rem;letter-spacing:0.22em;
+  color:rgba(255,255,255,0.25);font-weight:400;
+  text-transform:uppercase;display:block;
+  margin-bottom:48px;
+  animation:fadeUp 1s cubic-bezier(.22,1,.36,1) both;
 }
 .occ-headline{
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(2rem,8vw,2.8rem);font-weight:700;
-  color:white;line-height:1.15;margin-bottom:8px;
+  font-size:clamp(2.2rem,8vw,3rem);font-weight:700;
+  color:white;line-height:1.1;margin-bottom:12px;
+  text-align:center;
+  animation:fadeUp 1s 0.1s cubic-bezier(.22,1,.36,1) both;
 }
 .occ-headline em{
   font-style:italic;
@@ -73,66 +72,89 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 .occ-sub{
-  font-size:0.82rem;color:rgba(255,255,255,0.4);
-  letter-spacing:0.05em;
+  font-size:0.78rem;color:rgba(255,255,255,0.3);
+  letter-spacing:0.1em;text-transform:uppercase;
+  margin-bottom:52px;text-align:center;
+  animation:fadeUp 1s 0.2s cubic-bezier(.22,1,.36,1) both;
 }
-.occ-grid{
-  padding:0 18px 40px;
-  display:flex;flex-direction:column;gap:10px;
-  flex:1;
+
+/* 2-column icon grid */
+.occ-tiles{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:14px;width:100%;padding:0 28px;
+  animation:fadeUp 1s 0.3s cubic-bezier(.22,1,.36,1) both;
 }
-.occ-item{
-  border-radius:18px;padding:20px 22px;
+.occ-tile{
+  aspect-ratio:1;border-radius:24px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
   cursor:pointer;touch-action:manipulation;
-  display:flex;align-items:center;gap:18px;
   border:1px solid rgba(255,255,255,0.07);
-  transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s;
+  transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;
   position:relative;overflow:hidden;
+  gap:10px;
 }
-.occ-item:active{transform:scale(0.97);}
-.occ-item::before{
+.occ-tile::before{
   content:'';position:absolute;inset:0;
   opacity:0;transition:opacity 0.3s;
-  background:rgba(255,255,255,0.04);
+  background:rgba(255,255,255,0.05);
 }
-.occ-item:active::before{opacity:1;}
-
-.occ-item.birthday{background:linear-gradient(135deg,#1c0410,#2e0b1c);border-color:rgba(232,56,120,0.2);}
-.occ-item.birthday:hover{border-color:rgba(232,56,120,0.4);box-shadow:0 8px 32px rgba(232,56,120,0.15);}
-.occ-item.mothersday{background:linear-gradient(135deg,#130c06,#221508);border-color:rgba(240,160,60,0.2);}
-.occ-item.mothersday:hover{border-color:rgba(240,160,60,0.4);box-shadow:0 8px 32px rgba(240,160,60,0.15);}
-.occ-item.anniversary{background:linear-gradient(135deg,#0b0d1e,#161230);border-color:rgba(100,80,220,0.2);opacity:0.5;cursor:default;}
-.occ-item.valentine{background:linear-gradient(135deg,#1c0414,#320820);border-color:rgba(220,50,120,0.2);opacity:0.5;cursor:default;}
-
-.occ-icon-wrap{
-  width:52px;height:52px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.6rem;flex-shrink:0;
-  background:rgba(255,255,255,0.06);
+.occ-tile:active{transform:scale(0.94);}
+.occ-tile:active::before{opacity:1;}
+.occ-tile.birthday{
+  background:linear-gradient(145deg,#200818,#350d25);
 }
-.occ-info{flex:1;}
-.occ-name{
+.occ-tile.birthday:hover{border-color:rgba(232,56,120,0.35);box-shadow:0 16px 48px rgba(232,56,120,0.2);}
+.occ-tile.mothersday{
+  background:linear-gradient(145deg,#150e05,#261708);
+}
+.occ-tile.mothersday:hover{border-color:rgba(240,160,60,0.35);box-shadow:0 16px 48px rgba(240,160,60,0.15);}
+.occ-tile-emoji{font-size:2.4rem;line-height:1;}
+.occ-tile-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:1.15rem;font-weight:600;color:white;
-  margin-bottom:2px;
+  font-size:1rem;font-weight:600;color:white;
+  text-align:center;line-height:1.2;
 }
-.occ-desc{font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.4;}
-.occ-arrow{font-size:1rem;color:rgba(255,255,255,0.2);}
-.occ-badge{
-  font-size:0.58rem;font-weight:600;letter-spacing:0.1em;
-  padding:3px 8px;border-radius:20px;
-  text-transform:uppercase;
+.occ-tile-badge{
+  position:absolute;top:12px;right:12px;
+  width:7px;height:7px;border-radius:50%;
+  background:#e83878;
+  box-shadow:0 0 8px rgba(232,56,120,0.8);
+  animation:pulseDot 2s ease-in-out infinite;
 }
-.badge-live{background:rgba(232,56,120,0.2);color:#f06090;border:1px solid rgba(232,56,120,0.3);}
-.badge-soon{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.08);}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.7);}}
 
-/* Floating particles on occasion screen */
-.particle{position:absolute;pointer-events:none;border-radius:50%;animation:particleDrift linear infinite;}
-@keyframes particleDrift{
-  0%{transform:translateY(100vh) scale(0);opacity:0;}
-  10%{opacity:1;}90%{opacity:0.3;}
-  100%{transform:translateY(-20px) scale(1);opacity:0;}
+.occ-coming-soon{
+  font-size:0.65rem;color:rgba(255,255,255,0.2);
+  letter-spacing:0.08em;text-align:center;
+  margin-top:32px;
+  animation:fadeUp 1s 0.45s cubic-bezier(.22,1,.36,1) both;
 }
+
+/* Subtle grain texture */
+#s-occasion::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+/* Glow blobs */
+#s-occasion::after{
+  content:'';position:absolute;
+  width:300px;height:300px;
+  top:-80px;left:-80px;
+  background:radial-gradient(circle,rgba(232,56,120,0.08) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+  animation:blobDrift 12s ease-in-out infinite;
+}
+@keyframes blobDrift{0%,100%{transform:translate(0,0);}50%{transform:translate(40px,30px);}}
+.occ-glow-2{
+  position:absolute;width:250px;height:250px;
+  bottom:-60px;right:-60px;
+  background:radial-gradient(circle,rgba(240,160,60,0.06) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+  animation:blobDrift2 16s ease-in-out infinite;
+}
+@keyframes blobDrift2{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,-40px);}}
 
 /* ══════════════════════════════════════════════
    SCREEN 2: STYLE PICKER
@@ -537,45 +559,24 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
      SCREEN 1: OCCASION PICKER
 ════════════════════════════════════ -->
 <div class="screen active" id="s-occasion">
-  <div id="particlesBg" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"><div class="particle" style="width: 5.76368px; height: 5.76368px; left: 68.2967%; background: rgba(240, 160, 60, 0.3); animation-duration: 14.9701s; animation-delay: 1.10302s;"></div><div class="particle" style="width: 4.33248px; height: 4.33248px; left: 98.1448%; background: rgba(255, 255, 255, 0.15); animation-duration: 18.2906s; animation-delay: 9.71479s;"></div><div class="particle" style="width: 4.77718px; height: 4.77718px; left: 31.7188%; background: rgba(240, 160, 60, 0.3); animation-duration: 22.761s; animation-delay: 1.23582s;"></div><div class="particle" style="width: 6.51697px; height: 6.51697px; left: 36.0147%; background: rgba(255, 255, 255, 0.15); animation-duration: 16.1562s; animation-delay: 6.71382s;"></div><div class="particle" style="width: 5.92907px; height: 5.92907px; left: 29.9288%; background: rgba(232, 56, 120, 0.4); animation-duration: 14.0926s; animation-delay: 3.90866s;"></div><div class="particle" style="width: 7.06538px; height: 7.06538px; left: 41.1126%; background: rgba(255, 255, 255, 0.15); animation-duration: 15.7241s; animation-delay: 4.87463s;"></div><div class="particle" style="width: 4.5909px; height: 4.5909px; left: 32.4021%; background: rgba(240, 160, 60, 0.3); animation-duration: 20.2098s; animation-delay: 0.695723s;"></div><div class="particle" style="width: 5.80694px; height: 5.80694px; left: 0.0598133%; background: rgba(255, 255, 255, 0.15); animation-duration: 17.8991s; animation-delay: 3.48108s;"></div><div class="particle" style="width: 6.55989px; height: 6.55989px; left: 58.5223%; background: rgba(232, 56, 120, 0.4); animation-duration: 22.675s; animation-delay: 1.21305s;"></div><div class="particle" style="width: 6.37604px; height: 6.37604px; left: 39.8217%; background: rgba(240, 160, 60, 0.3); animation-duration: 23.4886s; animation-delay: 0.213828s;"></div><div class="particle" style="width: 7.76606px; height: 7.76606px; left: 56.9241%; background: rgba(232, 56, 120, 0.4); animation-duration: 22.3186s; animation-delay: 2.82041s;"></div><div class="particle" style="width: 5.27605px; height: 5.27605px; left: 10.2943%; background: rgba(240, 160, 60, 0.3); animation-duration: 11.9799s; animation-delay: 3.68454s;"></div><div class="particle" style="width: 6.06733px; height: 6.06733px; left: 35.0868%; background: rgba(255, 255, 255, 0.15); animation-duration: 17.5865s; animation-delay: 4.20475s;"></div><div class="particle" style="width: 5.60578px; height: 5.60578px; left: 99.646%; background: rgba(255, 255, 255, 0.15); animation-duration: 16.8266s; animation-delay: 3.80261s;"></div><div class="particle" style="width: 7.99562px; height: 7.99562px; left: 67.4162%; background: rgba(232, 56, 120, 0.4); animation-duration: 18.491s; animation-delay: 10.7187s;"></div><div class="particle" style="width: 5.33826px; height: 5.33826px; left: 46.0388%; background: rgba(240, 160, 60, 0.3); animation-duration: 20.287s; animation-delay: 10.5683s;"></div><div class="particle" style="width: 5.14696px; height: 5.14696px; left: 47.666%; background: rgba(240, 160, 60, 0.3); animation-duration: 15.5975s; animation-delay: 1.40766s;"></div><div class="particle" style="width: 7.0298px; height: 7.0298px; left: 21.5001%; background: rgba(255, 255, 255, 0.15); animation-duration: 10.687s; animation-delay: 4.83585s;"></div><div class="particle" style="width: 5.2602px; height: 5.2602px; left: 91.2772%; background: rgba(255, 255, 255, 0.15); animation-duration: 23.3543s; animation-delay: 9.69728s;"></div><div class="particle" style="width: 6.09918px; height: 6.09918px; left: 21.272%; background: rgba(240, 160, 60, 0.3); animation-duration: 17.9133s; animation-delay: 4.47538s;"></div></div>
-  <div class="occ-header">
+  <div class="occ-glow-2"></div>
+  <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:0 0 40px;">
     <span class="occ-logo">WishYou.ai</span>
     <div class="occ-headline">Send love,<br><em>beautifully.</em></div>
     <div class="occ-sub">Choose your occasion</div>
-  </div>
-  <div class="occ-grid">
-    <div class="occ-item birthday" onclick="selectOccasion(&#39;birthday&#39;)">
-      <div class="occ-icon-wrap">🎂</div>
-      <div class="occ-info">
-        <div class="occ-name">Birthday</div>
-        <div class="occ-desc">Make their day unforgettable</div>
+    <div class="occ-tiles">
+      <div class="occ-tile birthday" onclick="selectOccasion(&#39;birthday&#39;)">
+        <div class="occ-tile-badge"></div>
+        <span class="occ-tile-emoji">🎂</span>
+        <span class="occ-tile-name">Birthday</span>
       </div>
-      <span class="occ-badge badge-live">✦ Live</span>
-    </div>
-    <div class="occ-item mothersday" onclick="selectOccasion(&#39;mothersday&#39;)">
-      <div class="occ-icon-wrap">🌸</div>
-      <div class="occ-info">
-        <div class="occ-name">Mother's Day</div>
-        <div class="occ-desc">Thank her the right way</div>
+      <div class="occ-tile mothersday" onclick="selectOccasion(&#39;mothersday&#39;)">
+        <div class="occ-tile-badge" style="background:#f0a030;box-shadow:0 0 8px rgba(240,160,60,0.8);"></div>
+        <span class="occ-tile-emoji">🌸</span>
+        <span class="occ-tile-name">Mother's<br>Day</span>
       </div>
-      <span class="occ-badge badge-live">✦ Live</span>
     </div>
-    <div class="occ-item anniversary">
-      <div class="occ-icon-wrap">💍</div>
-      <div class="occ-info">
-        <div class="occ-name">Anniversary</div>
-        <div class="occ-desc">Celebrate your forever together</div>
-      </div>
-      <span class="occ-badge badge-soon">Soon</span>
-    </div>
-    <div class="occ-item valentine">
-      <div class="occ-icon-wrap">💕</div>
-      <div class="occ-info">
-        <div class="occ-name">Valentine's</div>
-        <div class="occ-desc">Say it with your whole heart</div>
-      </div>
-      <span class="occ-badge badge-soon">Soon</span>
-    </div>
+    <div class="occ-coming-soon">More occasions coming soon</div>
   </div>
 </div>
 
@@ -807,21 +808,6 @@ const STYLES = {
 };
 
 let currentStyleConfig = null;
-
-// ════════════════════════════════════════════════
-// FLOATING PARTICLES
-// ════════════════════════════════════════════════
-(function(){
-  const bg = document.getElementById('particlesBg');
-  const colors = ['rgba(232,56,120,0.4)','rgba(240,160,60,0.3)','rgba(255,255,255,0.15)'];
-  for(let i=0;i<20;i++){
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = 3+Math.random()*5;
-    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${10+Math.random()*15}s;animation-delay:${Math.random()*12}s;`;
-    bg.appendChild(p);
-  }
-})();
 
 // ════════════════════════════════════════════════
 // NAVIGATION
