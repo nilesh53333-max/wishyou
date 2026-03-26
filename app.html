@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_6.html -->
+<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_7.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -382,11 +382,11 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 @keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 .step-title{
   font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.7rem,6vw,2.2rem);
+  font-size:clamp(1.5rem,5vw,1.9rem);
   font-weight:700;line-height:1.2;
-  margin-bottom:6px;
+  margin-bottom:6px;word-break:break-word;
 }
-.step-sub{font-size:0.85rem;line-height:1.6;margin-bottom:24px;opacity:0.6;}
+.step-sub{font-size:0.82rem;line-height:1.6;margin-bottom:20px;opacity:0.6;}
 
 /* Inputs — intimate/blossom style */
 .field-label{
@@ -623,8 +623,8 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
   <div class="step-wrap">
     <div class="step-counter dark">Step 2 of 4</div>
     <span class="step-emoji">📸</span>
-    <div class="step-title" id="title-photos">Your favourite memories</div>
-    <div class="step-sub">Add up to 5 photos — they'll look beautiful on the card</div>
+    <div class="step-title" id="title-photos">Your memories together</div>
+    <div class="step-sub">Add up to 5 photos — tap any caption to edit it</div>
     <div class="photos-grid" id="photosGrid"></div>
     <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
     <button class="btn-next" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
@@ -642,7 +642,7 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
     <div class="step-counter dark">Step 3 of 4</div>
     <span class="step-emoji">🎵</span>
     <div class="step-title" id="title-song">A song just for them</div>
-    <div class="step-sub">Search or let AI find the perfect song</div>
+    <div class="step-sub">Search for a song or let AI suggest one</div>
     <div class="song-selected-box" id="songSelectedBox">
       <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Now playing:</div>
       <div style="font-size:0.9rem;font-weight:600;color:white;" id="songSelectedName">—</div>
@@ -652,11 +652,16 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
       <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;">🔍</button>
     </div>
     <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
-    <button class="btn-ai" id="aiSongBtn" onclick="suggestSongs()">✨ AI Suggest Songs</button>
-    <div class="ai-loading" id="songAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span id="songAiLoadingText">Finding perfect songs...</span></div>
-    <div id="songAiResults"></div>
+    <!-- AI suggestions with context -->
+    <div style="background:rgba(233,30,99,0.05);border:1px solid rgba(233,30,99,0.12);border-radius:14px;padding:12px 14px;margin-bottom:10px;" id="aiSongBox">
+      <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;margin-bottom:8px;">AI Song Suggestions</div>
+      <input id="aiSongContext" placeholder="e.g. romantic Hindi, nostalgic 90s, fun English..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="80">
+      <button class="btn-ai" id="aiSongBtn" onclick="suggestSongs()">✨ Suggest Songs for Me</button>
+      <div class="ai-loading" id="songAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span>Finding perfect songs...</span></div>
+      <div id="songAiResults"></div>
+    </div>
     <input type="hidden" id="cSpotify">
-    <button class="btn-next" id="btn-song" onclick="goTo(&#39;s-letter&#39;)" style="margin-top:10px;">Continue → Letter</button>
+    <button class="btn-next" id="btn-song" onclick="goTo(&#39;s-letter&#39;)" style="margin-top:4px;">Continue → Letter</button>
     <button class="btn-skip" onclick="goTo(&#39;s-letter&#39;)">Skip for now</button>
   </div>
 </div>
@@ -672,8 +677,26 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
     <span class="step-emoji">💌</span>
     <div class="step-title" id="title-letter">Write from the heart</div>
     <div class="step-sub">A few honest words mean everything</div>
-    <button class="btn-ai" id="aiLetterBtn" onclick="runAILetter()">✨ Help me find the words</button>
-    <div class="ai-loading" id="letterAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span>Writing a heartfelt letter...</span></div>
+    <!-- AI letter with language + regenerate -->
+    <div style="background:rgba(233,30,99,0.05);border:1px solid rgba(233,30,99,0.12);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
+      <div style="font-size:0.72rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;margin-bottom:8px;">AI Write Letter</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <select id="letterLang" style="flex:1;font-size:0.85rem;padding:10px 12px;border:1.5px solid rgba(233,30,99,0.2);border-radius:10px;background:white;color:#4a0e2a;outline:none;">
+          <option value="English">English</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Marathi">Marathi</option>
+          <option value="Tamil">Tamil</option>
+          <option value="Telugu">Telugu</option>
+          <option value="Bengali">Bengali</option>
+          <option value="Punjabi">Punjabi</option>
+          <option value="Gujarati">Gujarati</option>
+        </select>
+        <input id="letterTone" placeholder="e.g. funny, emotional..." style="flex:1;font-size:0.85rem;" maxlength="40">
+      </div>
+      <button class="btn-ai" id="aiLetterBtn" onclick="runAILetter()" style="margin-bottom:0;">✨ Write Letter with AI</button>
+      <div class="ai-loading" id="letterAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span id="letterAiText">Writing your letter...</span></div>
+      <div id="letterAiResult" style="display:none;font-size:0.72rem;margin-top:6px;opacity:0.6;">Tap again to get a different letter ↑</div>
+    </div>
     <div id="letterInputWrap"></div>
     <button class="btn-next" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)" style="margin-top:8px;">Preview My Card →</button>
   </div>
@@ -685,13 +708,14 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 <div class="screen creator-screen" id="s-preview">
   <div class="step-progress"><div class="step-progress-fill" id="prog-preview" style="width:100%"></div></div>
   <button class="step-back dark" onclick="goBackCreator()">←</button>
-  <div class="step-wrap" style="align-items:center;text-align:center;">
-    <span class="step-emoji">🎉</span>
-    <div class="step-title">Your card is ready!</div>
-    <div class="step-sub">Here's a preview — looks beautiful 💝</div>
-    <div id="previewMiniCard" style="width:100%;border-radius:18px;padding:20px;margin-bottom:16px;text-align:left;"></div>
+  <div class="step-wrap" style="padding-top:56px;">
+    <div class="step-title" style="margin-bottom:4px;">Almost there! 🎉</div>
+    <div class="step-sub" style="margin-bottom:16px;">Review each page of your card</div>
+
+    <!-- Page by page preview -->
+    <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
+
     <button class="btn-next" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
-    <button class="btn-skip" onclick="goTo(&#39;s-name&#39;)" style="margin-top:4px;">✏️ Edit card</button>
   </div>
 </div>
 
@@ -819,6 +843,7 @@ function goTo(id){
   if(prev){ prev.classList.remove('active'); prev.classList.add('slide-out'); setTimeout(()=>prev.classList.remove('slide-out'),500); }
   next.classList.add('active');
   curScreen = id;
+  if(id==='s-letter'){ aiLetterCount=0; const btn=document.getElementById('aiLetterBtn'); if(btn) btn.textContent='✨ Write Letter with AI'; const h=document.getElementById('letterAiResult'); if(h) h.style.display='none'; }
   if(id==='s-preview') buildPreview();
   setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollTo(0,0); },50);
 }
@@ -1152,6 +1177,7 @@ function buildPhotoSlots(cfg){
   const grid = document.getElementById('photosGrid');
   grid.innerHTML='';
   photos = [];
+  photoCaptions = ['Memory 1','Memory 2','Memory 3','Memory 4','Memory 5'];
   for(let i=0;i<5;i++){
     const slot = document.createElement('div');
     slot.className = 'photo-slot '+(cfg.inputType==='retro'?'retro-slot':'soft-slot');
@@ -1179,6 +1205,8 @@ function applyModalStyles(cfg){
 // ════════════════════════════════════════════════
 // PHOTOS
 // ════════════════════════════════════════════════
+let photoCaptions = ['Memory 1','Memory 2','Memory 3','Memory 4','Memory 5'];
+
 function triggerUpload(idx){
   currentSlotIdx=idx;
   document.getElementById('photoFileInput').click();
@@ -1187,8 +1215,18 @@ function handlePhotoUpload(inp){
   const file=inp.files[0]; if(!file) return;
   const url=URL.createObjectURL(file);
   photos[currentSlotIdx]=url;
-  const slot=document.getElementById('slot'+currentSlotIdx);
-  slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${currentSlotIdx})">✕</button>`;
+  const idx=currentSlotIdx;
+  const slot=document.getElementById('slot'+idx);
+  const cfg=currentStyleConfig;
+  const isRetro=cfg&&cfg.inputType==='retro';
+  slot.innerHTML=`
+    <img src="${url}">
+    <button class="photo-del" onclick="removePhoto(event,${idx})">✕</button>
+    <input class="photo-caption-input" value="${photoCaptions[idx]||'Memory '+(idx+1)}"
+      onclick="event.stopPropagation()"
+      oninput="photoCaptions[${idx}]=this.value"
+      style="position:absolute;bottom:0;left:0;right:0;border:none;font-size:0.55rem;font-weight:700;text-align:center;padding:3px 2px;background:${isRetro?'#FFE135':'rgba(233,30,99,0.85)'};color:${isRetro?'#111':'white'};outline:none;cursor:text;">
+  `;
   inp.value='';
 }
 function removePhoto(e,idx){
@@ -1237,16 +1275,22 @@ async function suggestSongs(){
   const loading=document.getElementById('songAiLoading');
   const results=document.getElementById('songAiResults');
   loading.classList.add('show'); results.innerHTML='';
-  const prompt = cfg.cardType.includes('mothersday')
-    ? `Suggest 4 real popular emotional songs perfect for a Mother's Day card. Mix Hindi and English. Return ONLY JSON array: [{"name":"Song","artist":"Artist"}]`
-    : `Suggest 4 real popular songs for a ${cfg.occasion} card. Mix Hindi and English. Return ONLY JSON array: [{"name":"Song","artist":"Artist"}]`;
+  // Get user context from the input field
+  const context = document.getElementById('aiSongContext')?.value.trim()||'';
+  const name = document.getElementById('cName')?.value.trim()||'';
+  const occ = cfg.cardType.includes('mothersday')?"Mother's Day":cfg.occasion;
+  let prompt = `Suggest 4 real popular songs for a ${occ} card`;
+  if(name) prompt += ` for ${name}`;
+  if(context) prompt += `. User wants: "${context}"`;
+  else prompt += `. Mix Hindi and English, emotional and upbeat`;
+  prompt += `. Return ONLY JSON array: [{"name":"Song","artist":"Artist"}]`;
   const text=await callClaude(prompt);
   try{
     const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
     songs.forEach(s=>{
       const el=document.createElement('div');
-      el.style.cssText=`display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.5);border:1px solid rgba(0,0,0,0.08);`;
-      el.innerHTML=`<span>🎵</span><div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;">${s.name}</div><div style="font-size:0.72rem;opacity:0.5;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;opacity:0.6;">Search ›</span>`;
+      el.style.cssText=`display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.6);border:1px solid rgba(233,30,99,0.1);`;
+      el.innerHTML=`<span>🎵</span><div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;color:#4a0e2a;">${s.name}</div><div style="font-size:0.72rem;opacity:0.5;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#e91e63;">Search ›</span>`;
       el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
       results.appendChild(el);
     });
@@ -1257,17 +1301,26 @@ async function suggestSongs(){
 // ════════════════════════════════════════════════
 // AI LETTER
 // ════════════════════════════════════════════════
+let aiLetterCount = 0;
 async function runAILetter(){
   const cfg=currentStyleConfig;
   const name=document.getElementById('cName')?.value.trim()||'them';
   const sender=document.getElementById('cSender')?.value.trim()||'someone';
+  const lang=document.getElementById('letterLang')?.value||'English';
+  const tone=document.getElementById('letterTone')?.value.trim()||'warm and heartfelt';
   const btn=document.getElementById('aiLetterBtn');
   const loading=document.getElementById('letterAiLoading');
+  const resultHint=document.getElementById('letterAiResult');
+  aiLetterCount++;
   btn.disabled=true; loading.classList.add('show');
-  const occ = cfg.cardType.includes('mothersday')?'Mother\'s Day':cfg.occasion;
-  const text=await callClaude(`Write a short heartfelt ${occ} letter from ${sender} to ${name} (3-4 sentences). Make it warm and genuine. Return ONLY the letter body — no greeting, no sign off.`);
+  const occ = cfg.cardType.includes('mothersday')?"Mother's Day":cfg.occasion;
+  const variationHint = aiLetterCount>1 ? ` Write a DIFFERENT letter from the previous one. Variation ${aiLetterCount}.` : '';
+  const prompt = `Write a short ${occ} letter in ${lang} language from ${sender} to ${name} (3-4 sentences). Tone: ${tone}.${variationHint} Return ONLY the letter body — no greeting line, no sign off.`;
+  const text=await callClaude(prompt);
   if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
   btn.disabled=false; loading.classList.remove('show');
+  if(resultHint) resultHint.style.display='block';
+  btn.textContent='✨ Write Another Letter';
 }
 
 async function callClaude(prompt){
@@ -1280,26 +1333,66 @@ async function callClaude(prompt){
 function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
 
 // ════════════════════════════════════════════════
-// PREVIEW
+// PREVIEW — page by page
 // ════════════════════════════════════════════════
 function buildPreview(){
   const cfg=currentStyleConfig; if(!cfg) return;
   const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
   const msg=document.getElementById('cMsg')?.value.trim()||'';
+  const sign=document.getElementById('cSign')?.value.trim()||cfg.defaultSign;
   const songName=document.getElementById('songSelectedName')?.textContent||'';
-  const box=document.getElementById('previewMiniCard');
   const isRetro=cfg.inputType==='retro';
-  const isBlossom=cfg.cardType.includes('mothersday');
-  box.style.background=isRetro?'#FFE135':isBlossom?'linear-gradient(135deg,#FDF0F3,#F7E0E5)':'linear-gradient(135deg,#fde8f0,#fce4ec)';
-  box.style.border=isRetro?'3px solid #111':'1.5px solid rgba(233,30,99,0.15)';
-  box.style.boxShadow=isRetro?'4px 4px 0 #111':'0 8px 24px rgba(233,30,99,0.12)';
-  box.innerHTML=`
-    <div style="text-align:center;font-size:1.4rem;margin-bottom:6px;">${cfg.emoji}</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:${isRetro?'#d90429':'#4a0e2a'};text-align:center;margin-bottom:8px;">${cfg.occasion==="Mother's Day"?`Happy Mother's Day${name?', '+name:''}! 🌸`:`Happy ${cfg.occasion}${name?', '+name:''}!`}</div>
-    <div style="display:flex;gap:5px;justify-content:center;margin-bottom:8px;">${photos.filter(Boolean).slice(0,3).map(u=>`<img src="${u}" style="width:44px;height:44px;border-radius:${isRetro?'4px':'8px'};object-fit:cover;border:${isRetro?'2px solid #111':'2px solid rgba(233,30,99,0.2)'};">`).join('')}</div>
-    ${songName&&songName!=='—'?`<div style="font-size:0.75rem;text-align:center;margin-bottom:6px;opacity:0.6;">🎵 ${songName}</div>`:''}
-    ${msg?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.88rem;line-height:1.6;opacity:0.8;">${msg.length>120?msg.slice(0,120)+'...':msg}</div>`:'<div style="font-size:0.82rem;opacity:0.4;font-style:italic;">No letter yet</div>'}
-  `;
+  const isMom=cfg.cardType.includes('mothersday');
+  const accentColor=isRetro?'#d90429':isMom?'#C9727A':'#e91e63';
+  const titleText=isMom?`Happy Mother's Day${name?', '+name:''}! 🌸`:`Happy ${cfg.occasion}${name?', '+name:''}! ${cfg.emoji}`;
+  const realPhotos=photos.filter(Boolean);
+
+  const wrap=document.getElementById('cardPagesPreview');
+  wrap.innerHTML='';
+
+  function makePage(icon, label, content, editScreen){
+    const page=document.createElement('div');
+    page.style.cssText=`background:${isRetro?'#FFE135':isMom?'linear-gradient(135deg,#FDF0F3,#F7E0E5)':'linear-gradient(135deg,#fde8f0,#fce4ec)'};border-radius:16px;padding:16px;border:${isRetro?'3px solid #111':'1.5px solid rgba(233,30,99,0.12)'};box-shadow:${isRetro?'3px 3px 0 #111':'0 4px 16px rgba(233,30,99,0.1)'};`;
+    page.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1.1rem;">${icon}</span>
+          <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.5;">${label}</span>
+        </div>
+        <button onclick="goTo('${editScreen}')" style="font-size:0.68rem;font-weight:600;color:${accentColor};background:none;border:1px solid ${accentColor};border-radius:20px;padding:4px 10px;cursor:pointer;opacity:0.8;">Edit</button>
+      </div>
+      ${content}
+    `;
+    wrap.appendChild(page);
+  }
+
+  // Page 1: Welcome
+  makePage(cfg.emoji,'Welcome Screen',`
+    <div style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:${isRetro?'#d90429':'#4a0e2a'};">${titleText}</div>
+    ${sender?`<div style="text-align:center;font-size:0.72rem;opacity:0.6;margin-top:4px;">From ${sender} 💝</div>`:''}
+  `,'s-name');
+
+  // Page 2: Photos
+  makePage('📸','Your Photos',
+    realPhotos.length?
+      `<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map((u,i)=>`<div style="position:relative;"><img src="${u}" style="width:52px;height:52px;border-radius:${isRetro?'4px':'8px'};object-fit:cover;border:${isRetro?'2px solid #111':'2px solid rgba(233,30,99,0.2)'};">
+      <div style="font-size:0.5rem;text-align:center;font-weight:600;opacity:0.7;margin-top:2px;">${photoCaptions[i]||''}</div></div>`).join('')}</div>`
+      :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No photos added yet</div>`,
+  's-photos');
+
+  // Page 3: Song
+  makePage('🎵','Song',
+    songName&&songName!=='—'?
+      `<div style="font-size:0.85rem;font-weight:600;color:${accentColor};">🎵 ${songName}</div>`
+      :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No song selected yet</div>`,
+  's-song');
+
+  // Page 4: Letter
+  makePage('💌','Letter',
+    msg?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.88rem;line-height:1.7;color:#3d1c1c;">${msg.length>140?msg.slice(0,140)+'...':msg}</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.82rem;color:${accentColor};margin-top:8px;">${sign}</div>`
+    :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No letter written yet</div>`,
+  's-letter');
 }
 
 // ════════════════════════════════════════════════
