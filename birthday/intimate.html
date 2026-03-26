@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_18.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>WishYou.ai — Intimate Birthday Card</title>
 <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
 <meta property="og:title" content="You have a birthday surprise! 💝">
 <meta property="og:description" content="Someone made you a special interactive card with photos, music &amp; a heartfelt letter.">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
-<link href="./intimate_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
 <style>
 /* ── BASE ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -251,7 +249,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 <div class="app" id="mainApp">
 
 <!-- ══ CREATOR SCREENS ══ -->
-<div class="screen creator-screen theme-intimate active" id="s-name">
+<div class="screen creator-screen theme-intimate" id="s-name">
   <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-name" style="width:20%"></div></div>
   <button class="step-back dark" onclick="window.location.href=&#39;/&#39;">←</button>
   <div class="step-wrap">
@@ -381,7 +379,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div class="screen" id="rv-error">
   <span class="rv-error-emoji">💔</span>
   <div class="rv-error-text">This card has expired<br>or couldn't be found.</div>
-  <button onclick="window.location.href=&#39;/birthday/intimate.html&#39;" style="margin-top:28px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,99,0.35);">💝 Create your own card</button>
+  <button onclick="window.location.href=&#39;/&#39;" style="margin-top:28px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,99,0.35);">💝 Create your own card</button>
 </div>
 
 <div class="screen" id="rv-welcome">
@@ -394,7 +392,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
     <div class="rv-from" id="rvFrom"></div>
     <button class="rv-open-btn" onclick="goTo(&#39;rv-photos&#39;)">Open Your Card ✨</button>
     <br>
-    <button class="rv-create-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">💝 Create a card like this</button>
+    <button class="rv-create-btn" onclick="window.location.href=&#39;/&#39;">💝 Create a card like this</button>
   </div>
 </div>
 
@@ -414,7 +412,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
   <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
   <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
-  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;" src="./intimate_files/saved_resource" alt="">
+  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;transition:opacity 0.18s ease;" src="" alt="">
   <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
   <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
 </div>
@@ -457,7 +455,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   <div class="letter-foot">
     <div class="letter-foot-row">
       <button class="replay-btn" onclick="goTo(&#39;rv-welcome&#39;)">💝 Replay</button>
-      <button class="create-again-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">✨ Make one</button>
+      <button class="create-again-btn" onclick="window.location.href=&#39;/&#39;">✨ Create a card like this</button>
     </div>
   </div>
 </div>
@@ -854,7 +852,14 @@ async function saveAndShare(){
 }
 
 function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
-function openWhatsApp(){const name=document.getElementById('cName')?.value.trim()||'';const sender=document.getElementById('cSender')?.value.trim()||'';window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(CFG.shareMsg(name,sender,shareLink)),'_blank');}
+function openWhatsApp(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const text=encodeURIComponent(CFG.shareMsg(name,sender,shareLink));
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(isMobile){window.location.href='whatsapp://send?text='+text;}
+  else{window.open('https://web.whatsapp.com/send?text='+text,'_blank');}
+}
 function closeShare(){document.getElementById('shareModal').classList.remove('show');}
 
 // ════ RECEIVER FUNCTIONS ════
@@ -946,9 +951,14 @@ function openLightbox(idx){
 
 function lbNav(dir){
   if(lbPhotos.length<=1) return;
-  lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
-  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
-  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+  const img=document.getElementById('lightboxImg');
+  img.style.opacity='0';
+  setTimeout(()=>{
+    lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
+    img.src=lbPhotos[lbIdx];
+    img.style.opacity='1';
+    document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+  },180);
 }
 
 function closeLightbox(){
