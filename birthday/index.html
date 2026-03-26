@@ -2,53 +2,73 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WishYou.ai — Birthday Cards</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
 <meta property="og:title" content="WishYou.ai — Birthday Cards">
 <meta property="og:description" content="Choose your birthday card style">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;}
-.app{position:relative;width:100%;max-width:430px;height:100vh;overflow:hidden;margin:0 auto;}
-@media(min-width:500px){
-  .app{height:90vh;max-height:900px;border-radius:40px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
-}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;min-height:100vh;overflow-x:hidden;}
 
-/* STYLE PICKER */
-#s-style{
-  position:absolute;inset:0;
-  background:#0f0810;
-  display:flex;flex-direction:column;align-items:center;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  justify-content:flex-start;
-}
-.style-header{padding:52px 24px 16px;display:flex;align-items:center;gap:14px;width:100%;max-width:430px;flex-shrink:0;}
-.back-circle{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:rgba(255,255,255,0.6);flex-shrink:0;touch-action:manipulation;transition:background 0.2s;text-decoration:none;}
-.back-circle:active{background:rgba(255,255,255,0.12);}
-.style-occasion-label{font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;}
-.style-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:white;}
-.style-cards-wrap{padding:0 18px 40px;display:flex;flex-direction:column;gap:14px;width:100%;max-width:430px;flex-shrink:0;}
+/* ambient glows — same as main index */
+body::before{content:'';position:fixed;top:-200px;left:50%;transform:translateX(-50%);width:900px;height:600px;background:radial-gradient(ellipse,rgba(20,160,140,0.07) 0%,transparent 65%);pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;bottom:-150px;right:-80px;width:500px;height:400px;background:radial-gradient(ellipse,rgba(240,192,64,0.05) 0%,transparent 65%);pointer-events:none;z-index:0;}
 
-/* PREVIEW CARDS */
-.style-preview-card{border-radius:18px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;width:100%;}
-.style-preview-card:active{transform:scale(0.97);}
-.preview-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec);border:1.5px solid rgba(233,30,99,0.15);padding:14px 14px 12px;}
-.preview-retro{background:#FFE135;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:14px 14px 12px;}
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 36px;display:flex;align-items:center;justify-content:space-between;}
+.nav-left{display:flex;align-items:center;gap:14px;}
+.back-btn{width:36px;height:36px;border-radius:50%;background:rgba(160,220,210,0.06);border:1px solid rgba(160,220,210,0.12);display:flex;align-items:center;justify-content:center;color:rgba(160,220,210,0.5);font-size:1rem;text-decoration:none;transition:all 0.2s;flex-shrink:0;}
+.back-btn:hover{background:rgba(160,220,210,0.1);color:rgba(160,220,210,0.8);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:400;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.45);text-decoration:none;}
+.nav-tag{font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,192,64,0.4);border:1px solid rgba(240,192,64,0.15);border-radius:50px;padding:5px 12px;}
 
-/* Slideshow */
-.slide-viewport{width:100%;border-radius:10px;overflow:hidden;position:relative;height:140px;margin-bottom:8px;background:rgba(255,255,255,0.6);}
-.preview-retro .slide-viewport{background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
+/* ── HERO ── */
+.hero{position:relative;z-index:1;padding:110px 36px 28px;max-width:860px;margin:0 auto;text-align:center;}
+.hero-eyebrow{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px;}
+.hero-eyebrow-line{width:24px;height:1px;background:rgba(240,192,64,0.4);}
+.hero-eyebrow-txt{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,192,64,0.5);}
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:300;line-height:1.1;color:rgba(224,240,238,0.9);}
+h1 em{font-style:italic;color:#f0c040;}
+.hero-sub{margin-top:12px;font-size:0.8rem;color:rgba(160,220,210,0.32);letter-spacing:0.04em;}
+.hero-rule{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(20,160,140,0.2),rgba(240,192,64,0.1),transparent);margin-top:32px;}
+
+/* ── CARDS SECTION ── */
+.cards-section{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:32px 36px 80px;}
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:600px){.cards-grid{grid-template-columns:1fr;gap:16px;}}
+
+/* ── STYLE CARD WRAPPER ── */
+.style-card{border-radius:20px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;}
+.style-card:active{transform:scale(0.97);}
+
+/* Intimate card */
+.style-card.intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec);border:1.5px solid rgba(233,30,99,0.15);}
+.style-card.intimate:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(233,30,99,0.2);}
+
+/* Retro card */
+.style-card.retro{background:#FFE135;border:3px solid #111;box-shadow:4px 4px 0 #111;}
+.style-card.retro:hover{transform:translateY(-4px) translateX(-2px);box-shadow:8px 8px 0 #111;}
+
+.card-inner{padding:16px 16px 14px;}
+
+/* Slideshow viewport */
+.slide-viewport{width:100%;border-radius:10px;overflow:hidden;position:relative;height:160px;margin-bottom:10px;background:rgba(255,255,255,0.6);}
+.retro .slide-viewport{background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
 .preview-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
 .preview-slide.active-slide{opacity:1;}
-.slide-dots{display:flex;gap:5px;justify-content:center;margin-bottom:10px;}
+
+/* slide dots */
+.slide-dots{display:flex;gap:5px;justify-content:center;margin-bottom:12px;}
 .slide-dot{width:6px;height:6px;border-radius:50%;background:rgba(233,30,99,0.2);transition:all 0.3s;}
 .slide-dot.active{background:#e91e63;transform:scale(1.3);}
 .retro-dot{background:rgba(17,17,17,0.15)!important;}
 .retro-dot.active{background:#d90429!important;}
+
+/* slide content helpers */
 .slide-screen-label{font-size:0.55rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
 .slide-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;margin-bottom:6px;line-height:1.2;}
 .slide-title.retro-slide-title{font-family:'Fredoka One',cursive;color:#d90429;font-size:0.95rem;}
@@ -76,33 +96,68 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .slide-news-lines{display:flex;flex-direction:column;gap:2px;}
 .slide-news-line{height:2px;background:rgba(0,0,0,0.12);border-radius:1px;}
 
-.preview-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.preview-style-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;}
-.preview-style-name.retro-name{font-family:'Fredoka One',cursive;color:#d90429;}
-.preview-style-desc{font-size:0.62rem;color:#8d3a5a;margin-top:1px;}
-.preview-style-desc.retro-desc{font-family:'Fredoka One',cursive;color:#555;font-size:0.6rem;}
-.preview-btn{padding:12px 18px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;width:100%;margin-top:6px;transition:transform 0.15s;text-decoration:none;display:block;text-align:center;}
-.preview-btn:active{transform:scale(0.97);}
-.preview-btn.intimate-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
-.preview-btn.retro-btn{background:#d90429;color:white;border:2px solid #111;border-radius:6px;box-shadow:3px 3px 0 #111;font-family:'Fredoka One',cursive;font-size:0.9rem;}
+/* card info row */
+.card-info{margin-bottom:10px;}
+.card-style-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:2px;}
+.card-style-name.retro-name{font-family:'Fredoka One',cursive;color:#d90429;}
+.card-style-desc{font-size:0.62rem;color:#8d3a5a;}
+.card-style-desc.retro-desc{font-family:'Fredoka One',cursive;color:#555;font-size:0.6rem;}
 
-.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.6rem;color:rgba(255,255,255,0.3);}
+/* CTA button */
+.card-btn{padding:13px 18px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;touch-action:manipulation;width:100%;transition:transform 0.15s;text-decoration:none;display:block;text-align:center;}
+.card-btn:active{transform:scale(0.97);}
+.card-btn.intimate-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
+.card-btn.retro-btn{background:#d90429;color:white;border:2px solid #111;border-radius:6px;box-shadow:3px 3px 0 #111;font-family:'Fredoka One',cursive;font-size:0.9rem;}
+
+
+
+/* animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.hero-eyebrow{animation:fadeUp 0.8s ease both;}
+h1{animation:fadeUp 0.8s 0.08s ease both;}
+.hero-sub{animation:fadeUp 0.8s 0.14s ease both;}
+.hero-rule{animation:fadeUp 0.8s 0.2s ease both;}
+.style-card:nth-child(1){animation:fadeUp 0.7s 0.26s ease both;}
+.style-card:nth-child(2){animation:fadeUp 0.7s 0.34s ease both;}
+
+/* mobile */
+@media(max-width:600px){
+  nav{padding:14px 20px;}
+  .nav-tag{display:none;}
+  .hero{padding:90px 20px 24px;}
+  .cards-section{padding:24px 20px 60px;}
+  h1{font-size:clamp(1.9rem,8vw,2.4rem);}
+  footer{padding:20px;}
+}
 </style>
 </head>
 <body>
-<div class="app">
-  <div id="s-style">
-    <div class="style-header">
-      <a href="/" class="back-circle">←</a>
-      <div>
-        <div class="style-occasion-label">Birthday</div>
-        <div class="style-title">Choose your style</div>
-      </div>
-    </div>
-    <div class="style-cards-wrap">
 
-      <!-- INTIMATE -->
-      <div class="style-preview-card preview-intimate" id="prev-intimate" onclick="window.location.href='/birthday/intimate.html'">
+<nav>
+  <div class="nav-left">
+    <a href="/" class="back-btn">←</a>
+    <a href="/" class="nav-logo">WishYou.ai</a>
+  </div>
+  <span class="nav-tag">Birthday</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span class="hero-eyebrow-line"></span>
+    <span class="hero-eyebrow-txt">Birthday Cards</span>
+    <span class="hero-eyebrow-line"></span>
+  </div>
+  <h1>Choose your<br><em>style.</em></h1>
+  <p class="hero-sub">Same love, different feeling.</p>
+  <div class="hero-rule"></div>
+</section>
+
+<section class="cards-section">
+  <div class="cards-grid">
+
+    <!-- INTIMATE -->
+    <div class="style-card intimate" id="prev-intimate" onclick="window.location.href='/birthday/intimate.html'">
+      <div class="card-inner">
         <div class="slide-viewport">
           <div class="preview-slide active-slide">
             <div class="slide-screen-label">Welcome Screen</div>
@@ -145,17 +200,17 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
         <div class="slide-dots">
           <div class="slide-dot active"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div>
         </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name">💌 Intimate</div>
-            <div class="preview-style-desc">Soft & emotional • Envelope reveal • Photos & song</div>
-          </div>
+        <div class="card-info">
+          <div class="card-style-name">💌 Intimate</div>
+          <div class="card-style-desc">Soft & emotional • Envelope reveal • Photos & song</div>
         </div>
-        <a class="preview-btn intimate-btn" href="/birthday/intimate.html" onclick="event.stopPropagation();">💌 Make this card →</a>
+        <a class="card-btn intimate-btn" href="/birthday/intimate.html" onclick="event.stopPropagation();">💌 Make this card →</a>
       </div>
+    </div>
 
-      <!-- RETRO -->
-      <div class="style-preview-card preview-retro" id="prev-retro" onclick="window.location.href='/birthday/retro.html'">
+    <!-- RETRO -->
+    <div class="style-card retro" id="prev-retro" onclick="window.location.href='/birthday/retro.html'">
+      <div class="card-inner">
         <div class="slide-viewport">
           <div class="preview-slide active-slide">
             <div class="slide-screen-label" style="color:#d90429;">Welcome Screen</div>
@@ -196,24 +251,21 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
         <div class="slide-dots">
           <div class="slide-dot retro-dot active"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div>
         </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name retro-name">🎊 Retro Party</div>
-            <div class="preview-style-desc retro-desc">Fun & loud • Balloon pop • Newspaper letter</div>
-          </div>
+        <div class="card-info">
+          <div class="card-style-name retro-name">🎊 Retro Party</div>
+          <div class="card-style-desc retro-desc">Fun & loud • Balloon pop • Newspaper letter</div>
         </div>
-        <a class="preview-btn retro-btn" href="/birthday/retro.html" onclick="event.stopPropagation();">🎊 Make this card →</a>
+        <a class="card-btn retro-btn" href="/birthday/retro.html" onclick="event.stopPropagation();">🎊 Make this card →</a>
       </div>
-
     </div>
+
   </div>
-</div>
-<div class="wm">WishYou.ai</div>
+</section>
 
 <script>
-const slideshowTimers = {};
-function startSlideshow(cardId, totalSlides){
-  if(slideshowTimers[cardId]) clearInterval(slideshowTimers[cardId]);
+const slideshowTimers={};
+function startSlideshow(cardId,totalSlides){
+  if(slideshowTimers[cardId])clearInterval(slideshowTimers[cardId]);
   let idx=0;
   function next(){
     const slides=document.querySelectorAll('#'+cardId+' .preview-slide');
@@ -221,8 +273,8 @@ function startSlideshow(cardId, totalSlides){
     slides.forEach(s=>s.classList.remove('active-slide'));
     dots.forEach(d=>d.classList.remove('active'));
     idx=(idx+1)%totalSlides;
-    if(slides[idx]) slides[idx].classList.add('active-slide');
-    if(dots[idx]) dots[idx].classList.add('active');
+    if(slides[idx])slides[idx].classList.add('active-slide');
+    if(dots[idx])dots[idx].classList.add('active');
   }
   slideshowTimers[cardId]=setInterval(next,2200);
 }
