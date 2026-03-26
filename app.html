@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0042)file:///C:/Users/Nilesh/Downloads/app.html -->
+<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_3.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -160,11 +160,11 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 
 .style-cards-wrap{
   padding:8px 18px 30px;
-  display:flex;flex-direction:column;gap:14px;
+  display:flex;flex-direction:column;gap:16px;
   flex:1;overflow-y:auto;
 }
 
-/* Animated style preview card */
+/* ── Animated preview card ──────────────────── */
 .style-preview-card{
   border-radius:20px;overflow:hidden;
   cursor:pointer;touch-action:manipulation;
@@ -173,105 +173,134 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 }
 .style-preview-card:active{transform:scale(0.97);}
 
-/* Intimate preview */
-.preview-intimate{
-  background:linear-gradient(160deg,#fde8f0,#fce4ec);
-  padding:22px 20px 16px;
-  border:1.5px solid rgba(233,30,99,0.15);
-}
-.preview-retro{
-  background:#FFE135;
-  padding:22px 20px 16px;
-  border:3px solid #111;
-  box-shadow:5px 5px 0 #111;
-}
-.preview-blossom{
-  background:linear-gradient(160deg,#FDF0F3,#F7E0E5);
-  padding:22px 20px 16px;
-  border:1.5px solid rgba(201,114,122,0.2);
-}
+.preview-intimate{ background:linear-gradient(160deg,#fde8f0,#fce4ec); border:1.5px solid rgba(233,30,99,0.15); padding:16px 16px 14px; }
+.preview-retro{ background:#FFE135; border:3px solid #111; box-shadow:5px 5px 0 #111; padding:16px 16px 14px; }
+.preview-blossom{ background:linear-gradient(160deg,#FDF0F3,#F7E0E5); border:1.5px solid rgba(201,114,122,0.2); padding:16px 16px 14px; }
 
-/* Mini card elements inside preview */
-.mini-card{
-  background:rgba(255,255,255,0.85);
-  border-radius:12px;padding:12px 14px;
-  margin-bottom:12px;
-  box-shadow:0 4px 16px rgba(233,30,99,0.1);
+/* Slideshow viewport */
+.slide-viewport{
+  width:100%;border-radius:12px;overflow:hidden;
+  position:relative;height:160px;margin-bottom:10px;
+  background:rgba(255,255,255,0.6);
 }
-.mini-card.retro-mini{
-  background:white;border:2px solid #111;
-  box-shadow:3px 3px 0 #111;border-radius:8px;
-}
-.mini-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem;font-weight:700;color:#4a0e2a;
-  margin-bottom:4px;text-align:center;
-}
-.mini-title.retro{
-  font-family:'Fredoka One',cursive;
-  color:#d90429;font-size:1rem;
-}
-.mini-photos{display:flex;gap:4px;margin-bottom:8px;justify-content:center;}
-.mini-photo{
-  width:36px;height:48px;border-radius:6px;
-  background:rgba(233,30,99,0.12);
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.7rem;
-}
-.mini-photo.retro-ph{
-  background:#f0f0f0;border:2px solid #111;border-radius:4px;
-}
-.mini-env{
-  width:50px;height:34px;margin:4px auto;
-  background:linear-gradient(135deg,#ffd6e7,#ffaac8);
-  border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;
-}
-.mini-balloon{font-size:2rem;text-align:center;animation:miniBounce 1.5s ease-in-out infinite;}
-@keyframes miniBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-.mini-vinyl{
-  width:40px;height:40px;border-radius:50%;margin:4px auto;
-  background:conic-gradient(#111 0deg,#222 30deg,#111 60deg,#222 90deg,#111 120deg,#222 150deg,#111 180deg,#222 210deg,#111 240deg,#222 270deg,#111 300deg,#222 330deg,#111 360deg);
-  animation:vinylSpin 3s linear infinite;
-  display:flex;align-items:center;justify-content:center;
-}
-@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.mini-vinyl-center{width:12px;height:12px;border-radius:50%;background:#e91e63;position:absolute;}
+.preview-retro .slide-viewport{background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
 
-.preview-label-row{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-top:4px;
+/* Individual slides */
+.preview-slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:12px;
+  opacity:0;
+  transition:opacity 0.6s ease;
+  text-align:center;
 }
-.preview-style-name{
+.preview-slide.active-slide{opacity:1;}
+
+/* Slide dots */
+.slide-dots{
+  display:flex;gap:5px;justify-content:center;margin-bottom:10px;
+}
+.slide-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(233,30,99,0.2);
+  transition:all 0.3s;
+}
+.slide-dot.active{background:#e91e63;transform:scale(1.3);}
+.retro-dot{background:rgba(17,17,17,0.15)!important;}
+.retro-dot.active{background:#d90429!important;}
+
+/* Slide screen content */
+.slide-screen-label{
+  font-size:0.55rem;font-weight:600;letter-spacing:0.12em;
+  text-transform:uppercase;opacity:0.4;margin-bottom:6px;
+}
+.slide-title{
   font-family:'Cormorant Garamond',serif;
   font-size:1rem;font-weight:700;color:#4a0e2a;
+  margin-bottom:6px;line-height:1.2;
 }
-.preview-style-name.retro-name{
-  font-family:'Fredoka One',cursive;color:#d90429;
+.slide-title.retro-slide-title{font-family:'Fredoka One',cursive;color:#d90429;font-size:0.95rem;}
+
+/* Polaroid photos in slide */
+.slide-photos{display:flex;gap:4px;justify-content:center;margin:4px 0;}
+.slide-pol{
+  width:38px;height:50px;background:white;border-radius:4px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:3px 3px 10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.9rem;
 }
+.slide-pol:nth-child(odd){transform:rotate(-2deg);}
+.slide-pol:nth-child(even){transform:rotate(2deg);}
+
+/* Comic panels in slide */
+.slide-comic{display:flex;gap:3px;justify-content:center;margin:4px 0;}
+.slide-panel{
+  width:42px;height:56px;
+  border:2px solid #111;border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;background:#fff9c4;
+}
+.slide-panel:nth-child(2){background:#ffe0b2;}
+.slide-panel:nth-child(3){background:#fce4ec;}
+
+/* Envelope in slide */
+.slide-env{
+  font-size:2.2rem;
+  animation:envWiggle 2s ease-in-out infinite;
+}
+@keyframes envWiggle{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+
+/* Balloon in slide */
+.slide-balloon{
+  font-size:2.5rem;
+  animation:ballFloat 1.5s ease-in-out infinite;
+}
+@keyframes ballFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+/* Vinyl in slide */
+.slide-vinyl{
+  width:44px;height:44px;border-radius:50%;
+  background:conic-gradient(#111 0deg,#222 20deg,#111 40deg,#222 60deg,#111 80deg,#222 100deg,#111 120deg,#222 140deg,#111 160deg,#222 180deg,#111 200deg,#222 220deg,#111 240deg,#222 260deg,#111 280deg,#222 300deg,#111 320deg,#222 340deg,#111 360deg);
+  animation:vinylSpin 3s linear infinite;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 3px #333,0 0 0 5px #444;
+}
+@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.slide-vinyl-center{width:12px;height:12px;border-radius:50%;background:#e91e63;position:absolute;}
+
+/* Letter in slide */
+.slide-letter-lines{width:80%;margin:4px auto;}
+.slide-line{height:2px;border-radius:2px;background:rgba(74,14,42,0.12);margin-bottom:4px;}
+.slide-line:first-child{width:60%;background:rgba(233,30,99,0.3);}
+
+/* Newspaper in slide */
+.slide-newspaper{
+  background:#fdf8e7;border:2px solid #111;border-radius:4px;
+  padding:6px 8px;width:100%;
+}
+.slide-news-head{font-family:'Fredoka One',cursive;font-size:0.55rem;color:#111;border-bottom:2px double #111;margin-bottom:4px;padding-bottom:2px;}
+.slide-headline{background:#d90429;color:white;font-family:'Fredoka One',cursive;font-size:0.55rem;padding:2px 4px;border-radius:2px;margin-bottom:4px;}
+.slide-news-lines{display:flex;flex-direction:column;gap:2px;}
+.slide-news-line{height:2px;background:rgba(0,0,0,0.12);border-radius:1px;}
+
+/* Card label + button row */
+.preview-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.preview-style-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;}
+.preview-style-name.retro-name{font-family:'Fredoka One',cursive;color:#d90429;}
 .preview-style-name.blossom-name{color:#3D1C1C;}
-.preview-style-desc{font-size:0.65rem;color:#8d3a5a;margin-top:1px;}
+.preview-style-desc{font-size:0.62rem;color:#8d3a5a;margin-top:1px;}
 .preview-style-desc.retro-desc{font-family:'Fredoka One',cursive;color:#555;font-size:0.6rem;}
 .preview-btn{
-  padding:10px 18px;border:none;border-radius:50px;
-  font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;
+  padding:12px 18px;border:none;border-radius:50px;
+  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;
   cursor:pointer;touch-action:manipulation;
-  transition:transform 0.15s,box-shadow 0.15s;
-  width:100%;margin-top:10px;
+  width:100%;margin-top:6px;
+  transition:transform 0.15s;
 }
-.preview-btn.intimate-btn{
-  background:linear-gradient(135deg,#e91e63,#f06292);color:white;
-  box-shadow:0 6px 20px rgba(233,30,99,0.35);
-}
-.preview-btn.retro-btn{
-  background:#d90429;color:white;border:2px solid #111;
-  border-radius:6px;box-shadow:3px 3px 0 #111;
-  font-family:'Fredoka One',cursive;font-size:0.88rem;
-}
-.preview-btn.blossom-btn{
-  background:linear-gradient(135deg,#C9727A,#C9973A);color:white;
-  box-shadow:0 6px 20px rgba(201,114,122,0.35);
-}
-.preview-btn:active{transform:scale(0.96);}
+.preview-btn:active{transform:scale(0.97);}
+.preview-btn.intimate-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
+.preview-btn.retro-btn{background:#d90429;color:white;border:2px solid #111;border-radius:6px;box-shadow:3px 3px 0 #111;font-family:'Fredoka One',cursive;font-size:0.9rem;}
+.preview-btn.blossom-btn{background:linear-gradient(135deg,#C9727A,#C9973A);color:white;box-shadow:0 6px 20px rgba(201,114,122,0.35);}
 
 /* ══════════════════════════════════════════════
    SCREENS 3-6: STEP BY STEP CREATOR
@@ -506,7 +535,7 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
      SCREEN 1: OCCASION PICKER
 ════════════════════════════════════ -->
 <div class="screen active" id="s-occasion">
-  <div id="particlesBg" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"><div class="particle" style="width: 5.81394px; height: 5.81394px; left: 89.7462%; background: rgba(240, 160, 60, 0.3); animation-duration: 18.0828s; animation-delay: 5.82445s;"></div><div class="particle" style="width: 4.3978px; height: 4.3978px; left: 68.3987%; background: rgba(255, 255, 255, 0.15); animation-duration: 19.3462s; animation-delay: 8.66009s;"></div><div class="particle" style="width: 6.09148px; height: 6.09148px; left: 47.1752%; background: rgba(240, 160, 60, 0.3); animation-duration: 21.342s; animation-delay: 2.53654s;"></div><div class="particle" style="width: 3.3694px; height: 3.3694px; left: 24.7158%; background: rgba(232, 56, 120, 0.4); animation-duration: 11.9451s; animation-delay: 1.9305s;"></div><div class="particle" style="width: 6.81029px; height: 6.81029px; left: 2.86507%; background: rgba(240, 160, 60, 0.3); animation-duration: 24.726s; animation-delay: 9.59303s;"></div><div class="particle" style="width: 3.96983px; height: 3.96983px; left: 83.9827%; background: rgba(232, 56, 120, 0.4); animation-duration: 17.153s; animation-delay: 3.57542s;"></div><div class="particle" style="width: 5.65271px; height: 5.65271px; left: 30.8764%; background: rgba(255, 255, 255, 0.15); animation-duration: 22.6774s; animation-delay: 9.03166s;"></div><div class="particle" style="width: 5.33655px; height: 5.33655px; left: 26.9892%; background: rgba(240, 160, 60, 0.3); animation-duration: 16.9246s; animation-delay: 1.93116s;"></div><div class="particle" style="width: 4.77326px; height: 4.77326px; left: 40.7459%; background: rgba(255, 255, 255, 0.15); animation-duration: 13.7007s; animation-delay: 9.92208s;"></div><div class="particle" style="width: 6.27768px; height: 6.27768px; left: 15.8596%; background: rgba(255, 255, 255, 0.15); animation-duration: 12.8137s; animation-delay: 6.92137s;"></div><div class="particle" style="width: 5.36832px; height: 5.36832px; left: 37.7237%; background: rgba(255, 255, 255, 0.15); animation-duration: 23.0741s; animation-delay: 10.2749s;"></div><div class="particle" style="width: 3.13779px; height: 3.13779px; left: 33.1765%; background: rgba(255, 255, 255, 0.15); animation-duration: 11.4888s; animation-delay: 4.12287s;"></div><div class="particle" style="width: 4.18241px; height: 4.18241px; left: 60.9742%; background: rgba(240, 160, 60, 0.3); animation-duration: 19.0165s; animation-delay: 4.50895s;"></div><div class="particle" style="width: 5.76594px; height: 5.76594px; left: 81.0468%; background: rgba(255, 255, 255, 0.15); animation-duration: 18.9895s; animation-delay: 6.09565s;"></div><div class="particle" style="width: 5.9521px; height: 5.9521px; left: 97.5772%; background: rgba(240, 160, 60, 0.3); animation-duration: 14.4985s; animation-delay: 5.49775s;"></div><div class="particle" style="width: 5.55847px; height: 5.55847px; left: 82.9756%; background: rgba(232, 56, 120, 0.4); animation-duration: 10.815s; animation-delay: 10.9544s;"></div><div class="particle" style="width: 6.11173px; height: 6.11173px; left: 28.0283%; background: rgba(255, 255, 255, 0.15); animation-duration: 15.0333s; animation-delay: 8.36235s;"></div><div class="particle" style="width: 3.15109px; height: 3.15109px; left: 78.2248%; background: rgba(232, 56, 120, 0.4); animation-duration: 21.0072s; animation-delay: 5.894s;"></div><div class="particle" style="width: 4.31771px; height: 4.31771px; left: 54.7957%; background: rgba(240, 160, 60, 0.3); animation-duration: 10.9897s; animation-delay: 8.93183s;"></div><div class="particle" style="width: 4.82777px; height: 4.82777px; left: 55.1147%; background: rgba(255, 255, 255, 0.15); animation-duration: 21.2385s; animation-delay: 3.46189s;"></div></div>
+  <div id="particlesBg" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"><div class="particle" style="width: 3.60382px; height: 3.60382px; left: 24.139%; background: rgba(240, 160, 60, 0.3); animation-duration: 11.6649s; animation-delay: 2.85413s;"></div><div class="particle" style="width: 6.53207px; height: 6.53207px; left: 27.4127%; background: rgba(255, 255, 255, 0.15); animation-duration: 10.972s; animation-delay: 9.37827s;"></div><div class="particle" style="width: 6.75302px; height: 6.75302px; left: 96.3415%; background: rgba(232, 56, 120, 0.4); animation-duration: 11.8775s; animation-delay: 2.77177s;"></div><div class="particle" style="width: 6.75719px; height: 6.75719px; left: 85.2577%; background: rgba(240, 160, 60, 0.3); animation-duration: 12.6286s; animation-delay: 9.28328s;"></div><div class="particle" style="width: 3.33223px; height: 3.33223px; left: 2.91535%; background: rgba(240, 160, 60, 0.3); animation-duration: 19.1436s; animation-delay: 3.3747s;"></div><div class="particle" style="width: 3.70837px; height: 3.70837px; left: 82.4851%; background: rgba(255, 255, 255, 0.15); animation-duration: 14.1735s; animation-delay: 3.48728s;"></div><div class="particle" style="width: 7.41512px; height: 7.41512px; left: 18.7301%; background: rgba(255, 255, 255, 0.15); animation-duration: 10.1052s; animation-delay: 10.5229s;"></div><div class="particle" style="width: 4.12609px; height: 4.12609px; left: 49.2323%; background: rgba(255, 255, 255, 0.15); animation-duration: 17.6549s; animation-delay: 3.42112s;"></div><div class="particle" style="width: 7.49411px; height: 7.49411px; left: 2.3642%; background: rgba(232, 56, 120, 0.4); animation-duration: 14.5127s; animation-delay: 2.28842s;"></div><div class="particle" style="width: 7.17911px; height: 7.17911px; left: 42.9116%; background: rgba(255, 255, 255, 0.15); animation-duration: 11.2759s; animation-delay: 8.70646s;"></div><div class="particle" style="width: 4.00433px; height: 4.00433px; left: 22.77%; background: rgba(232, 56, 120, 0.4); animation-duration: 19.1428s; animation-delay: 9.10563s;"></div><div class="particle" style="width: 4.14217px; height: 4.14217px; left: 60.4691%; background: rgba(255, 255, 255, 0.15); animation-duration: 24.6154s; animation-delay: 1.48078s;"></div><div class="particle" style="width: 7.01565px; height: 7.01565px; left: 99.7687%; background: rgba(255, 255, 255, 0.15); animation-duration: 17.6095s; animation-delay: 4.1248s;"></div><div class="particle" style="width: 5.29823px; height: 5.29823px; left: 15.4287%; background: rgba(255, 255, 255, 0.15); animation-duration: 12.9442s; animation-delay: 11.5476s;"></div><div class="particle" style="width: 6.41988px; height: 6.41988px; left: 10.8903%; background: rgba(232, 56, 120, 0.4); animation-duration: 11.742s; animation-delay: 8.48003s;"></div><div class="particle" style="width: 5.9863px; height: 5.9863px; left: 69.3603%; background: rgba(255, 255, 255, 0.15); animation-duration: 17.1861s; animation-delay: 2.07845s;"></div><div class="particle" style="width: 6.93765px; height: 6.93765px; left: 27.2726%; background: rgba(240, 160, 60, 0.3); animation-duration: 23.8071s; animation-delay: 8.61197s;"></div><div class="particle" style="width: 5.82014px; height: 5.82014px; left: 46.1871%; background: rgba(255, 255, 255, 0.15); animation-duration: 10.3732s; animation-delay: 8.96677s;"></div><div class="particle" style="width: 3.10239px; height: 3.10239px; left: 60.7482%; background: rgba(232, 56, 120, 0.4); animation-duration: 19.4331s; animation-delay: 2.57615s;"></div><div class="particle" style="width: 4.69439px; height: 4.69439px; left: 40.716%; background: rgba(232, 56, 120, 0.4); animation-duration: 19.322s; animation-delay: 3.50679s;"></div></div>
   <div class="occ-header">
     <span class="occ-logo">WishYou.ai</span>
     <div class="occ-headline">Send love,<br><em>beautifully.</em></div>
@@ -560,76 +589,42 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
     </div>
   </div>
   <div class="style-cards-wrap" id="styleCardsWrap">
-      <!-- Intimate Preview -->
-      <div class="style-preview-card preview-intimate" onclick="selectStyle(&#39;birthday-intimate&#39;)">
-        <div class="mini-card">
-          <div class="mini-title">Happy Birthday! 💝</div>
-          <div class="mini-photos">
-            <div class="mini-photo">📸</div><div class="mini-photo">🌸</div><div class="mini-photo">💕</div>
-          </div>
-          <div class="mini-env">💌</div>
-        </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name">💌 Intimate</div>
-            <div class="preview-style-desc">Soft, emotional • Envelope reveal</div>
-          </div>
-        </div>
-        <button class="preview-btn intimate-btn" onclick="event.stopPropagation();selectStyle(&#39;birthday-intimate&#39;)">Create This Card →</button>
-      </div>
-      <!-- Retro Preview -->
-      <div class="style-preview-card preview-retro" onclick="selectStyle(&#39;birthday-retro&#39;)">
-        <div class="mini-card retro-mini">
-          <div class="mini-title retro">Happy Birthday! 🎊</div>
-          <div style="display:flex;gap:4px;justify-content:center;margin-bottom:6px;">
-            <div class="mini-photo retro-ph">🎂</div><div class="mini-photo retro-ph">🎉</div><div class="mini-photo retro-ph">🎈</div>
-          </div>
-          <div class="mini-balloon">🎈</div>
-        </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name retro-name">🎊 Retro Party</div>
-            <div class="preview-style-desc retro-desc">Fun &amp; bold • Balloon pop • Newspaper</div>
-          </div>
-        </div>
-        <button class="preview-btn retro-btn" onclick="event.stopPropagation();selectStyle(&#39;birthday-retro&#39;)">Create This Card →</button>
-      </div></div>
+    <!-- Injected by JS based on occasion -->
+  </div>
 </div>
 
 <!-- ════════════════════════════════════
      SCREEN 3: NAME
 ════════════════════════════════════ -->
-<div class="screen creator-screen theme-intimate" id="s-name">
-  <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-name" style="width:20%"></div></div>
+<div class="screen creator-screen" id="s-name">
+  <div class="step-progress"><div class="step-progress-fill" id="prog-name" style="width:20%"></div></div>
   <button class="step-back dark" id="back-name" onclick="goBackCreator()">←</button>
   <div class="step-wrap">
     <div class="step-counter dark" id="counter-name">Step 1 of 4</div>
-    <span class="step-emoji" id="emoji-name">💝</span>
+    <span class="step-emoji" id="emoji-name">🎂</span>
     <div class="step-title" id="title-name">Who is this card for?</div>
     <div class="step-sub" id="sub-name">Make it personal from the very start</div>
     <div class="input-wrap" id="nameInputWrap">
-      <label class="field-label">Their Name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
-      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30"></div>
-    <button class="btn-next btn-intimate" id="btn-name" onclick="goTo(&#39;s-photos&#39;)">Continue → Photos</button>
+      <!-- Injected by style -->
+    </div>
+    <button class="btn-next" id="btn-name" onclick="goTo(&#39;s-photos&#39;)">Continue → Photos</button>
   </div>
 </div>
 
 <!-- ════════════════════════════════════
      SCREEN 4: PHOTOS
 ════════════════════════════════════ -->
-<div class="screen creator-screen theme-intimate" id="s-photos">
-  <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-photos" style="width:40%"></div></div>
+<div class="screen creator-screen" id="s-photos">
+  <div class="step-progress"><div class="step-progress-fill" id="prog-photos" style="width:40%"></div></div>
   <button class="step-back dark" id="back-photos" onclick="goBackCreator()">←</button>
   <div class="step-wrap">
     <div class="step-counter dark">Step 2 of 4</div>
     <span class="step-emoji">📸</span>
-    <div class="step-title" id="title-photos">Your memories together</div>
+    <div class="step-title" id="title-photos">Your favourite memories</div>
     <div class="step-sub">Add up to 5 photos — they'll look beautiful on the card</div>
-    <div class="photos-grid" id="photosGrid"><div class="photo-slot soft-slot" id="slot0"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot1"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot2"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot3"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot4"><span style="opacity:0.4;">+</span></div></div>
+    <div class="photos-grid" id="photosGrid"></div>
     <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
-    <button class="btn-next btn-intimate" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
+    <button class="btn-next" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
     <button class="btn-skip" onclick="goTo(&#39;s-song&#39;)">Skip for now</button>
   </div>
 </div>
@@ -637,28 +632,28 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 <!-- ════════════════════════════════════
      SCREEN 5: SONG
 ════════════════════════════════════ -->
-<div class="screen creator-screen theme-intimate" id="s-song">
-  <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-song" style="width:60%"></div></div>
+<div class="screen creator-screen" id="s-song">
+  <div class="step-progress"><div class="step-progress-fill" id="prog-song" style="width:60%"></div></div>
   <button class="step-back dark" id="back-song" onclick="goBackCreator()">←</button>
   <div class="step-wrap">
     <div class="step-counter dark">Step 3 of 4</div>
     <span class="step-emoji">🎵</span>
-    <div class="step-title" id="title-song">A song that reminds you of them</div>
+    <div class="step-title" id="title-song">A song just for them</div>
     <div class="step-sub">Search or let AI find the perfect song</div>
-    <div class="song-selected-box soft-selected" id="songSelectedBox">
+    <div class="song-selected-box" id="songSelectedBox">
       <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Now playing:</div>
       <div style="font-size:0.9rem;font-weight:600;color:white;" id="songSelectedName">—</div>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <input id="ytSearchInput" placeholder="Search song name..." style="flex:1;" onkeydown="if(event.key===&#39;Enter&#39;)searchSong()" maxlength="100" class="regular-input">
-      <button onclick="searchSong()" id="searchBtn" style="padding: 13px 16px; border: none; border-radius: 14px; font-size: 0.9rem; cursor: pointer; touch-action: manipulation; color: white; background: linear-gradient(135deg, rgb(233, 30, 99), rgb(240, 98, 146));">🔍</button>
+      <input id="ytSearchInput" placeholder="Search song name..." style="flex:1;" onkeydown="if(event.key===&#39;Enter&#39;)searchSong()" maxlength="100">
+      <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;">🔍</button>
     </div>
     <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
-    <button class="btn-ai soft" id="aiSongBtn" onclick="suggestSongs()">✨ AI Suggest Songs</button>
+    <button class="btn-ai" id="aiSongBtn" onclick="suggestSongs()">✨ AI Suggest Songs</button>
     <div class="ai-loading" id="songAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span id="songAiLoadingText">Finding perfect songs...</span></div>
     <div id="songAiResults"></div>
     <input type="hidden" id="cSpotify">
-    <button class="btn-next btn-intimate" id="btn-song" onclick="goTo(&#39;s-letter&#39;)" style="margin-top:10px;">Continue → Letter</button>
+    <button class="btn-next" id="btn-song" onclick="goTo(&#39;s-letter&#39;)" style="margin-top:10px;">Continue → Letter</button>
     <button class="btn-skip" onclick="goTo(&#39;s-letter&#39;)">Skip for now</button>
   </div>
 </div>
@@ -666,38 +661,33 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 <!-- ════════════════════════════════════
      SCREEN 6: LETTER
 ════════════════════════════════════ -->
-<div class="screen creator-screen theme-intimate" id="s-letter">
-  <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-letter" style="width:80%"></div></div>
+<div class="screen creator-screen" id="s-letter">
+  <div class="step-progress"><div class="step-progress-fill" id="prog-letter" style="width:80%"></div></div>
   <button class="step-back dark" id="back-letter" onclick="goBackCreator()">←</button>
   <div class="step-wrap">
     <div class="step-counter dark">Step 4 of 4</div>
     <span class="step-emoji">💌</span>
     <div class="step-title" id="title-letter">Write from the heart</div>
     <div class="step-sub">A few honest words mean everything</div>
-    <button class="btn-ai soft" id="aiLetterBtn" onclick="runAILetter()">✨ Help me find the words</button>
+    <button class="btn-ai" id="aiLetterBtn" onclick="runAILetter()">✨ Help me find the words</button>
     <div class="ai-loading" id="letterAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span>Writing a heartfelt letter...</span></div>
-    <div id="letterInputWrap">
-      <textarea class="letter-area" id="cMsg" placeholder="Dear Maa,
-
-There are no words...">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.</textarea>
-      <label class="field-label" style="margin-top:12px;">Sign Off</label>
-      <input class="regular-input" id="cSign" value="Forever yours 💕" maxlength="60"></div>
-    <button class="btn-next btn-intimate" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)" style="margin-top:8px;">Preview My Card →</button>
+    <div id="letterInputWrap"></div>
+    <button class="btn-next" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)" style="margin-top:8px;">Preview My Card →</button>
   </div>
 </div>
 
 <!-- ════════════════════════════════════
      SCREEN 7: PREVIEW & SHARE
 ════════════════════════════════════ -->
-<div class="screen creator-screen theme-intimate" id="s-preview">
-  <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-preview" style="width:100%"></div></div>
+<div class="screen creator-screen" id="s-preview">
+  <div class="step-progress"><div class="step-progress-fill" id="prog-preview" style="width:100%"></div></div>
   <button class="step-back dark" onclick="goBackCreator()">←</button>
   <div class="step-wrap" style="align-items:center;text-align:center;">
     <span class="step-emoji">🎉</span>
     <div class="step-title">Your card is ready!</div>
     <div class="step-sub">Here's a preview — looks beautiful 💝</div>
     <div id="previewMiniCard" style="width:100%;border-radius:18px;padding:20px;margin-bottom:16px;text-align:left;"></div>
-    <button class="btn-next btn-intimate" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
+    <button class="btn-next" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
     <button class="btn-skip" onclick="goTo(&#39;s-name&#39;)" style="margin-top:4px;">✏️ Edit card</button>
   </div>
 </div>
@@ -706,27 +696,27 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 
 <!-- Save overlay -->
 <div class="save-overlay" id="saveOverlay">
-  <div class="save-box soft-save" id="saveBox">
+  <div class="save-box" id="saveBox">
     <span class="save-emoji" id="saveEmoji">💝</span>
     <div class="save-label" id="saveLabel">Saving your card...</div>
-    <div class="save-bar-wrap soft-bar-wrap" id="saveBarWrap"><div class="save-bar soft-bar" id="saveBar"></div></div>
+    <div class="save-bar-wrap" id="saveBarWrap"><div class="save-bar" id="saveBar"></div></div>
     <div class="save-step" id="saveStep">Please wait</div>
   </div>
 </div>
 
 <!-- Share modal -->
 <div class="share-modal" id="shareModal">
-  <div class="share-box soft-share" id="shareBox">
-    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">💝</div>
+  <div class="share-box" id="shareBox">
+    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">🎉</div>
     <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;" id="shareTitle">Card Saved!</div>
     <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;">Share this link with them</div>
-    <div style="font-size: 0.72rem; opacity: 0.5; border-radius: 10px; padding: 7px 12px; margin-bottom: 12px; background: rgba(233, 30, 99, 0.05);" id="expiryNote">⏳ Card expires in 3 days</div>
-    <div class="share-link-row soft-link-row" id="shareLinkRow">
+    <div style="font-size:0.72rem;opacity:0.5;border-radius:10px;padding:7px 12px;margin-bottom:12px;" id="expiryNote">⏳ Card expires in 3 days</div>
+    <div class="share-link-row" id="shareLinkRow">
       <span class="share-link-txt" id="shareLinkTxt"></span>
-      <button class="copy-btn soft-copy" id="copyBtn" onclick="copyLink()">Copy</button>
+      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
     </div>
     <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
-    <button class="modal-close soft-close" id="modalClose" onclick="closeShare()">Done ✓</button>
+    <button class="modal-close" id="modalClose" onclick="closeShare()">Done ✓</button>
   </div>
 </div>
 
@@ -851,12 +841,36 @@ function goBackCreator(){
   if(idx>0) goTo(order[idx-1]);
 }
 
+
+// ════════════════════════════════════════════════
+// SLIDESHOW TIMERS
+// ════════════════════════════════════════════════
+const slideshowTimers = {};
+
+function startSlideshow(cardId, totalSlides){
+  if(slideshowTimers[cardId]) clearInterval(slideshowTimers[cardId]);
+  let idx = 0;
+  function next(){
+    const slides = document.querySelectorAll('#'+cardId+' .preview-slide');
+    const dots = document.querySelectorAll('#'+cardId+' .slide-dot');
+    slides.forEach(s=>s.classList.remove('active-slide'));
+    dots.forEach(d=>d.classList.remove('active'));
+    idx = (idx+1) % totalSlides;
+    if(slides[idx]) slides[idx].classList.add('active-slide');
+    if(dots[idx]) dots[idx].classList.add('active');
+  }
+  slideshowTimers[cardId] = setInterval(next, 2200);
+}
+function stopAllSlideshows(){
+  Object.values(slideshowTimers).forEach(t=>clearInterval(t));
+}
+
 // ════════════════════════════════════════════════
 // OCCASION SELECTION
 // ════════════════════════════════════════════════
 function selectOccasion(occ){
   selectedOccasion = occ;
-  // Build style cards
+  stopAllSlideshows();
   const wrap = document.getElementById('styleCardsWrap');
   const label = document.getElementById('styleOccasionLabel');
   wrap.innerHTML = '';
@@ -864,53 +878,161 @@ function selectOccasion(occ){
   if(occ === 'birthday'){
     label.textContent = 'Birthday';
     wrap.innerHTML = `
-      <!-- Intimate Preview -->
-      <div class="style-preview-card preview-intimate" onclick="selectStyle('birthday-intimate')">
-        <div class="mini-card">
-          <div class="mini-title">Happy Birthday! 💝</div>
-          <div class="mini-photos">
-            <div class="mini-photo">📸</div><div class="mini-photo">🌸</div><div class="mini-photo">💕</div>
+      <div class="style-preview-card preview-intimate" id="prev-intimate" onclick="selectStyle('birthday-intimate')">
+        <div class="slide-viewport">
+          <div class="preview-slide active-slide">
+            <div class="slide-screen-label">Welcome Screen</div>
+            <div style="font-size:2rem;margin-bottom:6px;">💝</div>
+            <div class="slide-title">Happy Birthday!</div>
+            <div style="font-size:0.65rem;color:#8d3a5a;opacity:0.7;">Someone special made this just for you 🌸</div>
           </div>
-          <div class="mini-env">💌</div>
+          <div class="preview-slide">
+            <div class="slide-screen-label">Your Memories</div>
+            <div class="slide-photos">
+              <div class="slide-pol">📸</div><div class="slide-pol">🌸</div><div class="slide-pol">💕</div>
+            </div>
+            <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Your photos as beautiful polaroids</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label">Song Screen</div>
+            <div style="position:relative;display:flex;align-items:center;justify-content:center;margin:4px 0;">
+              <div class="slide-vinyl"><div class="slide-vinyl-center"></div></div>
+            </div>
+            <div style="font-size:0.65rem;color:#4a0e2a;font-weight:600;margin-top:6px;">Your Special Song 🎵</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label">Envelope Reveal</div>
+            <div class="slide-env">💌</div>
+            <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Tap to open the letter...</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label">Heartfelt Letter</div>
+            <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:10px;width:100%;border-top:3px solid #e91e63;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:#4a0e2a;font-weight:600;margin-bottom:4px;">Dear Priya,</div>
+              <div class="slide-letter-lines">
+                <div class="slide-line" style="width:100%"></div>
+                <div class="slide-line" style="width:90%"></div>
+                <div class="slide-line" style="width:95%"></div>
+              </div>
+              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.68rem;color:#e91e63;margin-top:6px;">Forever yours 💕</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-dots">
+          <div class="slide-dot active"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div>
         </div>
         <div class="preview-label-row">
           <div>
             <div class="preview-style-name">💌 Intimate</div>
-            <div class="preview-style-desc">Soft, emotional • Envelope reveal</div>
+            <div class="preview-style-desc">Soft & emotional • Envelope reveal • 5 themes</div>
           </div>
         </div>
-        <button class="preview-btn intimate-btn" onclick="event.stopPropagation();selectStyle('birthday-intimate')">Create This Card →</button>
+        <button class="preview-btn intimate-btn" onclick="event.stopPropagation();selectStyle('birthday-intimate')">✨ Create this card in 30 sec</button>
       </div>
-      <!-- Retro Preview -->
-      <div class="style-preview-card preview-retro" onclick="selectStyle('birthday-retro')">
-        <div class="mini-card retro-mini">
-          <div class="mini-title retro">Happy Birthday! 🎊</div>
-          <div style="display:flex;gap:4px;justify-content:center;margin-bottom:6px;">
-            <div class="mini-photo retro-ph">🎂</div><div class="mini-photo retro-ph">🎉</div><div class="mini-photo retro-ph">🎈</div>
+
+      <div class="style-preview-card preview-retro" id="prev-retro" onclick="selectStyle('birthday-retro')">
+        <div class="slide-viewport">
+          <div class="preview-slide active-slide">
+            <div class="slide-screen-label" style="color:#d90429;">Welcome Screen</div>
+            <div style="font-size:2rem;margin-bottom:4px;">🎂</div>
+            <div class="slide-title retro-slide-title">Happy Birthday!</div>
+            <div style="font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#555;">Someone special made this 🎊</div>
           </div>
-          <div class="mini-balloon">🎈</div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:#d90429;">Comic Strip Photos</div>
+            <div class="slide-comic">
+              <div class="slide-panel">🎂</div><div class="slide-panel">🎉</div><div class="slide-panel">🎈</div>
+            </div>
+            <div style="font-family:'Patrick Hand',cursive;font-size:0.6rem;color:#555;margin-top:4px;">Your photos as a comic strip!</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:#d90429;">Party Anthem</div>
+            <div style="background:linear-gradient(135deg,#1a0a00,#2d1500);border-radius:8px;padding:10px;margin:4px 0;width:90%;">
+              <div style="display:flex;justify-content:center;"><div class="slide-vinyl" style="width:36px;height:36px;"><div class="slide-vinyl-center" style="background:#FFE135;"></div></div></div>
+              <div style="font-family:'Fredoka One',cursive;font-size:0.65rem;color:#FFE135;text-align:center;margin-top:5px;">Your Party Anthem 🎵</div>
+            </div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:#d90429;">Balloon Pop!</div>
+            <div class="slide-balloon">🎈</div>
+            <div style="font-family:'Fredoka One',cursive;font-size:0.65rem;color:#d90429;margin-top:4px;">Pop it to reveal the letter!</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:#d90429;">Newspaper Letter</div>
+            <div class="slide-newspaper">
+              <div class="slide-news-head">🗞️ THE BIRTHDAY GAZETTE</div>
+              <div class="slide-headline">BREAKING: IT'S YOUR BIRTHDAY!</div>
+              <div class="slide-news-lines">
+                <div class="slide-news-line"></div><div class="slide-news-line" style="width:90%"></div><div class="slide-news-line" style="width:85%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-dots">
+          <div class="slide-dot retro-dot active"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div>
         </div>
         <div class="preview-label-row">
           <div>
             <div class="preview-style-name retro-name">🎊 Retro Party</div>
-            <div class="preview-style-desc retro-desc">Fun & bold • Balloon pop • Newspaper</div>
+            <div class="preview-style-desc retro-desc">Fun & loud • Balloon pop • Newspaper letter</div>
           </div>
         </div>
-        <button class="preview-btn retro-btn" onclick="event.stopPropagation();selectStyle('birthday-retro')">Create This Card →</button>
+        <button class="preview-btn retro-btn" onclick="event.stopPropagation();selectStyle('birthday-retro')">🎊 Create this card in 30 sec</button>
       </div>`;
+    setTimeout(function(){ startSlideshow('prev-intimate',5); setTimeout(function(){ startSlideshow('prev-retro',5); },1100); },100);
+
   } else if(occ === 'mothersday'){
     label.textContent = "Mother's Day";
     wrap.innerHTML = `
-      <!-- Blossom Preview -->
-      <div class="style-preview-card preview-blossom" onclick="selectStyle('mothersday-blossom')">
-        <div class="mini-card">
-          <div class="mini-title" style="color:#3D1C1C;">Happy Mother's Day 🌸</div>
-          <div class="mini-photos">
-            <div class="mini-photo" style="background:rgba(201,114,122,0.12);">📸</div>
-            <div class="mini-photo" style="background:rgba(201,114,122,0.12);">🌸</div>
-            <div class="mini-photo" style="background:rgba(201,114,122,0.12);">💐</div>
+      <div class="style-preview-card preview-blossom" id="prev-blossom" onclick="selectStyle('mothersday-blossom')">
+        <div class="slide-viewport" style="background:rgba(253,246,240,0.8);">
+          <div class="preview-slide active-slide">
+            <div class="slide-screen-label" style="color:#C9727A;">Opening Scene</div>
+            <div style="font-size:1.8rem;margin-bottom:4px;">🕯️</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:0.75rem;color:#3D1C1C;font-style:italic;line-height:1.5;">Someone who loves you<br>made something special...</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:600;color:#C9973A;margin-top:4px;">Happy Mother's Day 🌸</div>
           </div>
-          <div style="text-align:center;font-size:1.4rem;margin-top:4px;">🕯️</div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:#C9727A;">Film Strip Photos</div>
+            <div style="display:flex;gap:5px;justify-content:center;">
+              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">📸</div>
+              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">🌸</div>
+              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">💐</div>
+            </div>
+            <div style="font-size:0.62rem;color:#8B5A5A;margin-top:6px;opacity:0.7;">Beautiful film strip slideshow</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:#C9727A;">Song Screen</div>
+            <div style="background:linear-gradient(135deg,#2d1048,#1a0a2e);border-radius:8px;padding:10px;width:90%;">
+              <div style="display:flex;justify-content:center;"><div class="slide-vinyl" style="width:36px;height:36px;"><div class="slide-vinyl-center" style="background:#E8B86D;"></div></div></div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:0.68rem;color:#E8B86D;text-align:center;margin-top:5px;">A Song for You 🎵</div>
+            </div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:#C9727A;">Heartfelt Letter</div>
+            <div style="background:white;border-radius:8px;padding:10px;width:100%;border-top:3px solid #C9727A;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:#3D1C1C;font-weight:600;margin-bottom:4px;">Dear Maa,</div>
+              <div class="slide-letter-lines">
+                <div class="slide-line" style="background:rgba(201,114,122,0.15);"></div>
+                <div class="slide-line" style="width:90%;background:rgba(201,114,122,0.15);"></div>
+                <div class="slide-line" style="width:95%;background:rgba(201,114,122,0.15);"></div>
+              </div>
+              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.68rem;color:#C9727A;margin-top:6px;">With all my love 💛</div>
+            </div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:#C9727A;">Beautiful Ending</div>
+            <div style="font-size:1.5rem;margin-bottom:6px;">🌸🌷🌸</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:600;color:#3D1C1C;">Happy Mother's Day!</div>
+            <div style="font-size:0.65rem;color:#8B5A5A;margin-top:4px;opacity:0.7;">You are so loved 💛</div>
+          </div>
+        </div>
+        <div class="slide-dots">
+          <div class="slide-dot active" style="background:rgba(201,114,122,0.25);"></div>
+          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
+          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
+          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
+          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
         </div>
         <div class="preview-label-row">
           <div>
@@ -918,17 +1040,19 @@ function selectOccasion(occ){
             <div class="preview-style-desc" style="color:#8B5A5A;">Soft & cinematic • Film strip photos</div>
           </div>
         </div>
-        <button class="preview-btn blossom-btn" onclick="event.stopPropagation();selectStyle('mothersday-blossom')">Create This Card →</button>
+        <button class="preview-btn blossom-btn" onclick="event.stopPropagation();selectStyle('mothersday-blossom')">🌸 Create this card in 30 sec</button>
       </div>
-      <!-- Sunshine coming soon -->
-      <div class="style-preview-card" style="background:#FFF8E1;border:1.5px solid rgba(255,193,7,0.3);opacity:0.5;cursor:default;padding:22px 20px 16px;border-radius:20px;">
-        <div style="text-align:center;font-size:2rem;margin-bottom:8px;">☀️</div>
+      <div style="border-radius:20px;background:#FFF8E1;border:1.5px solid rgba(255,193,7,0.3);opacity:0.55;cursor:default;padding:20px;text-align:center;">
+        <div style="font-size:2rem;margin-bottom:6px;">☀️</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#7B5800;margin-bottom:4px;">Sunshine</div>
-        <div style="font-size:0.65rem;color:#8B6914;">Fun & colourful • Coming Soon</div>
+        <div style="font-size:0.65rem;color:#8B6914;margin-bottom:10px;">Fun & colourful • Coming Soon</div>
+        <div style="background:rgba(255,193,7,0.2);color:#7B5800;border-radius:20px;padding:5px 14px;font-size:0.65rem;font-weight:600;display:inline-block;">Coming Soon</div>
       </div>`;
+    setTimeout(function(){ startSlideshow('prev-blossom',5); },100);
   }
   goTo('s-style');
 }
+
 
 // ════════════════════════════════════════════════
 // STYLE SELECTION — apply theme
