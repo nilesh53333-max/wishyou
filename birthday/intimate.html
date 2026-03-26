@@ -380,7 +380,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div class="screen" id="rv-error">
   <span class="rv-error-emoji">💔</span>
   <div class="rv-error-text">This card has expired<br>or couldn't be found.</div>
-  <button onclick="window.location.href=&#39;/birthday/intimate.html&#39;" style="margin-top:28px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,99,0.35);">💝 Create your own card</button>
+  <button onclick="window.location.href=&#39;/&#39;" style="margin-top:28px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,99,0.35);">💝 Create your own card</button>
 </div>
 
 <div class="screen" id="rv-welcome">
@@ -393,7 +393,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
     <div class="rv-from" id="rvFrom"></div>
     <button class="rv-open-btn" onclick="goTo(&#39;rv-photos&#39;)">Open Your Card ✨</button>
     <br>
-    <button class="rv-create-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">💝 Create a card like this</button>
+    <button class="rv-create-btn" onclick="window.location.href=&#39;/&#39;">💝 Create a card like this</button>
   </div>
 </div>
 
@@ -413,7 +413,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
   <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
   <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
-  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;" src="" alt="" alt="">
+  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;transition:opacity 0.18s ease;" src="" alt="">
   <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
   <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
 </div>
@@ -456,7 +456,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   <div class="letter-foot">
     <div class="letter-foot-row">
       <button class="replay-btn" onclick="goTo(&#39;rv-welcome&#39;)">💝 Replay</button>
-      <button class="create-again-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">✨ Make one</button>
+      <button class="create-again-btn" onclick="window.location.href=&#39;/&#39;">✨ Create a card like this</button>
     </div>
   </div>
 </div>
@@ -853,7 +853,19 @@ async function saveAndShare(){
 }
 
 function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
-function openWhatsApp(){const name=document.getElementById('cName')?.value.trim()||'';const sender=document.getElementById('cSender')?.value.trim()||'';window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(CFG.shareMsg(name,sender,shareLink)),'_blank');}
+function openWhatsApp(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const text=encodeURIComponent(CFG.shareMsg(name,sender,shareLink));
+  // Use whatsapp:// deep link for mobile — works on iOS and Android
+  // Falls back to web.whatsapp.com on desktop
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(isMobile){
+    window.location.href='whatsapp://send?text='+text;
+  } else {
+    window.open('https://web.whatsapp.com/send?text='+text,'_blank');
+  }
+}
 function closeShare(){document.getElementById('shareModal').classList.remove('show');}
 
 // ════ RECEIVER FUNCTIONS ════
@@ -945,9 +957,14 @@ function openLightbox(idx){
 
 function lbNav(dir){
   if(lbPhotos.length<=1) return;
-  lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
-  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
-  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+  const img=document.getElementById('lightboxImg');
+  img.style.opacity='0';
+  setTimeout(()=>{
+    lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
+    img.src=lbPhotos[lbIdx];
+    img.style.opacity='1';
+    document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+  },180);
 }
 
 function closeLightbox(){
