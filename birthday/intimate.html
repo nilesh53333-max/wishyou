@@ -12,11 +12,17 @@
 <style>
 /* ── BASE ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;}
-.app{position:relative;width:100%;max-width:430px;height:100vh;overflow:hidden;margin:0 auto;}
+html,body{margin:0;padding:0;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:#111;}
+.app{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;background:#111;}
 @media(min-width:500px){
-  .app{height:90vh;max-height:900px;border-radius:40px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
+  .app{
+    top:50%;left:50%;right:auto;bottom:auto;
+    transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;
+    border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.8);
+  }
 }
 
 /* ── SCREEN SYSTEM ── */
@@ -28,9 +34,9 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .creator-screen{padding:0;align-items:stretch;justify-content:flex-start;}
 .theme-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
 
-.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 16px;overflow:hidden;min-height:0;}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
 .step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
-.step-actions{padding-top:12px;flex-shrink:0;padding-bottom:max(24px,env(safe-area-inset-bottom));}
+.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom) + 16px);}
 
 .step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.15);}
 .step-progress-fill{height:100%;transition:width 0.5s ease;}
@@ -92,7 +98,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .soft-selected{background:linear-gradient(135deg,#2d1048,#1a0a2e);}
 
 /* SAVE OVERLAY */
-.save-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
 .save-overlay.show{display:flex;}
 .save-box{border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;}
 .save-box.soft-save{background:white;box-shadow:0 20px 60px rgba(233,30,99,0.2);}
@@ -108,7 +114,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .save-step{font-size:0.75rem;opacity:0.6;display:none;}
 
 /* SHARE MODAL */
-.share-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
 .share-modal.show{display:flex;}
 .share-box{border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;}
 .share-box.soft-share{background:white;}
@@ -239,7 +245,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .replay-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
 .create-again-btn{background:none;border:1.5px solid rgba(233,30,99,0.35);color:#e91e63;border-radius:50px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;}
 
-.wm{position:fixed;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(74,14,42,0.18);}
+.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(74,14,42,0.18);}
 @keyframes ripple{to{transform:scale(4);opacity:0;}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 @keyframes letterFade{to{opacity:1;}}
@@ -409,7 +415,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 </div>
 
 <!-- Lightbox with swipe/arrows -->
-<div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
+<div id="photoLightbox" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
   <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
   <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
   <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;transition:opacity 0.18s ease;" src="" alt="">
@@ -460,13 +466,18 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   </div>
 </div>
 
-</div><!-- /app -->
 
 <!-- Save overlay -->
 <div class="save-overlay" id="saveOverlay">
   <div class="save-box soft-save" id="saveBox">
     <div class="save-spinner">
       <div class="save-ring"></div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box soft-share" id="shareBox">
+    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">💝</div>
+</div><!-- /app -->
       <span class="save-emoji" id="saveEmoji">💝</span>
     </div>
     <div class="save-label" id="saveLabel">Creating your card...</div>
@@ -474,11 +485,6 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
     <div class="save-step" id="saveStep"></div>
   </div>
 </div>
-
-<!-- Share modal -->
-<div class="share-modal" id="shareModal">
-  <div class="share-box soft-share" id="shareBox">
-    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">💝</div>
     <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Card is ready! 🎉</div>
     <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;">Send this link to them 💝</div>
     <div style="font-size:0.72rem;opacity:0.5;border-radius:10px;padding:7px 12px;margin-bottom:12px;" id="expiryNote">⏳ Card expires in 3 days</div>
