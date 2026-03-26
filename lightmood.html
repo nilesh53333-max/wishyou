@@ -2,330 +2,560 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LightMood — Please Forgive Me? 🐱</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>LightMood — Forgive Me Card 🐱</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
+<meta property="og:title" content="Someone has a message for you 🐱">
+<meta property="og:description" content="Open this — it's important 👀">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;font-family:'Nunito',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;overflow:hidden;}
+body{font-family:'Nunito',sans-serif;background:#f0a8c0;}
 
-/* ── PINK CAT BACKGROUND ── */
-body{
-  background-color:#f0a8c0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.5' opacity='0.45'%3E%3C!-- cat face --%3E%3Ccircle cx='40' cy='55' r='22'/%3E%3C!-- ears --%3E%3Cpolygon points='22,36 28,22 38,36'/%3E%3Cpolygon points='42,36 52,22 58,36'/%3E%3C!-- eyes --%3E%3Ccircle cx='33' cy='50' r='4'/%3E%3Ccircle cx='47' cy='50' r='4'/%3E%3C!-- nose --%3E%3Cellipse cx='40' cy='59' rx='3' ry='2'/%3E%3C!-- whiskers --%3E%3Cline x1='15' y1='57' x2='32' y2='59'/%3E%3Cline x1='15' y1='62' x2='32' y2='61'/%3E%3Cline x1='48' y1='59' x2='65' y2='57'/%3E%3Cline x1='48' y1='61' x2='65' y2='62'/%3E%3C!-- paw --%3E%3Ccircle cx='90' cy='30' r='12'/%3E%3Ccircle cx='82' cy='20' r='6'/%3E%3Ccircle cx='90' cy='17' r='6'/%3E%3Ccircle cx='98' cy='20' r='6'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:120px 120px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
-  overflow:hidden;
-  position:relative;
+/* ── APP SHELL (exact intimate pattern) ── */
+.app{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;background:#f0a8c0;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;
+       transform:translate(-50%,-50%);
+       width:430px;height:90vh;max-height:900px;
+       border-radius:40px;
+       box-shadow:0 40px 120px rgba(0,0,0,0.8);}
 }
 
-/* ── DECORATIVE CAT (left side) ── */
-.deco-cat{
-  position:fixed;
-  left:20px;
-  bottom:20px;
-  font-size:5rem;
-  animation:catBob 2s ease-in-out infinite;
-  pointer-events:none;
-  filter:drop-shadow(2px 4px 6px rgba(0,0,0,0.15));
-  z-index:0;
-}
-@keyframes catBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+/* cat pattern bg */
+.app::before{content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.2' opacity='0.35'%3E%3Ccircle cx='40' cy='55' r='22'/%3E%3Cpolygon points='22,36 28,22 38,36'/%3E%3Cpolygon points='42,36 52,22 58,36'/%3E%3Ccircle cx='33' cy='50' r='4'/%3E%3Ccircle cx='47' cy='50' r='4'/%3E%3Cellipse cx='40' cy='59' rx='3' ry='2'/%3E%3Cline x1='15' y1='57' x2='32' y2='59'/%3E%3Cline x1='15' y1='62' x2='32' y2='61'/%3E%3Cline x1='48' y1='59' x2='65' y2='57'/%3E%3Cline x1='48' y1='61' x2='65' y2='62'/%3E%3Ccircle cx='90' cy='30' r='12'/%3E%3Ccircle cx='82' cy='20' r='6'/%3E%3Ccircle cx='90' cy='17' r='6'/%3E%3Ccircle cx='98' cy='20' r='6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:120px 120px;pointer-events:none;z-index:0;}
 
-/* ── CARD ── */
-.card{
-  background:rgba(255,240,245,0.92);
-  border-radius:24px;
-  padding:36px 40px 40px;
-  max-width:440px;
-  width:90%;
-  text-align:center;
-  box-shadow:0 8px 40px rgba(200,80,120,0.18);
-  position:relative;
-  z-index:1;
-  transition:all 0.3s ease;
-}
+/* ── SCREEN SYSTEM ── */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;
+  transition:opacity 0.4s ease,transform 0.4s cubic-bezier(.4,0,.2,1);
+  transform:translateX(60px);overflow:hidden;z-index:1;}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.screen.slide-out{opacity:0;transform:translateX(-60px);}
 
-/* ── SCREENS ── */
-.screen{display:none;}
-.screen.active{display:block;}
+/* ── CREATOR SCREENS ── */
+.creator-screen{background:rgba(255,240,248,0.97);align-items:stretch;justify-content:flex-start;}
+.step-progress{position:absolute;top:0;left:0;right:0;height:4px;background:rgba(224,85,133,0.12);}
+.step-fill{height:100%;background:linear-gradient(90deg,#e91e78,#f48fb1);transition:width 0.5s ease;}
+.step-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(224,85,133,0.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;color:#e05585;touch-action:manipulation;z-index:5;}
+.step-back:active{background:rgba(224,85,133,0.2);}
 
-/* ── GREETING ── */
-.greeting{
-  font-size:clamp(1.8rem,5vw,2.4rem);
-  font-weight:800;
-  color:#e05585;
-  margin-bottom:22px;
-  line-height:1.2;
-}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
+.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
+.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom)+16px);}
 
-/* ── PHOTO ── */
-.photo-wrap{
-  width:200px;height:200px;
-  border-radius:16px;
-  margin:0 auto 22px;
-  overflow:hidden;
-  border:3px solid rgba(224,85,133,0.25);
-  background:#f8d8e8;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  position:relative;
-  transition:transform 0.2s;
-}
-.photo-wrap:hover{transform:scale(1.02);}
-.photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
-.photo-placeholder{font-size:3rem;color:rgba(224,85,133,0.4);}
-.photo-edit-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(224,85,133,0.75);color:white;font-size:0.65rem;font-weight:700;padding:5px;letter-spacing:0.05em;text-transform:uppercase;}
-#photoInput{display:none;}
+.step-counter{font-size:0.62rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:18px;opacity:0.45;color:#c0507a;}
+.step-emoji{font-size:2.6rem;margin-bottom:12px;display:block;animation:catBob 2s ease-in-out infinite;}
+@keyframes catBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.step-title{font-family:'Nunito',sans-serif;font-size:1.6rem;font-weight:800;color:#c0507a;line-height:1.2;margin-bottom:6px;}
+.step-sub{font-size:0.82rem;color:#c0507a;opacity:0.6;line-height:1.6;margin-bottom:20px;}
 
-/* ── QUESTION ── */
-.question{
-  font-size:1.3rem;
-  color:#e05585;
-  font-weight:700;
-  margin-bottom:28px;
-  font-style:italic;
-}
+/* inputs */
+.field-label{display:block;font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#c0507a;margin-bottom:8px;opacity:0.6;}
+.pink-input{width:100%;border:2px solid rgba(224,85,133,0.2);border-radius:14px;padding:13px 16px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:#c0507a;background:rgba(255,255,255,0.8);outline:none;transition:border-color 0.2s;margin-bottom:14px;}
+.pink-input:focus{border-color:rgba(224,85,133,0.5);}
+.pink-input::placeholder{opacity:0.3;font-weight:600;}
+.pink-textarea{width:100%;border:2px solid rgba(224,85,133,0.2);border-radius:14px;padding:14px 16px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:600;color:#c0507a;background:rgba(255,255,255,0.8);outline:none;resize:none;min-height:130px;line-height:1.7;transition:border-color 0.2s;margin-bottom:14px;}
+.pink-textarea:focus{border-color:rgba(224,85,133,0.5);}
 
-/* ── BUTTONS ── */
-.btn-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
-.btn-yes{
-  background:#e91e78;
-  color:white;
-  border:none;
-  border-radius:50px;
-  padding:14px 40px;
-  font-family:'Nunito',sans-serif;
-  font-size:1.1rem;
-  font-weight:800;
-  cursor:pointer;
-  transition:transform 0.15s,box-shadow 0.15s;
-  box-shadow:0 6px 20px rgba(233,30,120,0.35);
-}
-.btn-yes:hover{transform:scale(1.05);box-shadow:0 8px 24px rgba(233,30,120,0.45);}
-.btn-yes:active{transform:scale(0.97);}
+/* photo grid — single slot (1 photo for lightmood) */
+.photo-slot{aspect-ratio:1;border-radius:16px;background:rgba(224,85,133,0.08);border:2px dashed rgba(224,85,133,0.25);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;font-size:2rem;color:rgba(224,85,133,0.4);margin-bottom:14px;transition:background 0.2s;}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.photo-del{position:absolute;top:6px;right:6px;width:24px;height:24px;background:#e91e78;color:white;border-radius:50%;border:none;font-size:0.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+.upind{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(233,30,120,0.15);}
+.upbar{height:100%;background:#e91e78;width:0%;transition:width 0.3s;}
 
-.btn-no{
-  background:#b0a8b0;
-  color:white;
-  border:none;
-  border-radius:50px;
-  padding:14px 32px;
-  font-family:'Nunito',sans-serif;
-  font-size:1.1rem;
-  font-weight:800;
-  cursor:pointer;
-  transition:all 0.1s;
-  position:relative;
-}
+/* buttons */
+.btn-next{width:100%;padding:15px;border:none;border-radius:50px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;touch-action:manipulation;margin-top:8px;background:linear-gradient(135deg,#e91e78,#f48fb1);color:white;box-shadow:0 8px 24px rgba(233,30,120,0.35);transition:transform 0.15s;}
+.btn-next:active{transform:scale(0.97);}
+.btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.45;font-family:'Nunito',sans-serif;color:#c0507a;}
 
-/* ── SCREEN 3 — REVEAL ── */
-.reveal-photo{
-  width:100%;
-  max-height:320px;
-  border-radius:16px;
-  object-fit:cover;
-  margin-bottom:20px;
-  border:3px solid rgba(224,85,133,0.2);
-}
-.reveal-msg{
-  font-size:1.15rem;
-  color:#e05585;
-  font-weight:700;
-  font-style:italic;
-  line-height:1.5;
-}
+/* ── PREVIEW ── */
+.preview-page{background:rgba(255,255,255,0.7);border:1.5px solid rgba(224,85,133,0.15);border-radius:16px;padding:14px 16px;position:relative;overflow:hidden;}
+.preview-page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.preview-page-label{display:flex;align-items:center;gap:8px;}
+.preview-page-label span{font-size:0.68rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;opacity:0.5;color:#c0507a;}
+.preview-edit-btn{font-size:0.68rem;font-weight:700;color:white;background:#e91e78;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;}
 
-/* ── WATERMARK ── */
-.wm{
-  position:fixed;bottom:10px;right:14px;
-  font-size:0.62rem;color:rgba(255,255,255,0.7);
-  letter-spacing:0.06em;font-weight:600;z-index:10;
-  background:rgba(200,80,120,0.25);border-radius:50px;padding:3px 10px;
-}
+/* ── SAVE OVERLAY ── */
+.save-overlay{position:absolute;inset:0;background:rgba(240,168,192,0.92);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay.show{display:flex;}
+.save-box{background:white;border-radius:24px;padding:28px 24px;width:100%;max-width:300px;text-align:center;box-shadow:0 20px 60px rgba(224,85,133,0.25);}
+.save-label{font-size:1rem;font-weight:800;margin-bottom:14px;color:#c0507a;font-family:'Nunito',sans-serif;}
+.save-bar-wrap{height:8px;border-radius:50px;overflow:hidden;background:rgba(224,85,133,0.12);margin-bottom:8px;}
+.save-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s ease;background:linear-gradient(90deg,#e91e78,#f48fb1);}
 
-/* ── NAME EDIT ── */
-.name-edit{
-  font-size:clamp(1.8rem,5vw,2.4rem);
-  font-weight:800;
-  color:#e05585;
-  background:none;
-  border:none;
-  border-bottom:2px dashed rgba(224,85,133,0.35);
-  outline:none;
-  text-align:center;
-  width:100%;
-  font-family:'Nunito',sans-serif;
-  padding:4px 8px;
-  margin-bottom:22px;
-}
-.name-edit::placeholder{color:rgba(224,85,133,0.4);}
+/* ── SHARE MODAL ── */
+.share-modal{position:absolute;inset:0;background:rgba(240,168,192,0.85);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{background:white;border-radius:24px;padding:26px 22px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 60px rgba(224,85,133,0.25);}
+.share-link-row{border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(224,85,133,0.06);border:1.5px solid rgba(224,85,133,0.15);}
+.share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;color:#c0507a;}
+.copy-btn{padding:6px 14px;border:none;border-radius:20px;font-size:0.72rem;font-weight:800;cursor:pointer;background:#e91e78;color:white;font-family:'Nunito',sans-serif;}
+.btn-wa{width:100%;padding:14px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(37,211,102,0.3);margin-top:8px;}
+.modal-close{width:100%;padding:12px;background:none;border-radius:50px;font-family:'Nunito',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:6px;border:1.5px solid rgba(224,85,133,0.2);color:#c0507a;font-weight:700;}
 
-/* ── SETUP PANEL ── */
-.setup-hint{font-size:0.72rem;color:rgba(200,80,120,0.6);margin-top:-14px;margin-bottom:18px;}
+/* ── RECEIVER SCREENS ── */
+/* Loading */
+#rv-loading{background:#f0a8c0;align-items:center;justify-content:center;}
+.rv-load-emoji{font-size:3.5rem;animation:catBob 1s ease-in-out infinite alternate;}
+.rv-load-txt{font-size:1rem;font-weight:700;color:rgba(255,255,255,0.8);margin-top:14px;letter-spacing:0.05em;}
 
-/* WIGGLE animation for No button when it runs */
-@keyframes wiggle{0%,100%{transform:rotate(0);}25%{transform:rotate(-4deg);}75%{transform:rotate(4deg);}}
+/* Error */
+#rv-error{background:#f0a8c0;align-items:center;justify-content:center;text-align:center;padding:40px;}
+.rv-error-emoji{font-size:3rem;margin-bottom:16px;display:block;}
+.rv-error-txt{font-size:1rem;font-weight:700;color:white;line-height:1.7;}
+
+/* Welcome / Card screen */
+#rv-card{background:rgba(255,240,248,0.97);align-items:center;justify-content:center;padding:32px 28px;}
+.rv-greeting{font-size:clamp(1.6rem,6vw,2.2rem);font-weight:800;color:#c0507a;text-align:center;margin-bottom:20px;line-height:1.2;}
+.rv-photo{width:190px;height:190px;border-radius:18px;object-fit:cover;margin:0 auto 20px;display:block;border:3px solid rgba(224,85,133,0.2);}
+.rv-photo-placeholder{width:190px;height:190px;border-radius:18px;background:rgba(224,85,133,0.1);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;font-size:4rem;}
+.rv-question{font-size:1.2rem;font-weight:800;color:#c0507a;text-align:center;font-style:italic;margin-bottom:28px;}
+.rv-btns{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:nowrap;width:100%;}
+.rv-btn-yes{background:#e91e78;color:white;border:none;border-radius:50px;padding:14px 38px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,120,0.4);transition:transform 0.15s;flex-shrink:0;}
+.rv-btn-yes:active{transform:scale(0.97);}
+.rv-btn-no{background:rgba(180,160,170,0.6);color:white;border:none;border-radius:50px;padding:14px 28px;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:800;cursor:pointer;transition:all 0.12s;position:absolute;flex-shrink:0;}
+
+/* Reveal screen */
+#rv-reveal{background:rgba(255,240,248,0.97);align-items:center;justify-content:center;padding:32px 24px;overflow-y:auto;}
+.rv-reveal-greeting{font-size:clamp(1.5rem,5.5vw,2rem);font-weight:800;color:#c0507a;text-align:center;margin-bottom:18px;}
+.rv-reveal-photo{width:100%;max-height:280px;border-radius:18px;object-fit:cover;margin-bottom:20px;border:3px solid rgba(224,85,133,0.2);}
+.rv-reveal-msg{font-size:1.1rem;font-weight:800;color:#c0507a;text-align:center;font-style:italic;line-height:1.5;margin-bottom:24px;}
+.rv-replay-btn{background:none;border:2px solid rgba(224,85,133,0.3);color:#c0507a;border-radius:50px;padding:12px 28px;font-family:'Nunito',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;}
+
+/* ── WIGGLE ── */
+@keyframes wiggle{0%,100%{transform:rotate(0);}25%{transform:rotate(-5deg);}75%{transform:rotate(5deg);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+/* watermark */
+.wm{position:absolute;bottom:10px;right:14px;font-size:0.58rem;color:rgba(200,80,120,0.4);letter-spacing:0.08em;z-index:10;}
 </style>
 </head>
 <body>
+<div class="app" id="mainApp">
 
-<div class="deco-cat">🐱</div>
-
-<!-- ══ SCREEN 1 — SETUP (creator fills name + photo) ══ -->
-<div class="card" id="screen-setup">
-  <div class="screen active">
-    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(224,85,133,0.5);margin-bottom:16px;">✨ LightMood Card Setup</div>
-
-    <div style="font-size:0.9rem;color:#e05585;font-weight:600;margin-bottom:8px;text-align:left;">Their Name</div>
-    <input type="text" id="nameInput" placeholder="e.g. Kateryna" maxlength="20"
-      style="width:100%;border:2.5px solid rgba(224,85,133,0.25);border-radius:14px;padding:12px 16px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:#e05585;background:rgba(255,255,255,0.7);outline:none;margin-bottom:20px;text-align:center;">
-
-    <div style="font-size:0.9rem;color:#e05585;font-weight:600;margin-bottom:8px;text-align:left;">Their Photo <span style="font-weight:400;opacity:0.6;">(tap to upload)</span></div>
-    <div class="photo-wrap" onclick="document.getElementById('photoInput').click()" style="margin-bottom:20px;">
-      <div class="photo-placeholder" id="photoPlaceholder">🐱</div>
-      <img id="photoPreview" style="display:none;width:100%;height:100%;object-fit:cover;">
-      <div class="photo-edit-hint">Tap to upload</div>
+<!-- ══ CREATOR: Step 1 — Name ══ -->
+<div class="screen creator-screen" id="s-name">
+  <div class="step-progress"><div class="step-fill" style="width:25%"></div></div>
+  <button class="step-back" onclick="window.location.href='/'">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 1 of 3</div>
+      <span class="step-emoji">🐱</span>
+      <div class="step-title">Who is this for?</div>
+      <div class="step-sub">They'll see their name on the card</div>
+      <label class="field-label">Their Name</label>
+      <input class="pink-input" id="cName" placeholder="e.g. Kateryna" maxlength="30">
+      <label class="field-label">Your Name (From)</label>
+      <input class="pink-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">
+      <label class="field-label">Your Apology Message</label>
+      <input class="pink-input" id="cMsg" value="Please forgive me?" maxlength="60">
+      <label class="field-label">After YES — your cheeky reveal 😈</label>
+      <input class="pink-input" id="cReveal" value="I knew you'd say yes, now let's fight again è_é" maxlength="80">
     </div>
-    <input type="file" accept="image/*" id="photoInput" onchange="handlePhoto(this)">
-
-    <div style="font-size:0.9rem;color:#e05585;font-weight:600;margin-bottom:8px;text-align:left;">Your apology message</div>
-    <input type="text" id="msgInput" value="Please forgive me?" maxlength="40"
-      style="width:100%;border:2.5px solid rgba(224,85,133,0.25);border-radius:14px;padding:12px 16px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;color:#e05585;background:rgba(255,255,255,0.7);outline:none;margin-bottom:20px;text-align:center;font-style:italic;">
-
-    <div style="font-size:0.9rem;color:#e05585;font-weight:600;margin-bottom:8px;text-align:left;">After YES message 😈</div>
-    <input type="text" id="revealInput" value="I knew you'd say yes, now let's fight again è_é" maxlength="80"
-      style="width:100%;border:2.5px solid rgba(224,85,133,0.25);border-radius:14px;padding:12px 16px;font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:700;color:#e05585;background:rgba(255,255,255,0.7);outline:none;margin-bottom:28px;text-align:center;font-style:italic;">
-
-    <button onclick="launchCard()" style="width:100%;background:#e91e78;color:white;border:none;border-radius:50px;padding:15px;font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,120,0.35);transition:transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-      🐱 Preview Card →
-    </button>
+    <div class="step-actions">
+      <button class="btn-next" onclick="goTo('s-photo')">Continue → Photo 📸</button>
+    </div>
   </div>
 </div>
 
-<!-- ══ SCREEN 2 — CARD (receiver sees this) ══ -->
-<div class="card" id="screen-card" style="display:none;">
-  <div class="greeting" id="cardGreeting">Dearest Kateryna,</div>
-  <div class="photo-wrap" style="cursor:default;" id="cardPhotoWrap">
-    <img id="cardPhoto" src="" alt="photo" style="width:100%;height:100%;object-fit:cover;display:none;">
-    <div class="photo-placeholder" id="cardPhotoPlaceholder">🐱</div>
-  </div>
-  <div class="question" id="cardQuestion">Please forgive me?</div>
-  <div class="btn-row">
-    <button class="btn-yes" onclick="showReveal()">Yes</button>
-    <button class="btn-no" id="btnNo" onmouseover="runAway(this)" ontouchstart="runAway(this)">No</button>
+<!-- ══ CREATOR: Step 2 — Photo ══ -->
+<div class="screen creator-screen" id="s-photo">
+  <div class="step-progress"><div class="step-fill" style="width:66%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 2 of 3</div>
+      <span class="step-emoji">📸</span>
+      <div class="step-title">Add their photo</div>
+      <div class="step-sub">This appears on the card and the reveal — make it funny or cute!</div>
+      <div class="photo-slot" id="photoSlot" onclick="document.getElementById('photoFile').click()">
+        <span style="opacity:0.4;font-size:2.5rem;">+</span>
+      </div>
+      <input type="file" accept="image/*" style="display:none;" id="photoFile" onchange="handlePhoto(this)">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next" onclick="goTo('s-preview')">Preview My Card →</button>
+      <button class="btn-skip" onclick="goTo('s-preview')">Skip for now</button>
+    </div>
   </div>
 </div>
 
-<!-- ══ SCREEN 3 — REVEAL ══ -->
-<div class="card" id="screen-reveal" style="display:none;">
-  <div class="greeting" id="revealGreeting">Dearest Kateryna,</div>
-  <img class="reveal-photo" id="revealPhoto" src="" alt="">
-  <div class="reveal-msg" id="revealMsg">I knew you'd say yes, now let's fight again è_é</div>
+<!-- ══ CREATOR: Step 3 — Preview ══ -->
+<div class="screen creator-screen" id="s-preview">
+  <div class="step-progress"><div class="step-fill" style="width:100%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-title" style="margin-bottom:4px;padding-top:4px;">Almost there! 🎉</div>
+      <div class="step-sub" style="margin-bottom:16px;">Review your card — tap Edit to change anything</div>
+      <div id="cardPreview" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next" onclick="saveAndShare()">🐱 Create &amp; Share Card</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RECEIVER: Loading ══ -->
+<div class="screen" id="rv-loading">
+  <span class="rv-load-emoji">🐱</span>
+  <div class="rv-load-txt">Opening your card...</div>
+</div>
+
+<!-- ══ RECEIVER: Error ══ -->
+<div class="screen" id="rv-error">
+  <span class="rv-error-emoji">😿</span>
+  <div class="rv-error-txt">This card has expired<br>or couldn't be found.</div>
+  <button onclick="window.location.href='/'" style="margin-top:28px;background:#e91e78;color:white;border:none;border-radius:50px;padding:14px 32px;font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:800;cursor:pointer;">🐱 Create your own</button>
+</div>
+
+<!-- ══ RECEIVER: Card ══ -->
+<div class="screen" id="rv-card">
+  <div class="rv-greeting" id="rvGreeting">Dearest you,</div>
+  <div id="rvPhotoWrap">
+    <div class="rv-photo-placeholder" id="rvPhotoPlaceholder">🐱</div>
+  </div>
+  <div class="rv-question" id="rvQuestion">Please forgive me?</div>
+  <div class="rv-btns" id="rvBtns" style="position:relative;min-height:56px;">
+    <button class="rv-btn-yes" onclick="showReveal()">Yes 🥺</button>
+    <button class="rv-btn-no" id="btnNo" onmouseover="runAway(this)" ontouchstart="runAway(this)">No</button>
+  </div>
+</div>
+
+<!-- ══ RECEIVER: Reveal ══ -->
+<div class="screen" id="rv-reveal">
+  <div class="rv-reveal-greeting" id="rvRevealGreeting">Dearest you,</div>
+  <img class="rv-reveal-photo" id="rvRevealPhoto" src="" alt="" style="display:none;">
+  <div class="rv-photo-placeholder" id="rvRevealPlaceholder" style="margin:0 auto 20px;">🐱</div>
+  <div class="rv-reveal-msg" id="rvRevealMsg">I knew you'd say yes!</div>
+  <button class="rv-replay-btn" onclick="goTo('rv-card');resetNo();">🔄 Replay</button>
+  <button onclick="window.location.href='/'" style="margin-top:12px;background:none;border:none;font-size:0.82rem;color:rgba(192,80,122,0.55);cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;">✨ Create a card like this</button>
+</div>
+
+<!-- Save overlay -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-box">
+    <span style="font-size:2rem;display:block;margin-bottom:10px;">🐱</span>
+    <div class="save-label" id="saveLabel">Creating your card...</div>
+    <div class="save-bar-wrap"><div class="save-bar" id="saveBar"></div></div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:2rem;margin-bottom:8px;">🐱</div>
+    <div style="font-size:1.1rem;font-weight:800;color:#c0507a;margin-bottom:6px;font-family:'Nunito',sans-serif;">Card is ready! 🎉</div>
+    <div style="font-size:0.82rem;color:#c0507a;opacity:0.6;margin-bottom:14px;font-family:'Nunito',sans-serif;">Send this link to them 🐾</div>
+    <div style="font-size:0.72rem;color:#c0507a;opacity:0.5;margin-bottom:12px;" id="expiryNote">⏳ Expires in 3 days</div>
+    <div class="share-link-row">
+      <span class="share-link-txt" id="shareLinkTxt"></span>
+      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
+    <button class="modal-close" onclick="closeShare()">Done ✓</button>
+  </div>
 </div>
 
 <div class="wm">LightMood · WishYou.ai</div>
+</div><!-- /app -->
 
 <script>
-let photoDataUrl = '';
-let noClickCount = 0;
-let noMessages = [
-  'No',
-  "I can't click this...",
-  "Don't do it...",
-  "Noooo...",
-  "Pls stop 🥺",
-  "I can't!!!",
-  "It's impossible!",
-  "My finger won't...",
-  "HELP 😭",
-];
+// ── CONFIG ──
+const FIREBASE_URL   = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const CLOUDINARY_CLOUD  = 'dkvbjazfe';
+const CLOUDINARY_PRESET = 'wishyou-uploads';
 
-function handlePhoto(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    photoDataUrl = e.target.result;
-    document.getElementById('photoPreview').src = photoDataUrl;
-    document.getElementById('photoPreview').style.display = 'block';
-    document.getElementById('photoPlaceholder').style.display = 'none';
+const CFG = {
+  cardType: 'lightmood-forgive',
+  emoji: '🐱',
+  shareMsg: (name, sender, link) =>
+    `🐱 *Hey ${name||'you'}!*\n\n${sender ? sender+' has a message for you 👀\n\n' : 'Someone has a message for you 👀\n\n'}Open here:\n${link}`,
+  shareUrl: (id) => `https://wishyou.ai/lightmood.html?card=${id}`
+};
+
+// ── STATE ──
+let curScreen    = '';
+let photoLocal   = null;  // object URL
+let photoUploaded = null; // cloudinary URL
+let shareLink    = '';
+let returnToPreview = false;
+let noCount      = 0;
+
+const IS_RECEIVER = new URLSearchParams(window.location.search).has('card');
+
+// ── NAVIGATION ──
+const CREATOR_ORDER = ['s-name','s-photo','s-preview'];
+const RV_ORDER      = ['rv-card','rv-reveal'];
+
+function goTo(id, fromPreview=false){
+  const prev = document.getElementById(curScreen);
+  const next = document.getElementById(id);
+  if(!next || curScreen===id) return;
+  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
+  next.classList.add('active');
+  curScreen = id;
+  returnToPreview = fromPreview;
+  if(id==='s-preview') buildPreview();
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
+}
+
+function goBackCreator(){
+  if(returnToPreview){goTo('s-preview');return;}
+  const idx = CREATOR_ORDER.indexOf(curScreen);
+  if(idx>0) goTo(CREATOR_ORDER[idx-1]);
+  else window.location.href='/';
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', function(){
+  if(IS_RECEIVER){
+    goTo('rv-loading');
+    loadCard();
+    // swipe between receiver screens
+    let _rx=0,_ry=0,_rt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',e=>{
+      _rx=e.changedTouches[0].clientX;_ry=e.changedTouches[0].clientY;_rt=Date.now();
+    },{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',e=>{
+      if(curScreen==='rv-card'||curScreen==='rv-loading'||curScreen==='rv-error') return;
+      const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
+      const idx=RV_ORDER.indexOf(curScreen);if(idx===-1)return;
+      if(dx<0&&idx<RV_ORDER.length-1) goTo(RV_ORDER[idx+1]);
+      else if(dx>0&&idx>0) goTo(RV_ORDER[idx-1]);
+    },{passive:true});
+  } else {
+    goTo('s-name');
+    // creator swipe
+    let _tx=0,_ty=0,_tt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',e=>{
+      _tx=e.changedTouches[0].clientX;_ty=e.changedTouches[0].clientY;_tt=Date.now();
+    },{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',e=>{
+      const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty,dt=Date.now()-_tt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
+      const idx=CREATOR_ORDER.indexOf(curScreen);if(idx===-1)return;
+      if(dx<0&&idx<CREATOR_ORDER.length-1) goTo(CREATOR_ORDER[idx+1]);
+      else if(dx>0&&idx>0) goTo(CREATOR_ORDER[idx-1]);
+    },{passive:true});
+  }
+});
+
+// ── PHOTO ──
+function handlePhoto(inp){
+  const file=inp.files[0];if(!file)return;
+  photoLocal=URL.createObjectURL(file);
+  photoUploaded=null;
+  const slot=document.getElementById('photoSlot');
+  slot.innerHTML=`<img src="${photoLocal}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:16px;"><button class="photo-del" onclick="removePhoto(event)">✕</button><div class="upind"><div class="upbar" id="upbar"></div></div>`;
+  inp.value='';
+  // upload in background
+  uploadInBackground(file);
+}
+
+async function uploadInBackground(file){
+  try{
+    const bar=document.getElementById('upbar');
+    if(bar)bar.style.width='40%';
+    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    if(bar)bar.style.width='70%';
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+    const d=await res.json();
+    if(d.secure_url){
+      photoUploaded=d.secure_url;
+      if(bar){bar.style.width='100%';setTimeout(()=>{const ind=document.getElementById('upind');if(ind)ind.remove();},600);}
+    }
+  }catch(e){console.error('Upload failed',e);}
+}
+
+function removePhoto(e){
+  e.stopPropagation();
+  photoLocal=null;photoUploaded=null;
+  const slot=document.getElementById('photoSlot');
+  slot.innerHTML='<span style="opacity:0.4;font-size:2.5rem;">+</span>';
+  slot.onclick=()=>document.getElementById('photoFile').click();
+}
+
+// ── PREVIEW ──
+function buildPreview(){
+  const wrap=document.getElementById('cardPreview');
+  wrap.innerHTML='';
+  const name   = document.getElementById('cName').value.trim()||'You';
+  const sender = document.getElementById('cSender').value.trim();
+  const msg    = document.getElementById('cMsg').value.trim()||'Please forgive me?';
+  const reveal = document.getElementById('cReveal').value.trim();
+  const accent = '#e91e78';
+
+  function makePage(emoji, label, content, editScreen){
+    const page = document.createElement('div');
+    page.className='preview-page';
+    page.innerHTML=`
+      <div class="preview-page-hdr">
+        <div class="preview-page-label">
+          <span style="font-size:1.1rem;">${emoji}</span>
+          <span>${label}</span>
+        </div>
+        <button class="preview-edit-btn" onclick="goTo('${editScreen}',true)">Edit</button>
+      </div>
+      ${content}`;
+    wrap.appendChild(page);
+  }
+
+  makePage('🐱','Card Info',`
+    <div style="font-size:0.88rem;font-weight:700;color:#c0507a;">Dearest ${name},</div>
+    ${sender?`<div style="font-size:0.75rem;color:#c0507a;opacity:0.6;margin-top:3px;">From: ${sender}</div>`:''}
+    <div style="font-size:0.82rem;font-style:italic;color:#c0507a;margin-top:6px;opacity:0.8;">"${msg}"</div>
+  `,'s-name');
+
+  makePage('😈','After YES Reveal',`
+    <div style="font-size:0.82rem;font-style:italic;color:#c0507a;opacity:0.8;">"${reveal||'...'}"</div>
+  `,'s-name');
+
+  makePage('📸','Their Photo',
+    photoLocal
+      ? `<img src="${photoLocal}" style="width:100%;height:120px;object-fit:cover;border-radius:10px;">${!photoUploaded?'<div style="font-size:0.68rem;color:#e91e78;margin-top:6px;opacity:0.7;">⏳ Uploading...</div>':''}`
+      : `<div style="font-size:0.8rem;color:#c0507a;opacity:0.4;font-style:italic;">No photo added</div>`,
+  's-photo');
+}
+
+// ── SAVE & SHARE ──
+async function saveAndShare(){
+  const overlay=document.getElementById('saveOverlay');
+  const bar=document.getElementById('saveBar');
+  const label=document.getElementById('saveLabel');
+  function setP(pct,txt){bar.style.width=pct+'%';if(txt)label.textContent=txt;}
+
+  overlay.classList.add('show');
+  setP(10,'Creating your card... 🐱');
+
+  // wait for background upload if still pending
+  if(photoLocal && !photoUploaded){
+    setP(30,'Uploading photo...');
+    let waited=0;
+    while(!photoUploaded && waited<12000){await new Promise(r=>setTimeout(r,400));waited+=400;}
+  }
+  setP(70,'Saving to cloud...');
+
+  const now=Date.now();
+  const cardData={
+    type:CFG.cardType,
+    name:document.getElementById('cName').value.trim()||'',
+    sender:document.getElementById('cSender').value.trim()||'',
+    msg:document.getElementById('cMsg').value.trim()||'Please forgive me?',
+    reveal:document.getElementById('cReveal').value.trim()||"I knew you'd say yes!",
+    photo:photoUploaded||'',
+    created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
   };
-  reader.readAsDataURL(file);
+
+  try{
+    setP(85,'Almost there...');
+    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
+    const data=await res.json();
+    const cardId=data.name;
+    shareLink=CFG.shareUrl(cardId);
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
+    setP(100,'Card created! 🎉');
+    setTimeout(()=>{
+      overlay.classList.remove('show');
+      document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');
+      document.getElementById('shareModal').classList.add('show');
+    },600);
+  }catch(e){overlay.classList.remove('show');alert('Could not save. Please try again.');}
 }
 
-function launchCard() {
-  const name = document.getElementById('nameInput').value.trim() || 'You';
-  const msg  = document.getElementById('msgInput').value.trim()  || 'Please forgive me?';
-  const rev  = document.getElementById('revealInput').value.trim() || "I knew you'd say yes!";
+function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const b=document.getElementById('copyBtn');b.textContent='Copied! ✓';setTimeout(()=>b.textContent='Copy',2000);});}
+function openWhatsApp(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=CFG.shareMsg(name,sender,shareLink);
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&isMobile){navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));}
+  else{window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');}
+}
+function closeShare(){document.getElementById('shareModal').classList.remove('show');}
 
-  // Set card screen
-  document.getElementById('cardGreeting').textContent  = `Dearest ${name},`;
-  document.getElementById('cardQuestion').textContent  = msg;
-  document.getElementById('revealGreeting').textContent = `Dearest ${name},`;
-  document.getElementById('revealMsg').textContent     = rev;
+// ── RECEIVER ──
+async function loadCard(){
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  try{
+    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
+    const d=await res.json();
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    // count view
+    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderCard(d);
+  }catch(e){goTo('rv-error');}
+}
 
-  if (photoDataUrl) {
-    document.getElementById('cardPhoto').src = photoDataUrl;
-    document.getElementById('cardPhoto').style.display = 'block';
-    document.getElementById('cardPhotoPlaceholder').style.display = 'none';
-    document.getElementById('revealPhoto').src = photoDataUrl;
-    document.getElementById('revealPhoto').style.display = 'block';
+function renderCard(d){
+  const name   = d.name||'';
+  const sender = d.sender||'';
+  const msg    = d.msg||'Please forgive me?';
+  const reveal = d.reveal||"I knew you'd say yes!";
+  const photo  = d.photo||'';
+
+  // card screen
+  document.getElementById('rvGreeting').textContent   = name ? `Dearest ${name},` : 'Dearest you,';
+  document.getElementById('rvQuestion').textContent   = msg;
+  document.getElementById('rvRevealGreeting').textContent = name ? `Dearest ${name},` : 'Dearest you,';
+  document.getElementById('rvRevealMsg').textContent  = reveal;
+
+  if(photo){
+    document.getElementById('rvPhotoWrap').innerHTML = `<img src="${photo}" class="rv-photo" onerror="this.style.display='none'">`;
+    document.getElementById('rvRevealPhoto').src     = photo;
+    document.getElementById('rvRevealPhoto').style.display='block';
+    document.getElementById('rvRevealPlaceholder').style.display='none';
   }
 
-  // Reset No button
-  noClickCount = 0;
-  const btnNo = document.getElementById('btnNo');
-  btnNo.textContent = 'No';
-  btnNo.style.transform = '';
-  btnNo.style.fontSize = '1.1rem';
-  btnNo.style.opacity = '1';
-
-  document.getElementById('screen-setup').style.display = 'none';
-  document.getElementById('screen-card').style.display  = 'block';
+  resetNo();
+  goTo('rv-card');
 }
 
-function runAway(btn) {
-  noClickCount++;
-  const card = document.getElementById('screen-card');
-  const cardRect = card.getBoundingClientRect();
-  const btnRect  = btn.getBoundingClientRect();
+// ── NO BUTTON RUNS AWAY ──
+const noMessages=['No',"I can't click this...",'Noooo...','Pls stop 🥺',"I can't!!!",'My finger won\'t...','HELP 😭','It\'s impossible!','Just say YES 😭'];
 
-  // Change label
-  if (noClickCount < noMessages.length) {
-    btn.textContent = noMessages[noClickCount];
-  }
-
-  // Shrink button over time
-  const scale = Math.max(0.55, 1 - noClickCount * 0.07);
-  btn.style.fontSize = (1.1 * scale) + 'rem';
-  btn.style.padding  = `${14 * scale}px ${32 * scale}px`;
-
-  // Move button to random spot WITHIN card bounds
-  const maxX = cardRect.width  - btnRect.width  - 20;
-  const maxY = cardRect.height - btnRect.height - 20;
-  const rx   = 10 + Math.random() * Math.max(0, maxX - 10);
-  const ry   = 10 + Math.random() * Math.max(0, maxY - 10);
-
-  btn.style.position = 'absolute';
-  btn.style.left     = rx + 'px';
-  btn.style.top      = ry + 'px';
-  btn.style.animation= 'wiggle 0.3s ease';
-  setTimeout(() => btn.style.animation = '', 300);
-
-  // Make card relative for absolute positioning
-  card.style.position = 'relative';
-  card.style.minHeight = '380px';
+function runAway(btn){
+  noCount++;
+  if(noCount<noMessages.length) btn.textContent=noMessages[noCount];
+  // shrink
+  const scale=Math.max(0.5,1-noCount*0.07);
+  btn.style.fontSize=(1.05*scale)+'rem';
+  btn.style.padding=`${12*scale}px ${24*scale}px`;
+  // move within rv-card bounds
+  const card=document.getElementById('rv-card');
+  const cr=card.getBoundingClientRect();
+  const br=btn.getBoundingClientRect();
+  const maxX=cr.width-br.width-16;
+  const maxY=cr.height-br.height-16;
+  btn.style.left=Math.max(8,Math.random()*maxX)+'px';
+  btn.style.top=Math.max(8,Math.random()*maxY)+'px';
+  btn.style.animation='wiggle 0.3s ease';
+  setTimeout(()=>btn.style.animation='',300);
 }
 
-function showReveal() {
-  document.getElementById('screen-card').style.display   = 'none';
-  document.getElementById('screen-reveal').style.display = 'block';
+function resetNo(){
+  noCount=0;
+  const btn=document.getElementById('btnNo');
+  if(!btn)return;
+  btn.textContent='No';
+  btn.style.fontSize='1.05rem';
+  btn.style.padding='12px 24px';
+  btn.style.left='auto';
+  btn.style.top='auto';
+  btn.style.position='absolute';
+  btn.style.right='24px';
 }
+
+function showReveal(){goTo('rv-reveal');}
 </script>
 </body>
 </html>
