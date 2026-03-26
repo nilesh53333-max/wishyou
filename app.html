@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0045)file:///C:/Users/Nilesh/Downloads/app_11.html -->
+<!-- saved from url=(0045)file:///C:/Users/Nilesh/Downloads/app_12.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -39,7 +39,7 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
   opacity:0;pointer-events:none;
   transition:opacity 0.45s ease, transform 0.45s cubic-bezier(.4,0,.2,1);
   transform:translateX(60px);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overflow:hidden;
 }
 .screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
 .screen.slide-out{opacity:0;transform:translateX(-60px);}
@@ -161,13 +161,18 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 ══════════════════════════════════════════════ */
 #s-style{
   background:#0f0810;
-  padding:0;align-items:center;
+  padding:0;
+  align-items:center;
   overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  flex-direction:column;
+  justify-content:flex-start;
 }
 .style-header{
   padding:52px 24px 16px;
   display:flex;align-items:center;gap:14px;
   width:100%;max-width:430px;
+  flex-shrink:0;
 }
 .back-circle{
   width:38px;height:38px;border-radius:50%;
@@ -183,9 +188,10 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 .style-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:white;}
 
 .style-cards-wrap{
-  padding:0 18px 30px;
+  padding:0 18px 40px;
   display:flex;flex-direction:column;gap:14px;
   width:100%;max-width:430px;
+  flex-shrink:0;
 }
 
 /* ── Animated preview card ──────────────────── */
@@ -342,16 +348,20 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 .step-wrap{
   flex:1;display:flex;flex-direction:column;
   padding:56px 22px 16px;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overflow:hidden;
   min-height:0;
 }
 .step-content{
-  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  flex:1;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
   padding-bottom:8px;
+  min-height:0;
 }
 .step-actions{
   padding-top:12px;
   flex-shrink:0;
+  padding-bottom:8px;
 }
 
 /* Progress bar */
@@ -616,7 +626,7 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
       <div class="step-counter dark" id="counter-name">Step 1 of 4</div>
       <span class="step-emoji" id="emoji-name">🎂</span>
       <div class="step-title" id="title-name">Who is this card for?</div>
-      <div class="step-sub" id="sub-name">Make it personal from the very start</div>
+      <div class="step-sub" id="sub-name">They'll see their name on the card</div>
       <div class="input-wrap" id="nameInputWrap"></div>
     </div>
     <div class="step-actions">
