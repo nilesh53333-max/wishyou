@@ -1,64 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_18.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>WishYou.ai — Intimate Birthday Card</title>
 <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
 <meta property="og:title" content="You have a birthday surprise! 💝">
 <meta property="og:description" content="Someone made you a special interactive card with photos, music &amp; a heartfelt letter.">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<link href="./intimate_files/css2" rel="stylesheet">
 <style>
 /* ── BASE ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#111;}
-body{font-family:'DM Sans',sans-serif;}
-
-/* ── APP WRAPPER ── */
-/* Single container — screens stack inside it, only .active shows */
-#appWrap{
-  position:relative;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#fde8f0;
+html,body{height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;}
+.app{position:relative;width:100%;max-width:430px;height:100vh;overflow:hidden;margin:0 auto;}
+@media(min-width:500px){
+  .app{height:90vh;max-height:900px;border-radius:40px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
 }
 
 /* ── SCREEN SYSTEM ── */
-/* display:none hides completely — only .active screen is flex */
-.screen{
-  display:none;
-  flex-direction:column;
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-}
-.screen.active{display:flex;}
-.screen.slide-out{display:none;}
-
-/* Desktop: centered card look — NO body flex, use absolute centering */
-@media(min-width:500px){
-  #appWrap{
-    position:absolute;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    width:430px;
-    height:90dvh;
-    max-height:900px;
-    border-radius:40px;
-    box-shadow:0 40px 120px rgba(0,0,0,0.8);
-    overflow:hidden;
-  }
-}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);transform:translateX(60px);overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.screen.slide-out{opacity:0;transform:translateX(-60px);}
 
 /* ── CREATOR SCREENS ── */
-.creator-screen{padding:0;align-items:stretch;justify-content:flex-start;background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
+.creator-screen{padding:0;align-items:stretch;justify-content:flex-start;}
 .theme-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
 
-.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;position:relative;}
-.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:12px;min-height:0;}
-.step-actions{flex-shrink:0;padding:12px 0 max(20px,env(safe-area-inset-bottom));}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 16px;overflow:hidden;min-height:0;}
+.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
+.step-actions{padding-top:12px;flex-shrink:0;padding-bottom:max(8px,env(safe-area-inset-bottom));}
 
 .step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.15);}
 .step-progress-fill{height:100%;transition:width 0.5s ease;}
@@ -120,7 +94,7 @@ body{font-family:'DM Sans',sans-serif;}
 .soft-selected{background:linear-gradient(135deg,#2d1048,#1a0a2e);}
 
 /* SAVE OVERLAY */
-.save-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
 .save-overlay.show{display:flex;}
 .save-box{border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;}
 .save-box.soft-save{background:white;box-shadow:0 20px 60px rgba(233,30,99,0.2);}
@@ -136,7 +110,7 @@ body{font-family:'DM Sans',sans-serif;}
 .save-step{font-size:0.75rem;opacity:0.6;display:none;}
 
 /* SHARE MODAL */
-.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
 .share-modal.show{display:flex;}
 .share-box{border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;}
 .share-box.soft-share{background:white;}
@@ -150,7 +124,9 @@ body{font-family:'DM Sans',sans-serif;}
 
 /* ── RECEIVER SCREENS ── */
 /* FIX: all receiver screens fill 100% — no black edges */
-/* receiver screens each fill full viewport */
+#rv-loading,#rv-error,#rv-welcome,#rv-photos,#rv-song,#rv-envelope,#rv-letter{
+  position:absolute;inset:0;
+}
 #rv-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;align-items:center;justify-content:center;flex-direction:column;}
 .rv-loading-heart{font-size:3rem;animation:hb 1.2s ease-in-out infinite;}
 @keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
@@ -161,7 +137,7 @@ body{font-family:'DM Sans',sans-serif;}
 .rv-error-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#8d3a5a;line-height:1.7;}
 
 /* WELCOME */
-#rv-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#rv-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;}
 .petals-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
 .petal{position:absolute;animation:pf linear infinite;opacity:0;}
 @keyframes pf{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:0.4;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
@@ -196,12 +172,12 @@ body{font-family:'DM Sans',sans-serif;}
 .pol img{width:180px;height:200px;object-fit:cover;display:block;}
 .pol-lbl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.72rem;color:#8d3a5a;text-align:center;margin-top:6px;opacity:0.55;}
 .no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
-.rv-nav-row{display:flex;gap:8px;padding:10px 16px max(20px,env(safe-area-inset-bottom));flex-shrink:0;}
+.rv-nav-row{display:flex;gap:8px;padding:10px 16px max(16px,env(safe-area-inset-bottom));flex-shrink:0;}
 .rv-next-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
 .rv-next-btn:active{transform:scale(0.97);}
 
 /* SONG — Beautiful vinyl */
-#rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 28px 20px;overflow-y:auto;}
+#rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 20px;}
 .vinyl-wrap{width:170px;height:170px;margin:0 auto 20px;position:relative;}
 .vinyl{
   width:100%;height:100%;border-radius:50%;position:relative;
@@ -253,29 +229,29 @@ body{font-family:'DM Sans',sans-serif;}
 .env-icon:active{transform:scale(0.9)!important;}
 
 /* LETTER — full screen, centered, nice paper */
-#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;}
+#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;overflow:hidden;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
-.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 100px;min-height:0;}
+.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 100px;}
 .letter-paper{background:white;border-radius:16px;padding:22px 20px;box-shadow:0 4px 20px rgba(74,14,42,0.08);border-top:3px solid #e91e63;}
 .l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}
 .l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;color:#3d1c2e;line-height:2.1;white-space:pre-wrap;}
 .l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#e91e63;margin-top:22px;display:block;}
-.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:12px 20px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(253,232,240,1) 65%,rgba(253,232,240,0));}
+.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(253,232,240,1) 70%,rgba(253,232,240,0));}
 .letter-foot-row{display:flex;gap:8px;}
 .replay-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
 .create-again-btn{background:none;border:1.5px solid rgba(233,30,99,0.35);color:#e91e63;border-radius:50px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;}
 
-.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(74,14,42,0.18);}
+.wm{position:fixed;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(74,14,42,0.18);}
 @keyframes ripple{to{transform:scale(4);opacity:0;}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 @keyframes letterFade{to{opacity:1;}}
 </style>
 </head>
 <body>
-<div id="appWrap">
+<div class="app" id="mainApp">
 
 <!-- ══ CREATOR SCREENS ══ -->
-<div class="screen creator-screen theme-intimate" id="s-name">
+<div class="screen creator-screen theme-intimate active" id="s-name">
   <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-name" style="width:20%"></div></div>
   <button class="step-back dark" onclick="window.location.href=&#39;/&#39;">←</button>
   <div class="step-wrap">
@@ -405,7 +381,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div class="screen" id="rv-error">
   <span class="rv-error-emoji">💔</span>
   <div class="rv-error-text">This card has expired<br>or couldn't be found.</div>
-  <button onclick="window.location.href=&#39;/&#39;" style="margin-top:28px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,99,0.35);">💝 Create your own card</button>
+  <button onclick="window.location.href=&#39;/birthday/intimate.html&#39;" style="margin-top:28px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,99,0.35);">💝 Create your own card</button>
 </div>
 
 <div class="screen" id="rv-welcome">
@@ -418,7 +394,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
     <div class="rv-from" id="rvFrom"></div>
     <button class="rv-open-btn" onclick="goTo(&#39;rv-photos&#39;)">Open Your Card ✨</button>
     <br>
-    <button class="rv-create-btn" onclick="window.location.href=&#39;/&#39;">💝 Create a card like this</button>
+    <button class="rv-create-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">💝 Create a card like this</button>
   </div>
 </div>
 
@@ -438,7 +414,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
   <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
   <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
-  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;transition:opacity 0.18s ease;" src="" alt="">
+  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;" src="./intimate_files/saved_resource" alt="">
   <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
   <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
 </div>
@@ -481,11 +457,12 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   <div class="letter-foot">
     <div class="letter-foot-row">
       <button class="replay-btn" onclick="goTo(&#39;rv-welcome&#39;)">💝 Replay</button>
-      <button class="create-again-btn" onclick="window.location.href=&#39;/&#39;">✨ Create a card like this</button>
+      <button class="create-again-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">✨ Make one</button>
     </div>
   </div>
 </div>
 
+</div><!-- /app -->
 
 <!-- Save overlay -->
 <div class="save-overlay" id="saveOverlay">
@@ -517,8 +494,6 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 </div>
 
 <div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
-
-</div><!-- /appWrap -->
 
 <script>
 // ── CONFIG ──
@@ -580,7 +555,7 @@ function goTo(id, fromPreview=false){
     const iframe=document.querySelector('#rvYtWrap iframe');
     if(iframe) iframe.src=iframe.src; // pause by reassigning
   }
-  setTimeout(()=>{const sc=document.querySelector('#'+id+' .step-content');if(sc)sc.scrollTop=0;},50);
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
 }
 
 const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter','s-preview'];
@@ -599,10 +574,10 @@ window.addEventListener('DOMContentLoaded',function(){
     loadCard();
     // FIX: swipe left/right between receiver screens
     let _rx=0,_ry=0,_rt=0;
-    document.addEventListener('touchstart',function(e){
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){
       _rx=e.changedTouches[0].clientX;_ry=e.changedTouches[0].clientY;_rt=Date.now();
     },{passive:true});
-    document.addEventListener('touchend',function(e){
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
       if(curScreen==='rv-welcome'||curScreen==='rv-loading'||curScreen==='rv-error') return;
       const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
       if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
@@ -632,10 +607,10 @@ window.addEventListener('DOMContentLoaded',function(){
     goTo('s-name');
     // Swipe for creator screens
     let _tx=0,_ty=0,_tt=0;
-    document.addEventListener('touchstart',function(e){
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){
       _tx=e.changedTouches[0].clientX;_ty=e.changedTouches[0].clientY;_tt=Date.now();
     },{passive:true});
-    document.addEventListener('touchend',function(e){
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
       const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty,dt=Date.now()-_tt;
       if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
       const idx=CREATOR_ORDER.indexOf(curScreen);if(idx===-1)return;
@@ -879,19 +854,7 @@ async function saveAndShare(){
 }
 
 function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
-function openWhatsApp(){
-  const name=document.getElementById('cName')?.value.trim()||'';
-  const sender=document.getElementById('cSender')?.value.trim()||'';
-  const text=encodeURIComponent(CFG.shareMsg(name,sender,shareLink));
-  // Use whatsapp:// deep link for mobile — works on iOS and Android
-  // Falls back to web.whatsapp.com on desktop
-  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if(isMobile){
-    window.location.href='whatsapp://send?text='+text;
-  } else {
-    window.open('https://web.whatsapp.com/send?text='+text,'_blank');
-  }
-}
+function openWhatsApp(){const name=document.getElementById('cName')?.value.trim()||'';const sender=document.getElementById('cSender')?.value.trim()||'';window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(CFG.shareMsg(name,sender,shareLink)),'_blank');}
 function closeShare(){document.getElementById('shareModal').classList.remove('show');}
 
 // ════ RECEIVER FUNCTIONS ════
@@ -983,14 +946,9 @@ function openLightbox(idx){
 
 function lbNav(dir){
   if(lbPhotos.length<=1) return;
-  const img=document.getElementById('lightboxImg');
-  img.style.opacity='0';
-  setTimeout(()=>{
-    lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
-    img.src=lbPhotos[lbIdx];
-    img.style.opacity='1';
-    document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
-  },180);
+  lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
+  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
+  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
 }
 
 function closeLightbox(){
