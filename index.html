@@ -1,102 +1,42 @@
 <!DOCTYPE html>
-<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_2.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>WishYou.ai — Send Love, Beautifully</title>
-<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
 <meta property="og:title" content="WishYou.ai — Send Love, Beautifully">
-<meta property="og:description" content="Interactive cards with photos, music &amp; heartfelt letters.">
-<link href="./index_files/css2" rel="stylesheet">
+<meta property="og:description" content="Interactive cards with photos, music & heartfelt letters.">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════════════
-   RESET & BASE
-══════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;}
 
-/* ══════════════════════════════════════════════
-   APP SHELL
-══════════════════════════════════════════════ */
-.app{
-  position:relative;width:100%;max-width:430px;
-  height:100vh;overflow:hidden;
-  margin:0 auto;
-}
+.app{position:relative;width:100%;max-width:430px;height:100vh;overflow:hidden;margin:0 auto;}
 @media(min-width:500px){
-  body{background:#111;display:flex;align-items:center;justify-content:center;}
-  .app{height:90vh;max-height:900px;border-radius:40px;overflow:hidden;
-    box-shadow:0 40px 120px rgba(0,0,0,0.8);}
+  .app{height:90vh;max-height:900px;border-radius:40px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
 }
 
-/* ══════════════════════════════════════════════
-   SCREEN SYSTEM
-══════════════════════════════════════════════ */
-.screen{
+/* OCCASION SCREEN */
+#s-occasion{
   position:absolute;inset:0;
-  display:flex;flex-direction:column;
-  opacity:0;pointer-events:none;
-  transition:opacity 0.45s ease, transform 0.45s cubic-bezier(.4,0,.2,1);
-  transform:translateX(60px);
+  background:linear-gradient(160deg,#0a0008 0%,#140010 50%,#0a0008 100%);
+  display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
   overflow-y:auto;-webkit-overflow-scrolling:touch;
 }
-.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
-.screen.slide-out{opacity:0;transform:translateX(-60px);}
+.occ-header{padding:52px 28px 24px;text-align:center;position:relative;}
+.occ-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;letter-spacing:0.15em;color:rgba(255,255,255,0.4);font-weight:400;text-transform:uppercase;margin-bottom:28px;display:block;}
+.occ-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,8vw,2.8rem);font-weight:700;color:white;line-height:1.15;margin-bottom:8px;}
+.occ-headline em{font-style:italic;background:linear-gradient(135deg,#e83878,#f0a030);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.occ-sub{font-size:0.82rem;color:rgba(255,255,255,0.4);letter-spacing:0.05em;}
+.occ-grid{padding:0 18px 40px;display:flex;flex-direction:column;gap:10px;flex:1;}
 
-/* ══════════════════════════════════════════════
-   SCREEN 1: OCCASION PICKER
-══════════════════════════════════════════════ */
-#s-occasion{
-  background:linear-gradient(160deg,#0a0008 0%,#140010 50%,#0a0008 100%);
-  padding:0;align-items:stretch;justify-content:flex-start;
-}
-.occ-header{
-  padding:52px 28px 24px;text-align:center;
-  position:relative;
-}
-.occ-logo{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.1rem;letter-spacing:0.15em;
-  color:rgba(255,255,255,0.4);font-weight:400;
-  text-transform:uppercase;margin-bottom:28px;
-  display:block;
-}
-.occ-headline{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(2rem,8vw,2.8rem);font-weight:700;
-  color:white;line-height:1.15;margin-bottom:8px;
-}
-.occ-headline em{
-  font-style:italic;
-  background:linear-gradient(135deg,#e83878,#f0a030);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.occ-sub{
-  font-size:0.82rem;color:rgba(255,255,255,0.4);
-  letter-spacing:0.05em;
-}
-.occ-grid{
-  padding:0 18px 40px;
-  display:flex;flex-direction:column;gap:10px;
-  flex:1;
-}
-.occ-item{
-  border-radius:18px;padding:20px 22px;
-  cursor:pointer;touch-action:manipulation;
-  display:flex;align-items:center;gap:18px;
-  border:1px solid rgba(255,255,255,0.07);
-  transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s;
-  position:relative;overflow:hidden;
-}
+.occ-item{border-radius:18px;padding:20px 22px;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:18px;border:1px solid rgba(255,255,255,0.07);transition:transform 0.2s,border-color 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;}
 .occ-item:active{transform:scale(0.97);}
-.occ-item::before{
-  content:'';position:absolute;inset:0;
-  opacity:0;transition:opacity 0.3s;
-  background:rgba(255,255,255,0.04);
-}
+.occ-item::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;background:rgba(255,255,255,0.04);}
 .occ-item:active::before{opacity:1;}
-
 .occ-item.birthday{background:linear-gradient(135deg,#1c0410,#2e0b1c);border-color:rgba(232,56,120,0.2);}
 .occ-item.birthday:hover{border-color:rgba(232,56,120,0.4);box-shadow:0 8px 32px rgba(232,56,120,0.15);}
 .occ-item.mothersday{background:linear-gradient(135deg,#130c06,#221508);border-color:rgba(240,160,60,0.2);}
@@ -104,1315 +44,204 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 .occ-item.anniversary{background:linear-gradient(135deg,#0b0d1e,#161230);border-color:rgba(100,80,220,0.2);opacity:0.5;cursor:default;}
 .occ-item.valentine{background:linear-gradient(135deg,#1c0414,#320820);border-color:rgba(220,50,120,0.2);opacity:0.5;cursor:default;}
 
-.occ-icon-wrap{
-  width:52px;height:52px;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.6rem;flex-shrink:0;
-  background:rgba(255,255,255,0.06);
-}
+.occ-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;background:rgba(255,255,255,0.06);}
 .occ-info{flex:1;}
-.occ-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.15rem;font-weight:600;color:white;
-  margin-bottom:2px;
-}
+.occ-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:600;color:white;margin-bottom:2px;}
 .occ-desc{font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.4;}
-.occ-arrow{font-size:1rem;color:rgba(255,255,255,0.2);}
-.occ-badge{
-  font-size:0.58rem;font-weight:600;letter-spacing:0.1em;
-  padding:3px 8px;border-radius:20px;
-  text-transform:uppercase;
-}
+.occ-badge{font-size:0.58rem;font-weight:600;letter-spacing:0.1em;padding:3px 8px;border-radius:20px;text-transform:uppercase;}
 .badge-live{background:rgba(232,56,120,0.2);color:#f06090;border:1px solid rgba(232,56,120,0.3);}
 .badge-soon{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);border:1px solid rgba(255,255,255,0.08);}
 
-/* Floating particles on occasion screen */
-.particle{position:absolute;pointer-events:none;border-radius:50%;animation:particleDrift linear infinite;}
-@keyframes particleDrift{
-  0%{transform:translateY(100vh) scale(0);opacity:0;}
-  10%{opacity:1;}90%{opacity:0.3;}
-  100%{transform:translateY(-20px) scale(1);opacity:0;}
-}
-
-/* ══════════════════════════════════════════════
-   SCREEN 2: STYLE PICKER
-══════════════════════════════════════════════ */
+/* STYLE PICKER SCREEN */
 #s-style{
-  background:#0f0810;
-  padding:0;align-items:stretch;
-}
-.style-header{
-  padding:52px 24px 20px;
-  display:flex;align-items:center;gap:14px;
-}
-.back-circle{
-  width:38px;height:38px;border-radius:50%;
-  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:1rem;color:rgba(255,255,255,0.6);
-  flex-shrink:0;touch-action:manipulation;
-  transition:background 0.2s;
-}
-.back-circle:active{background:rgba(255,255,255,0.12);}
-.style-header-text{}
-.style-occasion-label{font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;}
-.style-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:white;}
-
-.style-cards-wrap{
-  padding:8px 18px 30px;
-  display:flex;flex-direction:column;gap:16px;
-  flex:1;overflow-y:auto;
-}
-
-/* ── Animated preview card ──────────────────── */
-.style-preview-card{
-  border-radius:20px;overflow:hidden;
-  cursor:pointer;touch-action:manipulation;
-  transition:transform 0.2s,box-shadow 0.2s;
-  position:relative;
-}
-.style-preview-card:active{transform:scale(0.97);}
-
-.preview-intimate{ background:linear-gradient(160deg,#fde8f0,#fce4ec); border:1.5px solid rgba(233,30,99,0.15); padding:16px 16px 14px; }
-.preview-retro{ background:#FFE135; border:3px solid #111; box-shadow:5px 5px 0 #111; padding:16px 16px 14px; }
-.preview-blossom{ background:linear-gradient(160deg,#FDF0F3,#F7E0E5); border:1.5px solid rgba(201,114,122,0.2); padding:16px 16px 14px; }
-
-/* Slideshow viewport */
-.slide-viewport{
-  width:100%;border-radius:12px;overflow:hidden;
-  position:relative;height:160px;margin-bottom:10px;
-  background:rgba(255,255,255,0.6);
-}
-.preview-retro .slide-viewport{background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
-
-/* Individual slides */
-.preview-slide{
   position:absolute;inset:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:12px;
-  opacity:0;
-  transition:opacity 0.6s ease;
-  text-align:center;
-}
-.preview-slide.active-slide{opacity:1;}
-
-/* Slide dots */
-.slide-dots{
-  display:flex;gap:5px;justify-content:center;margin-bottom:10px;
-}
-.slide-dot{
-  width:6px;height:6px;border-radius:50%;
-  background:rgba(233,30,99,0.2);
-  transition:all 0.3s;
-}
-.slide-dot.active{background:#e91e63;transform:scale(1.3);}
-.retro-dot{background:rgba(17,17,17,0.15)!important;}
-.retro-dot.active{background:#d90429!important;}
-
-/* Slide screen content */
-.slide-screen-label{
-  font-size:0.55rem;font-weight:600;letter-spacing:0.12em;
-  text-transform:uppercase;opacity:0.4;margin-bottom:6px;
-}
-.slide-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:1rem;font-weight:700;color:#4a0e2a;
-  margin-bottom:6px;line-height:1.2;
-}
-.slide-title.retro-slide-title{font-family:'Fredoka One',cursive;color:#d90429;font-size:0.95rem;}
-
-/* Polaroid photos in slide */
-.slide-photos{display:flex;gap:4px;justify-content:center;margin:4px 0;}
-.slide-pol{
-  width:38px;height:50px;background:white;border-radius:4px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:3px 3px 10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.9rem;
-}
-.slide-pol:nth-child(odd){transform:rotate(-2deg);}
-.slide-pol:nth-child(even){transform:rotate(2deg);}
-
-/* Comic panels in slide */
-.slide-comic{display:flex;gap:3px;justify-content:center;margin:4px 0;}
-.slide-panel{
-  width:42px;height:56px;
-  border:2px solid #111;border-radius:3px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;background:#fff9c4;
-}
-.slide-panel:nth-child(2){background:#ffe0b2;}
-.slide-panel:nth-child(3){background:#fce4ec;}
-
-/* Envelope in slide */
-.slide-env{
-  font-size:2.2rem;
-  animation:envWiggle 2s ease-in-out infinite;
-}
-@keyframes envWiggle{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
-
-/* Balloon in slide */
-.slide-balloon{
-  font-size:2.5rem;
-  animation:ballFloat 1.5s ease-in-out infinite;
-}
-@keyframes ballFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-
-/* Vinyl in slide */
-.slide-vinyl{
-  width:44px;height:44px;border-radius:50%;
-  background:conic-gradient(#111 0deg,#222 20deg,#111 40deg,#222 60deg,#111 80deg,#222 100deg,#111 120deg,#222 140deg,#111 160deg,#222 180deg,#111 200deg,#222 220deg,#111 240deg,#222 260deg,#111 280deg,#222 300deg,#111 320deg,#222 340deg,#111 360deg);
-  animation:vinylSpin 3s linear infinite;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 0 3px #333,0 0 0 5px #444;
-}
-@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.slide-vinyl-center{width:12px;height:12px;border-radius:50%;background:#e91e63;position:absolute;}
-
-/* Letter in slide */
-.slide-letter-lines{width:80%;margin:4px auto;}
-.slide-line{height:2px;border-radius:2px;background:rgba(74,14,42,0.12);margin-bottom:4px;}
-.slide-line:first-child{width:60%;background:rgba(233,30,99,0.3);}
-
-/* Newspaper in slide */
-.slide-newspaper{
-  background:#fdf8e7;border:2px solid #111;border-radius:4px;
-  padding:6px 8px;width:100%;
-}
-.slide-news-head{font-family:'Fredoka One',cursive;font-size:0.55rem;color:#111;border-bottom:2px double #111;margin-bottom:4px;padding-bottom:2px;}
-.slide-headline{background:#d90429;color:white;font-family:'Fredoka One',cursive;font-size:0.55rem;padding:2px 4px;border-radius:2px;margin-bottom:4px;}
-.slide-news-lines{display:flex;flex-direction:column;gap:2px;}
-.slide-news-line{height:2px;background:rgba(0,0,0,0.12);border-radius:1px;}
-
-/* Card label + button row */
-.preview-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.preview-style-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;}
-.preview-style-name.retro-name{font-family:'Fredoka One',cursive;color:#d90429;}
-.preview-style-name.blossom-name{color:#3D1C1C;}
-.preview-style-desc{font-size:0.62rem;color:#8d3a5a;margin-top:1px;}
-.preview-style-desc.retro-desc{font-family:'Fredoka One',cursive;color:#555;font-size:0.6rem;}
-.preview-btn{
-  padding:12px 18px;border:none;border-radius:50px;
-  font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;
-  cursor:pointer;touch-action:manipulation;
-  width:100%;margin-top:6px;
-  transition:transform 0.15s;
-}
-.preview-btn:active{transform:scale(0.97);}
-.preview-btn.intimate-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
-.preview-btn.retro-btn{background:#d90429;color:white;border:2px solid #111;border-radius:6px;box-shadow:3px 3px 0 #111;font-family:'Fredoka One',cursive;font-size:0.9rem;}
-.preview-btn.blossom-btn{background:linear-gradient(135deg,#C9727A,#C9973A);color:white;box-shadow:0 6px 20px rgba(201,114,122,0.35);}
-
-/* ══════════════════════════════════════════════
-   SCREENS 3-6: STEP BY STEP CREATOR
-══════════════════════════════════════════════ */
-.creator-screen{
-  padding:0;align-items:stretch;justify-content:flex-start;
-}
-
-/* Dynamic theme applied via JS */
-.theme-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
-.theme-retro{background:#FFE135;}
-.theme-blossom{background:linear-gradient(160deg,#FDF6F0,#F7E8E8);}
-.theme-mothersday-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);}
-
-.step-wrap{
-  flex:1;display:flex;flex-direction:column;
-  padding:56px 22px 28px;
+  background:#0f0810;
+  display:flex;flex-direction:column;align-items:stretch;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.4s ease,transform 0.4s cubic-bezier(.4,0,.2,1);
+  transform:translateX(60px);
   overflow-y:auto;-webkit-overflow-scrolling:touch;
 }
+#s-style.active{opacity:1;pointer-events:all;transform:translateX(0);}
 
-/* Progress bar */
-.step-progress{
-  position:absolute;top:0;left:0;right:0;height:3px;
-  background:rgba(255,255,255,0.15);
-}
-.step-progress-fill{
-  height:100%;
-  transition:width 0.5s ease;
-}
-.intimate-progress{background:linear-gradient(90deg,#e91e63,#f06292);}
-.retro-progress{background:linear-gradient(90deg,#d90429,#FFE135);}
-.blossom-progress{background:linear-gradient(90deg,#C9727A,#C9973A);}
+.style-header{padding:52px 24px 20px;display:flex;align-items:center;gap:14px;}
+.back-circle{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:rgba(255,255,255,0.6);flex-shrink:0;touch-action:manipulation;transition:background 0.2s;}
+.back-circle:active{background:rgba(255,255,255,0.12);}
+.style-occasion-label{font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;}
+.style-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:white;}
+.style-cards-wrap{padding:8px 18px 30px;display:flex;flex-direction:column;gap:16px;flex:1;}
 
-/* Back button */
-.step-back{
-  position:absolute;top:14px;left:16px;
-  width:36px;height:36px;border-radius:50%;
-  border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;touch-action:manipulation;
-  transition:background 0.2s;z-index:5;
-}
-.step-back.dark{background:rgba(0,0,0,0.1);color:#333;}
-.step-back.dark:active{background:rgba(0,0,0,0.18);}
+/* CARD PREVIEW CARDS */
+.style-card{border-radius:20px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s;position:relative;}
+.style-card:active{transform:scale(0.97);}
+.card-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec);border:1.5px solid rgba(233,30,99,0.15);padding:20px;}
+.card-retro{background:#FFE135;border:3px solid #111;box-shadow:5px 5px 0 #111;padding:20px;}
 
-/* Step counter */
-.step-counter{
-  font-size:0.62rem;font-weight:600;letter-spacing:0.12em;
-  text-transform:uppercase;margin-bottom:20px;opacity:0.5;
-}
-.step-counter.dark{color:#333;}
+.card-preview-inner{background:rgba(255,255,255,0.6);border-radius:14px;padding:20px;margin-bottom:14px;text-align:center;}
+.card-retro .card-preview-inner{background:white;border:2px solid #111;border-radius:6px;}
 
-/* Step content */
-.step-emoji{font-size:2.8rem;margin-bottom:14px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
-@keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.step-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(1.7rem,6vw,2.2rem);
-  font-weight:700;line-height:1.2;
-  margin-bottom:6px;
-}
-.step-sub{font-size:0.85rem;line-height:1.6;margin-bottom:24px;opacity:0.6;}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;margin-bottom:4px;}
+.card-name.retro-name{font-family:'Fredoka One',cursive;color:#d90429;}
+.card-desc{font-size:0.62rem;color:#8d3a5a;opacity:0.7;}
+.card-desc.retro-desc{font-family:'Patrick Hand',cursive;color:#555;}
 
-/* Inputs — intimate/blossom style */
-.field-label{
-  display:block;font-size:0.68rem;font-weight:600;
-  letter-spacing:0.08em;text-transform:uppercase;
-  margin-bottom:8px;opacity:0.5;
-}
-.big-input{
-  width:100%;border:none;
-  border-bottom:2px solid rgba(233,30,99,0.25);
-  background:transparent;padding:10px 0;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.7rem;font-weight:600;
-  outline:none;transition:border-color 0.3s;
-  text-align:center;
-}
-.big-input::placeholder{opacity:0.25;font-style:italic;}
-.big-input:focus{border-color:rgba(233,30,99,0.6);}
-.regular-input{
-  width:100%;border:1.5px solid rgba(0,0,0,0.1);
-  border-radius:14px;padding:13px 16px;
-  font-family:'DM Sans',sans-serif;font-size:0.95rem;
-  background:rgba(255,255,255,0.7);outline:none;
-  transition:border-color 0.3s;margin-bottom:12px;
-  backdrop-filter:blur(10px);
-}
-.regular-input::placeholder{opacity:0.35;font-style:italic;}
-.regular-input:focus{border-color:rgba(233,30,99,0.4);background:rgba(255,255,255,0.9);}
-
-/* Retro inputs */
-.retro-input{
-  width:100%;border:3px solid #111;border-radius:8px;
-  padding:12px 14px;font-family:'DM Sans',sans-serif;
-  font-size:0.95rem;background:white;outline:none;
-  box-shadow:3px 3px 0 #111;margin-bottom:12px;
-  transition:box-shadow 0.15s;
-}
-.retro-input:focus{box-shadow:4px 4px 0 #d90429;border-color:#d90429;}
-.retro-input::placeholder{opacity:0.35;font-style:italic;}
-.retro-label{
-  display:block;font-family:'Fredoka One',cursive;
-  font-size:0.82rem;color:#111;margin-bottom:7px;letter-spacing:0.02em;
-}
-
-/* Textarea */
-.letter-area{
-  width:100%;border:1.5px solid rgba(0,0,0,0.1);
-  border-radius:16px;padding:16px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem;line-height:1.8;
-  background:rgba(255,255,255,0.7);outline:none;
-  resize:none;min-height:160px;
-  transition:border-color 0.3s;
-  backdrop-filter:blur(10px);
-}
-.letter-area:focus{border-color:rgba(233,30,99,0.4);}
-.letter-area::placeholder{opacity:0.35;font-style:italic;}
-.retro-area{
-  width:100%;border:3px solid #111;border-radius:8px;
-  padding:14px;font-family:'DM Sans',sans-serif;
-  font-size:0.95rem;line-height:1.7;
-  background:white;outline:none;resize:none;min-height:140px;
-  box-shadow:3px 3px 0 #111;
-  transition:box-shadow 0.15s;
-}
-.retro-area:focus{box-shadow:4px 4px 0 #d90429;border-color:#d90429;}
-
-/* Buttons */
-.btn-next{
-  width:100%;padding:15px;border:none;border-radius:50px;
-  font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;
-  cursor:pointer;touch-action:manipulation;margin-top:8px;
-  position:relative;overflow:hidden;
-  transition:transform 0.15s,box-shadow 0.15s;
-}
-.btn-next:active{transform:scale(0.97);}
-.btn-intimate{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 8px 24px rgba(233,30,99,0.35);}
-.btn-retro{background:#d90429;color:white;border:3px solid #111;border-radius:8px;box-shadow:4px 4px 0 #111;font-family:'Fredoka One',cursive;font-size:1rem;}
+.card-btn{width:100%;padding:13px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:transform 0.15s;}
+.card-btn:active{transform:scale(0.97);}
+.btn-intimate{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
+.btn-retro{background:#d90429;color:white;border:3px solid #111;border-radius:8px;box-shadow:4px 4px 0 #111;font-family:'Fredoka One',cursive;font-size:0.95rem;}
 .btn-retro:active{box-shadow:1px 1px 0 #111!important;}
-.btn-blossom{background:linear-gradient(135deg,#C9727A,#C9973A);color:white;box-shadow:0 8px 24px rgba(201,114,122,0.35);}
-.btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.5;font-family:'DM Sans',sans-serif;}
-.btn-wa{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(37,211,102,0.3);margin-top:8px;touch-action:manipulation;}
-.btn-ai{
-  width:100%;padding:12px;border-radius:12px;
-  font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;
-  cursor:pointer;margin-bottom:10px;touch-action:manipulation;
-  transition:background 0.2s;
-}
-.btn-ai.soft{background:rgba(233,30,99,0.07);border:1.5px solid rgba(233,30,99,0.2);color:#e91e63;}
-.btn-ai.retro-ai{background:#FFE135;border:2px solid #111;color:#111;font-family:'Fredoka One',cursive;border-radius:8px;box-shadow:2px 2px 0 #111;}
 
-/* AI loading */
-.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;margin:6px 0;}
-.ai-loading.show{display:flex;}
-.ai-dot{width:6px;height:6px;border-radius:50%;animation:aiPulse 1s ease-in-out infinite;}
-@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
-.pink-dot{background:#e91e63;}.yellow-dot{background:#d90429;}
+/* PARTICLES */
+.particle{position:absolute;pointer-events:none;border-radius:50%;animation:particleDrift linear infinite;}
+@keyframes particleDrift{0%{transform:translateY(100vh) scale(0);opacity:0;}10%{opacity:1;}90%{opacity:0.3;}100%{transform:translateY(-20px) scale(1);opacity:0;}}
 
-/* Photo grid */
-.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
-.photo-slot{
-  aspect-ratio:1;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;position:relative;overflow:hidden;
-  touch-action:manipulation;transition:background 0.2s;font-size:1.3rem;
-}
-.photo-slot.soft-slot{background:rgba(233,30,99,0.07);border:1.5px dashed rgba(233,30,99,0.25);}
-.photo-slot.retro-slot{background:#fff;border:3px solid #111;border-radius:6px;}
-.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
-.photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#e91e63;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
-
-/* Song results */
-.song-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;}
-.song-result.soft-result{background:rgba(255,255,255,0.6);border:1.5px solid rgba(233,30,99,0.1);}
-.song-result.retro-result{background:white;border:2px solid #111;border-radius:8px;box-shadow:2px 2px 0 #111;}
-.song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
-.song-use-btn{padding:6px 12px;border:none;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
-.soft-use{background:linear-gradient(135deg,#e91e63,#f06292);color:white;}
-.retro-use{background:#d90429;color:white;border:2px solid #111;border-radius:6px;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;}
-.song-selected-box{border-radius:14px;padding:12px 14px;margin-bottom:10px;display:none;}
-.soft-selected{background:linear-gradient(135deg,#2d1048,#1a0a2e);}
-.retro-selected{background:#111;border:2px solid #FFE135;box-shadow:2px 2px 0 #FFE135;}
-
-/* Save progress overlay */
-.save-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
-.save-overlay.show{display:flex;}
-.save-box{border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;}
-.save-box.soft-save{background:white;box-shadow:0 20px 60px rgba(233,30,99,0.2);}
-.save-box.retro-save{background:#FFE135;border:4px solid #111;box-shadow:8px 8px 0 #111;}
-.save-emoji{font-size:2.2rem;margin-bottom:10px;display:block;}
-.save-label{font-size:1rem;font-weight:600;margin-bottom:14px;}
-.save-bar-wrap{height:8px;border-radius:50px;overflow:hidden;width:100%;margin-bottom:8px;}
-.soft-bar-wrap{background:rgba(233,30,99,0.12);}
-.retro-bar-wrap{background:rgba(0,0,0,0.15);border:1px solid #111;}
-.save-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s ease;}
-.soft-bar{background:linear-gradient(90deg,#e91e63,#f06292);}
-.retro-bar{background:#d90429;}
-.save-step{font-size:0.75rem;opacity:0.6;}
-
-/* Share modal */
-.share-modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
-.share-modal.show{display:flex;}
-.share-box{border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;}
-.share-box.soft-share{background:white;}
-.share-box.retro-share{background:#FFE135;border:4px solid #111;box-shadow:8px 8px 0 #111;}
-.share-link-row{border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.soft-link-row{background:rgba(233,30,99,0.06);border:1px solid rgba(233,30,99,0.15);}
-.retro-link-row{background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
-.share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;}
-.copy-btn{padding:6px 12px;border:none;border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
-.soft-copy{background:#e91e63;color:white;}
-.retro-copy{background:#d90429;color:white;border:2px solid #111;font-family:'Fredoka One',cursive;}
-.modal-close{width:100%;padding:12px;background:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:6px;}
-.soft-close{border:1.5px solid rgba(233,30,99,0.2);color:#8d3a5a;}
-.retro-close{border:2px solid #111;color:#111;font-family:'Fredoka One',cursive;border-radius:8px;box-shadow:2px 2px 0 #111;}
-
-/* Watermark */
-.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.6rem;color:rgba(255,255,255,0.3);font-weight:600;}
-.wm a{color:inherit;text-decoration:none;}
-
-/* Animations */
-@keyframes ripple{to{transform:scale(4);opacity:0;}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.6rem;color:rgba(255,255,255,0.2);}
 </style>
 </head>
 <body>
-<div class="app" id="mainApp">
+<div class="app">
 
-<!-- ════════════════════════════════════
-     SCREEN 1: OCCASION PICKER
-════════════════════════════════════ -->
-<div class="screen active" id="s-occasion">
-  <div id="particlesBg" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"><div class="particle" style="width: 6.29598px; height: 6.29598px; left: 79.4714%; background: rgba(255, 255, 255, 0.15); animation-duration: 20.6583s; animation-delay: 6.5281s;"></div><div class="particle" style="width: 4.68906px; height: 4.68906px; left: 31.4977%; background: rgba(240, 160, 60, 0.3); animation-duration: 13.0035s; animation-delay: 1.46052s;"></div><div class="particle" style="width: 4.21132px; height: 4.21132px; left: 52.7331%; background: rgba(255, 255, 255, 0.15); animation-duration: 19.9939s; animation-delay: 5.18844s;"></div><div class="particle" style="width: 4.91681px; height: 4.91681px; left: 91.218%; background: rgba(255, 255, 255, 0.15); animation-duration: 16.7591s; animation-delay: 4.98265s;"></div><div class="particle" style="width: 3.37119px; height: 3.37119px; left: 28.8803%; background: rgba(240, 160, 60, 0.3); animation-duration: 13.5905s; animation-delay: 5.01593s;"></div><div class="particle" style="width: 6.59428px; height: 6.59428px; left: 47.9134%; background: rgba(232, 56, 120, 0.4); animation-duration: 15.1506s; animation-delay: 9.06964s;"></div><div class="particle" style="width: 6.79635px; height: 6.79635px; left: 48.3601%; background: rgba(232, 56, 120, 0.4); animation-duration: 23.3626s; animation-delay: 3.61845s;"></div><div class="particle" style="width: 6.21507px; height: 6.21507px; left: 13.7902%; background: rgba(255, 255, 255, 0.15); animation-duration: 16.2078s; animation-delay: 6.46809s;"></div><div class="particle" style="width: 3.55866px; height: 3.55866px; left: 81.6964%; background: rgba(232, 56, 120, 0.4); animation-duration: 19.7348s; animation-delay: 9.32035s;"></div><div class="particle" style="width: 3.96353px; height: 3.96353px; left: 51.7673%; background: rgba(255, 255, 255, 0.15); animation-duration: 16.1131s; animation-delay: 1.33565s;"></div><div class="particle" style="width: 3.48714px; height: 3.48714px; left: 66.8278%; background: rgba(255, 255, 255, 0.15); animation-duration: 16.109s; animation-delay: 0.878962s;"></div><div class="particle" style="width: 7.96894px; height: 7.96894px; left: 90.5192%; background: rgba(255, 255, 255, 0.15); animation-duration: 14.2268s; animation-delay: 3.47013s;"></div><div class="particle" style="width: 5.43357px; height: 5.43357px; left: 59.5855%; background: rgba(232, 56, 120, 0.4); animation-duration: 14.1892s; animation-delay: 0.607101s;"></div><div class="particle" style="width: 4.8032px; height: 4.8032px; left: 5.45736%; background: rgba(240, 160, 60, 0.3); animation-duration: 11.0524s; animation-delay: 0.856797s;"></div><div class="particle" style="width: 5.82443px; height: 5.82443px; left: 4.13973%; background: rgba(255, 255, 255, 0.15); animation-duration: 22.3372s; animation-delay: 4.5731s;"></div><div class="particle" style="width: 3.46011px; height: 3.46011px; left: 14.6498%; background: rgba(232, 56, 120, 0.4); animation-duration: 12.1971s; animation-delay: 7.99914s;"></div><div class="particle" style="width: 5.65338px; height: 5.65338px; left: 68.6184%; background: rgba(255, 255, 255, 0.15); animation-duration: 13.4031s; animation-delay: 2.39446s;"></div><div class="particle" style="width: 6.17486px; height: 6.17486px; left: 59.5239%; background: rgba(240, 160, 60, 0.3); animation-duration: 20.3159s; animation-delay: 1.12749s;"></div><div class="particle" style="width: 6.92502px; height: 6.92502px; left: 2.4244%; background: rgba(240, 160, 60, 0.3); animation-duration: 14.4359s; animation-delay: 11.2875s;"></div><div class="particle" style="width: 3.35349px; height: 3.35349px; left: 77.4829%; background: rgba(255, 255, 255, 0.15); animation-duration: 15.1402s; animation-delay: 9.6845s;"></div></div>
-  <div class="occ-header">
-    <span class="occ-logo">WishYou.ai</span>
-    <div class="occ-headline">Send love,<br><em>beautifully.</em></div>
-    <div class="occ-sub">Choose your occasion</div>
-  </div>
-  <div class="occ-grid">
-    <div class="occ-item birthday" onclick="selectOccasion(&#39;birthday&#39;)">
-      <div class="occ-icon-wrap">🎂</div>
-      <div class="occ-info">
-        <div class="occ-name">Birthday</div>
-        <div class="occ-desc">Make their day unforgettable</div>
+  <!-- OCCASION PICKER -->
+  <div id="s-occasion">
+    <div id="particlesBg" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
+    <div class="occ-header">
+      <span class="occ-logo">WishYou.ai</span>
+      <div class="occ-headline">Send love,<br><em>beautifully.</em></div>
+      <div class="occ-sub">Choose your occasion</div>
+    </div>
+    <div class="occ-grid">
+      <div class="occ-item birthday" onclick="showStyles('birthday')">
+        <div class="occ-icon-wrap">🎂</div>
+        <div class="occ-info">
+          <div class="occ-name">Birthday</div>
+          <div class="occ-desc">Make their day unforgettable</div>
+        </div>
+        <span class="occ-badge badge-live">✦ Live</span>
       </div>
-      <span class="occ-badge badge-live">✦ Live</span>
-    </div>
-    <div class="occ-item mothersday" onclick="selectOccasion(&#39;mothersday&#39;)">
-      <div class="occ-icon-wrap">🌸</div>
-      <div class="occ-info">
-        <div class="occ-name">Mother's Day</div>
-        <div class="occ-desc">Thank her the right way</div>
+      <div class="occ-item mothersday" onclick="showStyles('mothersday')">
+        <div class="occ-icon-wrap">🌸</div>
+        <div class="occ-info">
+          <div class="occ-name">Mother's Day</div>
+          <div class="occ-desc">Thank her the right way</div>
+        </div>
+        <span class="occ-badge badge-live">✦ Live</span>
       </div>
-      <span class="occ-badge badge-live">✦ Live</span>
-    </div>
-    <div class="occ-item anniversary">
-      <div class="occ-icon-wrap">💍</div>
-      <div class="occ-info">
-        <div class="occ-name">Anniversary</div>
-        <div class="occ-desc">Celebrate your forever together</div>
+      <div class="occ-item anniversary">
+        <div class="occ-icon-wrap">💍</div>
+        <div class="occ-info">
+          <div class="occ-name">Anniversary</div>
+          <div class="occ-desc">Celebrate your forever together</div>
+        </div>
+        <span class="occ-badge badge-soon">Soon</span>
       </div>
-      <span class="occ-badge badge-soon">Soon</span>
-    </div>
-    <div class="occ-item valentine">
-      <div class="occ-icon-wrap">💕</div>
-      <div class="occ-info">
-        <div class="occ-name">Valentine's</div>
-        <div class="occ-desc">Say it with your whole heart</div>
+      <div class="occ-item valentine">
+        <div class="occ-icon-wrap">💕</div>
+        <div class="occ-info">
+          <div class="occ-name">Valentine's</div>
+          <div class="occ-desc">Say it with your whole heart</div>
+        </div>
+        <span class="occ-badge badge-soon">Soon</span>
       </div>
-      <span class="occ-badge badge-soon">Soon</span>
     </div>
   </div>
-</div>
 
-<!-- ════════════════════════════════════
-     SCREEN 2: STYLE PICKER
-════════════════════════════════════ -->
-<div class="screen" id="s-style">
-  <div class="style-header">
-    <div class="back-circle" onclick="goTo(&#39;s-occasion&#39;)">←</div>
-    <div class="style-header-text">
-      <div class="style-occasion-label" id="styleOccasionLabel">Birthday</div>
-      <div class="style-title">Choose your style</div>
+  <!-- STYLE PICKER -->
+  <div id="s-style">
+    <div class="style-header">
+      <div class="back-circle" onclick="goBack()">←</div>
+      <div>
+        <div class="style-occasion-label" id="styleLabel">Birthday</div>
+        <div class="style-title">Choose your style</div>
+      </div>
     </div>
+    <div class="style-cards-wrap" id="styleCards"></div>
   </div>
-  <div class="style-cards-wrap" id="styleCardsWrap">
-    <!-- Injected by JS based on occasion -->
-  </div>
+
 </div>
-
-<!-- ════════════════════════════════════
-     SCREEN 3: NAME
-════════════════════════════════════ -->
-<div class="screen creator-screen" id="s-name">
-  <div class="step-progress"><div class="step-progress-fill" id="prog-name" style="width:20%"></div></div>
-  <button class="step-back dark" id="back-name" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-counter dark" id="counter-name">Step 1 of 4</div>
-    <span class="step-emoji" id="emoji-name">🎂</span>
-    <div class="step-title" id="title-name">Who is this card for?</div>
-    <div class="step-sub" id="sub-name">Make it personal from the very start</div>
-    <div class="input-wrap" id="nameInputWrap">
-      <!-- Injected by style -->
-    </div>
-    <button class="btn-next" id="btn-name" onclick="goTo(&#39;s-photos&#39;)">Continue → Photos</button>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     SCREEN 4: PHOTOS
-════════════════════════════════════ -->
-<div class="screen creator-screen" id="s-photos">
-  <div class="step-progress"><div class="step-progress-fill" id="prog-photos" style="width:40%"></div></div>
-  <button class="step-back dark" id="back-photos" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-counter dark">Step 2 of 4</div>
-    <span class="step-emoji">📸</span>
-    <div class="step-title" id="title-photos">Your favourite memories</div>
-    <div class="step-sub">Add up to 5 photos — they'll look beautiful on the card</div>
-    <div class="photos-grid" id="photosGrid"></div>
-    <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
-    <button class="btn-next" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
-    <button class="btn-skip" onclick="goTo(&#39;s-song&#39;)">Skip for now</button>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     SCREEN 5: SONG
-════════════════════════════════════ -->
-<div class="screen creator-screen" id="s-song">
-  <div class="step-progress"><div class="step-progress-fill" id="prog-song" style="width:60%"></div></div>
-  <button class="step-back dark" id="back-song" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-counter dark">Step 3 of 4</div>
-    <span class="step-emoji">🎵</span>
-    <div class="step-title" id="title-song">A song just for them</div>
-    <div class="step-sub">Search or let AI find the perfect song</div>
-    <div class="song-selected-box" id="songSelectedBox">
-      <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Now playing:</div>
-      <div style="font-size:0.9rem;font-weight:600;color:white;" id="songSelectedName">—</div>
-    </div>
-    <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <input id="ytSearchInput" placeholder="Search song name..." style="flex:1;" onkeydown="if(event.key===&#39;Enter&#39;)searchSong()" maxlength="100">
-      <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;">🔍</button>
-    </div>
-    <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
-    <button class="btn-ai" id="aiSongBtn" onclick="suggestSongs()">✨ AI Suggest Songs</button>
-    <div class="ai-loading" id="songAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span id="songAiLoadingText">Finding perfect songs...</span></div>
-    <div id="songAiResults"></div>
-    <input type="hidden" id="cSpotify">
-    <button class="btn-next" id="btn-song" onclick="goTo(&#39;s-letter&#39;)" style="margin-top:10px;">Continue → Letter</button>
-    <button class="btn-skip" onclick="goTo(&#39;s-letter&#39;)">Skip for now</button>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     SCREEN 6: LETTER
-════════════════════════════════════ -->
-<div class="screen creator-screen" id="s-letter">
-  <div class="step-progress"><div class="step-progress-fill" id="prog-letter" style="width:80%"></div></div>
-  <button class="step-back dark" id="back-letter" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-counter dark">Step 4 of 4</div>
-    <span class="step-emoji">💌</span>
-    <div class="step-title" id="title-letter">Write from the heart</div>
-    <div class="step-sub">A few honest words mean everything</div>
-    <button class="btn-ai" id="aiLetterBtn" onclick="runAILetter()">✨ Help me find the words</button>
-    <div class="ai-loading" id="letterAiLoading"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span>Writing a heartfelt letter...</span></div>
-    <div id="letterInputWrap"></div>
-    <button class="btn-next" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)" style="margin-top:8px;">Preview My Card →</button>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════
-     SCREEN 7: PREVIEW & SHARE
-════════════════════════════════════ -->
-<div class="screen creator-screen" id="s-preview">
-  <div class="step-progress"><div class="step-progress-fill" id="prog-preview" style="width:100%"></div></div>
-  <button class="step-back dark" onclick="goBackCreator()">←</button>
-  <div class="step-wrap" style="align-items:center;text-align:center;">
-    <span class="step-emoji">🎉</span>
-    <div class="step-title">Your card is ready!</div>
-    <div class="step-sub">Here's a preview — looks beautiful 💝</div>
-    <div id="previewMiniCard" style="width:100%;border-radius:18px;padding:20px;margin-bottom:16px;text-align:left;"></div>
-    <button class="btn-next" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
-    <button class="btn-skip" onclick="goTo(&#39;s-name&#39;)" style="margin-top:4px;">✏️ Edit card</button>
-  </div>
-</div>
-
-</div><!-- /app -->
-
-<!-- Save overlay -->
-<div class="save-overlay" id="saveOverlay">
-  <div class="save-box" id="saveBox">
-    <span class="save-emoji" id="saveEmoji">💝</span>
-    <div class="save-label" id="saveLabel">Saving your card...</div>
-    <div class="save-bar-wrap" id="saveBarWrap"><div class="save-bar" id="saveBar"></div></div>
-    <div class="save-step" id="saveStep">Please wait</div>
-  </div>
-</div>
-
-<!-- Share modal -->
-<div class="share-modal" id="shareModal">
-  <div class="share-box" id="shareBox">
-    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">🎉</div>
-    <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;" id="shareTitle">Card Saved!</div>
-    <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;">Share this link with them</div>
-    <div style="font-size:0.72rem;opacity:0.5;border-radius:10px;padding:7px 12px;margin-bottom:12px;" id="expiryNote">⏳ Card expires in 3 days</div>
-    <div class="share-link-row" id="shareLinkRow">
-      <span class="share-link-txt" id="shareLinkTxt"></span>
-      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
-    </div>
-    <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
-    <button class="modal-close" id="modalClose" onclick="closeShare()">Done ✓</button>
-  </div>
-</div>
-
-<div class="wm"><a href="file:///C:/">WishYou.ai</a></div>
+<div class="wm">WishYou.ai</div>
 
 <script>
-// ════════════════════════════════════════════════
-// CONFIG
-// ════════════════════════════════════════════════
-const FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
-const CLOUDINARY_CLOUD = 'dkvbjazfe';
-const CLOUDINARY_PRESET = 'wishyou-uploads';
-const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
-
-// ════════════════════════════════════════════════
-// STATE
-// ════════════════════════════════════════════════
-let curScreen = 's-occasion';
-let selectedOccasion = ''; // birthday | mothersday
-let selectedStyle = '';    // intimate | retro | blossom
-let photos = [];
-let currentSlotIdx = 0;
-let spotifySrc = '';
-let shareLink = '';
-let expandIdx = 0;
-
-// Style config — defines everything per style
-const STYLES = {
-  'birthday-intimate': {
-    label:'Intimate', occasion:'Birthday',
-    cardType:'birthday-intimate',
-    theme:'theme-intimate', progressClass:'intimate-progress',
-    btnClass:'btn-intimate', aiClass:'soft', useClass:'soft-use',
-    resultClass:'soft-result', selectedClass:'soft-selected',
-    saveClass:'soft-save', saveBarClass:'soft-bar', saveWrapClass:'soft-bar-wrap',
-    shareClass:'soft-share', linkRowClass:'soft-link-row', copyClass:'soft-copy',
-    closeClass:'soft-close',
-    emoji:'💝', stepEmoji:'💝',
-    photosTitle:'Your memories together',
-    songTitle:'A song that reminds you of them',
-    letterTitle:'Write from the heart',
-    defaultMsg:"Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.",
-    defaultSign:'Forever yours 💕',
-    shareMsg:(name,sender,link)=>`💝 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a special card 💌\n\n':'Someone made you a special card 💌\n\n'}👆 Open here:\n${link}`,
-    shareUrl:(id)=>`https://wishyou.ai/birthday/intimate.html?card=${id}`,
-    inputType:'soft'
-  },
-  'birthday-retro': {
-    label:'Retro Party', occasion:'Birthday',
-    cardType:'birthday-retro',
-    theme:'theme-retro', progressClass:'retro-progress',
-    btnClass:'btn-retro', aiClass:'retro-ai', useClass:'retro-use',
-    resultClass:'retro-result', selectedClass:'retro-selected',
-    saveClass:'retro-save', saveBarClass:'retro-bar', saveWrapClass:'retro-bar-wrap',
-    shareClass:'retro-share', linkRowClass:'retro-link-row', copyClass:'retro-copy',
-    closeClass:'retro-close',
-    emoji:'🎊', stepEmoji:'🎂',
-    photosTitle:'Your comic strip memories',
-    songTitle:'Your party anthem 🎵',
-    letterTitle:'Write the newspaper letter',
-    defaultMsg:"It's a BIG day and you deserve to feel like a superstar! Thank you for being exactly who you are — hilarious, brilliant and absolutely one of a kind.",
-    defaultSign:'Reported with love 💛',
-    shareMsg:(name,sender,link)=>`🎊 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a Retro Party card 🎉\n\n':'Someone made you a Retro Party card 🎉\n\n'}👆 Open here:\n${link}`,
-    shareUrl:(id)=>`https://wishyou.ai/birthday/retro.html?card=${id}`,
-    inputType:'retro'
-  },
-  'mothersday-blossom': {
-    label:'Blossom', occasion:"Mother's Day",
-    cardType:'mothersday-blossom',
-    theme:'theme-blossom', progressClass:'blossom-progress',
-    btnClass:'btn-blossom', aiClass:'soft', useClass:'soft-use',
-    resultClass:'soft-result', selectedClass:'soft-selected',
-    saveClass:'soft-save', saveBarClass:'soft-bar', saveWrapClass:'soft-bar-wrap',
-    shareClass:'soft-share', linkRowClass:'soft-link-row', copyClass:'soft-copy',
-    closeClass:'soft-close',
-    emoji:'🌸', stepEmoji:'🌸',
-    photosTitle:'Your memories with her',
-    songTitle:'A song that reminds you of her',
-    letterTitle:'Write her something from the heart',
-    defaultMsg:"There are no words that can fully express what you mean to me. But I want you to know — every good thing in me came from watching you. Thank you for being my everything.",
-    defaultSign:'With all my love 💛',
-    shareMsg:(name,sender,link)=>`🌸 *Happy Mother's Day${name?', '+name:''}!*\n\n${sender?sender+' made you a special card 💛\n\n':'Someone who loves you made you a special card 💛\n\n'}👆 Open here:\n${link}`,
-    shareUrl:(id)=>`https://wishyou.ai/mothers-day/blossom.html?card=${id}`,
-    inputType:'soft'
-  }
-};
-
-let currentStyleConfig = null;
-
-// ════════════════════════════════════════════════
-// FLOATING PARTICLES
-// ════════════════════════════════════════════════
+// Particles
 (function(){
   const bg = document.getElementById('particlesBg');
   const colors = ['rgba(232,56,120,0.4)','rgba(240,160,60,0.3)','rgba(255,255,255,0.15)'];
   for(let i=0;i<20;i++){
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = 3+Math.random()*5;
-    p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${10+Math.random()*15}s;animation-delay:${Math.random()*12}s;`;
+    const p=document.createElement('div'); p.className='particle';
+    const size=3+Math.random()*5;
+    p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${10+Math.random()*15}s;animation-delay:${Math.random()*12}s;`;
     bg.appendChild(p);
   }
 })();
 
-// ════════════════════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════════════════════
-function goTo(id){
-  const prev = document.getElementById(curScreen);
-  const next = document.getElementById(id);
-  if(!next||curScreen===id) return;
-  if(prev){ prev.classList.remove('active'); prev.classList.add('slide-out'); setTimeout(()=>prev.classList.remove('slide-out'),500); }
-  next.classList.add('active');
-  curScreen = id;
-  if(id==='s-preview') buildPreview();
-  setTimeout(()=>{ const el=document.getElementById(id); if(el) el.scrollTo(0,0); },50);
-}
+function showStyles(occasion){
+  const label = document.getElementById('styleLabel');
+  const cards = document.getElementById('styleCards');
 
-function goBackCreator(){
-  const order = ['s-occasion','s-style','s-name','s-photos','s-song','s-letter','s-preview'];
-  const idx = order.indexOf(curScreen);
-  if(idx>0) goTo(order[idx-1]);
-}
-
-
-// ════════════════════════════════════════════════
-// SLIDESHOW TIMERS
-// ════════════════════════════════════════════════
-const slideshowTimers = {};
-
-function startSlideshow(cardId, totalSlides){
-  if(slideshowTimers[cardId]) clearInterval(slideshowTimers[cardId]);
-  let idx = 0;
-  function next(){
-    const slides = document.querySelectorAll('#'+cardId+' .preview-slide');
-    const dots = document.querySelectorAll('#'+cardId+' .slide-dot');
-    slides.forEach(s=>s.classList.remove('active-slide'));
-    dots.forEach(d=>d.classList.remove('active'));
-    idx = (idx+1) % totalSlides;
-    if(slides[idx]) slides[idx].classList.add('active-slide');
-    if(dots[idx]) dots[idx].classList.add('active');
-  }
-  slideshowTimers[cardId] = setInterval(next, 2200);
-}
-function stopAllSlideshows(){
-  Object.values(slideshowTimers).forEach(t=>clearInterval(t));
-}
-
-// ════════════════════════════════════════════════
-// OCCASION SELECTION
-// ════════════════════════════════════════════════
-function selectOccasion(occ){
-  selectedOccasion = occ;
-  stopAllSlideshows();
-  const wrap = document.getElementById('styleCardsWrap');
-  const label = document.getElementById('styleOccasionLabel');
-  wrap.innerHTML = '';
-
-  if(occ === 'birthday'){
+  if(occasion === 'birthday'){
     label.textContent = 'Birthday';
-    wrap.innerHTML = `
-      <div class="style-preview-card preview-intimate" id="prev-intimate" onclick="selectStyle('birthday-intimate')">
-        <div class="slide-viewport">
-          <div class="preview-slide active-slide">
-            <div class="slide-screen-label">Welcome Screen</div>
-            <div style="font-size:2rem;margin-bottom:6px;">💝</div>
-            <div class="slide-title">Happy Birthday!</div>
-            <div style="font-size:0.65rem;color:#8d3a5a;opacity:0.7;">Someone special made this just for you 🌸</div>
+    cards.innerHTML = `
+      <div class="style-card card-intimate" onclick="window.location.href='/birthday/intimate.html'">
+        <div class="card-preview-inner">
+          <div style="font-size:2.5rem;margin-bottom:10px;">💝</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;margin-bottom:4px;">Happy Birthday!</div>
+          <div style="font-size:0.7rem;color:#8d3a5a;opacity:0.6;margin-bottom:10px;">Someone special made this just for you 🌸</div>
+          <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
+            <div style="width:36px;height:48px;background:white;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.12);padding:3px 3px 10px;transform:rotate(-2deg);display:flex;align-items:center;justify-content:center;font-size:1rem;">📸</div>
+            <div style="width:36px;height:48px;background:white;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.12);padding:3px 3px 10px;transform:rotate(2deg);display:flex;align-items:center;justify-content:center;font-size:1rem;">🌸</div>
+            <div style="width:36px;height:48px;background:white;border-radius:3px;box-shadow:0 2px 8px rgba(0,0,0,0.12);padding:3px 3px 10px;transform:rotate(-1deg);display:flex;align-items:center;justify-content:center;font-size:1rem;">💕</div>
           </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Your Memories</div>
-            <div class="slide-photos">
-              <div class="slide-pol">📸</div><div class="slide-pol">🌸</div><div class="slide-pol">💕</div>
-            </div>
-            <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Your photos as beautiful polaroids</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Song Screen</div>
-            <div style="position:relative;display:flex;align-items:center;justify-content:center;margin:4px 0;">
-              <div class="slide-vinyl"><div class="slide-vinyl-center"></div></div>
-            </div>
-            <div style="font-size:0.65rem;color:#4a0e2a;font-weight:600;margin-top:6px;">Your Special Song 🎵</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Envelope Reveal</div>
-            <div class="slide-env">💌</div>
-            <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Tap to open the letter...</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Heartfelt Letter</div>
-            <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:10px;width:100%;border-top:3px solid #e91e63;">
-              <div style="font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:#4a0e2a;font-weight:600;margin-bottom:4px;">Dear Priya,</div>
-              <div class="slide-letter-lines">
-                <div class="slide-line" style="width:100%"></div>
-                <div class="slide-line" style="width:90%"></div>
-                <div class="slide-line" style="width:95%"></div>
-              </div>
-              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.68rem;color:#e91e63;margin-top:6px;">Forever yours 💕</div>
-            </div>
-          </div>
+          <div style="font-size:0.65rem;color:#8d3a5a;opacity:0.5;">Polaroid photos • Envelope reveal • Heartfelt letter</div>
         </div>
-        <div class="slide-dots">
-          <div class="slide-dot active"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div>
+        <div style="margin-bottom:10px;">
+          <div class="card-name">💌 Intimate</div>
+          <div class="card-desc">Soft & emotional • Envelope reveal</div>
         </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name">💌 Intimate</div>
-            <div class="preview-style-desc">Soft & emotional • Envelope reveal • 5 themes</div>
-          </div>
-        </div>
-        <button class="preview-btn intimate-btn" onclick="event.stopPropagation();selectStyle('birthday-intimate')">✨ Create this card in 30 sec</button>
+        <button class="card-btn btn-intimate" onclick="event.stopPropagation();window.location.href='/birthday/intimate.html'">✨ Create this card</button>
       </div>
 
-      <div class="style-preview-card preview-retro" id="prev-retro" onclick="selectStyle('birthday-retro')">
-        <div class="slide-viewport">
-          <div class="preview-slide active-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Welcome Screen</div>
-            <div style="font-size:2rem;margin-bottom:4px;">🎂</div>
-            <div class="slide-title retro-slide-title">Happy Birthday!</div>
-            <div style="font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#555;">Someone special made this 🎊</div>
+      <div class="style-card card-retro" onclick="window.location.href='/birthday/retro.html'">
+        <div class="card-preview-inner">
+          <div style="font-size:2.5rem;margin-bottom:10px;">🎂</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:#d90429;margin-bottom:4px;">Happy Birthday!</div>
+          <div style="font-family:'Patrick Hand',cursive;font-size:0.7rem;color:#555;margin-bottom:10px;">Someone special made this 🎊</div>
+          <div style="display:flex;gap:4px;justify-content:center;margin-bottom:8px;">
+            <div style="width:40px;height:54px;border:2px solid #111;border-radius:3px;background:#fff9c4;display:flex;align-items:center;justify-content:center;font-size:1rem;">🎂</div>
+            <div style="width:40px;height:54px;border:2px solid #111;border-radius:3px;background:#ffe0b2;display:flex;align-items:center;justify-content:center;font-size:1rem;">🎉</div>
+            <div style="width:40px;height:54px;border:2px solid #111;border-radius:3px;background:#fce4ec;display:flex;align-items:center;justify-content:center;font-size:1rem;">🎈</div>
           </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Comic Strip Photos</div>
-            <div class="slide-comic">
-              <div class="slide-panel">🎂</div><div class="slide-panel">🎉</div><div class="slide-panel">🎈</div>
-            </div>
-            <div style="font-family:'Patrick Hand',cursive;font-size:0.6rem;color:#555;margin-top:4px;">Your photos as a comic strip!</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Party Anthem</div>
-            <div style="background:linear-gradient(135deg,#1a0a00,#2d1500);border-radius:8px;padding:10px;margin:4px 0;width:90%;">
-              <div style="display:flex;justify-content:center;"><div class="slide-vinyl" style="width:36px;height:36px;"><div class="slide-vinyl-center" style="background:#FFE135;"></div></div></div>
-              <div style="font-family:'Fredoka One',cursive;font-size:0.65rem;color:#FFE135;text-align:center;margin-top:5px;">Your Party Anthem 🎵</div>
-            </div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Balloon Pop!</div>
-            <div class="slide-balloon">🎈</div>
-            <div style="font-family:'Fredoka One',cursive;font-size:0.65rem;color:#d90429;margin-top:4px;">Pop it to reveal the letter!</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Newspaper Letter</div>
-            <div class="slide-newspaper">
-              <div class="slide-news-head">🗞️ THE BIRTHDAY GAZETTE</div>
-              <div class="slide-headline">BREAKING: IT'S YOUR BIRTHDAY!</div>
-              <div class="slide-news-lines">
-                <div class="slide-news-line"></div><div class="slide-news-line" style="width:90%"></div><div class="slide-news-line" style="width:85%"></div>
-              </div>
-            </div>
-          </div>
+          <div style="font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#555;opacity:0.7;">Comic strip photos • Balloon pop • Newspaper letter</div>
         </div>
-        <div class="slide-dots">
-          <div class="slide-dot retro-dot active"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div>
+        <div style="margin-bottom:10px;">
+          <div class="card-name retro-name">🎊 Retro Party</div>
+          <div class="card-desc retro-desc">Fun & loud • Balloon pop</div>
         </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name retro-name">🎊 Retro Party</div>
-            <div class="preview-style-desc retro-desc">Fun & loud • Balloon pop • Newspaper letter</div>
-          </div>
-        </div>
-        <button class="preview-btn retro-btn" onclick="event.stopPropagation();selectStyle('birthday-retro')">🎊 Create this card in 30 sec</button>
-      </div>`;
-    setTimeout(function(){ startSlideshow('prev-intimate',5); setTimeout(function(){ startSlideshow('prev-retro',5); },1100); },100);
-
-  } else if(occ === 'mothersday'){
+        <button class="card-btn btn-retro" onclick="event.stopPropagation();window.location.href='/birthday/retro.html'">🎊 Create this card</button>
+      </div>
+    `;
+  } else if(occasion === 'mothersday'){
     label.textContent = "Mother's Day";
-    wrap.innerHTML = `
-      <div class="style-preview-card preview-blossom" id="prev-blossom" onclick="selectStyle('mothersday-blossom')">
-        <div class="slide-viewport" style="background:rgba(253,246,240,0.8);">
-          <div class="preview-slide active-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Opening Scene</div>
-            <div style="font-size:1.8rem;margin-bottom:4px;">🕯️</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:0.75rem;color:#3D1C1C;font-style:italic;line-height:1.5;">Someone who loves you<br>made something special...</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:600;color:#C9973A;margin-top:4px;">Happy Mother's Day 🌸</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Film Strip Photos</div>
-            <div style="display:flex;gap:5px;justify-content:center;">
-              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">📸</div>
-              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">🌸</div>
-              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">💐</div>
-            </div>
-            <div style="font-size:0.62rem;color:#8B5A5A;margin-top:6px;opacity:0.7;">Beautiful film strip slideshow</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Song Screen</div>
-            <div style="background:linear-gradient(135deg,#2d1048,#1a0a2e);border-radius:8px;padding:10px;width:90%;">
-              <div style="display:flex;justify-content:center;"><div class="slide-vinyl" style="width:36px;height:36px;"><div class="slide-vinyl-center" style="background:#E8B86D;"></div></div></div>
-              <div style="font-family:'Cormorant Garamond',serif;font-size:0.68rem;color:#E8B86D;text-align:center;margin-top:5px;">A Song for You 🎵</div>
-            </div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Heartfelt Letter</div>
-            <div style="background:white;border-radius:8px;padding:10px;width:100%;border-top:3px solid #C9727A;">
-              <div style="font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:#3D1C1C;font-weight:600;margin-bottom:4px;">Dear Maa,</div>
-              <div class="slide-letter-lines">
-                <div class="slide-line" style="background:rgba(201,114,122,0.15);"></div>
-                <div class="slide-line" style="width:90%;background:rgba(201,114,122,0.15);"></div>
-                <div class="slide-line" style="width:95%;background:rgba(201,114,122,0.15);"></div>
-              </div>
-              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.68rem;color:#C9727A;margin-top:6px;">With all my love 💛</div>
-            </div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Beautiful Ending</div>
-            <div style="font-size:1.5rem;margin-bottom:6px;">🌸🌷🌸</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:600;color:#3D1C1C;">Happy Mother's Day!</div>
-            <div style="font-size:0.65rem;color:#8B5A5A;margin-top:4px;opacity:0.7;">You are so loved 💛</div>
-          </div>
+    cards.innerHTML = `
+      <div class="style-card" style="background:linear-gradient(160deg,#FDF0F3,#F7E0E5);border:1.5px solid rgba(201,114,122,0.2);padding:20px;border-radius:20px;cursor:pointer;" onclick="window.location.href='/mothers-day/blossom.html'">
+        <div class="card-preview-inner" style="background:rgba(253,246,240,0.8);">
+          <div style="font-size:2.5rem;margin-bottom:10px;">🌸</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#3D1C1C;margin-bottom:4px;">Happy Mother's Day!</div>
+          <div style="font-size:0.7rem;color:#C9727A;opacity:0.7;margin-bottom:10px;">Someone who loves you made this 💛</div>
         </div>
-        <div class="slide-dots">
-          <div class="slide-dot active" style="background:rgba(201,114,122,0.25);"></div>
-          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
-          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
-          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
-          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
+        <div style="margin-bottom:10px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#3D1C1C;">🌸 Blossom</div>
+          <div style="font-size:0.62rem;color:#C9727A;opacity:0.7;">Warm & tender • Film strip photos</div>
         </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name blossom-name">🌸 Blossom</div>
-            <div class="preview-style-desc" style="color:#8B5A5A;">Soft & cinematic • Film strip photos</div>
-          </div>
-        </div>
-        <button class="preview-btn blossom-btn" onclick="event.stopPropagation();selectStyle('mothersday-blossom')">🌸 Create this card in 30 sec</button>
+        <button style="width:100%;padding:13px;border:none;border-radius:50px;background:linear-gradient(135deg,#C9727A,#C9973A);color:white;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(201,114,122,0.35);" onclick="event.stopPropagation();window.location.href='/mothers-day/blossom.html'">✨ Create this card</button>
       </div>
-      <div style="border-radius:20px;background:#FFF8E1;border:1.5px solid rgba(255,193,7,0.3);opacity:0.55;cursor:default;padding:20px;text-align:center;">
-        <div style="font-size:2rem;margin-bottom:6px;">☀️</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#7B5800;margin-bottom:4px;">Sunshine</div>
-        <div style="font-size:0.65rem;color:#8B6914;margin-bottom:10px;">Fun & colourful • Coming Soon</div>
-        <div style="background:rgba(255,193,7,0.2);color:#7B5800;border-radius:20px;padding:5px 14px;font-size:0.65rem;font-weight:600;display:inline-block;">Coming Soon</div>
-      </div>`;
-    setTimeout(function(){ startSlideshow('prev-blossom',5); },100);
-  }
-  goTo('s-style');
-}
-
-
-// ════════════════════════════════════════════════
-// STYLE SELECTION — apply theme
-// ════════════════════════════════════════════════
-function selectStyle(styleKey){
-  selectedStyle = styleKey;
-  currentStyleConfig = STYLES[styleKey];
-  const cfg = currentStyleConfig;
-
-  // Apply theme to creator screens
-  ['s-name','s-photos','s-song','s-letter','s-preview'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.className = el.className.replace(/theme-\S+/g,'').trim();
-    el.classList.add('screen','creator-screen',cfg.theme);
-  });
-
-  // Apply progress bar class
-  ['prog-name','prog-photos','prog-song','prog-letter','prog-preview'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el){ el.className = 'step-progress-fill '+cfg.progressClass; }
-  });
-
-  // Apply button classes
-  ['btn-name','btn-photos','btn-song','btn-letter','btn-share'].forEach(id=>{
-    const el = document.getElementById(id); if(el){ el.className='btn-next '+cfg.btnClass; }
-  });
-
-  // Apply AI button classes
-  ['aiSongBtn','aiLetterBtn'].forEach(id=>{
-    const el = document.getElementById(id); if(el) el.className='btn-ai '+cfg.aiClass;
-  });
-
-  // Apply search btn style
-  const sb = document.getElementById('searchBtn');
-  if(sb) sb.style.background = cfg.theme==='theme-retro'?'#d90429':'linear-gradient(135deg,#e91e63,#f06292)';
-
-  // Update step emojis and titles
-  document.getElementById('emoji-name').textContent = cfg.stepEmoji;
-  document.getElementById('title-name').textContent = cfg.occasion==="Mother's Day"?"Who is she?":"Who is this card for?";
-  document.getElementById('title-photos').textContent = cfg.photosTitle;
-  document.getElementById('title-song').textContent = cfg.songTitle;
-  document.getElementById('title-letter').textContent = cfg.letterTitle;
-
-  // Build name inputs
-  buildNameInputs(cfg);
-
-  // Build letter inputs
-  buildLetterInputs(cfg);
-
-  // Build photo slots
-  buildPhotoSlots(cfg);
-
-  // Style song search input
-  const yi = document.getElementById('ytSearchInput');
-  if(yi) yi.className = cfg.inputType==='retro'?'retro-input':'regular-input';
-
-  // Style song selected box
-  const ssb = document.getElementById('songSelectedBox');
-  if(ssb) ssb.className = 'song-selected-box '+cfg.selectedClass;
-
-  // Style save/share
-  applyModalStyles(cfg);
-
-  goTo('s-name');
-}
-
-function buildNameInputs(cfg){
-  const wrap = document.getElementById('nameInputWrap');
-  if(cfg.inputType==='retro'){
-    wrap.innerHTML = `
-      <label class="retro-label">Their Name</label>
-      <input class="retro-input" id="cName" placeholder="e.g. Rahul" maxlength="30">
-      <label class="retro-label" style="margin-top:8px;">Their Age (for headline)</label>
-      <input class="retro-input" id="cAge" type="number" placeholder="e.g. 25" min="1" max="120">
-      <label class="retro-label" style="margin-top:8px;">Your Name (From)</label>
-      <input class="retro-input" id="cSender" placeholder="e.g. Nilesh" maxlength="30">`;
-  } else if(cfg.occasion==="Mother's Day"){
-    wrap.innerHTML = `
-      <label class="field-label">Her Name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Maa, Mom, Aai..." maxlength="30" style="color:#3D1C1C;border-color:rgba(201,114,122,0.3);">
-      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Your name" maxlength="30">`;
-  } else {
-    wrap.innerHTML = `
-      <label class="field-label">Their Name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
-      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">`;
-  }
-}
-
-function buildLetterInputs(cfg){
-  const wrap = document.getElementById('letterInputWrap');
-  if(cfg.inputType==='retro'){
-    wrap.innerHTML = `
-      <textarea class="retro-area" id="cMsg" placeholder="Write something fun and heartfelt...">${cfg.defaultMsg}</textarea>
-      <label class="retro-label" style="margin-top:10px;">Sign Off</label>
-      <input class="retro-input" id="cSign" value="${cfg.defaultSign}" maxlength="60">`;
-  } else {
-    wrap.innerHTML = `
-      <textarea class="letter-area" id="cMsg" placeholder="Dear Maa,&#10;&#10;There are no words...">${cfg.defaultMsg}</textarea>
-      <label class="field-label" style="margin-top:12px;">Sign Off</label>
-      <input class="regular-input" id="cSign" value="${cfg.defaultSign}" maxlength="60">`;
-  }
-}
-
-function buildPhotoSlots(cfg){
-  const grid = document.getElementById('photosGrid');
-  grid.innerHTML='';
-  photos = [];
-  for(let i=0;i<5;i++){
-    const slot = document.createElement('div');
-    slot.className = 'photo-slot '+(cfg.inputType==='retro'?'retro-slot':'soft-slot');
-    slot.id = 'slot'+i;
-    slot.innerHTML = '<span style="opacity:0.4;">+</span>';
-    slot.onclick = ()=>triggerUpload(i);
-    grid.appendChild(slot);
-  }
-}
-
-function applyModalStyles(cfg){
-  const sb = document.getElementById('saveBox'); if(sb) sb.className='save-box '+cfg.saveClass;
-  const sw = document.getElementById('saveBarWrap'); if(sw) sw.className='save-bar-wrap '+cfg.saveWrapClass;
-  const sbar = document.getElementById('saveBar'); if(sbar) sbar.className='save-bar '+cfg.saveBarClass;
-  const shb = document.getElementById('shareBox'); if(shb) shb.className='share-box '+cfg.shareClass;
-  const slr = document.getElementById('shareLinkRow'); if(slr) slr.className='share-link-row '+cfg.linkRowClass;
-  const cb = document.getElementById('copyBtn'); if(cb) cb.className='copy-btn '+cfg.copyClass;
-  const mc = document.getElementById('modalClose'); if(mc) mc.className='modal-close '+cfg.closeClass;
-  const en = document.getElementById('expiryNote');
-  if(en){ en.style.background=cfg.theme==='theme-retro'?'rgba(0,0,0,0.1)':'rgba(233,30,99,0.05)'; }
-  const se = document.getElementById('shareEmoji');
-  if(se) se.textContent = cfg.emoji;
-}
-
-// ════════════════════════════════════════════════
-// PHOTOS
-// ════════════════════════════════════════════════
-function triggerUpload(idx){
-  currentSlotIdx=idx;
-  document.getElementById('photoFileInput').click();
-}
-function handlePhotoUpload(inp){
-  const file=inp.files[0]; if(!file) return;
-  const url=URL.createObjectURL(file);
-  photos[currentSlotIdx]=url;
-  const slot=document.getElementById('slot'+currentSlotIdx);
-  slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${currentSlotIdx})">✕</button>`;
-  inp.value='';
-}
-function removePhoto(e,idx){
-  e.stopPropagation(); photos[idx]=null;
-  const slot=document.getElementById('slot'+idx);
-  slot.innerHTML='<span style="opacity:0.4;">+</span>';
-  slot.onclick=()=>triggerUpload(idx);
-}
-
-// ════════════════════════════════════════════════
-// SONG SEARCH
-// ════════════════════════════════════════════════
-async function searchSong(){
-  const q=document.getElementById('ytSearchInput').value.trim();
-  if(!q){alert('Please type a song name.');return;}
-  const rd=document.getElementById('songResults');
-  const cfg=currentStyleConfig;
-  rd.innerHTML=`<div style="text-align:center;padding:12px;font-size:0.85rem;color:${cfg.theme==='theme-retro'?'#d90429':'#e91e63'};">🔍 Searching...</div>`;
-  try{
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query:q})});
-    const data=await res.json();
-    if(!data.items||!data.items.length){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>';return;}
-    rd.innerHTML='';
-    data.items.slice(0,4).forEach(item=>{
-      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
-      const card=document.createElement('div');
-      card.className='song-result '+cfg.resultClass;
-      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;">${channelTitle}</div></div><button class="song-use-btn ${cfg.useClass}">✓ Use</button>`;
-      card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
-      rd.appendChild(card);
-    });
-  }catch(e){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>';}
-}
-
-function selectSong(videoId,title,artist){
-  const ytUrl='https://www.youtube.com/watch?v='+videoId;
-  document.getElementById('cSpotify').value=ytUrl;
-  spotifySrc='https://www.youtube.com/embed/'+videoId+'?autoplay=0&rel=0';
-  document.getElementById('songSelectedName').textContent=title+' — '+artist;
-  document.getElementById('songSelectedBox').style.display='block';
-  document.getElementById('songResults').innerHTML=`<div style="font-size:0.8rem;font-weight:600;padding:6px 0;color:${currentStyleConfig.theme==='theme-retro'?'#d90429':'#e91e63'};">✅ ${title} added!</div>`;
-}
-
-async function suggestSongs(){
-  const cfg=currentStyleConfig;
-  const loading=document.getElementById('songAiLoading');
-  const results=document.getElementById('songAiResults');
-  loading.classList.add('show'); results.innerHTML='';
-  const prompt = cfg.cardType.includes('mothersday')
-    ? `Suggest 4 real popular emotional songs perfect for a Mother's Day card. Mix Hindi and English. Return ONLY JSON array: [{"name":"Song","artist":"Artist"}]`
-    : `Suggest 4 real popular songs for a ${cfg.occasion} card. Mix Hindi and English. Return ONLY JSON array: [{"name":"Song","artist":"Artist"}]`;
-  const text=await callClaude(prompt);
-  try{
-    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
-    songs.forEach(s=>{
-      const el=document.createElement('div');
-      el.style.cssText=`display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.5);border:1px solid rgba(0,0,0,0.08);`;
-      el.innerHTML=`<span>🎵</span><div style="flex:1;"><div style="font-size:0.85rem;font-weight:600;">${s.name}</div><div style="font-size:0.72rem;opacity:0.5;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;opacity:0.6;">Search ›</span>`;
-      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
-      results.appendChild(el);
-    });
-  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;">Could not fetch. Try again.</div>';}
-  loading.classList.remove('show');
-}
-
-// ════════════════════════════════════════════════
-// AI LETTER
-// ════════════════════════════════════════════════
-async function runAILetter(){
-  const cfg=currentStyleConfig;
-  const name=document.getElementById('cName')?.value.trim()||'them';
-  const sender=document.getElementById('cSender')?.value.trim()||'someone';
-  const btn=document.getElementById('aiLetterBtn');
-  const loading=document.getElementById('letterAiLoading');
-  btn.disabled=true; loading.classList.add('show');
-  const occ = cfg.cardType.includes('mothersday')?'Mother\'s Day':cfg.occasion;
-  const text=await callClaude(`Write a short heartfelt ${occ} letter from ${sender} to ${name} (3-4 sentences). Make it warm and genuine. Return ONLY the letter body — no greeting, no sign off.`);
-  if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
-  btn.disabled=false; loading.classList.remove('show');
-}
-
-async function callClaude(prompt){
-  try{
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
-    const data=await res.json(); if(data.error)return'';
-    return data.content&&data.content[0]?data.content[0].text:'';
-  }catch(e){return'';}
-}
-function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
-
-// ════════════════════════════════════════════════
-// PREVIEW
-// ════════════════════════════════════════════════
-function buildPreview(){
-  const cfg=currentStyleConfig; if(!cfg) return;
-  const name=document.getElementById('cName')?.value.trim()||'';
-  const msg=document.getElementById('cMsg')?.value.trim()||'';
-  const songName=document.getElementById('songSelectedName')?.textContent||'';
-  const box=document.getElementById('previewMiniCard');
-  const isRetro=cfg.inputType==='retro';
-  const isBlossom=cfg.cardType.includes('mothersday');
-  box.style.background=isRetro?'#FFE135':isBlossom?'linear-gradient(135deg,#FDF0F3,#F7E0E5)':'linear-gradient(135deg,#fde8f0,#fce4ec)';
-  box.style.border=isRetro?'3px solid #111':'1.5px solid rgba(233,30,99,0.15)';
-  box.style.boxShadow=isRetro?'4px 4px 0 #111':'0 8px 24px rgba(233,30,99,0.12)';
-  box.innerHTML=`
-    <div style="text-align:center;font-size:1.4rem;margin-bottom:6px;">${cfg.emoji}</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:${isRetro?'#d90429':'#4a0e2a'};text-align:center;margin-bottom:8px;">${cfg.occasion==="Mother's Day"?`Happy Mother's Day${name?', '+name:''}! 🌸`:`Happy ${cfg.occasion}${name?', '+name:''}!`}</div>
-    <div style="display:flex;gap:5px;justify-content:center;margin-bottom:8px;">${photos.filter(Boolean).slice(0,3).map(u=>`<img src="${u}" style="width:44px;height:44px;border-radius:${isRetro?'4px':'8px'};object-fit:cover;border:${isRetro?'2px solid #111':'2px solid rgba(233,30,99,0.2)'};">`).join('')}</div>
-    ${songName&&songName!=='—'?`<div style="font-size:0.75rem;text-align:center;margin-bottom:6px;opacity:0.6;">🎵 ${songName}</div>`:''}
-    ${msg?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.88rem;line-height:1.6;opacity:0.8;">${msg.length>120?msg.slice(0,120)+'...':msg}</div>`:'<div style="font-size:0.82rem;opacity:0.4;font-style:italic;">No letter yet</div>'}
-  `;
-}
-
-// ════════════════════════════════════════════════
-// SAVE & SHARE
-// ════════════════════════════════════════════════
-async function saveAndShare(){
-  const cfg=currentStyleConfig; if(!cfg) return;
-  const overlay=document.getElementById('saveOverlay');
-  const bar=document.getElementById('saveBar');
-  const label=document.getElementById('saveLabel');
-  const step=document.getElementById('saveStep');
-  const saveEmoji=document.getElementById('saveEmoji');
-  saveEmoji.textContent=cfg.emoji;
-
-  function setProgress(pct,lbl,stp){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;if(stp)step.textContent=stp;}
-  overlay.classList.add('show');
-  setProgress(10,'Preparing your card... '+cfg.emoji,'Getting everything ready');
-
-  let photoUrls=[];
-  const realPhotos=photos.filter(Boolean);
-  for(let i=0;i<realPhotos.length;i++){
-    setProgress(10+((i/Math.max(realPhotos.length,1))*50),'Uploading photos... 📸',`Photo ${i+1} of ${realPhotos.length}`);
-    try{
-      const blob=await fetch(realPhotos[i]).then(r=>r.blob());
-      const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
-      const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-      const d=await res.json();if(d.secure_url)photoUrls.push(d.secure_url);
-    }catch(e){console.error(e);}
+    `;
   }
 
-  setProgress(70,'Saving your card... 💾','Almost there!');
-  const now=Date.now();
-  const cardData={
-    type:cfg.cardType,
-    name:document.getElementById('cName')?.value.trim()||'',
-    age:document.getElementById('cAge')?.value.trim()||'',
-    sender:document.getElementById('cSender')?.value.trim()||'',
-    msg:document.getElementById('cMsg')?.value.trim()||'',
-    sign:document.getElementById('cSign')?.value.trim()||'',
-    spotify:document.getElementById('cSpotify')?.value.trim()||'',
-    songName:document.getElementById('songSelectedName')?.textContent||'',
-    photos:photoUrls,
-    created:now,createdAt:now,
-    expiresAt:now+3*24*60*60*1000
-  };
-
-  try{
-    setProgress(85,'Saving...','Storing in the cloud');
-    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
-    const data=await res.json();
-    const cardId=data.name;
-    shareLink=cfg.shareUrl(cardId);
-    setProgress(100,'Card saved! 🎉','Ready to share!');
-    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
-    setTimeout(()=>{
-      overlay.classList.remove('show');
-      document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');
-      document.getElementById('shareModal').classList.add('show');
-    },600);
-  }catch(e){
-    overlay.classList.remove('show');
-    alert('Could not save card. Please try again.');
-  }
+  document.getElementById('s-style').classList.add('active');
 }
 
-function copyLink(){
-  navigator.clipboard.writeText(shareLink).then(()=>{
-    const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';
-    setTimeout(()=>btn.textContent='Copy',2000);
-  });
+function goBack(){
+  document.getElementById('s-style').classList.remove('active');
 }
-function openWhatsApp(){
-  const cfg=currentStyleConfig; if(!cfg) return;
-  const name=document.getElementById('cName')?.value.trim()||'';
-  const sender=document.getElementById('cSender')?.value.trim()||'';
-  const msg=cfg.shareMsg(name,sender,shareLink);
-  window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
-}
-function closeShare(){document.getElementById('shareModal').classList.remove('show');}
-
-// ════════════════════════════════════════════════
-// INIT
-// ════════════════════════════════════════════════
-window.addEventListener('DOMContentLoaded',function(){
-  // Swipe navigation
-  let _tx=0,_ty=0,_tt=0;
-  const SWIPE_ORDER=['s-occasion','s-style','s-name','s-photos','s-song','s-letter','s-preview'];
-  document.getElementById('mainApp').addEventListener('touchstart',function(e){
-    if(curScreen==='s-occasion'||curScreen==='s-style') return;
-    _tx=e.changedTouches[0].clientX;_ty=e.changedTouches[0].clientY;_tt=Date.now();
-  },{passive:true});
-  document.getElementById('mainApp').addEventListener('touchend',function(e){
-    if(curScreen==='s-occasion'||curScreen==='s-style') return;
-    const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty,dt=Date.now()-_tt;
-    if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
-    const idx=SWIPE_ORDER.indexOf(curScreen);if(idx===-1) return;
-    if(dx<0&&idx<SWIPE_ORDER.length-1) goTo(SWIPE_ORDER[idx+1]);
-    else if(dx>0&&idx>0) goTo(SWIPE_ORDER[idx-1]);
-  },{passive:true});
-});
 </script>
-
-
-</body></html>
+</body>
+</html>
