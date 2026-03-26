@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LightMood — Please Forgive Me? 🐱</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:'Nunito',sans-serif;}
+
+/* ── PINK CAT BACKGROUND ── */
+body{
+  background-color:#f0a8c0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='none' stroke='%23fff' stroke-width='2.5' opacity='0.45'%3E%3C!-- cat face --%3E%3Ccircle cx='40' cy='55' r='22'/%3E%3C!-- ears --%3E%3Cpolygon points='22,36 28,22 38,36'/%3E%3Cpolygon points='42,36 52,22 58,36'/%3E%3C!-- eyes --%3E%3Ccircle cx='33' cy='50' r='4'/%3E%3Ccircle cx='47' cy='50' r='4'/%3E%3C!-- nose --%3E%3Cellipse cx='40' cy='59' rx='3' ry='2'/%3E%3C!-- whiskers --%3E%3Cline x1='15' y1='57' x2='32' y2='59'/%3E%3Cline x1='15' y1='62' x2='32' y2='61'/%3E%3Cline x1='48' y1='59' x2='65' y2='57'/%3E%3Cline x1='48' y1='61' x2='65' y2='62'/%3E%3C!-- paw --%3E%3Ccircle cx='90' cy='30' r='12'/%3E%3Ccircle cx='82' cy='20' r='6'/%3E%3Ccircle cx='90' cy='17' r='6'/%3E%3Ccircle cx='98' cy='20' r='6'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:120px 120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  overflow:hidden;
+  position:relative;
+}
+
+/* ── DECORATIVE CAT (left side) ── */
+.deco-cat{
+  position:fixed;
+  left:20px;
+  bottom:20px;
+  font-size:5rem;
+  animation:catBob 2s ease-in-out infinite;
+  pointer-events:none;
+  filter:drop-shadow(2px 4px 6px rgba(0,0,0,0.15));
+  z-index:0;
+}
+@keyframes catBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+
+/* ── CARD ── */
+.card{
+  background:rgba(255,240,245,0.92);
+  border-radius:24px;
+  padding:36px 40px 40px;
+  max-width:440px;
+  width:90%;
+  text-align:center;
+  box-shadow:0 8px 40px rgba(200,80,120,0.18);
+  position:relative;
+  z-index:1;
+  transition:all 0.3s ease;
+}
+
+/* ── SCREENS ── */
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ── GREETING ── */
+.greeting{
+  font-size:clamp(1.8rem,5vw,2.4rem);
+  font-weight:800;
+  color:#e05585;
+  margin-bottom:22px;
+  line-height:1.2;
+}
+
+/* ── PHOTO ── */
+.photo-wrap{
+  width:200px;height:200px;
+  border-radius:16px;
+  margin:0 auto 22px;
+  overflow:hidden;
+  border:3px solid rgba(224,85,133,0.25);
+  background:#f8d8e8;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  position:relative;
+  transition:transform 0.2s;
+}
+.photo-wrap:hover{transform:scale(1.02);}
+.photo-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-placeholder{font-size:3rem;color:rgba(224,85,133,0.4);}
+.photo-edit-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(224,85,133,0.75);color:white;font-size:0.65rem;font-weight:700;padding:5px;letter-spacing:0.05em;text-transform:uppercase;}
+#photoInput{display:none;}
+
+/* ── QUESTION ── */
+.question{
+  font-size:1.3rem;
+  color:#e05585;
+  font-weight:700;
+  margin-bottom:28px;
+  font-style:italic;
+}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
+.btn-yes{
+  background:#e91e78;
+  color:white;
+  border:none;
+  border-radius:50px;
+  padding:14px 40px;
+  font-family:'Nunito',sans-serif;
+  font-size:1.1rem;
+  font-weight:800;
+  cursor:pointer;
+  transition:transform 0.15s,box-shadow 0.15s;
+  box-shadow:0 6px 20px rgba(233,30,120,0.35);
+}
+.btn-yes:hover{transform:scale(1.05);box-shadow:0 8px 24px rgba(233,30,120,0.45);}
+.btn-yes:active{transform:scale(0.97);}
+
+.btn-no{
+  background:#b0a8b0;
+  color:white;
+  border:none;
+  border-radius:50px;
+  padding:14px 32px;
+  font-family:'Nunito',sans-serif;
+  font-size:1.1rem;
+  font-weight:800;
+  cursor:pointer;
+  transition:all 0.1s;
+  position:relative;
+}
+
+/* ── SCREEN 3 — REVEAL ── */
+.reveal-photo{
+  width:100%;
+  max-height:320px;
+  border-radius:16px;
+  object-fit:cover;
+  margin-bottom:20px;
+  border:3px solid rgba(224,85,133,0.2);
+}
+.reveal-msg{
+  font-size:1.15rem;
+  color:#e05585;
+  font-weight:700;
+  font-style:italic;
+  line-height:1.5;
+}
+
+/* ── WATERMARK ── */
+.wm{
+  position:fixed;bottom:10px;right:14px;
+  font-size:0.62rem;color:rgba(255,255,255,0.7);
+  letter-spacing:0.06em;font-weight:600;z-index:10;
+  background:rgba(200,80,120,0.25);border-radius:50px;padding:3px 10px;
+}
+
+/* ── NAME EDIT ── */
+.name-edit{
+  font-size:clamp(1.8rem,5vw,2.4rem);
+  font-weight:800;
+  color:#e05585;
+  background:none;
+  border:none;
+  border-bottom:2px dashed rgba(224,85,133,0.35);
+  outline:none;
+  text-align:center;
+  width:100%;
+  font-family:'Nunito',sans-serif;
+  padding:4px 8px;
+  margin-bottom:22px;
+}
+.name-edit::placeholder{color:rgba(224,85,133,0.4);}
+
+/* ── SETUP PANEL ── */
+.setup-hint{font-size:0.72rem;color:rgba(200,80,120,0.6);margin-top:-14px;margin-bottom:18px;}
+
+/* WIGGLE animation for No button when it runs */
+@keyframes wiggle{0%,100%{transform:rotate(0);}25%{transform:rotate(-4deg);}75%{transform:rotate(4deg);}}
+</style>
+</head>
+<body>
+
+<div class="deco-cat">🐱</div>
+
+<!-- ══ SCREEN 1 — SETUP (creator fills name + photo) ══ -->
+<div class="card" id="screen-setup">
+  <div class="screen active">
+    <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(224,85,133,0.5);margin-bottom:16px;">✨ LightMood Card Setup</div>
+
+    <div style="font-size:0.9rem;color:#e05585;font-weight:600;margin-bottom:8px;text-align:left;">Their Name</div>
+    <input type="text" id="nameInput" placeholder="e.g. Kateryna" maxlength="20"
+      style="width:100%;border:2.5px solid rgba(224,85,133,0.25);border-radius:14px;padding:12px 16px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:700;color:#e05585;background:rgba(255,255,255,0.7);outline:none;margin-bottom:20px;text-align:center;">
+
+    <div style="font-size:0.9rem;color:#e05585;font-weight:600;margin-bottom:8px;text-align:left;">Their Photo <span style="font-weight:400;opacity:0.6;">(tap to upload)</span></div>
+    <div class="photo-wrap" onclick="document.getElementById('photoInput').click()" style="margin-bottom:20px;">
+      <div class="photo-placeholder" id="photoPlaceholder">🐱</div>
+      <img id="photoPreview" style="display:none;width:100%;height:100%;object-fit:cover;">
+      <div class="photo-edit-hint">Tap to upload</div>
+    </div>
+    <input type="file" accept="image/*" id="photoInput" onchange="handlePhoto(this)">
+
+    <div style="font-size:0.9rem;color:#e05585;font-weight:600;margin-bottom:8px;text-align:left;">Your apology message</div>
+    <input type="text" id="msgInput" value="Please forgive me?" maxlength="40"
+      style="width:100%;border:2.5px solid rgba(224,85,133,0.25);border-radius:14px;padding:12px 16px;font-family:'Nunito',sans-serif;font-size:0.95rem;font-weight:700;color:#e05585;background:rgba(255,255,255,0.7);outline:none;margin-bottom:20px;text-align:center;font-style:italic;">
+
+    <div style="font-size:0.9rem;color:#e05585;font-weight:600;margin-bottom:8px;text-align:left;">After YES message 😈</div>
+    <input type="text" id="revealInput" value="I knew you'd say yes, now let's fight again è_é" maxlength="80"
+      style="width:100%;border:2.5px solid rgba(224,85,133,0.25);border-radius:14px;padding:12px 16px;font-family:'Nunito',sans-serif;font-size:0.9rem;font-weight:700;color:#e05585;background:rgba(255,255,255,0.7);outline:none;margin-bottom:28px;text-align:center;font-style:italic;">
+
+    <button onclick="launchCard()" style="width:100%;background:#e91e78;color:white;border:none;border-radius:50px;padding:15px;font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(233,30,120,0.35);transition:transform 0.15s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+      🐱 Preview Card →
+    </button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2 — CARD (receiver sees this) ══ -->
+<div class="card" id="screen-card" style="display:none;">
+  <div class="greeting" id="cardGreeting">Dearest Kateryna,</div>
+  <div class="photo-wrap" style="cursor:default;" id="cardPhotoWrap">
+    <img id="cardPhoto" src="" alt="photo" style="width:100%;height:100%;object-fit:cover;display:none;">
+    <div class="photo-placeholder" id="cardPhotoPlaceholder">🐱</div>
+  </div>
+  <div class="question" id="cardQuestion">Please forgive me?</div>
+  <div class="btn-row">
+    <button class="btn-yes" onclick="showReveal()">Yes</button>
+    <button class="btn-no" id="btnNo" onmouseover="runAway(this)" ontouchstart="runAway(this)">No</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3 — REVEAL ══ -->
+<div class="card" id="screen-reveal" style="display:none;">
+  <div class="greeting" id="revealGreeting">Dearest Kateryna,</div>
+  <img class="reveal-photo" id="revealPhoto" src="" alt="">
+  <div class="reveal-msg" id="revealMsg">I knew you'd say yes, now let's fight again è_é</div>
+</div>
+
+<div class="wm">LightMood · WishYou.ai</div>
+
+<script>
+let photoDataUrl = '';
+let noClickCount = 0;
+let noMessages = [
+  'No',
+  "I can't click this...",
+  "Don't do it...",
+  "Noooo...",
+  "Pls stop 🥺",
+  "I can't!!!",
+  "It's impossible!",
+  "My finger won't...",
+  "HELP 😭",
+];
+
+function handlePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    photoDataUrl = e.target.result;
+    document.getElementById('photoPreview').src = photoDataUrl;
+    document.getElementById('photoPreview').style.display = 'block';
+    document.getElementById('photoPlaceholder').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function launchCard() {
+  const name = document.getElementById('nameInput').value.trim() || 'You';
+  const msg  = document.getElementById('msgInput').value.trim()  || 'Please forgive me?';
+  const rev  = document.getElementById('revealInput').value.trim() || "I knew you'd say yes!";
+
+  // Set card screen
+  document.getElementById('cardGreeting').textContent  = `Dearest ${name},`;
+  document.getElementById('cardQuestion').textContent  = msg;
+  document.getElementById('revealGreeting').textContent = `Dearest ${name},`;
+  document.getElementById('revealMsg').textContent     = rev;
+
+  if (photoDataUrl) {
+    document.getElementById('cardPhoto').src = photoDataUrl;
+    document.getElementById('cardPhoto').style.display = 'block';
+    document.getElementById('cardPhotoPlaceholder').style.display = 'none';
+    document.getElementById('revealPhoto').src = photoDataUrl;
+    document.getElementById('revealPhoto').style.display = 'block';
+  }
+
+  // Reset No button
+  noClickCount = 0;
+  const btnNo = document.getElementById('btnNo');
+  btnNo.textContent = 'No';
+  btnNo.style.transform = '';
+  btnNo.style.fontSize = '1.1rem';
+  btnNo.style.opacity = '1';
+
+  document.getElementById('screen-setup').style.display = 'none';
+  document.getElementById('screen-card').style.display  = 'block';
+}
+
+function runAway(btn) {
+  noClickCount++;
+  const card = document.getElementById('screen-card');
+  const cardRect = card.getBoundingClientRect();
+  const btnRect  = btn.getBoundingClientRect();
+
+  // Change label
+  if (noClickCount < noMessages.length) {
+    btn.textContent = noMessages[noClickCount];
+  }
+
+  // Shrink button over time
+  const scale = Math.max(0.55, 1 - noClickCount * 0.07);
+  btn.style.fontSize = (1.1 * scale) + 'rem';
+  btn.style.padding  = `${14 * scale}px ${32 * scale}px`;
+
+  // Move button to random spot WITHIN card bounds
+  const maxX = cardRect.width  - btnRect.width  - 20;
+  const maxY = cardRect.height - btnRect.height - 20;
+  const rx   = 10 + Math.random() * Math.max(0, maxX - 10);
+  const ry   = 10 + Math.random() * Math.max(0, maxY - 10);
+
+  btn.style.position = 'absolute';
+  btn.style.left     = rx + 'px';
+  btn.style.top      = ry + 'px';
+  btn.style.animation= 'wiggle 0.3s ease';
+  setTimeout(() => btn.style.animation = '', 300);
+
+  // Make card relative for absolute positioning
+  card.style.position = 'relative';
+  card.style.minHeight = '380px';
+}
+
+function showReveal() {
+  document.getElementById('screen-card').style.display   = 'none';
+  document.getElementById('screen-reveal').style.display = 'block';
+}
+</script>
+</body>
+</html>
