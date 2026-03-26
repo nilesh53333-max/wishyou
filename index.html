@@ -1,368 +1,321 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<!-- saved from url=(0046)file:///C:/Users/Nilesh/Downloads/index_6.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WishYou.ai — Send Love, Beautifully</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
 <meta property="og:title" content="WishYou.ai — Send Love, Beautifully">
-<meta property="og:description" content="Interactive cards with photos, music & heartfelt letters.">
+<meta property="og:description" content="Interactive cards with photos, music &amp; heartfelt letters.">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="./index_files/css2" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
-.app{position:relative;width:100%;max-width:430px;height:100vh;overflow:hidden;margin:0 auto;}
-@media(min-width:500px){
-  body{background:#111;display:flex;align-items:center;justify-content:center;}
-  .app{height:90vh;max-height:900px;border-radius:40px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:#06020b;color:white;overflow-x:hidden;min-height:100vh;}
+
+/* ── NAV ── */
+.nav-wrap{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:center;padding:16px 24px;}
+nav{width:100%;max-width:860px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:50px;padding:10px 10px 10px 24px;backdrop-filter:blur(20px);}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:white;text-decoration:none;letter-spacing:0.04em;}
+.nav-logo em{font-style:normal;color:#e83878;}
+.nav-right{display:flex;align-items:center;gap:6px;}
+.nav-pill{font-size:0.78rem;color:rgba(255,255,255,0.45);padding:8px 16px;border-radius:50px;text-decoration:none;transition:all 0.2s;}
+.nav-pill:hover{color:white;background:rgba(255,255,255,0.07);}
+.nav-btn{background:linear-gradient(135deg,#e83878,#f06060);color:white;border:none;border-radius:50px;padding:9px 20px;font-size:0.82rem;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity 0.2s;white-space:nowrap;}
+.nav-btn:hover{opacity:0.88;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:110px 24px 80px;position:relative;overflow:hidden;}
+
+/* Gradient blobs */
+.g1{position:absolute;width:600px;height:600px;top:-200px;left:-150px;background:radial-gradient(circle,rgba(232,56,120,0.13) 0%,transparent 65%);pointer-events:none;animation:g1d 20s ease-in-out infinite;}
+.g2{position:absolute;width:500px;height:500px;bottom:-150px;right:-120px;background:radial-gradient(circle,rgba(90,50,200,0.1) 0%,transparent 65%);pointer-events:none;animation:g2d 25s ease-in-out infinite;}
+.g3{position:absolute;width:350px;height:350px;top:35%;left:60%;background:radial-gradient(circle,rgba(240,160,60,0.07) 0%,transparent 65%);pointer-events:none;animation:g3d 16s ease-in-out infinite;}
+@keyframes g1d{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(50px,30px) scale(1.08);}}
+@keyframes g2d{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,-50px) scale(1.05);}}
+@keyframes g3d{0%,100%{transform:translate(0,0);}50%{transform:translate(-25px,25px);}}
+
+/* Subtle grid */
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;mask-image:radial-gradient(ellipse 80% 60% at 50% 50%,black 0%,transparent 100%);}
+
+.hero-inner{position:relative;z-index:2;max-width:700px;}
+
+/* Badge pill */
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(232,56,120,0.22);background:rgba(232,56,120,0.07);border-radius:50px;padding:7px 16px;margin-bottom:32px;animation:fu 0.9s ease both;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:#e83878;box-shadow:0 0 10px rgba(232,56,120,0.9);animation:bdot 2s ease-in-out infinite;}
+@keyframes bdot{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(0.6);opacity:0.45;}}
+.badge-text{font-size:0.7rem;font-weight:600;letter-spacing:0.09em;color:rgba(232,56,120,0.85);text-transform:uppercase;}
+
+/* Headlines */
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,10vw,5.5rem);font-weight:700;line-height:1.02;letter-spacing:-0.025em;margin-bottom:24px;animation:fu 0.9s 0.07s ease both;}
+h1 .l1{display:block;color:rgba(255,255,255,0.95);}
+h1 .l2{display:block;font-style:italic;background:linear-gradient(120deg,#e83878,#f5804a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:1.05rem;color:rgba(255,255,255,0.38);line-height:1.75;max-width:440px;margin:0 auto 44px;animation:fu 0.9s 0.14s ease both;}
+.hero-sub strong{color:rgba(255,255,255,0.6);font-weight:500;}
+
+/* CTA */
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;animation:fu 0.9s 0.21s ease both;}
+.btn-hero-p{display:inline-flex;align-items:center;gap:8px;padding:16px 34px;border-radius:50px;background:linear-gradient(135deg,#e83878,#f06060);color:white;font-size:0.95rem;font-weight:600;border:none;cursor:pointer;text-decoration:none;box-shadow:0 0 48px rgba(232,56,120,0.28),0 8px 24px rgba(0,0,0,0.3);transition:all 0.22s;touch-action:manipulation;}
+.btn-hero-p:hover{transform:translateY(-2px);box-shadow:0 0 70px rgba(232,56,120,0.4),0 12px 32px rgba(0,0,0,0.4);}
+.btn-hero-p:active{transform:scale(0.97);}
+.btn-hero-s{display:inline-flex;align-items:center;gap:8px;padding:15px 28px;border-radius:50px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:0.95rem;font-weight:500;cursor:pointer;text-decoration:none;transition:all 0.22s;touch-action:manipulation;}
+.btn-hero-s:hover{background:rgba(255,255,255,0.09);border-color:rgba(255,255,255,0.18);color:white;}
+.btn-hero-s:active{transform:scale(0.97);}
+
+/* Social proof strip */
+.proof{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:36px;animation:fu 0.9s 0.28s ease both;}
+.proof-avs{display:flex;}
+.av{width:30px;height:30px;border-radius:50%;border:2px solid #06020b;display:flex;align-items:center;justify-content:center;font-size:0.75rem;margin-left:-8px;}
+.av:first-child{margin-left:0;}
+.av1{background:linear-gradient(135deg,#e83878,#c0265a);}
+.av2{background:linear-gradient(135deg,#9c27b0,#4a0080);}
+.av3{background:linear-gradient(135deg,#f0a030,#c06010);}
+.av4{background:linear-gradient(135deg,#3f51b5,#1a237e);}
+.proof-text{font-size:0.78rem;color:rgba(255,255,255,0.3);}
+.proof-text b{color:rgba(255,255,255,0.6);font-weight:600;}
+
+/* ── DIVIDER ── */
+.divider{max-width:860px;margin:0 auto;border:none;border-top:1px solid rgba(255,255,255,0.05);}
+
+/* ── OCCASIONS ── */
+.occasions{padding:90px 24px 100px;max-width:860px;margin:0 auto;}
+.sec-eyebrow{font-size:0.62rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.22);text-align:center;display:block;margin-bottom:12px;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.9rem,5vw,2.6rem);font-weight:700;color:white;text-align:center;margin-bottom:14px;line-height:1.15;}
+.sec-sub{font-size:0.88rem;color:rgba(255,255,255,0.3);text-align:center;margin-bottom:52px;line-height:1.6;}
+
+.occ-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+@media(max-width:540px){.occ-grid{grid-template-columns:1fr;}}
+
+.occ-card{display:block;text-decoration:none;border-radius:24px;padding:28px 24px 24px;border:1px solid rgba(255,255,255,0.055);position:relative;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.25s cubic-bezier(.2,0,.2,1),box-shadow 0.25s,border-color 0.25s;}
+.occ-card:active{transform:scale(0.97)!important;}
+.occ-card.bday{background:linear-gradient(150deg,#190612 0%,#2c0d20 100%);}
+.occ-card.bday:hover{transform:translateY(-4px);border-color:rgba(232,56,120,0.28);box-shadow:0 24px 64px rgba(232,56,120,0.16);}
+.occ-card.mday{background:linear-gradient(150deg,#110c03 0%,#201403 100%);}
+.occ-card.mday:hover{transform:translateY(-4px);border-color:rgba(240,160,60,0.28);box-shadow:0 24px 64px rgba(240,160,60,0.1);}
+.occ-card.soon{opacity:0.35;cursor:default;}
+.occ-card.soon:hover{transform:none;border-color:rgba(255,255,255,0.055);box-shadow:none;}
+
+/* Card glow orbs */
+.card-orb{position:absolute;width:180px;height:180px;top:-50px;right:-40px;border-radius:50%;pointer-events:none;transition:opacity 0.3s;}
+.bday .card-orb{background:radial-gradient(circle,rgba(232,56,120,0.18),transparent 65%);}
+.mday .card-orb{background:radial-gradient(circle,rgba(240,160,60,0.14),transparent 65%);}
+
+.card-emoji{font-size:2.5rem;display:block;margin-bottom:16px;line-height:1;position:relative;z-index:1;}
+.card-tag{font-size:0.58rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;display:block;margin-bottom:6px;position:relative;z-index:1;}
+.bday .card-tag{color:rgba(232,56,120,0.55);}
+.mday .card-tag{color:rgba(240,160,60,0.5);}
+.soon .card-tag{color:rgba(255,255,255,0.22);}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:white;margin-bottom:7px;line-height:1.15;position:relative;z-index:1;}
+.card-blurb{font-size:0.78rem;color:rgba(255,255,255,0.32);line-height:1.6;margin-bottom:20px;position:relative;z-index:1;}
+.card-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:20px;position:relative;z-index:1;}
+.chip{font-size:0.62rem;color:rgba(255,255,255,0.38);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:50px;padding:3px 9px;}
+.card-link{display:inline-flex;align-items:center;gap:6px;font-size:0.82rem;font-weight:600;position:relative;z-index:1;}
+.bday .card-link{color:#e83878;}
+.mday .card-link{color:#f0a030;}
+.soon .card-link{color:rgba(255,255,255,0.22);}
+.link-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;transition:transform 0.2s;}
+.bday .link-icon{background:rgba(232,56,120,0.14);}
+.mday .link-icon{background:rgba(240,160,60,0.12);}
+.occ-card:hover .link-icon{transform:translateX(4px);}
+.soon-tag{display:inline-block;font-size:0.62rem;font-weight:600;letter-spacing:0.07em;color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:50px;padding:4px 12px;}
+
+/* ── STEPS ── */
+.steps-sec{padding:60px 24px 100px;max-width:640px;margin:0 auto;}
+.steps-list{margin-top:48px;display:flex;flex-direction:column;gap:0;}
+.step{display:flex;gap:20px;padding:26px 0;position:relative;}
+.step:not(:last-child)::after{content:'';position:absolute;left:19px;top:54px;bottom:-2px;width:1px;background:linear-gradient(to bottom,rgba(255,255,255,0.07) 0%,transparent 100%);}
+.step-num{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:600;color:rgba(255,255,255,0.35);flex-shrink:0;}
+.step-info{padding-top:9px;}
+.step-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:6px;}
+.step-desc{font-size:0.82rem;color:rgba(255,255,255,0.3);line-height:1.65;}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid rgba(255,255,255,0.05);padding:26px 24px;}
+.foot-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;}
+.foot-logo{font-family:'Cormorant Garamond',serif;font-size:0.9rem;color:rgba(255,255,255,0.25);letter-spacing:0.05em;}
+.foot-links{display:flex;gap:20px;}
+.foot-link{font-size:0.75rem;color:rgba(255,255,255,0.2);text-decoration:none;transition:color 0.2s;}
+.foot-link:hover{color:rgba(255,255,255,0.5);}
+
+@keyframes fu{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:480px){
+  nav{padding:9px 9px 9px 20px;}
+  .nav-pill{display:none;}
+  h1{font-size:clamp(2.7rem,12vw,3.2rem);}
+  .occasions{padding:70px 20px 80px;}
+  .steps-sec{padding:50px 20px 80px;}
 }
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);transform:translateX(60px);overflow:hidden;}
-.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
-.screen.slide-out{opacity:0;transform:translateX(-60px);}
-
-/* OCCASION SCREEN */
-#s-occasion{background:linear-gradient(170deg,#0a0008 0%,#120010 60%,#0a0008 100%);padding:0;align-items:center;justify-content:center;}
-.occ-logo{font-family:'Cormorant Garamond',serif;font-size:0.75rem;letter-spacing:0.22em;color:rgba(255,255,255,0.25);font-weight:400;text-transform:uppercase;display:block;margin-bottom:48px;animation:fadeUp 1s cubic-bezier(.22,1,.36,1) both;}
-.occ-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,8vw,3rem);font-weight:700;color:white;line-height:1.1;margin-bottom:12px;text-align:center;animation:fadeUp 1s 0.1s cubic-bezier(.22,1,.36,1) both;}
-.occ-headline em{font-style:italic;background:linear-gradient(135deg,#e83878,#f0a030);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.occ-sub{font-size:0.78rem;color:rgba(255,255,255,0.3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:52px;text-align:center;animation:fadeUp 1s 0.2s cubic-bezier(.22,1,.36,1) both;}
-.occ-tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;padding:0 28px;animation:fadeUp 1s 0.3s cubic-bezier(.22,1,.36,1) both;}
-.occ-tile{aspect-ratio:1;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;border:1px solid rgba(255,255,255,0.07);transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;position:relative;overflow:hidden;gap:10px;}
-.occ-tile::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.3s;background:rgba(255,255,255,0.05);}
-.occ-tile:active{transform:scale(0.94);}
-.occ-tile:active::before{opacity:1;}
-.occ-tile.birthday{background:linear-gradient(145deg,#200818,#350d25);}
-.occ-tile.birthday:hover{border-color:rgba(232,56,120,0.35);box-shadow:0 16px 48px rgba(232,56,120,0.2);}
-.occ-tile.mothersday{background:linear-gradient(145deg,#150e05,#261708);}
-.occ-tile.mothersday:hover{border-color:rgba(240,160,60,0.35);box-shadow:0 16px 48px rgba(240,160,60,0.15);}
-.occ-tile-emoji{font-size:2.4rem;line-height:1;}
-.occ-tile-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:white;text-align:center;line-height:1.2;}
-.occ-tile-badge{position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#e83878;box-shadow:0 0 8px rgba(232,56,120,0.8);animation:pulseDot 2s ease-in-out infinite;}
-@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.7);}}
-.occ-coming-soon{font-size:0.65rem;color:rgba(255,255,255,0.2);letter-spacing:0.08em;text-align:center;margin-top:32px;animation:fadeUp 1s 0.45s cubic-bezier(.22,1,.36,1) both;}
-#s-occasion::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
-#s-occasion::after{content:'';position:absolute;width:300px;height:300px;top:-80px;left:-80px;background:radial-gradient(circle,rgba(232,56,120,0.08) 0%,transparent 65%);pointer-events:none;z-index:0;animation:blobDrift 12s ease-in-out infinite;}
-@keyframes blobDrift{0%,100%{transform:translate(0,0);}50%{transform:translate(40px,30px);}}
-.occ-glow-2{position:absolute;width:250px;height:250px;bottom:-60px;right:-60px;background:radial-gradient(circle,rgba(240,160,60,0.06) 0%,transparent 65%);pointer-events:none;z-index:0;animation:blobDrift2 16s ease-in-out infinite;}
-@keyframes blobDrift2{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,-40px);}}
-
-/* STYLE PICKER SCREEN */
-#s-style{background:#0f0810;padding:0;align-items:center;overflow-y:auto;-webkit-overflow-scrolling:touch;flex-direction:column;justify-content:flex-start;}
-.style-header{padding:52px 24px 16px;display:flex;align-items:center;gap:14px;width:100%;max-width:430px;flex-shrink:0;}
-.back-circle{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:rgba(255,255,255,0.6);flex-shrink:0;touch-action:manipulation;transition:background 0.2s;}
-.back-circle:active{background:rgba(255,255,255,0.12);}
-.style-occasion-label{font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;}
-.style-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:white;}
-.style-cards-wrap{padding:0 18px 40px;display:flex;flex-direction:column;gap:14px;width:100%;max-width:430px;flex-shrink:0;}
-
-/* PREVIEW CARDS */
-.style-preview-card{border-radius:18px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;width:100%;}
-.style-preview-card:active{transform:scale(0.97);}
-.preview-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec);border:1.5px solid rgba(233,30,99,0.15);padding:14px 14px 12px;}
-.preview-retro{background:#FFE135;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:14px 14px 12px;}
-.preview-blossom{background:linear-gradient(160deg,#FDF0F3,#F7E0E5);border:1.5px solid rgba(201,114,122,0.2);padding:14px 14px 12px;}
-.slide-viewport{width:100%;border-radius:10px;overflow:hidden;position:relative;height:140px;margin-bottom:8px;background:rgba(255,255,255,0.6);}
-.preview-retro .slide-viewport{background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
-.preview-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
-.preview-slide.active-slide{opacity:1;}
-.slide-dots{display:flex;gap:5px;justify-content:center;margin-bottom:10px;}
-.slide-dot{width:6px;height:6px;border-radius:50%;background:rgba(233,30,99,0.2);transition:all 0.3s;}
-.slide-dot.active{background:#e91e63;transform:scale(1.3);}
-.retro-dot{background:rgba(17,17,17,0.15)!important;}
-.retro-dot.active{background:#d90429!important;}
-.slide-screen-label{font-size:0.55rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
-.slide-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;margin-bottom:6px;line-height:1.2;}
-.slide-title.retro-slide-title{font-family:'Fredoka One',cursive;color:#d90429;font-size:0.95rem;}
-.slide-photos{display:flex;gap:4px;justify-content:center;margin:4px 0;}
-.slide-pol{width:38px;height:50px;background:white;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:3px 3px 10px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
-.slide-pol:nth-child(odd){transform:rotate(-2deg);}
-.slide-pol:nth-child(even){transform:rotate(2deg);}
-.slide-comic{display:flex;gap:3px;justify-content:center;margin:4px 0;}
-.slide-panel{width:42px;height:56px;border:2px solid #111;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;background:#fff9c4;}
-.slide-panel:nth-child(2){background:#ffe0b2;}
-.slide-panel:nth-child(3){background:#fce4ec;}
-.slide-env{font-size:2.2rem;animation:envWiggle 2s ease-in-out infinite;}
-@keyframes envWiggle{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
-.slide-balloon{font-size:2.5rem;animation:ballFloat 1.5s ease-in-out infinite;}
-@keyframes ballFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.slide-vinyl{width:44px;height:44px;border-radius:50%;background:conic-gradient(#111 0deg,#222 20deg,#111 40deg,#222 60deg,#111 80deg,#222 100deg,#111 120deg,#222 140deg,#111 160deg,#222 180deg,#111 200deg,#222 220deg,#111 240deg,#222 260deg,#111 280deg,#222 300deg,#111 320deg,#222 340deg,#111 360deg);animation:vinylSpin 3s linear infinite;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #333,0 0 0 5px #444;}
-@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.slide-vinyl-center{width:12px;height:12px;border-radius:50%;background:#e91e63;position:absolute;}
-.slide-letter-lines{width:80%;margin:4px auto;}
-.slide-line{height:2px;border-radius:2px;background:rgba(74,14,42,0.12);margin-bottom:4px;}
-.slide-line:first-child{width:60%;background:rgba(233,30,99,0.3);}
-.slide-newspaper{background:#fdf8e7;border:2px solid #111;border-radius:4px;padding:6px 8px;width:100%;}
-.slide-news-head{font-family:'Fredoka One',cursive;font-size:0.55rem;color:#111;border-bottom:2px double #111;margin-bottom:4px;padding-bottom:2px;}
-.slide-headline{background:#d90429;color:white;font-family:'Fredoka One',cursive;font-size:0.55rem;padding:2px 4px;border-radius:2px;margin-bottom:4px;}
-.slide-news-lines{display:flex;flex-direction:column;gap:2px;}
-.slide-news-line{height:2px;background:rgba(0,0,0,0.12);border-radius:1px;}
-.preview-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.preview-style-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;}
-.preview-style-name.retro-name{font-family:'Fredoka One',cursive;color:#d90429;}
-.preview-style-name.blossom-name{color:#3D1C1C;}
-.preview-style-desc{font-size:0.62rem;color:#8d3a5a;margin-top:1px;}
-.preview-style-desc.retro-desc{font-family:'Fredoka One',cursive;color:#555;font-size:0.6rem;}
-.preview-btn{padding:12px 18px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;width:100%;margin-top:6px;transition:transform 0.15s;}
-.preview-btn:active{transform:scale(0.97);}
-.preview-btn.intimate-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
-.preview-btn.retro-btn{background:#d90429;color:white;border:2px solid #111;border-radius:6px;box-shadow:3px 3px 0 #111;font-family:'Fredoka One',cursive;font-size:0.9rem;}
-.preview-btn.blossom-btn{background:linear-gradient(135deg,#C9727A,#C9973A);color:white;box-shadow:0 6px 20px rgba(201,114,122,0.35);}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.6rem;color:rgba(255,255,255,0.3);font-weight:600;}
-.wm a{color:inherit;text-decoration:none;}
 </style>
 </head>
 <body>
-<div class="app" id="mainApp">
 
-<div class="screen active" id="s-occasion">
-  <div class="occ-glow-2"></div>
-  <div style="position:relative;z-index:1;width:100%;display:flex;flex-direction:column;align-items:center;padding:0 0 40px;">
-    <span class="occ-logo">WishYou.ai</span>
-    <div class="occ-headline">Send love,<br><em>beautifully.</em></div>
-    <div class="occ-sub">Choose your occasion</div>
-    <div class="occ-tiles">
-      <div class="occ-tile birthday" onclick="window.location.href='/birthday/'">
-        <div class="occ-tile-badge"></div>
-        <span class="occ-tile-emoji">🎂</span>
-        <span class="occ-tile-name">Birthday</span>
+<!-- NAV -->
+<div class="nav-wrap">
+  <nav>
+    <a href="file:///C:/" class="nav-logo">Wish<em>You</em>.ai</a>
+    <div class="nav-right">
+      <a href="file:///C:/birthday/" class="nav-pill">Birthday</a>
+      <a href="file:///C:/mothers-day/" class="nav-pill">Mother's Day</a>
+      <a href="file:///C:/birthday/" class="nav-btn">Make a card →</a>
+    </div>
+  </nav>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="g1"></div>
+  <div class="g2"></div>
+  <div class="g3"></div>
+  <div class="grid-bg"></div>
+
+  <div class="hero-inner">
+    <div class="badge">
+      <div class="badge-dot"></div>
+      <span class="badge-text">AI-Powered Interactive Cards</span>
+    </div>
+
+    <h1>
+      <span class="l1">Send love,</span>
+      <span class="l2">beautifully.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Not just a message — <strong>a real experience.</strong><br>
+      Photos, music &amp; a letter written from the heart. One link. Forever.
+    </p>
+
+    <div class="cta-row">
+      <a href="file:///C:/birthday/" class="btn-hero-p">🎂 Make a Birthday Card</a>
+      <a href="file:///C:/mothers-day/" class="btn-hero-s">🌸 Mother's Day</a>
+    </div>
+
+    <div class="proof">
+      <div class="proof-avs">
+        <div class="av av1">💝</div>
+        <div class="av av2">🎂</div>
+        <div class="av av3">🌸</div>
+        <div class="av av4">🎉</div>
       </div>
-      <div class="occ-tile mothersday" onclick="window.location.href='/mothers-day/'">\
-        <div class="occ-tile-badge" style="background:#f0a030;box-shadow:0 0 8px rgba(240,160,60,0.8);"></div>
-        <span class="occ-tile-emoji">🌸</span>
-        <span class="occ-tile-name">Mother's<br>Day</span>
+      <span class="proof-text">Cards made with <b>love</b> every day</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- OCCASIONS -->
+<section class="occasions">
+  <span class="sec-eyebrow">Choose your occasion</span>
+  <h2 class="sec-title">What are you celebrating?</h2>
+  <p class="sec-sub">Every moment of love deserves to be felt, not just read.</p>
+
+  <div class="occ-grid">
+
+    <!-- Birthday -->
+    <a href="file:///C:/birthday/" class="occ-card bday">
+      <div class="card-orb"></div>
+      <span class="card-emoji">🎂</span>
+      <span class="card-tag">Birthday</span>
+      <div class="card-name">Birthday Cards</div>
+      <div class="card-blurb">Make someone feel truly special with a card they'll never forget.</div>
+      <div class="card-chips">
+        <span class="chip">📸 Polaroid photos</span>
+        <span class="chip">🎵 YouTube song</span>
+        <span class="chip">💌 Letter</span>
+        <span class="chip">✨ AI writing</span>
+      </div>
+      <span class="card-link">
+        Choose your style
+        <span class="link-icon">→</span>
+      </span>
+    </a>
+
+    <!-- Mother's Day -->
+    <a href="file:///C:/mothers-day/" class="occ-card mday">
+      <div class="card-orb"></div>
+      <span class="card-emoji">🌸</span>
+      <span class="card-tag">Mother's Day</span>
+      <div class="card-name">Mother's Day Cards</div>
+      <div class="card-blurb">Tell her everything you never quite found the words for.</div>
+      <div class="card-chips">
+        <span class="chip">📸 Film strip photos</span>
+        <span class="chip">🎵 Her favourite song</span>
+        <span class="chip">💌 Letter</span>
+        <span class="chip">✨ AI writing</span>
+      </div>
+      <span class="card-link">
+        Choose your style
+        <span class="link-icon">→</span>
+      </span>
+    </a>
+
+    <!-- Coming Soon: Anniversary -->
+    <div class="occ-card bday soon">
+      <span class="card-emoji">💍</span>
+      <span class="card-tag">Coming Soon</span>
+      <div class="card-name">Anniversary</div>
+      <div class="card-blurb">Celebrate the love story that started it all.</div>
+      <span class="card-link"><span class="soon-tag">Coming Soon</span></span>
+    </div>
+
+    <!-- Coming Soon: Friendship Day -->
+    <div class="occ-card mday soon">
+      <span class="card-emoji">🤝</span>
+      <span class="card-tag">Coming Soon</span>
+      <div class="card-name">Friendship Day</div>
+      <div class="card-blurb">Because some people just make life better.</div>
+      <span class="card-link"><span class="soon-tag">Coming Soon</span></span>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HOW IT WORKS -->
+<section class="steps-sec">
+  <span class="sec-eyebrow" style="text-align:center;display:block;">How it works</span>
+  <h2 class="sec-title">Three steps to something beautiful</h2>
+
+  <div class="steps-list">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-info">
+        <div class="step-name">Add photos, a song &amp; a letter</div>
+        <div class="step-desc">Upload up to 5 photos, pick a YouTube song, and write a letter — or let AI write it for you in Hindi, Marathi, or any language.</div>
       </div>
     </div>
-    <div class="occ-coming-soon">More occasions coming soon</div>
-  </div>
-</div>
-
-<div class="screen" id="s-style">
-  <div class="style-header">
-    <div class="back-circle" onclick="goTo('s-occasion')">←</div>
-    <div class="style-header-text">
-      <div class="style-occasion-label" id="styleOccasionLabel">Birthday</div>
-      <div class="style-title">Choose your style</div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-info">
+        <div class="step-name">Get a shareable link instantly</div>
+        <div class="step-desc">Your card is saved and ready in seconds. Share the link via WhatsApp, Instagram, or anywhere you like.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-info">
+        <div class="step-name">They open an experience, not just a message</div>
+        <div class="step-desc">Polaroid photos, a spinning vinyl record, an envelope reveal, and a typewriter letter — all beautifully designed, just for them.</div>
+      </div>
     </div>
   </div>
-  <div class="style-cards-wrap" id="styleCardsWrap"></div>
-</div>
+</section>
 
-</div>
-<div class="wm"><a href="https://wishyou.ai">WishYou.ai</a></div>
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <span class="foot-logo">WishYou.ai</span>
+    <div class="foot-links">
+      <a href="file:///C:/privacy-policy.html" class="foot-link">Privacy</a>
+      <a href="file:///C:/terms.html" class="foot-link">Terms</a>
+      <a href="file:///C:/refund.html" class="foot-link">Refund</a>
+    </div>
+  </div>
+</footer>
 
-<script>
-let curScreen = 's-occasion';
-const slideshowTimers = {};
 
-function goTo(id){
-  const prev=document.getElementById(curScreen);
-  const next=document.getElementById(id);
-  if(!next||curScreen===id) return;
-  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
-  next.classList.add('active');
-  curScreen=id;
-}
 
-function startSlideshow(cardId,totalSlides){
-  if(slideshowTimers[cardId]) clearInterval(slideshowTimers[cardId]);
-  let idx=0;
-  function next(){
-    const slides=document.querySelectorAll('#'+cardId+' .preview-slide');
-    const dots=document.querySelectorAll('#'+cardId+' .slide-dot');
-    slides.forEach(s=>s.classList.remove('active-slide'));
-    dots.forEach(d=>d.classList.remove('active'));
-    idx=(idx+1)%totalSlides;
-    if(slides[idx]) slides[idx].classList.add('active-slide');
-    if(dots[idx]) dots[idx].classList.add('active');
-  }
-  slideshowTimers[cardId]=setInterval(next,2200);
-}
-
-function selectOccasion(occ){
-  const wrap=document.getElementById('styleCardsWrap');
-  const label=document.getElementById('styleOccasionLabel');
-
-  if(occ==='birthday'){
-    label.textContent='Birthday';
-    wrap.innerHTML=`
-      <div class="style-preview-card preview-intimate" id="prev-intimate" onclick="window.location.href='/birthday/intimate.html'">
-        <div class="slide-viewport">
-          <div class="preview-slide active-slide">
-            <div class="slide-screen-label">Welcome Screen</div>
-            <div style="font-size:2rem;margin-bottom:6px;">💝</div>
-            <div class="slide-title">Happy Birthday!</div>
-            <div style="font-size:0.65rem;color:#8d3a5a;opacity:0.7;">Someone special made this just for you 🌸</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Your Memories</div>
-            <div class="slide-photos">
-              <div class="slide-pol">📸</div><div class="slide-pol">🌸</div><div class="slide-pol">💕</div>
-            </div>
-            <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Your photos as beautiful polaroids</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Song Screen</div>
-            <div style="position:relative;display:flex;align-items:center;justify-content:center;margin:4px 0;">
-              <div class="slide-vinyl"><div class="slide-vinyl-center"></div></div>
-            </div>
-            <div style="font-size:0.65rem;color:#4a0e2a;font-weight:600;margin-top:6px;">Your Special Song 🎵</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Envelope Reveal</div>
-            <div class="slide-env">💌</div>
-            <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Tap to open the letter...</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Heartfelt Letter</div>
-            <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:10px;width:100%;border-top:3px solid #e91e63;">
-              <div style="font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:#4a0e2a;font-weight:600;margin-bottom:4px;">Dear Priya,</div>
-              <div class="slide-letter-lines">
-                <div class="slide-line" style="width:100%"></div>
-                <div class="slide-line" style="width:90%"></div>
-                <div class="slide-line" style="width:95%"></div>
-              </div>
-              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.68rem;color:#e91e63;margin-top:6px;">Forever yours 💕</div>
-            </div>
-          </div>
-        </div>
-        <div class="slide-dots">
-          <div class="slide-dot active"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div>
-        </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name">💌 Intimate</div>
-            <div class="preview-style-desc">Soft & emotional • Envelope reveal • Photos & song</div>
-          </div>
-        </div>
-        <button class="preview-btn intimate-btn" onclick="event.stopPropagation();window.location.href='/birthday/intimate.html'">💌 Make this card →</button>
-      </div>
-
-      <div class="style-preview-card preview-retro" id="prev-retro" onclick="window.location.href='/birthday/retro.html'">
-        <div class="slide-viewport">
-          <div class="preview-slide active-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Welcome Screen</div>
-            <div style="font-size:2rem;margin-bottom:4px;">🎂</div>
-            <div class="slide-title retro-slide-title">Happy Birthday!</div>
-            <div style="font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#555;">Someone special made this 🎊</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Comic Strip Photos</div>
-            <div class="slide-comic">
-              <div class="slide-panel">🎂</div><div class="slide-panel">🎉</div><div class="slide-panel">🎈</div>
-            </div>
-            <div style="font-family:'Patrick Hand',cursive;font-size:0.6rem;color:#555;margin-top:4px;">Your photos as a comic strip!</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Party Anthem</div>
-            <div style="background:linear-gradient(135deg,#1a0a00,#2d1500);border-radius:8px;padding:10px;margin:4px 0;width:90%;">
-              <div style="display:flex;justify-content:center;"><div class="slide-vinyl" style="width:36px;height:36px;"><div class="slide-vinyl-center" style="background:#FFE135;"></div></div></div>
-              <div style="font-family:'Fredoka One',cursive;font-size:0.65rem;color:#FFE135;text-align:center;margin-top:5px;">Your Party Anthem 🎵</div>
-            </div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Balloon Pop!</div>
-            <div class="slide-balloon">🎈</div>
-            <div style="font-family:'Fredoka One',cursive;font-size:0.65rem;color:#d90429;margin-top:4px;">Pop it to reveal the letter!</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Newspaper Letter</div>
-            <div class="slide-newspaper">
-              <div class="slide-news-head">🗞️ THE BIRTHDAY GAZETTE</div>
-              <div class="slide-headline">BREAKING: IT'S YOUR BIRTHDAY!</div>
-              <div class="slide-news-lines">
-                <div class="slide-news-line"></div><div class="slide-news-line" style="width:90%"></div><div class="slide-news-line" style="width:85%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="slide-dots">
-          <div class="slide-dot retro-dot active"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div>
-        </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name retro-name">🎊 Retro Party</div>
-            <div class="preview-style-desc retro-desc">Fun & loud • Balloon pop • Newspaper letter</div>
-          </div>
-        </div>
-        <button class="preview-btn retro-btn" onclick="event.stopPropagation();window.location.href='/birthday/retro.html'">🎊 Make this card →</button>
-      </div>`;
-    setTimeout(function(){startSlideshow('prev-intimate',5);setTimeout(function(){startSlideshow('prev-retro',5);},1100);},100);
-
-  } else if(occ==='mothersday'){
-    label.textContent="Mother's Day";
-    wrap.innerHTML=`
-      <div class="style-preview-card preview-blossom" id="prev-blossom" onclick="window.location.href='/mothers-day/blossom.html'">
-        <div class="slide-viewport" style="background:rgba(253,246,240,0.8);">
-          <div class="preview-slide active-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Opening Scene</div>
-            <div style="font-size:1.8rem;margin-bottom:4px;">🕯️</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:0.75rem;color:#3D1C1C;font-style:italic;line-height:1.5;">Someone who loves you<br>made something special...</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:600;color:#C9973A;margin-top:4px;">Happy Mother's Day 🌸</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Film Strip Photos</div>
-            <div style="display:flex;gap:5px;justify-content:center;">
-              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">📸</div>
-              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">🌸</div>
-              <div style="flex:0 0 48px;height:64px;border-radius:6px;background:rgba(201,114,122,0.15);border:2px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:1rem;">💐</div>
-            </div>
-            <div style="font-size:0.62rem;color:#8B5A5A;margin-top:6px;opacity:0.7;">Beautiful film strip slideshow</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Song Screen</div>
-            <div style="background:linear-gradient(135deg,#2d1048,#1a0a2e);border-radius:8px;padding:10px;width:90%;">
-              <div style="display:flex;justify-content:center;"><div class="slide-vinyl" style="width:36px;height:36px;"><div class="slide-vinyl-center" style="background:#E8B86D;"></div></div></div>
-              <div style="font-family:'Cormorant Garamond',serif;font-size:0.68rem;color:#E8B86D;text-align:center;margin-top:5px;">A Song for You 🎵</div>
-            </div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Heartfelt Letter</div>
-            <div style="background:white;border-radius:8px;padding:10px;width:100%;border-top:3px solid #C9727A;">
-              <div style="font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:#3D1C1C;font-weight:600;margin-bottom:4px;">Dear Maa,</div>
-              <div class="slide-letter-lines">
-                <div class="slide-line" style="background:rgba(201,114,122,0.15);"></div>
-                <div class="slide-line" style="width:90%;background:rgba(201,114,122,0.15);"></div>
-                <div class="slide-line" style="width:95%;background:rgba(201,114,122,0.15);"></div>
-              </div>
-              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.68rem;color:#C9727A;margin-top:6px;">With all my love 💛</div>
-            </div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#C9727A;">Beautiful Ending</div>
-            <div style="font-size:1.5rem;margin-bottom:6px;">🌸🌷🌸</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;font-weight:600;color:#3D1C1C;">Happy Mother's Day!</div>
-            <div style="font-size:0.65rem;color:#8B5A5A;margin-top:4px;opacity:0.7;">You are so loved 💛</div>
-          </div>
-        </div>
-        <div class="slide-dots">
-          <div class="slide-dot active" style="background:rgba(201,114,122,0.25);"></div>
-          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
-          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
-          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
-          <div class="slide-dot" style="background:rgba(201,114,122,0.25);"></div>
-        </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name blossom-name">🌸 Blossom</div>
-            <div class="preview-style-desc" style="color:#8B5A5A;">Soft & cinematic • Film strip photos</div>
-          </div>
-        </div>
-        <button class="preview-btn blossom-btn" onclick="event.stopPropagation();window.location.href='/mothers-day/blossom.html'">🌸 Make this card →</button>
-      </div>
-      <div style="border-radius:20px;background:#FFF8E1;border:1.5px solid rgba(255,193,7,0.3);opacity:0.55;cursor:default;padding:20px;text-align:center;">
-        <div style="font-size:2rem;margin-bottom:6px;">☀️</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#7B5800;margin-bottom:4px;">Sunshine</div>
-        <div style="font-size:0.65rem;color:#8B6914;margin-bottom:10px;">Fun & colourful • Coming Soon</div>
-        <div style="background:rgba(255,193,7,0.2);color:#7B5800;border-radius:20px;padding:5px 14px;font-size:0.65rem;font-weight:600;display:inline-block;">Coming Soon</div>
-      </div>`;
-    setTimeout(function(){startSlideshow('prev-blossom',5);},100);
-  }
-  goTo('s-style');
-}
-</script>
-</body>
-</html>
+</body></html>
