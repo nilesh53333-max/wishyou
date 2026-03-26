@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0050)file:///C:/Users/Nilesh/Downloads/intimate_12.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>WishYou.ai — Intimate Birthday Card</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💝</text></svg>">
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
 <meta property="og:title" content="You have a birthday surprise! 💝">
-<meta property="og:description" content="Someone made you a special interactive card with photos, music & a heartfelt letter.">
+<meta property="og:description" content="Someone made you a special interactive card with photos, music &amp; a heartfelt letter.">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<link href="./intimate_files/css2" rel="stylesheet">
 <style>
 /* ── BASE ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
@@ -118,16 +118,21 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 .soft-close{border:1.5px solid rgba(233,30,99,0.2);color:#8d3a5a;}
 
 /* ── RECEIVER SCREENS ── */
-#rv-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);align-items:center;justify-content:center;}
+/* FIX: all receiver screens fill 100% — no black edges */
+#rv-loading,#rv-error,#rv-welcome,#rv-photos,#rv-song,#rv-envelope,#rv-letter{
+  position:absolute;inset:0;
+}
+#rv-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;align-items:center;justify-content:center;flex-direction:column;}
 .rv-loading-heart{font-size:3rem;animation:hb 1.2s ease-in-out infinite;}
 @keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
 .rv-loading-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#8d3a5a;margin-top:14px;opacity:0.6;}
 
-#rv-error{background:linear-gradient(160deg,#fde8f0,#fce4ec);align-items:center;justify-content:center;text-align:center;padding:40px;}
+#rv-error{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
 .rv-error-emoji{font-size:3rem;margin-bottom:16px;display:block;}
 .rv-error-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#8d3a5a;line-height:1.7;}
 
-#rv-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);padding:40px 28px;align-items:center;justify-content:center;}
+/* WELCOME */
+#rv-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;}
 .petals-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
 .petal{position:absolute;animation:pf linear infinite;opacity:0;}
 @keyframes pf{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:0.4;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
@@ -137,40 +142,79 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 @keyframes hb2{0%,100%{transform:scale(1);}14%{transform:scale(1.15);}28%{transform:scale(1);}42%{transform:scale(1.08);}56%{transform:scale(1);}}
 .rv-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,7vw,2.6rem);font-weight:700;color:#4a0e2a;line-height:1.1;margin-bottom:8px;}
 .rv-sub{font-size:0.85rem;color:#8d3a5a;opacity:0.65;margin-bottom:8px;line-height:1.5;}
-.rv-from{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:rgba(74,14,42,0.45);margin-bottom:36px;}
+.rv-from{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:rgba(74,14,42,0.45);margin-bottom:28px;}
 .rv-open-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 8px 28px rgba(233,30,99,0.4);transition:transform 0.2s;touch-action:manipulation;animation:bp 2.5s ease-in-out infinite;}
 @keyframes bp{0%,100%{box-shadow:0 8px 28px rgba(233,30,99,0.4);}50%{box-shadow:0 12px 36px rgba(233,30,99,0.6);}}
 .rv-open-btn:active{transform:scale(0.97);}
+/* FIX: Create card like this button */
+.rv-create-btn{margin-top:14px;background:none;border:1.5px solid rgba(233,30,99,0.3);color:#e91e63;border-radius:50px;padding:10px 28px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:all 0.2s;}
+.rv-create-btn:active{background:rgba(233,30,99,0.08);}
 
-#rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);padding:0;align-items:stretch;justify-content:flex-start;}
-.rv-sec-hdr{padding:48px 24px 18px;text-align:center;}
+/* FIX: Back button for receiver */
+.rv-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(233,30,99,0.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:#8d3a5a;z-index:10;touch-action:manipulation;transition:background 0.2s;}
+.rv-back:active{background:rgba(233,30,99,0.2);}
+
+/* PHOTOS */
+#rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;padding:0;}
+.rv-sec-hdr{padding:52px 24px 14px;text-align:center;flex-shrink:0;}
 .rv-sec-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(233,30,99,0.5);margin-bottom:6px;display:block;}
-.rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#4a0e2a;}
-.pol-strip{flex:1;padding:8px 16px 16px;display:flex;gap:12px;overflow-x:auto;align-items:center;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#4a0e2a;}
+.pol-strip{flex:1;padding:8px 16px 8px;display:flex;gap:12px;overflow-x:auto;align-items:center;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
 .pol-strip::-webkit-scrollbar{display:none;}
 .pol{flex-shrink:0;scroll-snap-align:center;background:white;padding:8px 8px 28px;box-shadow:0 8px 24px rgba(74,14,42,0.12);border-radius:2px;}
 .pol:nth-child(odd){transform:rotate(-2.5deg);}
 .pol:nth-child(even){transform:rotate(2deg);}
-.pol img{width:190px;height:210px;object-fit:cover;display:block;}
+.pol img{width:180px;height:200px;object-fit:cover;display:block;}
 .pol-lbl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.72rem;color:#8d3a5a;text-align:center;margin-top:6px;opacity:0.55;}
 .no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
-.rv-next-btn{margin:0 24px 24px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;touch-action:manipulation;width:calc(100% - 48px);box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
+.rv-nav-row{display:flex;gap:8px;padding:10px 16px 16px;flex-shrink:0;}
+.rv-next-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
 .rv-next-btn:active{transform:scale(0.97);}
 
-#rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);align-items:center;justify-content:center;padding:36px 28px;}
-.vinyl-wrap{width:140px;height:140px;margin:0 auto 24px;}
-.vinyl{width:100%;height:100%;border-radius:50%;background:conic-gradient(#1a0a1a 0deg,#2d1430 18deg,#1a0a1a 36deg,#2d1430 54deg,#1a0a1a 72deg,#2d1430 90deg,#1a0a1a 108deg,#2d1430 126deg,#1a0a1a 144deg,#2d1430 162deg,#1a0a1a 180deg,#2d1430 198deg,#1a0a1a 216deg,#2d1430 234deg,#1a0a1a 252deg,#2d1430 270deg,#1a0a1a 288deg,#2d1430 306deg,#1a0a1a 324deg,#2d1430 342deg,#1a0a1a 360deg);box-shadow:0 8px 32px rgba(74,14,42,0.2),0 0 0 4px rgba(233,30,99,0.1);display:flex;align-items:center;justify-content:center;}
-.vinyl-center{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#f06292,#e91e63);display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
-.vinyl-spin{animation:vsr 3s linear infinite;}
+/* SONG — FIX: nicer vinyl, full screen */
+#rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 20px;}
+/* FIX: Beautiful vinyl record */
+.vinyl-wrap{width:160px;height:160px;margin:0 auto 20px;position:relative;}
+.vinyl{width:100%;height:100%;border-radius:50%;position:relative;
+  background:
+    radial-gradient(circle at 50% 50%, #f8e8f0 0%, #f8e8f0 12%, transparent 12%),
+    radial-gradient(circle at 50% 50%, #3a1a2a 13%, #3a1a2a 14%, transparent 14%),
+    repeating-conic-gradient(#1a0812 0deg 2deg, #2d1020 2deg 4deg, #1a0812 4deg 6deg, #3a1520 6deg 8deg);
+  box-shadow:0 16px 48px rgba(74,14,42,0.35),0 0 0 3px rgba(233,30,99,0.15);
+  display:flex;align-items:center;justify-content:center;
+}
+.vinyl::before{
+  content:'';position:absolute;inset:20%;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,rgba(255,255,255,0.08),transparent 60%);
+  pointer-events:none;
+}
+.vinyl-groove{
+  position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,0.04);
+}
+.vinyl-label{
+  width:52px;height:52px;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#f48fb1,#e91e63,#c2185b);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4),inset 0 1px 2px rgba(255,255,255,0.2);
+  position:relative;z-index:2;
+}
+.vinyl-label::after{
+  content:'';position:absolute;width:8px;height:8px;border-radius:50%;
+  background:rgba(255,255,255,0.9);
+  box-shadow:0 0 0 2px rgba(0,0,0,0.3);
+}
+.vinyl-spin{animation:vsr 2.5s linear infinite;}
 @keyframes vsr{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .vinyl-pause{animation-play-state:paused;}
-.rv-song-t{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:4px;width:100%;}
-.rv-song-a{font-size:0.78rem;color:#8d3a5a;opacity:0.55;text-align:center;margin-bottom:24px;width:100%;}
-.yt-wrap{width:100%;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(74,14,42,0.12);margin-bottom:20px;display:none;}
-.yt-wrap iframe{width:100%;height:190px;border:none;display:block;}
+.rv-song-t{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;}
+.rv-song-a{font-size:0.75rem;color:#8d3a5a;opacity:0.55;text-align:center;margin-bottom:16px;width:100%;}
+.yt-wrap{width:100%;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(74,14,42,0.12);margin-bottom:14px;display:none;}
+.yt-wrap iframe{width:100%;height:180px;border:none;display:block;}
 .yt-wrap.show{display:block;}
+.rv-song-nav{display:flex;gap:8px;width:100%;margin-top:4px;}
 
-#rv-envelope{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);align-items:center;justify-content:center;}
+/* ENVELOPE */
+#rv-envelope{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;align-items:center;justify-content:center;flex-direction:column;}
 .env-inner{text-align:center;padding:28px;}
 .env-t{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;margin-bottom:8px;}
 .env-h{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:#8d3a5a;opacity:0.6;margin-bottom:28px;}
@@ -178,14 +222,18 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 @keyframes ef{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
 .env-icon:active{transform:scale(0.9)!important;}
 
-#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);padding:0;align-items:stretch;justify-content:flex-start;}
+/* LETTER — FIX: proper scroll + typewriter style + fits screen */
+#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
-.letter-scroll{flex:1;padding:32px 28px 110px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:#4a0e2a;margin-bottom:16px;}
-.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.02rem;color:#5a1e32;line-height:1.9;white-space:pre-wrap;}
-.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.95rem;color:#e91e63;margin-top:20px;}
-.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(to top,rgba(253,232,240,1) 55%,rgba(253,232,240,0));}
-.replay-btn{width:100%;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
+.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:28px 24px 120px;}
+/* FIX: typewriter-style letter */
+.letter-paper{background:white;border-radius:16px;padding:24px 22px;box-shadow:0 4px 20px rgba(74,14,42,0.08);border-top:3px solid #e91e63;}
+.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:#4a0e2a;margin-bottom:16px;}
+.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1rem;color:#3d1c2e;line-height:2;white-space:pre-wrap;}
+.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.95rem;color:#e91e63;margin-top:20px;display:block;}
+.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:12px 20px 16px;background:linear-gradient(to top,rgba(253,232,240,1) 60%,rgba(253,232,240,0));}
+.letter-foot-row{display:flex;gap:8px;}
+.replay-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
 
 .wm{position:fixed;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(74,14,42,0.18);}
 @keyframes ripple{to{transform:scale(4);opacity:0;}}
@@ -196,19 +244,23 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
 <div class="app" id="mainApp">
 
 <!-- ══ CREATOR SCREENS ══ -->
-<div class="screen creator-screen theme-intimate" id="s-name">
+<div class="screen creator-screen theme-intimate active" id="s-name">
   <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-name" style="width:20%"></div></div>
-  <button class="step-back dark" onclick="window.location.href='/'">←</button>
+  <button class="step-back dark" onclick="window.location.href=&#39;/&#39;">←</button>
   <div class="step-wrap">
     <div class="step-content">
       <div class="step-counter dark">Step 1 of 4</div>
       <span class="step-emoji" id="emoji-name">💝</span>
       <div class="step-title" id="title-name">Who is this card for?</div>
       <div class="step-sub" id="sub-name">They'll see their name on the card</div>
-      <div class="input-wrap" id="nameInputWrap"></div>
+      <div class="input-wrap" id="nameInputWrap">
+      <label class="field-label">Their Name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30"></div>
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-intimate" id="btn-name" onclick="goTo('s-photos')">Continue → Photos</button>
+      <button class="btn-next btn-intimate" id="btn-name" onclick="goTo(&#39;s-photos&#39;)">Continue → Photos</button>
     </div>
   </div>
 </div>
@@ -225,12 +277,12 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
         <div style="font-size:0.75rem;color:#8d3a5a;opacity:0.6;">Section title on card:</div>
         <input id="photosHeading" class="regular-input" value="Our Memories" maxlength="30" style="flex:1;font-size:0.85rem;padding:8px 12px;">
       </div>
-      <div class="photos-grid" id="photosGrid"></div>
+      <div class="photos-grid" id="photosGrid"><div class="photo-slot soft-slot" id="slot0"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot1"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot2"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot3"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot4"><span style="opacity:0.4;">+</span></div></div>
       <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-intimate" id="btn-photos" onclick="goTo('s-song')">Continue → Song</button>
-      <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
+      <button class="btn-next btn-intimate" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
+      <button class="btn-skip" onclick="goTo(&#39;s-song&#39;)">Skip for now</button>
     </div>
   </div>
 </div>
@@ -249,22 +301,22 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
         <div style="font-size:0.88rem;font-weight:600;color:white;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
+        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key===&#39;Enter&#39;)searchSong()" maxlength="100">
         <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;background:linear-gradient(135deg,#e91e63,#f06292);">🔍</button>
       </div>
       <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
       <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(233,30,99,0.15);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
         <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ AI Song Suggestions</div>
         <input id="aiSongContext" class="regular-input" placeholder="Describe what you want: e.g. romantic Hindi, 90s nostalgic, fun party song..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
-        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Suggest Songs</button>
+        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;">Suggest Songs</button>
         <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span style="font-size:0.78rem;color:#8d3a5a;">Finding songs...</span></div>
         <div id="songAiResults" style="margin-top:6px;"></div>
       </div>
       <input type="hidden" id="cSpotify">
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-intimate" id="btn-song" onclick="goTo('s-letter')">Continue → Letter</button>
-      <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
+      <button class="btn-next btn-intimate" id="btn-song" onclick="goTo(&#39;s-letter&#39;)">Continue → Letter</button>
+      <button class="btn-skip" onclick="goTo(&#39;s-letter&#39;)">Skip for now</button>
     </div>
   </div>
 </div>
@@ -281,14 +333,19 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
       <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(233,30,99,0.15);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
         <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ Write Letter with AI</div>
         <input id="letterTone" class="regular-input" placeholder="e.g. emotional, funny, simple Hindi, Marathi..." style="margin-bottom:8px;" maxlength="60">
-        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✨ Write Letter with AI</button>
+        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;">✨ Write Letter with AI</button>
         <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span style="font-size:0.78rem;color:#8d3a5a;">Writing your letter...</span></div>
         <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#8d3a5a;margin-top:6px;">↑ Tap again for a different letter</div>
       </div>
-      <div id="letterInputWrap"></div>
+      <div id="letterInputWrap">
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,
+
+There are no words...">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.</textarea>
+      <label class="field-label" style="margin-top:12px;">Sign Off</label>
+      <input class="regular-input" id="cSign" value="Forever yours 💕" maxlength="60"></div>
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-intimate" id="btn-letter" onclick="goTo('s-preview')">Preview My Card →</button>
+      <button class="btn-next btn-intimate" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)">Preview My Card →</button>
     </div>
   </div>
 </div>
@@ -303,7 +360,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
       <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;"></div>
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-intimate" id="btn-share" onclick="saveAndShare()">🎁 Create & Share Card</button>
+      <button class="btn-next btn-intimate" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
     </div>
   </div>
 </div>
@@ -327,33 +384,45 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
     <div class="rv-name" id="rvName">Happy Birthday!</div>
     <div class="rv-sub" id="rvSub">Someone special made this just for you 🌸</div>
     <div class="rv-from" id="rvFrom"></div>
-    <button class="rv-open-btn" onclick="goTo('rv-photos')">Open Your Card ✨</button>
+    <button class="rv-open-btn" onclick="goTo(&#39;rv-photos&#39;)">Open Your Card ✨</button>
+    <br>
+    <button class="rv-create-btn" onclick="window.location.href=&#39;/birthday/intimate.html&#39;">💝 Create a card like this</button>
   </div>
 </div>
 
 <div class="screen" id="rv-photos">
+  <button class="rv-back" onclick="goTo(&#39;rv-welcome&#39;)">←</button>
   <div class="rv-sec-hdr">
     <span class="rv-sec-tag" id="rvPhotoTag">Your Memories 📸</span>
     <div class="rv-sec-title">Moments just for you</div>
   </div>
   <div class="pol-strip" id="polStrip"></div>
-  <button class="rv-next-btn" onclick="goTo('rv-song')">Next → Your Special Song 🎵</button>
+  <div class="rv-nav-row">
+    <button class="rv-next-btn" onclick="goTo(&#39;rv-song&#39;)">Next → Your Song 🎵</button>
+  </div>
 </div>
 
-<div class="screen" id="rv-song" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 28px;background:linear-gradient(160deg,#fde8f0,#fce4ec);">
-  <span class="rv-sec-tag" style="margin-bottom:18px;">Your Song 🎵</span>
+<div class="screen" id="rv-song">
+  <button class="rv-back" onclick="goTo(&#39;rv-photos&#39;)">←</button>
+  <span class="rv-sec-tag" style="margin-top:52px;margin-bottom:12px;display:block;text-align:center;">Your Song 🎵</span>
   <div class="vinyl-wrap">
     <div class="vinyl vinyl-spin vinyl-pause" id="rvVinyl">
-      <div class="vinyl-center">🎵</div>
+      <div class="vinyl-groove" style="inset:8%;"></div>
+      <div class="vinyl-groove" style="inset:20%;"></div>
+      <div class="vinyl-groove" style="inset:32%;"></div>
+      <div class="vinyl-label"></div>
     </div>
   </div>
   <div class="rv-song-t" id="rvSongT">A song just for you</div>
   <div class="rv-song-a" id="rvSongA"></div>
   <div class="yt-wrap" id="rvYtWrap"><div id="rvYtEmbed"></div></div>
-  <button class="rv-next-btn" style="width:calc(100% - 48px);margin:0 24px;" onclick="goTo('rv-envelope')">Next → Your Letter 💌</button>
+  <div class="rv-song-nav">
+    <button class="rv-next-btn" onclick="goTo(&#39;rv-envelope&#39;)">Next → Your Letter 💌</button>
+  </div>
 </div>
 
-<div class="screen" id="rv-envelope" style="background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);">
+<div class="screen" id="rv-envelope">
+  <button class="rv-back" onclick="goTo(&#39;rv-song&#39;)">←</button>
   <div class="env-inner">
     <div class="env-t">A letter from the heart</div>
     <div class="env-h">Tap the envelope to open it</div>
@@ -361,15 +430,20 @@ body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:c
   </div>
 </div>
 
-<div class="screen" id="rv-letter" style="background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);">
+<div class="screen" id="rv-letter">
   <div class="letter-bar"></div>
-  <div class="letter-scroll">
-    <div class="l-greet" id="rvLGreet">Dear you,</div>
-    <div class="l-body" id="rvLBody"></div>
-    <div class="l-sign" id="rvLSign"></div>
+  <button class="rv-back" onclick="goTo(&#39;rv-envelope&#39;)" style="top:16px;">←</button>
+  <div class="letter-paper-wrap">
+    <div class="letter-paper">
+      <div class="l-greet" id="rvLGreet">Dear you,</div>
+      <div class="l-body" id="rvLBody"></div>
+      <span class="l-sign" id="rvLSign"></span>
+    </div>
   </div>
   <div class="letter-foot">
-    <button class="replay-btn" onclick="goTo('rv-welcome')">💝 Replay from start</button>
+    <div class="letter-foot-row">
+      <button class="replay-btn" onclick="goTo(&#39;rv-welcome&#39;)">💝 Replay from start</button>
+    </div>
   </div>
 </div>
 
@@ -435,6 +509,8 @@ let aiLetterCount = 0;
 const IS_RECEIVER = new URLSearchParams(window.location.search).has('card');
 
 // ── NAVIGATION ──
+const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
+
 function goTo(id, fromPreview=false){
   const prev=document.getElementById(curScreen);
   const next=document.getElementById(id);
@@ -455,9 +531,14 @@ function goTo(id, fromPreview=false){
     const btnId=btnMap[id];
     if(btnId){const b=document.getElementById(btnId);if(b){b.textContent='Done → Back to Preview ✓';b.onclick=()=>goTo('s-preview');}}
   }
-  // vinyl
+  // FIX: vinyl spin only on song screen
   const v=document.getElementById('rvVinyl');
   if(v){if(id==='rv-song')v.classList.remove('vinyl-pause');else v.classList.add('vinyl-pause');}
+  // FIX: stop YouTube iframe when leaving song screen
+  if(id!=='rv-song'){
+    const iframe=document.querySelector('#rvYtWrap iframe');
+    if(iframe){const s=iframe.src;iframe.src='';setTimeout(()=>iframe.src=s,10);}
+  }
   setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
 }
 
@@ -475,6 +556,19 @@ window.addEventListener('DOMContentLoaded',function(){
     goTo('rv-loading');
     initPetals();
     loadCard();
+    // FIX: swipe left/right between receiver screens
+    let _rx=0,_ry=0,_rt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){
+      _rx=e.changedTouches[0].clientX;_ry=e.changedTouches[0].clientY;_rt=Date.now();
+    },{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
+      if(curScreen==='rv-welcome'||curScreen==='rv-loading'||curScreen==='rv-error') return;
+      const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
+      const idx=RV_ORDER.indexOf(curScreen);if(idx===-1) return;
+      if(dx<0&&idx<RV_ORDER.length-1) goTo(RV_ORDER[idx+1]);
+      else if(dx>0&&idx>0) goTo(RV_ORDER[idx-1]);
+    },{passive:true});
   } else {
     // Build name inputs
     document.getElementById('nameInputWrap').innerHTML=`
@@ -495,7 +589,7 @@ window.addEventListener('DOMContentLoaded',function(){
     document.getElementById('title-song').textContent=CFG.songTitle;
     document.getElementById('title-letter').textContent=CFG.letterTitle;
     goTo('s-name');
-    // Swipe
+    // Swipe for creator screens
     let _tx=0,_ty=0,_tt=0;
     document.getElementById('mainApp').addEventListener('touchstart',function(e){
       _tx=e.changedTouches[0].clientX;_ty=e.changedTouches[0].clientY;_tt=Date.now();
@@ -796,5 +890,6 @@ function openLetter(){
   setTimeout(()=>{e.style.transform='';goTo('rv-letter');},380);
 }
 </script>
-</body>
-</html>
+
+
+</body></html>
