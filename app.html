@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0044)file:///C:/Users/Nilesh/Downloads/app_8.html -->
+<!-- saved from url=(0045)file:///C:/Users/Nilesh/Downloads/app_11.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -444,8 +444,8 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 .letter-area{
   width:100%;border:1.5px solid rgba(0,0,0,0.1);
   border-radius:16px;padding:16px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem;line-height:1.8;
+  font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;
+  font-size:1.05rem;line-height:2;
   background:rgba(255,255,255,0.7);outline:none;
   resize:none;min-height:160px;
   transition:border-color 0.3s;
@@ -455,8 +455,8 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
 .letter-area::placeholder{opacity:0.35;font-style:italic;}
 .retro-area{
   width:100%;border:3px solid #111;border-radius:8px;
-  padding:14px;font-family:'DM Sans',sans-serif;
-  font-size:0.95rem;line-height:1.7;
+  padding:14px;font-family:'DM Sans','Noto Sans Devanagari',sans-serif;
+  font-size:0.95rem;line-height:1.9;
   background:white;outline:none;resize:none;min-height:140px;
   box-shadow:3px 3px 0 #111;
   transition:box-shadow 0.15s;
@@ -635,8 +635,11 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
     <div class="step-content">
       <div class="step-counter dark">Step 2 of 4</div>
       <span class="step-emoji">📸</span>
-      <div class="step-title" id="title-photos">Your memories together</div>
-      <div class="step-sub">Tap any caption below a photo to rename it</div>
+      <div class="step-title" id="title-photos">Add your photos</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+        <div style="font-size:0.75rem;color:#8d3a5a;opacity:0.6;">Section title on card:</div>
+        <input id="photosHeading" class="regular-input" value="Our Memories" maxlength="30" style="flex:1;font-size:0.85rem;padding:8px 12px;">
+      </div>
       <div class="photos-grid" id="photosGrid"></div>
       <input type="file" accept="image/*" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
     </div>
@@ -696,23 +699,11 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
       <div class="step-counter dark">Step 4 of 4</div>
       <span class="step-emoji">💌</span>
       <div class="step-title" id="title-letter">Write from the heart</div>
-      <div class="step-sub">A few honest words mean everything</div>
+      <div class="step-sub">You can type directly in Hindi, Marathi or any language using your keyboard — or use AI to write it for you</div>
       <!-- AI letter -->
       <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(233,30,99,0.15);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
         <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ Write Letter with AI</div>
-        <div style="display:flex;gap:8px;margin-bottom:8px;">
-          <select id="letterLang" class="regular-input" style="flex:1;font-size:0.85rem;padding:10px 12px;">
-            <option value="English">English</option>
-            <option value="Hindi">Hindi</option>
-            <option value="Marathi">Marathi</option>
-            <option value="Tamil">Tamil</option>
-            <option value="Telugu">Telugu</option>
-            <option value="Bengali">Bengali</option>
-            <option value="Punjabi">Punjabi</option>
-            <option value="Gujarati">Gujarati</option>
-          </select>
-          <input id="letterTone" class="regular-input" placeholder="Tone: funny, emotional..." style="flex:1;" maxlength="40">
-        </div>
+        <input id="letterTone" class="regular-input" placeholder="e.g. emotional, funny, simple Hindi, Marathi..." style="margin-bottom:8px;" maxlength="60">
         <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;">✨ Write Letter with AI</button>
         <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span style="font-size:0.78rem;color:#8d3a5a;" id="letterAiText">Writing your letter...</span></div>
         <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#8d3a5a;margin-top:6px;">↑ Tap again for a different letter</div>
@@ -751,7 +742,7 @@ body{font-family:'DM Sans',sans-serif;height:100%;overflow:hidden;}
     <span class="save-emoji" id="saveEmoji">💝</span>
     <div class="save-label" id="saveLabel">Saving your card...</div>
     <div class="save-bar-wrap" id="saveBarWrap"><div class="save-bar" id="saveBar"></div></div>
-    <div class="save-step" id="saveStep">Please wait</div>
+    <div class="save-step" id="saveStep" style="display:none;"></div>
   </div>
 </div>
 
@@ -806,7 +797,7 @@ const STYLES = {
     shareClass:'soft-share', linkRowClass:'soft-link-row', copyClass:'soft-copy',
     closeClass:'soft-close',
     emoji:'💝', stepEmoji:'💝',
-    photosTitle:'Your memories together',
+    photosTitle:'Add your photos',
     songTitle:'A song that reminds you of them',
     letterTitle:'Write from the heart',
     defaultMsg:"Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.",
@@ -825,7 +816,7 @@ const STYLES = {
     shareClass:'retro-share', linkRowClass:'retro-link-row', copyClass:'retro-copy',
     closeClass:'retro-close',
     emoji:'🎊', stepEmoji:'🎂',
-    photosTitle:'Your comic strip memories',
+    photosTitle:'Add your photos',
     songTitle:'Your party anthem 🎵',
     letterTitle:'Write the newspaper letter',
     defaultMsg:"It's a BIG day and you deserve to feel like a superstar! Thank you for being exactly who you are — hilarious, brilliant and absolutely one of a kind.",
@@ -844,7 +835,7 @@ const STYLES = {
     shareClass:'soft-share', linkRowClass:'soft-link-row', copyClass:'soft-copy',
     closeClass:'soft-close',
     emoji:'🌸', stepEmoji:'🌸',
-    photosTitle:'Your memories with her',
+    photosTitle:'Add your photos',
     songTitle:'A song that reminds you of her',
     letterTitle:'Write her something from the heart',
     defaultMsg:"There are no words that can fully express what you mean to me. But I want you to know — every good thing in me came from watching you. Thank you for being my everything.",
@@ -989,7 +980,7 @@ function selectOccasion(occ){
         <div class="preview-label-row">
           <div>
             <div class="preview-style-name">💌 Intimate</div>
-            <div class="preview-style-desc">Soft & emotional • Envelope reveal • 5 themes</div>
+            <div class="preview-style-desc">Soft & emotional • Envelope reveal • Photos & song</div>
           </div>
         </div>
         <button class="preview-btn intimate-btn" onclick="event.stopPropagation();selectStyle('birthday-intimate')">💌 Make this card →</button>
@@ -1271,14 +1262,7 @@ function handlePhotoUpload(inp){
   const slot=document.getElementById('slot'+idx);
   const cfg=currentStyleConfig;
   const isRetro=cfg&&cfg.inputType==='retro';
-  slot.innerHTML=`
-    <img src="${url}">
-    <button class="photo-del" onclick="removePhoto(event,${idx})">✕</button>
-    <input class="photo-caption-input" value="${photoCaptions[idx]||'Memory '+(idx+1)}"
-      onclick="event.stopPropagation()"
-      oninput="photoCaptions[${idx}]=this.value"
-      style="position:absolute;bottom:0;left:0;right:0;border:none;font-size:0.55rem;font-weight:700;text-align:center;padding:3px 2px;background:${isRetro?'#FFE135':'rgba(233,30,99,0.85)'};color:${isRetro?'#111':'white'};outline:none;cursor:text;">
-  `;
+  slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${idx})">✕</button>`;
   inp.value='';
 }
 function removePhoto(e,idx){
@@ -1362,20 +1346,26 @@ async function runAILetter(){
   const cfg=currentStyleConfig;
   const name=document.getElementById('cName')?.value.trim()||'them';
   const sender=document.getElementById('cSender')?.value.trim()||'someone';
-  const lang=document.getElementById('letterLang')?.value||'English';
-  const tone=document.getElementById('letterTone')?.value.trim()||'warm and heartfelt';
+  const toneInput=document.getElementById('letterTone')?.value.trim()||'';
   const btn=document.getElementById('aiLetterBtn');
   const loading=document.getElementById('letterAiLoading');
   const resultHint=document.getElementById('letterAiResult');
   aiLetterCount++;
   btn.disabled=true; loading.classList.add('show');
   const occ = cfg.cardType.includes('mothersday')?"Mother's Day":cfg.occasion;
-  const variationHint = aiLetterCount>1 ? ` This is attempt #${aiLetterCount} — write a COMPLETELY DIFFERENT letter with different words and ideas.` : '';
+  const variationHint = aiLetterCount>1 ? ` Attempt #${aiLetterCount} — write a COMPLETELY DIFFERENT letter with different words and ideas.` : '';
+
+  // Detect if user wants a specific language from tone input
+  const langs = ['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
+  const detectedLang = langs.find(l=>toneInput.toLowerCase().includes(l));
   let langNote = '';
-  if(lang !== 'English'){
-    langNote = ` CRITICAL: Write ONLY in ${lang} script. Use simple natural everyday ${lang} — exactly how a real person texts or talks to someone they love. NOT formal, NOT poetic, NOT literary. NOT translated English sentences. Real ${lang} like "अरे यार, आज तुझा वाढदिवस आहे" not "तुझ्या जन्मदिनाच्या दिवशी माझे हृदय आनंदाने भरून जाते".`;
+  if(detectedLang){
+    const langName = detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1);
+    langNote = ` CRITICAL: Write the ENTIRE letter in ${langName} script only. Use simple natural everyday ${langName} — exactly how real people speak to loved ones. NOT formal or poetic. NOT translated English.`;
   }
-  const prompt = `Write a short ${occ} letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone}.${langNote}${variationHint} Return ONLY the letter body — no greeting, no sign off.`;
+
+  const toneDesc = toneInput || 'warm and heartfelt';
+  const prompt = `Write a short ${occ} letter from ${sender} to ${name} (3-4 sentences). Tone/style: ${toneDesc}.${langNote}${variationHint} Return ONLY the letter body — no greeting line, no sign off.`;
   const text=await callClaude(prompt);
   if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
   btn.disabled=false; loading.classList.remove('show');
@@ -1433,11 +1423,12 @@ function buildPreview(){
     ${sender?`<div style="text-align:center;font-size:0.72rem;opacity:0.6;margin-top:4px;">From ${sender} 💝</div>`:''}
   `,'s-name');
 
+  const photosHeading = document.getElementById('photosHeading')?.value.trim()||'Our Memories';
+
   // Page 2: Photos
-  makePage('📸','Your Photos',
+  makePage('📸', photosHeading,
     realPhotos.length?
-      `<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map((u,i)=>`<div style="position:relative;"><img src="${u}" style="width:52px;height:52px;border-radius:${isRetro?'4px':'8px'};object-fit:cover;border:${isRetro?'2px solid #111':'2px solid rgba(233,30,99,0.2)'};">
-      <div style="font-size:0.5rem;text-align:center;font-weight:600;opacity:0.7;margin-top:2px;">${photoCaptions[i]||''}</div></div>`).join('')}</div>`
+      `<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map(u=>`<img src="${u}" style="width:52px;height:52px;border-radius:${isRetro?'4px':'8px'};object-fit:cover;border:${isRetro?'2px solid #111':'2px solid rgba(233,30,99,0.2)'};">`).join('')}</div>`
       :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No photos added yet</div>`,
   's-photos');
 
@@ -1469,12 +1460,12 @@ async function saveAndShare(){
 
   function setProgress(pct,lbl,stp){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;if(stp)step.textContent=stp;}
   overlay.classList.add('show');
-  setProgress(10,'Preparing your card... '+cfg.emoji,'Getting everything ready');
+  setProgress(10,'Saving your card... '+cfg.emoji,'');
 
   let photoUrls=[];
   const realPhotos=photos.filter(Boolean);
   for(let i=0;i<realPhotos.length;i++){
-    setProgress(10+((i/Math.max(realPhotos.length,1))*50),'Uploading photos... 📸',`Photo ${i+1} of ${realPhotos.length}`);
+    setProgress(10+((i+1)/Math.max(realPhotos.length,1)*55),'Saving your card... '+cfg.emoji,'');
     try{
       const blob=await fetch(realPhotos[i]).then(r=>r.blob());
       const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
@@ -1483,7 +1474,7 @@ async function saveAndShare(){
     }catch(e){console.error(e);}
   }
 
-  setProgress(70,'Saving your card... 💾','Almost there!');
+  setProgress(70,'Saving your card... '+cfg.emoji,'');
   const now=Date.now();
   const cardData={
     type:cfg.cardType,
@@ -1494,18 +1485,19 @@ async function saveAndShare(){
     sign:document.getElementById('cSign')?.value.trim()||'',
     spotify:document.getElementById('cSpotify')?.value.trim()||'',
     songName:document.getElementById('songSelectedName')?.textContent||'',
+    photosHeading:document.getElementById('photosHeading')?.value.trim()||'Our Memories',
     photos:photoUrls,
     created:now,createdAt:now,
     expiresAt:now+3*24*60*60*1000
   };
 
   try{
-    setProgress(85,'Saving...','Storing in the cloud');
+    setProgress(85,'Saving your card... '+cfg.emoji,'');
     const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
     const data=await res.json();
     const cardId=data.name;
     shareLink=cfg.shareUrl(cardId);
-    setProgress(100,'Card saved! 🎉','Ready to share!');
+    setProgress(100,'Card saved! 🎉','');
     fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
     setTimeout(()=>{
       overlay.classList.remove('show');
