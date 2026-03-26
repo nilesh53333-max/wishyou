@@ -2,234 +2,327 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>WishYou.ai — Birthday Cards</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
-<meta property="og:title" content="WishYou.ai — Birthday Cards">
-<meta property="og:description" content="Choose your birthday card style">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WishYou.ai — Send Love, Beautifully</title>
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
+<meta property="og:title" content="WishYou.ai — Send Love, Beautifully">
+<meta property="og:description" content="Interactive cards with photos, music &amp; heartfelt letters.">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ── RESET ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:#111;display:flex;align-items:center;justify-content:center;}
-.app{position:relative;width:100%;max-width:430px;height:100vh;overflow:hidden;margin:0 auto;}
-@media(min-width:500px){
-  .app{height:90vh;max-height:900px;border-radius:40px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,0.8);}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:#060409;color:white;overflow-x:hidden;}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:white;text-decoration:none;letter-spacing:0.04em;}
+.nav-logo span{color:#e83878;}
+
+
+
+/* ── HERO ── */
+.hero{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px 32px;position:relative;overflow:hidden;}
+.g1{position:absolute;width:700px;height:700px;top:-220px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(232,56,120,0.09) 0%,transparent 65%);pointer-events:none;}
+.g2{position:absolute;width:500px;height:500px;bottom:-100px;left:-100px;background:radial-gradient(circle,rgba(90,40,180,0.07) 0%,transparent 65%);pointer-events:none;}
+.g3{position:absolute;width:400px;height:400px;bottom:-80px;right:-80px;background:radial-gradient(circle,rgba(240,100,60,0.06) 0%,transparent 65%);pointer-events:none;}
+
+/* Subtle dot grid */
+.dot-grid{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,0.07) 1px,transparent 1px);background-size:28px 28px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 0%,transparent 100%);}
+
+.hero-inner{position:relative;z-index:2;max-width:620px;}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,0.1);border-radius:50px;padding:6px 14px;margin-bottom:16px;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;animation:fu 0.8s ease both;}
+.tag-dot{width:5px;height:5px;border-radius:50%;background:#e83878;box-shadow:0 0 8px rgba(232,56,120,0.9);}
+
+h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,7vw,4rem);font-weight:700;line-height:1.0;letter-spacing:-0.025em;margin-bottom:14px;animation:fu 0.8s 0.06s ease both;}
+h1 .l1{display:block;color:rgba(255,255,255,0.93);}
+h1 .l2{display:block;font-style:italic;background:linear-gradient(120deg,#e83878 30%,#f5804a 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.hero-p{display:none;}
+
+
+
+
+
+
+
+
+/* ── OCCASIONS ── */
+.occasions{padding:20px 24px 60px;max-width:1000px;margin:0 auto;}
+
+.sec-head{text-align:center;margin-bottom:24px;}
+.sec-label{font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.2);display:block;margin-bottom:10px;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;color:rgba(255,255,255,0.88);}
+
+/* OCCASION GRID — 3 cols on desktop, 2 on tablet, 1 on mobile */
+.occ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media(max-width:780px){.occ-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.occ-grid{grid-template-columns:1fr 1fr;gap:10px;}}
+
+/* BASE CARD */
+.occ{border-radius:20px;padding:22px 20px 20px;border:1px solid rgba(255,255,255,0.055);position:relative;overflow:hidden;cursor:pointer;touch-action:manipulation;text-decoration:none;display:block;transition:transform 0.22s cubic-bezier(.2,0,.2,1),border-color 0.22s,box-shadow 0.22s;background:#0c0810;}
+.occ:active{transform:scale(0.96)!important;}
+.occ-glow{position:absolute;width:160px;height:160px;top:-40px;right:-30px;border-radius:50%;pointer-events:none;transition:opacity 0.3s;}
+
+/* Live cards */
+.occ.live:hover{transform:translateY(-3px);}
+
+/* Coming soon */
+.occ.soon{opacity:0.38;cursor:default;}
+.occ.soon:hover{transform:none!important;box-shadow:none!important;border-color:rgba(255,255,255,0.055)!important;}
+
+/* Per-occasion accent colours */
+.c-bday   {border-color:rgba(232,56,120,0.08);} .c-bday:hover  {border-color:rgba(232,56,120,0.22);box-shadow:0 16px 48px rgba(232,56,120,0.12);}  .c-bday   .occ-glow{background:radial-gradient(circle,rgba(232,56,120,0.18),transparent 65%);}
+.c-mday   {border-color:rgba(240,160,60,0.08);} .c-mday:hover  {border-color:rgba(240,160,60,0.22);box-shadow:0 16px 48px rgba(240,160,60,0.1);}   .c-mday   .occ-glow{background:radial-gradient(circle,rgba(240,160,60,0.15),transparent 65%);}
+.c-vday   {border-color:rgba(255,80,80,0.08);}  .c-vday:hover  {border-color:rgba(255,80,80,0.22);box-shadow:0 16px 48px rgba(255,80,80,0.1);}    .c-vday   .occ-glow{background:radial-gradient(circle,rgba(255,80,80,0.15),transparent 65%);}
+.c-anniv  {border-color:rgba(180,120,255,0.08);}.c-anniv:hover {border-color:rgba(180,120,255,0.22);box-shadow:0 16px 48px rgba(180,120,255,0.1);}  .c-anniv  .occ-glow{background:radial-gradient(circle,rgba(180,120,255,0.15),transparent 65%);}
+.c-fday   {border-color:rgba(80,200,255,0.08);} .c-fday:hover  {border-color:rgba(80,200,255,0.22);box-shadow:0 16px 48px rgba(80,200,255,0.08);}  .c-fday   .occ-glow{background:radial-gradient(circle,rgba(80,200,255,0.12),transparent 65%);}
+.c-grad   {border-color:rgba(60,210,140,0.08);} .c-grad:hover  {border-color:rgba(60,210,140,0.22);box-shadow:0 16px 48px rgba(60,210,140,0.08);}  .c-grad   .occ-glow{background:radial-gradient(circle,rgba(60,210,140,0.12),transparent 65%);}
+.c-baby   {border-color:rgba(255,180,60,0.08);} .c-baby:hover  {border-color:rgba(255,180,60,0.22);box-shadow:0 16px 48px rgba(255,180,60,0.08);}  .c-baby   .occ-glow{background:radial-gradient(circle,rgba(255,180,60,0.12),transparent 65%);}
+.c-fday2  {border-color:rgba(120,220,80,0.08);} .c-fday2:hover {border-color:rgba(120,220,80,0.22);box-shadow:0 16px 48px rgba(120,220,80,0.08);}  .c-fday2  .occ-glow{background:radial-gradient(circle,rgba(120,220,80,0.12),transparent 65%);}
+.c-xmas   {border-color:rgba(255,60,60,0.08);}  .c-xmas:hover  {border-color:rgba(255,60,60,0.22);box-shadow:0 16px 48px rgba(255,60,60,0.08);}   .c-xmas   .occ-glow{background:radial-gradient(circle,rgba(255,60,60,0.12),transparent 65%);}
+
+/* Card content */
+.occ-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;position:relative;z-index:1;}
+.occ-emoji{font-size:1.9rem;line-height:1;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,0.8);margin-top:4px;animation:ldot 2s ease-in-out infinite;}
+@keyframes ldot{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.soon-tag{font-size:0.58rem;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:50px;padding:3px 9px;}
+
+.occ-name{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:5px;line-height:1.2;position:relative;z-index:1;}
+.occ-desc{font-size:0.73rem;color:rgba(255,255,255,0.28);line-height:1.55;margin-bottom:16px;position:relative;z-index:1;}
+.occ-chips{display:flex;flex-wrap:wrap;gap:4px;position:relative;z-index:1;}
+.chip{font-size:0.58rem;color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:50px;padding:2px 8px;}
+
+/* ── HOW IT WORKS — ultra minimal ── */
+
+
+
+
+
+
+
+
+
+/* ── FOOTER ── */
+footer{border-top:1px solid rgba(255,255,255,0.04);padding:24px 32px;}
+.foot{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.foot-logo{font-family:'Cormorant Garamond',serif;font-size:0.85rem;color:rgba(255,255,255,0.2);letter-spacing:0.05em;}
+.foot-links{display:flex;gap:18px;}
+.foot-a{font-size:0.72rem;color:rgba(255,255,255,0.18);text-decoration:none;transition:color 0.2s;}
+.foot-a:hover{color:rgba(255,255,255,0.45);}
+
+@keyframes fu{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+@media(max-width:480px){
+  .nav{padding:14px 20px;}
+  .hero{padding:70px 20px 20px;}
+  h1{font-size:clamp(2rem,9vw,2.6rem);}
+  .occasions{padding:12px 16px 60px;}
+  .occ{padding:18px 14px 16px;}
+  .occ-name{font-size:1rem;}
 }
-
-/* STYLE PICKER */
-#s-style{
-  position:absolute;inset:0;
-  background:#0f0810;
-  display:flex;flex-direction:column;align-items:center;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  justify-content:flex-start;
-}
-.style-header{padding:52px 24px 16px;display:flex;align-items:center;gap:14px;width:100%;max-width:430px;flex-shrink:0;}
-.back-circle{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:rgba(255,255,255,0.6);flex-shrink:0;touch-action:manipulation;transition:background 0.2s;text-decoration:none;}
-.back-circle:active{background:rgba(255,255,255,0.12);}
-.style-occasion-label{font-size:0.65rem;color:rgba(255,255,255,0.3);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;}
-.style-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:white;}
-.style-cards-wrap{padding:0 18px 40px;display:flex;flex-direction:column;gap:14px;width:100%;max-width:430px;flex-shrink:0;}
-
-/* PREVIEW CARDS */
-.style-preview-card{border-radius:18px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;width:100%;}
-.style-preview-card:active{transform:scale(0.97);}
-.preview-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec);border:1.5px solid rgba(233,30,99,0.15);padding:14px 14px 12px;}
-.preview-retro{background:#FFE135;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:14px 14px 12px;}
-
-/* Slideshow */
-.slide-viewport{width:100%;border-radius:10px;overflow:hidden;position:relative;height:140px;margin-bottom:8px;background:rgba(255,255,255,0.6);}
-.preview-retro .slide-viewport{background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
-.preview-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
-.preview-slide.active-slide{opacity:1;}
-.slide-dots{display:flex;gap:5px;justify-content:center;margin-bottom:10px;}
-.slide-dot{width:6px;height:6px;border-radius:50%;background:rgba(233,30,99,0.2);transition:all 0.3s;}
-.slide-dot.active{background:#e91e63;transform:scale(1.3);}
-.retro-dot{background:rgba(17,17,17,0.15)!important;}
-.retro-dot.active{background:#d90429!important;}
-.slide-screen-label{font-size:0.55rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
-.slide-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;margin-bottom:6px;line-height:1.2;}
-.slide-title.retro-slide-title{font-family:'Fredoka One',cursive;color:#d90429;font-size:0.95rem;}
-.slide-photos{display:flex;gap:4px;justify-content:center;margin:4px 0;}
-.slide-pol{width:38px;height:50px;background:white;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:3px 3px 10px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
-.slide-pol:nth-child(odd){transform:rotate(-2deg);}
-.slide-pol:nth-child(even){transform:rotate(2deg);}
-.slide-comic{display:flex;gap:3px;justify-content:center;margin:4px 0;}
-.slide-panel{width:42px;height:56px;border:2px solid #111;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;background:#fff9c4;}
-.slide-panel:nth-child(2){background:#ffe0b2;}
-.slide-panel:nth-child(3){background:#fce4ec;}
-.slide-env{font-size:2.2rem;animation:envWiggle 2s ease-in-out infinite;}
-@keyframes envWiggle{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
-.slide-balloon{font-size:2.5rem;animation:ballFloat 1.5s ease-in-out infinite;}
-@keyframes ballFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.slide-vinyl{width:44px;height:44px;border-radius:50%;background:conic-gradient(#111 0deg,#222 20deg,#111 40deg,#222 60deg,#111 80deg,#222 100deg,#111 120deg,#222 140deg,#111 160deg,#222 180deg,#111 200deg,#222 220deg,#111 240deg,#222 260deg,#111 280deg,#222 300deg,#111 320deg,#222 340deg,#111 360deg);animation:vinylSpin 3s linear infinite;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #333,0 0 0 5px #444;}
-@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.slide-vinyl-center{width:12px;height:12px;border-radius:50%;background:#e91e63;position:absolute;}
-.slide-letter-lines{width:80%;margin:4px auto;}
-.slide-line{height:2px;border-radius:2px;background:rgba(74,14,42,0.12);margin-bottom:4px;}
-.slide-line:first-child{width:60%;background:rgba(233,30,99,0.3);}
-.slide-newspaper{background:#fdf8e7;border:2px solid #111;border-radius:4px;padding:6px 8px;width:100%;}
-.slide-news-head{font-family:'Fredoka One',cursive;font-size:0.55rem;color:#111;border-bottom:2px double #111;margin-bottom:4px;padding-bottom:2px;}
-.slide-headline{background:#d90429;color:white;font-family:'Fredoka One',cursive;font-size:0.55rem;padding:2px 4px;border-radius:2px;margin-bottom:4px;}
-.slide-news-lines{display:flex;flex-direction:column;gap:2px;}
-.slide-news-line{height:2px;background:rgba(0,0,0,0.12);border-radius:1px;}
-
-.preview-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.preview-style-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;}
-.preview-style-name.retro-name{font-family:'Fredoka One',cursive;color:#d90429;}
-.preview-style-desc{font-size:0.62rem;color:#8d3a5a;margin-top:1px;}
-.preview-style-desc.retro-desc{font-family:'Fredoka One',cursive;color:#555;font-size:0.6rem;}
-.preview-btn{padding:12px 18px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;width:100%;margin-top:6px;transition:transform 0.15s;text-decoration:none;display:block;text-align:center;}
-.preview-btn:active{transform:scale(0.97);}
-.preview-btn.intimate-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
-.preview-btn.retro-btn{background:#d90429;color:white;border:2px solid #111;border-radius:6px;box-shadow:3px 3px 0 #111;font-family:'Fredoka One',cursive;font-size:0.9rem;}
-
-.wm{position:fixed;bottom:10px;right:14px;z-index:100;font-size:0.6rem;color:rgba(255,255,255,0.3);}
 </style>
 </head>
 <body>
-<div class="app">
-  <div id="s-style">
-    <div class="style-header">
-      <a href="/" class="back-circle">←</a>
-      <div>
-        <div class="style-occasion-label">Birthday</div>
-        <div class="style-title">Choose your style</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">Wish<span>You</span>.ai</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="g1"></div>
+  <div class="g2"></div>
+  <div class="g3"></div>
+  <div class="dot-grid"></div>
+
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <div class="tag-dot"></div>
+      AI-Powered Interactive Cards
+    </div>
+
+    <h1>
+      <span class="l1">Send love,</span>
+      <span class="l2">beautifully.</span>
+    </h1>
+  </div>
+
+
+</section>
+
+<!-- OCCASIONS -->
+<section class="occasions">
+  <div class="sec-head">
+    <span class="sec-label">Every occasion</span>
+    <div class="sec-title">What are you celebrating?</div>
+  </div>
+
+  <div class="occ-grid">
+
+    <!-- BIRTHDAY — live -->
+    <a href="/birthday/" class="occ c-bday live">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">🎂</span>
+        <div class="live-dot"></div>
+      </div>
+      <div class="occ-name">Birthday</div>
+      <div class="occ-desc">Make them feel truly special with a card they'll never forget.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
+      </div>
+    </a>
+
+    <!-- MOTHER'S DAY — live -->
+    <a href="/mothers-day/" class="occ c-mday live">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">🌸</span>
+        <div class="live-dot"></div>
+      </div>
+      <div class="occ-name">Mother's Day</div>
+      <div class="occ-desc">Tell her everything you never quite found the words for.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
+      </div>
+    </a>
+
+    <!-- VALENTINE'S DAY — coming soon -->
+    <div class="occ c-vday soon">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">❤️</span>
+        <span class="soon-tag">Soon</span>
+      </div>
+      <div class="occ-name">Valentine's Day</div>
+      <div class="occ-desc">The most romantic card they'll ever receive.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
       </div>
     </div>
-    <div class="style-cards-wrap">
 
-      <!-- INTIMATE -->
-      <div class="style-preview-card preview-intimate" id="prev-intimate" onclick="window.location.href='/birthday/intimate.html'">
-        <div class="slide-viewport">
-          <div class="preview-slide active-slide">
-            <div class="slide-screen-label">Welcome Screen</div>
-            <div style="font-size:2rem;margin-bottom:6px;">💝</div>
-            <div class="slide-title">Happy Birthday!</div>
-            <div style="font-size:0.65rem;color:#8d3a5a;opacity:0.7;">Someone special made this just for you 🌸</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Your Memories</div>
-            <div class="slide-photos">
-              <div class="slide-pol">📸</div><div class="slide-pol">🌸</div><div class="slide-pol">💕</div>
-            </div>
-            <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Your photos as beautiful polaroids</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Song Screen</div>
-            <div style="position:relative;display:flex;align-items:center;justify-content:center;margin:4px 0;">
-              <div class="slide-vinyl"><div class="slide-vinyl-center"></div></div>
-            </div>
-            <div style="font-size:0.65rem;color:#4a0e2a;font-weight:600;margin-top:6px;">Your Special Song 🎵</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Envelope Reveal</div>
-            <div class="slide-env">💌</div>
-            <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Tap to open the letter...</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label">Heartfelt Letter</div>
-            <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:10px;width:100%;border-top:3px solid #e91e63;">
-              <div style="font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:#4a0e2a;font-weight:600;margin-bottom:4px;">Dear Priya,</div>
-              <div class="slide-letter-lines">
-                <div class="slide-line" style="width:100%"></div>
-                <div class="slide-line" style="width:90%"></div>
-                <div class="slide-line" style="width:95%"></div>
-              </div>
-              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.68rem;color:#e91e63;margin-top:6px;">Forever yours 💕</div>
-            </div>
-          </div>
-        </div>
-        <div class="slide-dots">
-          <div class="slide-dot active"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div><div class="slide-dot"></div>
-        </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name">💌 Intimate</div>
-            <div class="preview-style-desc">Soft & emotional • Envelope reveal • Photos & song</div>
-          </div>
-        </div>
-        <a class="preview-btn intimate-btn" href="/birthday/intimate.html" onclick="event.stopPropagation();">💌 Make this card →</a>
+    <!-- ANNIVERSARY — coming soon -->
+    <div class="occ c-anniv soon">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">💍</span>
+        <span class="soon-tag">Soon</span>
       </div>
-
-      <!-- RETRO -->
-      <div class="style-preview-card preview-retro" id="prev-retro" onclick="window.location.href='/birthday/retro.html'">
-        <div class="slide-viewport">
-          <div class="preview-slide active-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Welcome Screen</div>
-            <div style="font-size:2rem;margin-bottom:4px;">🎂</div>
-            <div class="slide-title retro-slide-title">Happy Birthday!</div>
-            <div style="font-family:'Patrick Hand',cursive;font-size:0.65rem;color:#555;">Someone special made this 🎊</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Comic Strip Photos</div>
-            <div class="slide-comic">
-              <div class="slide-panel">🎂</div><div class="slide-panel">🎉</div><div class="slide-panel">🎈</div>
-            </div>
-            <div style="font-family:'Patrick Hand',cursive;font-size:0.6rem;color:#555;margin-top:4px;">Your photos as a comic strip!</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Party Anthem</div>
-            <div style="background:linear-gradient(135deg,#1a0a00,#2d1500);border-radius:8px;padding:10px;margin:4px 0;width:90%;">
-              <div style="display:flex;justify-content:center;"><div class="slide-vinyl" style="width:36px;height:36px;"><div class="slide-vinyl-center" style="background:#FFE135;"></div></div></div>
-              <div style="font-family:'Fredoka One',cursive;font-size:0.65rem;color:#FFE135;text-align:center;margin-top:5px;">Your Party Anthem 🎵</div>
-            </div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Balloon Pop!</div>
-            <div class="slide-balloon">🎈</div>
-            <div style="font-family:'Fredoka One',cursive;font-size:0.65rem;color:#d90429;margin-top:4px;">Pop it to reveal the letter!</div>
-          </div>
-          <div class="preview-slide">
-            <div class="slide-screen-label" style="color:#d90429;">Newspaper Letter</div>
-            <div class="slide-newspaper">
-              <div class="slide-news-head">🗞️ THE BIRTHDAY GAZETTE</div>
-              <div class="slide-headline">BREAKING: IT'S YOUR BIRTHDAY!</div>
-              <div class="slide-news-lines">
-                <div class="slide-news-line"></div><div class="slide-news-line" style="width:90%"></div><div class="slide-news-line" style="width:85%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="slide-dots">
-          <div class="slide-dot retro-dot active"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div><div class="slide-dot retro-dot"></div>
-        </div>
-        <div class="preview-label-row">
-          <div>
-            <div class="preview-style-name retro-name">🎊 Retro Party</div>
-            <div class="preview-style-desc retro-desc">Fun & loud • Balloon pop • Newspaper letter</div>
-          </div>
-        </div>
-        <a class="preview-btn retro-btn" href="/birthday/retro.html" onclick="event.stopPropagation();">🎊 Make this card →</a>
+      <div class="occ-name">Anniversary</div>
+      <div class="occ-desc">Celebrate the love story that started it all.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
       </div>
+    </div>
 
+    <!-- FRIENDSHIP DAY — coming soon -->
+    <div class="occ c-fday soon">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">🤝</span>
+        <span class="soon-tag">Soon</span>
+      </div>
+      <div class="occ-name">Friendship Day</div>
+      <div class="occ-desc">Because some people just make life better.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
+      </div>
+    </div>
+
+    <!-- GRADUATION — coming soon -->
+    <div class="occ c-grad soon">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">🎓</span>
+        <span class="soon-tag">Soon</span>
+      </div>
+      <div class="occ-name">Graduation</div>
+      <div class="occ-desc">Mark the moment they worked so hard for.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
+      </div>
+    </div>
+
+    <!-- NEW BABY — coming soon -->
+    <div class="occ c-baby soon">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">👶</span>
+        <span class="soon-tag">Soon</span>
+      </div>
+      <div class="occ-name">New Baby</div>
+      <div class="occ-desc">Welcome the newest member of the family.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
+      </div>
+    </div>
+
+    <!-- FATHER'S DAY — coming soon -->
+    <div class="occ c-fday2 soon">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">👨</span>
+        <span class="soon-tag">Soon</span>
+      </div>
+      <div class="occ-name">Father's Day</div>
+      <div class="occ-desc">Show him how much he truly means to you.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
+      </div>
+    </div>
+
+    <!-- CHRISTMAS — coming soon -->
+    <div class="occ c-xmas soon">
+      <div class="occ-glow"></div>
+      <div class="occ-top">
+        <span class="occ-emoji">🎄</span>
+        <span class="soon-tag">Soon</span>
+      </div>
+      <div class="occ-name">Christmas</div>
+      <div class="occ-desc">Spread warmth, joy, and the magic of the season.</div>
+      <div class="occ-chips">
+        <span class="chip">📸 Photos</span>
+        <span class="chip">🎵 Music</span>
+        <span class="chip">💌 Letter</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot">
+    <span class="foot-logo">WishYou.ai</span>
+    <div class="foot-links">
+      <a href="/privacy-policy.html" class="foot-a">Privacy</a>
+      <a href="/terms.html" class="foot-a">Terms</a>
+      <a href="/refund.html" class="foot-a">Refund</a>
     </div>
   </div>
-</div>
-<div class="wm">WishYou.ai</div>
+</footer>
 
-<script>
-const slideshowTimers = {};
-function startSlideshow(cardId, totalSlides){
-  if(slideshowTimers[cardId]) clearInterval(slideshowTimers[cardId]);
-  let idx=0;
-  function next(){
-    const slides=document.querySelectorAll('#'+cardId+' .preview-slide');
-    const dots=document.querySelectorAll('#'+cardId+' .slide-dot');
-    slides.forEach(s=>s.classList.remove('active-slide'));
-    dots.forEach(d=>d.classList.remove('active'));
-    idx=(idx+1)%totalSlides;
-    if(slides[idx]) slides[idx].classList.add('active-slide');
-    if(dots[idx]) dots[idx].classList.add('active');
-  }
-  slideshowTimers[cardId]=setInterval(next,2200);
-}
-window.addEventListener('DOMContentLoaded',function(){
-  startSlideshow('prev-intimate',5);
-  setTimeout(()=>startSlideshow('prev-retro',5),1100);
-});
-</script>
-</body>
-</html>
+
+
+</body></html>
