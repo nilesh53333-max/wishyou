@@ -262,273 +262,149 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
 #btn-back-edit:hover{color:rgba(255,255,255,.5);}
 
 /* ══════════════════════════════════════════
-   SCREEN 3 — CARD
+   SCREEN 3 — CARD  (strict zone layout)
+   ZONE A: top 12-34%  — since + date (always visible, never moves)
+   ZONE B: 34-38%      — star hint pill
+   ZONE C: 38-82%      — stars + sky + tree grows here
+   ZONE D: 82-92%      — ground
+   ZONE E: bottom bar  — happy birthday + action buttons
 ══════════════════════════════════════════ */
 #screen-card{z-index:10;}
 
-/* Falling heart */
 #falling-heart{
   position:fixed;font-size:32px;color:#ff3a6e;
   display:none;z-index:50;pointer-events:none;
   line-height:1;transform-origin:center;
 }
-
-/* Tree canvas */
 #tree-canvas{
-  position:fixed;inset:0;
-  width:100%;height:100%;
+  position:fixed;inset:0;width:100%;height:100%;
   pointer-events:none;z-index:15;
 }
 
-/* LEFT text panel */
-#text-panel{
-  position:fixed;
-  left:0;top:0;bottom:0;width:44%;
-  display:flex;flex-direction:column;
-  justify-content:center;
-  padding:0 0 0 5vw;
-  z-index:40;pointer-events:none;
-  gap:0;
-}
-/* vertical gold thread */
-#text-panel::before{
-  content:'';position:absolute;
-  left:3vw;top:22%;bottom:22%;width:1px;
-  background:linear-gradient(180deg,
-    transparent,rgba(245,198,60,.12) 25%,
-    rgba(245,198,60,.32) 50%,
-    rgba(245,198,60,.12) 75%,transparent
-  );
-}
-
-/* TYPEWRITER lines */
-.tw-line{
-  display:block;
-  overflow:hidden;
-  white-space:nowrap;
-  width:0;
-  opacity:1;
-}
-.tw-line.typing{
-  border-right:2px solid rgba(255,255,255,.6);
-  animation:cursor .55s step-end infinite;
-}
-@keyframes cursor{0%,100%{border-color:transparent;}50%{border-color:rgba(255,255,255,.7);}}
-
-#tw-since{
-  font-family:'Libre Baskerville',serif;
-  font-style:italic;font-weight:400;
-  font-size:clamp(11px,1.5vw,17px);
-  color:rgba(255,255,255,.5);
-  letter-spacing:2px;
-  margin-bottom:14px;
-  line-height:1.6;
-}
-#tw-ornament{
-  font-family:'Jost',sans-serif;font-weight:200;
-  color:rgba(245,198,60,.35);
-  font-size:clamp(13px,1.8vw,20px);
-  letter-spacing:8px;
-  margin-bottom:14px;
-  opacity:0;transition:opacity .8s ease;
-}
-#tw-ornament.show{opacity:1;}
-#tw-date{
-  font-family:'Libre Baskerville',serif;
-  font-weight:700;
-  font-size:clamp(18px,2.8vw,30px);
-  color:#f5c842;
-  letter-spacing:3px;
-  margin-bottom:20px;
-  text-shadow:0 0 18px rgba(245,200,66,.45),0 0 40px rgba(245,180,50,.18);
-}
-#tw-divider{
-  display:block;width:0;height:1px;
-  background:linear-gradient(90deg,rgba(245,198,60,.55),rgba(255,80,130,.38),transparent);
-  margin-bottom:20px;
-  transition:width 1.1s cubic-bezier(.22,1,.36,1);
-}
-#tw-divider.expand{width:78%;}
-#tw-name{
-  font-family:'Great Vibes',cursive;
-  font-size:clamp(26px,4.5vw,48px);
-  color:#fff;
-  letter-spacing:1px;
-  text-shadow:0 0 28px rgba(255,255,255,.2);
-  line-height:1.2;
-}
-#tw-heart-accent{
-  display:inline-block;
-  color:#ff3a6e;font-size:.6em;
-  margin-left:6px;vertical-align:middle;
-  animation:hb .95s ease infinite;
-  text-shadow:0 0 10px rgba(255,58,110,.6);
-}
-
-/* ── INTRO TYPEWRITER (before star click) ── */
+/* ── ZONE A: since + date + bday ── */
 #intro-panel{
   position:fixed;
-  top:0;left:0;right:0;bottom:0;
+  top:8%;left:0;right:0;
   display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
+  align-items:center;gap:12px;
   z-index:46;pointer-events:none;
-  gap:18px;
+  padding:0 20px;
 }
 #intro-since{
   font-family:'Libre Baskerville',serif;
   font-style:italic;font-weight:400;
-  font-size:clamp(14px,2.2vw,22px);
-  color:rgba(255,255,255,.62);
-  letter-spacing:2px;
-  min-height:1.6em;
-  text-align:center;
+  font-size:clamp(13px,2vw,20px);
+  color:rgba(255,255,255,.72);
+  letter-spacing:2px;text-align:center;
+  min-height:1.5em;
+  text-shadow:0 1px 12px rgba(0,0,0,.5);
 }
 #intro-date{
   font-family:'Libre Baskerville',serif;
   font-weight:700;
-  font-size:clamp(22px,3.8vw,40px);
+  font-size:clamp(20px,3.5vw,38px);
   color:#f5c842;
-  letter-spacing:5px;
-  text-shadow:0 0 22px rgba(245,200,66,.55),0 0 50px rgba(245,180,50,.2);
-  min-height:1.4em;
-  text-align:center;
+  letter-spacing:5px;text-align:center;
+  min-height:1.3em;
+  text-shadow:0 0 22px rgba(245,200,66,.6),0 0 50px rgba(245,180,50,.22);
 }
-/* blinking cursor for intro */
-.intro-cursor{
-  display:inline-block;
-  border-right:2px solid rgba(255,255,255,.65);
-  animation:cur .55s step-end infinite;
-  margin-left:1px;
-}
-@keyframes cur{0%,100%{border-color:transparent;}50%{border-color:rgba(255,255,255,.8);}}
-.intro-cursor.gold{border-right-color:rgba(245,200,66,.8);}
-
-/* ── BIRTHDAY TEXT (bottom, after tree) ── */
+/* bday sits right below date — same panel, no overlap */
 #bday-panel{
   position:fixed;
-  bottom:calc(18% + 18px);
-  left:0;right:0;
-  text-align:center;
-  z-index:40;pointer-events:none;
-  opacity:0;transition:opacity .5s ease;
+  top:calc(8% + 9em);
+  left:0;right:0;text-align:center;
+  z-index:46;pointer-events:none;
+  opacity:0;transition:opacity .9s ease;
 }
 #bday-panel.show{opacity:1;}
 #tw-bday{
   font-family:'Great Vibes',cursive;
-  font-size:clamp(28px,5vw,52px);
-  color:#fff;
-  letter-spacing:1px;
+  font-size:clamp(26px,4.8vw,52px);
+  color:#fff;letter-spacing:1px;
   text-shadow:
-    0 0 30px rgba(255,100,160,.5),
-    0 0 60px rgba(255,58,110,.2),
-    0 2px 4px rgba(0,0,0,.8);
-  display:inline-block;
-  min-height:1.3em;
+    0 0 30px rgba(255,160,210,.7),
+    0 0 60px rgba(255,100,160,.3),
+    0 2px 4px rgba(0,0,0,.9);
+  display:inline-block;min-height:1.3em;
 }
 #tw-bday-heart{
-  display:inline-block;
-  color:#ff3a6e;font-size:.7em;
+  display:inline-block;color:#ff3a6e;font-size:.65em;
   margin-left:8px;vertical-align:middle;
   animation:hb .95s ease infinite;
-  text-shadow:0 0 12px rgba(255,58,110,.7);
+  text-shadow:0 0 14px rgba(255,58,110,.8);
 }
-  position:fixed;top:28%;left:50%;
-  transform:translateX(-50%);
-  display:flex;align-items:center;gap:14px;
-  z-index:45;
-  transition:opacity .5s;
-}
-#card-main-heart{
-  font-size:30px;color:#888;
-  text-shadow:0 0 8px rgba(160,160,160,.2);
-  animation:hb .95s ease infinite;
-  cursor:pointer;user-select:none;line-height:1;
+.intro-cursor{
   display:inline-block;
-  transition:color .5s,text-shadow .5s;
+  border-right:2px solid rgba(255,255,255,.7);
+  animation:cur .55s step-end infinite;
+  margin-left:1px;height:1em;vertical-align:text-bottom;
 }
-#card-hint{
-  font-family:'Jost',sans-serif;font-weight:200;
-  color:rgba(255,255,255,.35);font-size:13px;
-  letter-spacing:1px;white-space:nowrap;
-  animation:hp 2.8s ease-in-out infinite;pointer-events:none;
+@keyframes cur{0%,100%{border-color:transparent;}50%{border-color:rgba(255,255,255,.85);}}
+.intro-cursor.gold{
+  border-right-color:rgba(245,200,66,.9);
+  animation:curG .55s step-end infinite;
 }
-@keyframes hp{0%,100%{opacity:.2;}50%{opacity:.72;};}
+@keyframes curG{0%,100%{border-color:transparent;}50%{border-color:rgba(245,200,66,.95);}}
 
-/* ── CLICKABLE STAR LAYER ── */
-#cstar-layer{
-  position:fixed;inset:0;
-  pointer-events:none;
-  z-index:44;
+/* ── ZONE B: star hint pill ── */
+#star-hint{
+  position:fixed;
+  top:48%;left:0;right:0;
+  text-align:center;
+  z-index:46;pointer-events:none;
+  opacity:0;transition:opacity 1s ease;
 }
+#star-hint-inner{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:30px;padding:9px 24px;
+  backdrop-filter:blur(6px);
+}
+.hint-star{font-size:15px;color:rgba(255,220,100,.9);animation:hb 1.8s ease infinite;}
+#star-hint-text{
+  font-family:'Jost',sans-serif;font-weight:300;
+  color:rgba(255,255,255,.88);
+  font-size:clamp(12px,1.6vw,15px);
+  letter-spacing:2px;white-space:nowrap;
+}
+
+/* ── clickable stars ── */
+#cstar-layer{position:fixed;inset:0;pointer-events:none;z-index:44;}
 .cstar{
-  position:absolute;
-  pointer-events:all;
-  cursor:pointer;
-  user-select:none;
-  line-height:1;
-  color:#fff;
+  position:absolute;pointer-events:none;cursor:pointer;
+  user-select:none;line-height:1;color:#fff;
   animation:twk var(--d,2.5s) ease-in-out var(--dl,0s) infinite;
-  transition:transform .18s ease, filter .18s ease, opacity .18s;
+  transition:transform .18s,filter .18s,opacity .18s;
   transform-origin:center;
 }
 .cstar:hover{
-  animation:none !important;
-  opacity:1 !important;
-  transform:scale(2) !important;
-  filter:drop-shadow(0 0 8px rgba(255,255,200,.95))
-         drop-shadow(0 0 20px rgba(255,220,120,.7)) !important;
+  animation:none !important;opacity:1 !important;
+  transform:scale(2.2) !important;
+  filter:drop-shadow(0 0 10px rgba(255,255,200,.98)) drop-shadow(0 0 24px rgba(255,220,120,.75)) !important;
 }
-
-/* star-to-heart morph: scale up + crossfade */
 @keyframes starMorph{
-  0%  {transform:scale(1)    rotate(0deg);  opacity:1; filter:drop-shadow(0 0 6px #fff);}
-  40% {transform:scale(2.8)  rotate(15deg); opacity:.7;filter:drop-shadow(0 0 16px #ff6699);}
-  70% {transform:scale(2.2)  rotate(-8deg); opacity:.9;filter:drop-shadow(0 0 22px #ff3a6e);}
-  100%{transform:scale(0)    rotate(0deg);  opacity:0; filter:none;}
+  0%  {transform:scale(1)   rotate(0deg);  opacity:1;filter:drop-shadow(0 0 6px #fff);}
+  40% {transform:scale(2.8) rotate(15deg); opacity:.7;filter:drop-shadow(0 0 18px #ff6699);}
+  70% {transform:scale(2.2) rotate(-8deg); opacity:.9;filter:drop-shadow(0 0 24px #ff3a6e);}
+  100%{transform:scale(0)   rotate(0deg);  opacity:0;filter:none;}
 }
-.cstar.morphing{
-  animation:starMorph .55s ease-in forwards !important;
-  pointer-events:none;
-}
+.cstar.morphing{animation:starMorph .55s ease-in forwards !important;pointer-events:none;}
 
-/* hint pulse at bottom of sky */
-#star-hint{
-  position:fixed;
-  bottom:calc(19% + 28px);
-  left:50%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:9px;
-  z-index:45;pointer-events:none;
-  transition:opacity .5s;
-}
-#star-hint span:first-child{
-  font-size:14px;color:rgba(255,255,255,.4);
-  animation:hb 1.8s ease infinite;
-}
-#star-hint-text{
-  font-family:'Jost',sans-serif;font-weight:200;
-  color:rgba(255,255,255,.32);font-size:13px;
-  letter-spacing:1.8px;white-space:nowrap;
-  animation:hp 2.8s ease-in-out infinite;
-}
-/* bottom action bar on card */
+/* ── bottom actions ── */
 #card-actions{
-  position:fixed;bottom:24px;left:50%;
-  transform:translateX(-50%);
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
   display:flex;gap:12px;align-items:center;
-  z-index:50;opacity:0;
-  transition:opacity .8s ease;
+  z-index:50;opacity:0;transition:opacity .8s ease;
 }
 #card-actions.show{opacity:1;pointer-events:all;}
 #btn-wa{
   display:flex;align-items:center;gap:8px;
-  background:rgba(37,211,102,.15);
-  border:1px solid rgba(37,211,102,.35);
-  border-radius:40px;
-  color:rgba(120,240,140,.9);
+  background:rgba(37,211,102,.15);border:1px solid rgba(37,211,102,.35);
+  border-radius:40px;color:rgba(120,240,140,.9);
   font-family:'Jost',sans-serif;font-weight:300;
   font-size:13px;letter-spacing:2px;text-transform:uppercase;
-  padding:11px 26px;cursor:pointer;
-  transition:all .25s;text-decoration:none;
+  padding:11px 26px;cursor:pointer;transition:all .25s;text-decoration:none;
 }
 #btn-wa:hover{background:rgba(37,211,102,.25);box-shadow:0 4px 18px rgba(37,211,102,.18);}
 #btn-wa svg{width:18px;height:18px;fill:currentColor;}
@@ -540,39 +416,29 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
   padding:11px 22px;cursor:pointer;transition:all .25s;
 }
 #btn-restart:hover{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);}
-
-/* ripple + particles */
 .ripple{
-  position:fixed;border-radius:50%;
-  border:1.5px solid rgba(255,58,110,.55);
-  pointer-events:none;z-index:22;
-  animation:rp .95s ease-out forwards;
+  position:fixed;border-radius:50%;border:1.5px solid rgba(255,58,110,.55);
+  pointer-events:none;z-index:22;animation:rp .95s ease-out forwards;
 }
-@keyframes rp{
-  0%{width:0;height:0;opacity:.8;margin:0;}
-  100%{width:90px;height:90px;opacity:0;margin:-45px;}
-}
+@keyframes rp{0%{width:0;height:0;opacity:.8;margin:0;}100%{width:90px;height:90px;opacity:0;margin:-45px;}}
 .pt{
   position:fixed;width:3px;height:3px;border-radius:50%;
-  pointer-events:none;z-index:22;
-  animation:ptf var(--pt,.75s) ease-out forwards;
+  pointer-events:none;z-index:22;animation:ptf var(--pt,.75s) ease-out forwards;
 }
-@keyframes ptf{
-  0%{opacity:1;transform:translate(0,0) scale(1);}
-  100%{opacity:0;transform:translate(var(--px,0),var(--py,0)) scale(.1);}
-}
-
-/* fly hearts */
+@keyframes ptf{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--px,0),var(--py,0)) scale(.1);}}
 .fly-heart{
   position:fixed;pointer-events:none;z-index:18;opacity:0;
   animation:flyUp var(--fd,3.5s) ease-out var(--fdl,0s) forwards;
-  filter:drop-shadow(0 0 4px currentColor);
+  filter:drop-shadow(0 0 5px currentColor);
 }
 @keyframes flyUp{
-  0%{opacity:0;transform:translate(0,0) scale(.3) rotate(-8deg);}
-  10%{opacity:1;transform:translate(var(--fx,6px),-12px) scale(1.05) rotate(-6deg);}
-  100%{opacity:0;transform:translate(var(--fx2,20px),-140px) scale(.45) rotate(20deg);}
+  0%  {opacity:0;transform:translate(0,0) scale(.3) rotate(-8deg);}
+  10% {opacity:1;transform:translate(var(--fx,6px),-12px) scale(1.1) rotate(-6deg);}
+  100%{opacity:0;transform:translate(var(--fx2,20px),-155px) scale(.4) rotate(22deg);}
 }
+
+/* ── star hint pulse for SCREEN 1/2 ── */
+@keyframes hp{0%,100%{opacity:.2;}50%{opacity:.72};}
 </style>
 </head>
 <body>
@@ -649,10 +515,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
   <!-- clickable stars scattered in sky -->
   <div id="cstar-layer"></div>
 
-  <!-- hint at bottom of sky — shown after intro types -->
-  <div id="star-hint" style="opacity:0;">
-    <span>✦</span>
-    <span id="star-hint-text">click on any star</span>
+  <!-- hint pill — shown after intro types -->
+  <div id="star-hint">
+    <div id="star-hint-inner">
+      <span class="hint-star">✦</span>
+      <span id="star-hint-text">click on any star</span>
+    </div>
   </div>
 
   <!-- BIRTHDAY text bottom (shown after tree grows) -->
@@ -870,13 +738,9 @@ function onStarClick(e){
   const sx = r.left + r.width/2;
   const sy = r.top  + r.height/2;
 
-  // fade out intro text
-  const introPanel = document.getElementById('intro-panel');
-  introPanel.style.transition = 'opacity .5s';
-  introPanel.style.opacity = '0';
-
-  // hide hint
+  // fade ONLY hint + star layer — intro text stays visible always
   const hint = document.getElementById('star-hint');
+  hint.style.transition='opacity .4s';
   hint.style.opacity = '0';
 
   // morph the star
@@ -885,7 +749,7 @@ function onStarClick(e){
   setTimeout(()=>{
     document.getElementById('cstar-layer').innerHTML = '';
 
-    const targetX = tW * .62;
+    const targetX = tW * .58;
     const ey      = groundY - 14;
     landX = targetX; landY = ey;
 
@@ -941,15 +805,15 @@ function spawnBurst(x,y){
 
 function onLand(lx,ly){
   spawnRipple(lx,ly); spawnBurst(lx,ly);
-  setTimeout(()=>growHeartTree(lx,ly), 300);
+  setTimeout(()=>growRoseTree(lx,ly), 300);
 }
 
-/* ══ TYPEWRITER ENGINE (for bday text) ══════ */
+/* ══ TYPEWRITER ENGINE ══════════════════════ */
 function typeText(el, text, speed, onDone){
   el.textContent = '';
   const cur = document.createElement('span');
   cur.className = 'intro-cursor';
-  cur.style.borderColor = 'rgba(255,100,160,.7)';
+  cur.style.cssText='border-right-color:rgba(255,100,160,.8);';
   el.appendChild(cur);
   let i=0;
   function tick(){
@@ -958,7 +822,7 @@ function typeText(el, text, speed, onDone){
       i++;
       setTimeout(tick, speed + Math.random()*speed*.35);
     } else {
-      setTimeout(()=>{ if(cur.parentNode) cur.parentNode.removeChild(cur); if(onDone)onDone(); },300);
+      setTimeout(()=>{ if(cur.parentNode)cur.parentNode.removeChild(cur); if(onDone)onDone(); },300);
     }
   }
   tick();
@@ -972,180 +836,514 @@ function setupWhatsApp(){
   document.getElementById('btn-wa').href = `https://wa.me/?text=${encodeURIComponent(msg)}`;
 }
 
-/* ══ HEART COLOURS ══════════════════════════ */
-const HC=['#ff3a6e','#ff6b9d','#ff99cc','#ffcc44','#ff5588',
-  '#ee1155','#ff8822','#cc44ff','#44aaff','#55ffcc',
-  '#ff44aa','#ffee55','#88ff44','#ff7744'];
+/* ══ ANIME GIRL — drawn on canvas ════════════
+   Theme: a star fell, became a heart, landed,
+   and God created her — a beautiful anime girl
+   materialises from stardust at the landing spot.
+   She is drawn stroke-by-stroke as if being
+   painted by an invisible hand.
+════════════════════════════════════════════ */
 
-/* ── draw a filled canvas heart ── */
+const PETAL_COLS = [
+  '#ff3a6e','#ff6b9d','#ffaad4','#ffcc44',
+  '#ff88bb','#cc44ff','#74c0fc','#ffd700'
+];
+
+/* ── helpers ── */
+function lerp(a,b,t){return a+(b-a)*t;}
+
 function drawHeart(x,y,sz,col,alpha){
   tCtx.save();
   tCtx.globalAlpha=alpha;
   tCtx.fillStyle=col;
-  tCtx.shadowColor=col;
-  tCtx.shadowBlur=sz*3.5;
+  tCtx.shadowColor=col;tCtx.shadowBlur=sz*3;
   const s=sz*.05;
   tCtx.beginPath();
   tCtx.moveTo(x,y-s*2);
   tCtx.bezierCurveTo(x+s*5,y-s*10,x+s*13,y+s*2,x,y+s*10);
   tCtx.bezierCurveTo(x-s*13,y+s*2,x-s*5,y-s*10,x,y-s*2);
-  tCtx.closePath();
-  tCtx.fill();
+  tCtx.closePath();tCtx.fill();tCtx.restore();
+}
+
+/* animated stroke helper — draws from t0 to t1 along a bezier */
+function strokeAlong(pts, t0f, t1f, lw, col, alpha, blur){
+  // pts = [[x0,y0],[cx,cy],[x1,y1]] for quadratic bezier
+  const steps = 8;
+  tCtx.save();
+  tCtx.globalAlpha = alpha;
+  tCtx.strokeStyle = col;
+  tCtx.lineWidth   = lw;
+  tCtx.lineCap = tCtx.lineJoin = 'round';
+  tCtx.shadowColor = col;
+  tCtx.shadowBlur  = blur;
+  tCtx.beginPath();
+  for(let i=0;i<=steps;i++){
+    const t = lerp(t0f, t1f, i/steps);
+    const mt = 1-t;
+    const x = mt*mt*pts[0][0] + 2*mt*t*pts[1][0] + t*t*pts[2][0];
+    const y = mt*mt*pts[0][1] + 2*mt*t*pts[1][1] + t*t*pts[2][1];
+    i===0 ? tCtx.moveTo(x,y) : tCtx.lineTo(x,y);
+  }
+  tCtx.stroke();
   tCtx.restore();
 }
 
-/* ══ HEART TREE ══════════════════════════════
-   Instead of brush strokes, builds a tree made
-   entirely from colourful hearts of increasing
-   size. The hearts appear from root up, growing
-   the tree shape organically.
-════════════════════════════════════════════ */
-function growHeartTree(rootX, rootY){
-  // Build branch skeleton (same recursive system)
-  const nodes = [];
-  const MAX_DEPTH = 8;
+function growRoseTree(cx, groundY){
+  // The girl stands centred, her feet at groundY
+  // Scale everything relative to screen height
+  const H   = tH * .42;   // total girl height
+  const W   = H * .55;    // width ratio
+  const x   = cx;         // centre x
+  const bot = groundY;    // feet y
+  const top = bot - H;    // top of head
 
-  function build(sx, sy, angle, len, depth, startMs){
-    if(depth > MAX_DEPTH) return;
-    const bendX = (Math.random()-.5)*len*.32;
-    const bendY = (Math.random()-.5)*len*.14;
-    const ex = sx + Math.sin(angle)*len + bendX;
-    const ey = sy - Math.cos(angle)*len + bendY;
-    const drawDur = 280 + depth*32;
-    nodes.push({ sx, sy, ex, ey, bendX, bendY, depth, startMs, drawDur });
+  // ── Anatomy key points ──
+  const footY   = bot;
+  const kneeY   = bot - H*.22;
+  const hipY    = bot - H*.44;
+  const waistY  = bot - H*.52;
+  const chestY  = bot - H*.66;
+  const neckY   = bot - H*.78;
+  const chinY   = bot - H*.82;
+  const headCY  = bot - H*.90;  // head circle centre
+  const headR   = H * .11;
 
-    if(depth < MAX_DEPTH){
-      const childStart = startMs + drawDur*.50;
-      const spread = (Math.PI/5.2) + Math.random()*(Math.PI/8.5);
-      const lenScale = .62 + Math.random()*.13;
-      const bias = (Math.random()-.5)*.16;
-      const three = depth < 3 && Math.random() < .4;
-      build(ex, ey, angle - spread + bias, len*lenScale,       depth+1, childStart);
-      build(ex, ey, angle + spread + bias, len*(lenScale-.03), depth+1, childStart);
-      if(three) build(ex, ey, angle + bias*.3, len*lenScale*.7, depth+1, childStart+90);
-    }
+  /* ─── Build a list of draw-strokes ───
+     Each stroke: { delay, dur, draw(prog) }
+     prog 0→1 animates the stroke appearing.
+     Drawn in order so girl materialises top→down
+     like an artist painting her.                */
+  const strokes = [];
+  let T = 0; // running time ms
+
+  function add(dur, fn){
+    strokes.push({ delay:T, dur, fn });
+    T += dur * .55; // next starts before this finishes (overlap)
   }
 
-  build(rootX, rootY, 0, tH*.13, 0, 0);
+  // glow aura first — soft pink radial behind the whole figure
+  add(600, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p * .18;
+    const g = tCtx.createRadialGradient(x, hipY, 0, x, hipY, H*.6);
+    g.addColorStop(0, '#ff88cc');
+    g.addColorStop(1, 'transparent');
+    tCtx.fillStyle = g;
+    tCtx.fillRect(x-H*.7, top-H*.1, H*1.4, H*1.2);
+    tCtx.restore();
+  });
 
-  function lerp(a,b,t){ return a+(b-a)*t; }
+  // ── HEAD ──
+  add(500, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p;
+    tCtx.beginPath();
+    // slight oval head
+    tCtx.ellipse(x, headCY, headR*.95, headR, 0, 0, Math.PI*2);
+    tCtx.fillStyle = '#fde8d8';
+    tCtx.shadowColor = '#ffbbaa';
+    tCtx.shadowBlur = 12;
+    tCtx.fill();
+    tCtx.restore();
+  });
 
+  // ── HAIR — long flowing hair ──
+  add(700, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p*.95;
+    tCtx.fillStyle = '#1a0a2e';
+    tCtx.shadowColor = '#6644aa';
+    tCtx.shadowBlur  = 8;
+    // top of hair
+    tCtx.beginPath();
+    tCtx.ellipse(x, headCY - headR*.15, headR*1.05, headR*.65, 0, Math.PI, 0);
+    tCtx.fill();
+    // left flow
+    tCtx.beginPath();
+    tCtx.moveTo(x - headR*.9, headCY);
+    tCtx.bezierCurveTo(x - W*.55, headCY + H*.12, x - W*.5, hipY, x - W*.3, hipY + H*.15);
+    tCtx.bezierCurveTo(x - W*.35, hipY, x - W*.38, headCY + H*.1, x - headR*.6, headCY + H*.02);
+    tCtx.closePath();
+    tCtx.fill();
+    // right flow
+    tCtx.beginPath();
+    tCtx.moveTo(x + headR*.9, headCY);
+    tCtx.bezierCurveTo(x + W*.55, headCY + H*.12, x + W*.5, hipY, x + W*.28, hipY + H*.14);
+    tCtx.bezierCurveTo(x + W*.33, hipY, x + W*.36, headCY + H*.1, x + headR*.6, headCY + H*.02);
+    tCtx.closePath();
+    tCtx.fill();
+    tCtx.restore();
+  });
+
+  // ── EYES — big anime eyes ──
+  add(400, (p)=>{
+    tCtx.save();
+    const eyeY = headCY + headR*.15;
+    const eyeSpacing = headR*.48;
+    [-1,1].forEach(side=>{
+      const ex = x + side * eyeSpacing;
+      // white
+      tCtx.globalAlpha = p;
+      tCtx.beginPath();
+      tCtx.ellipse(ex, eyeY, headR*.28, headR*.22, 0, 0, Math.PI*2);
+      tCtx.fillStyle = '#fff';
+      tCtx.shadowBlur = 0;
+      tCtx.fill();
+      // iris — violet/purple anime style
+      tCtx.beginPath();
+      tCtx.ellipse(ex, eyeY + headR*.02, headR*.18, headR*.19, 0, 0, Math.PI*2);
+      tCtx.fillStyle = '#7744cc';
+      tCtx.shadowColor = '#aa66ff';
+      tCtx.shadowBlur  = 6;
+      tCtx.fill();
+      // pupil
+      tCtx.beginPath();
+      tCtx.arc(ex, eyeY + headR*.02, headR*.08, 0, Math.PI*2);
+      tCtx.fillStyle = '#110022';
+      tCtx.shadowBlur = 0;
+      tCtx.fill();
+      // shine dot
+      tCtx.beginPath();
+      tCtx.arc(ex - headR*.06, eyeY - headR*.06, headR*.045, 0, Math.PI*2);
+      tCtx.fillStyle = '#fff';
+      tCtx.fill();
+      // lashes top
+      tCtx.strokeStyle = '#110022';
+      tCtx.lineWidth   = headR*.06;
+      tCtx.lineCap     = 'round';
+      tCtx.globalAlpha = p;
+      tCtx.beginPath();
+      tCtx.moveTo(ex - headR*.28, eyeY - headR*.2);
+      tCtx.lineTo(ex + headR*.3, eyeY - headR*.2);
+      tCtx.stroke();
+    });
+    tCtx.restore();
+  });
+
+  // ── NOSE + MOUTH ──
+  add(200, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p * .7;
+    // tiny cute nose
+    tCtx.strokeStyle = '#e8a090';
+    tCtx.lineWidth = headR*.06;
+    tCtx.lineCap   = 'round';
+    tCtx.beginPath();
+    tCtx.moveTo(x - headR*.08, headCY + headR*.38);
+    tCtx.lineTo(x + headR*.08, headCY + headR*.38);
+    tCtx.stroke();
+    // smile
+    tCtx.beginPath();
+    tCtx.arc(x, headCY + headR*.52, headR*.18, .15, Math.PI-.15);
+    tCtx.strokeStyle = '#cc7766';
+    tCtx.lineWidth   = headR*.07;
+    tCtx.stroke();
+    tCtx.restore();
+  });
+
+  // ── BLUSH ──
+  add(200, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p * .4;
+    [-1,1].forEach(side=>{
+      const g = tCtx.createRadialGradient(
+        x + side*headR*.58, headCY + headR*.32, 0,
+        x + side*headR*.58, headCY + headR*.32, headR*.28
+      );
+      g.addColorStop(0,'#ff88aa');
+      g.addColorStop(1,'transparent');
+      tCtx.fillStyle = g;
+      tCtx.beginPath();
+      tCtx.ellipse(x+side*headR*.58, headCY+headR*.32, headR*.28, headR*.16, 0, 0, Math.PI*2);
+      tCtx.fill();
+    });
+    tCtx.restore();
+  });
+
+  // ── NECK + BODY ──
+  add(500, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p;
+    // neck
+    tCtx.fillStyle = '#fde8d8';
+    tCtx.shadowColor = '#ffbbaa';
+    tCtx.shadowBlur  = 4;
+    tCtx.fillRect(x - headR*.22, chinY, headR*.44, neckY - chinY + 4);
+    // torso — kimono/dress style
+    // dress body
+    tCtx.beginPath();
+    tCtx.moveTo(x - W*.14, neckY);
+    tCtx.bezierCurveTo(x - W*.32, chestY, x - W*.35, waistY, x - W*.28, hipY);
+    tCtx.lineTo(x + W*.28, hipY);
+    tCtx.bezierCurveTo(x + W*.35, waistY, x + W*.32, chestY, x + W*.14, neckY);
+    tCtx.closePath();
+    tCtx.fillStyle = '#cc44aa';
+    tCtx.shadowColor = '#ff88cc';
+    tCtx.shadowBlur  = 12;
+    tCtx.fill();
+    // dress overlay lighter
+    tCtx.beginPath();
+    tCtx.moveTo(x - W*.08, neckY);
+    tCtx.bezierCurveTo(x - W*.18, chestY + H*.02, x - W*.1, waistY, x, waistY + H*.01);
+    tCtx.bezierCurveTo(x + W*.1, waistY, x + W*.18, chestY + H*.02, x + W*.08, neckY);
+    tCtx.closePath();
+    tCtx.fillStyle = '#ee66cc';
+    tCtx.shadowBlur = 4;
+    tCtx.fill();
+    tCtx.restore();
+  });
+
+  // ── SKIRT ──
+  add(500, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p;
+    tCtx.beginPath();
+    tCtx.moveTo(x - W*.28, hipY);
+    tCtx.bezierCurveTo(x - W*.52, hipY + H*.06, x - W*.58, kneeY - H*.02, x - W*.32, kneeY);
+    tCtx.lineTo(x + W*.32, kneeY);
+    tCtx.bezierCurveTo(x + W*.58, kneeY - H*.02, x + W*.52, hipY + H*.06, x + W*.28, hipY);
+    tCtx.closePath();
+    tCtx.fillStyle = '#aa2288';
+    tCtx.shadowColor = '#ff44cc';
+    tCtx.shadowBlur  = 10;
+    tCtx.fill();
+    // skirt highlight
+    tCtx.beginPath();
+    tCtx.moveTo(x - W*.15, hipY + H*.01);
+    tCtx.bezierCurveTo(x - W*.2, hipY + H*.06, x - W*.18, kneeY - H*.03, x - W*.08, kneeY - H*.01);
+    tCtx.bezierCurveTo(x + W*.08, kneeY - H*.01, x + W*.2, hipY + H*.06, x + W*.15, hipY + H*.01);
+    tCtx.closePath();
+    tCtx.fillStyle = 'rgba(255,120,220,.22)';
+    tCtx.shadowBlur = 0;
+    tCtx.fill();
+    tCtx.restore();
+  });
+
+  // ── ARMS ──
+  add(400, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p;
+    tCtx.lineCap = 'round';
+    // left arm — slightly raised holding something
+    tCtx.strokeStyle = '#fde8d8';
+    tCtx.lineWidth   = W*.1;
+    tCtx.shadowColor = '#ffbbaa';
+    tCtx.shadowBlur  = 5;
+    tCtx.beginPath();
+    tCtx.moveTo(x - W*.3, chestY + H*.02);
+    tCtx.bezierCurveTo(x - W*.52, chestY + H*.08, x - W*.58, waistY + H*.02, x - W*.44, waistY + H*.12);
+    tCtx.stroke();
+    // sleeve left
+    tCtx.strokeStyle = '#cc44aa';
+    tCtx.lineWidth   = W*.14;
+    tCtx.beginPath();
+    tCtx.moveTo(x - W*.3, chestY + H*.02);
+    tCtx.bezierCurveTo(x - W*.44, chestY + H*.06, x - W*.5, chestY + H*.12, x - W*.48, chestY + H*.18);
+    tCtx.stroke();
+    // right arm — slightly forward
+    tCtx.strokeStyle = '#fde8d8';
+    tCtx.lineWidth   = W*.1;
+    tCtx.beginPath();
+    tCtx.moveTo(x + W*.3, chestY + H*.02);
+    tCtx.bezierCurveTo(x + W*.52, chestY + H*.08, x + W*.56, waistY, x + W*.42, waistY + H*.12);
+    tCtx.stroke();
+    tCtx.strokeStyle = '#cc44aa';
+    tCtx.lineWidth   = W*.14;
+    tCtx.beginPath();
+    tCtx.moveTo(x + W*.3, chestY + H*.02);
+    tCtx.bezierCurveTo(x + W*.44, chestY + H*.06, x + W*.5, chestY + H*.12, x + W*.46, chestY + H*.18);
+    tCtx.stroke();
+    tCtx.restore();
+  });
+
+  // ── LEGS ──
+  add(400, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p;
+    tCtx.lineCap = 'round';
+    tCtx.strokeStyle = '#fde8d8';
+    tCtx.lineWidth   = W*.12;
+    tCtx.shadowColor = '#ffbbaa';
+    tCtx.shadowBlur  = 4;
+    // left leg
+    tCtx.beginPath();
+    tCtx.moveTo(x - W*.12, kneeY);
+    tCtx.bezierCurveTo(x - W*.14, kneeY + H*.08, x - W*.13, footY - H*.04, x - W*.11, footY);
+    tCtx.stroke();
+    // right leg
+    tCtx.beginPath();
+    tCtx.moveTo(x + W*.12, kneeY);
+    tCtx.bezierCurveTo(x + W*.14, kneeY + H*.08, x + W*.13, footY - H*.04, x + W*.11, footY);
+    tCtx.stroke();
+    // socks/shoes
+    tCtx.strokeStyle = '#fff';
+    tCtx.lineWidth   = W*.13;
+    [-1,1].forEach(s=>{
+      tCtx.beginPath();
+      tCtx.moveTo(x + s*W*.11, footY - H*.05);
+      tCtx.lineTo(x + s*W*.11, footY - H*.01);
+      tCtx.stroke();
+    });
+    tCtx.strokeStyle = '#220033';
+    tCtx.lineWidth   = W*.1;
+    [-1,1].forEach(s=>{
+      tCtx.beginPath();
+      tCtx.moveTo(x + s*W*.11, footY - H*.015);
+      tCtx.bezierCurveTo(x + s*W*.06, footY + H*.005, x + s*W*.18, footY + H*.005, x + s*W*.2, footY - H*.01);
+      tCtx.stroke();
+    });
+    tCtx.restore();
+  });
+
+  // ── FLOATING HEARTS around her ──
+  add(800, (p)=>{
+    const hearts = [
+      { dx:-.52, dy:-.62, sz:9,  col:'#ff6699' },
+      { dx: .55, dy:-.55, sz:7,  col:'#ffcc44' },
+      { dx:-.6,  dy:-.35, sz:6,  col:'#cc44ff' },
+      { dx: .58, dy:-.28, sz:8,  col:'#ff3a6e' },
+      { dx: .1,  dy:-.72, sz:5,  col:'#74c0fc' },
+    ];
+    hearts.forEach(h=>{
+      drawHeart(x + h.dx*W, headCY + h.dy*H*.4, h.sz * p, h.col, p*.85);
+    });
+  });
+
+  // ── STAR SPARKLES around figure ──
+  add(600, (p)=>{
+    tCtx.save();
+    const sparks = [
+      { dx:-.7, dy:-.5 }, { dx:.68, dy:-.42 },
+      { dx:-.5, dy:-.1 }, { dx:.62, dy:-.08 },
+      { dx: .0, dy:-.85 },
+    ];
+    sparks.forEach((s,i)=>{
+      const sx2 = x + s.dx*W;
+      const sy2 = headCY + s.dy*H*.5;
+      const sz  = 5 + i%3;
+      tCtx.globalAlpha = p * (.5 + .5*Math.sin(p*Math.PI));
+      tCtx.fillStyle = '#ffe566';
+      tCtx.shadowColor='#ffe566';tCtx.shadowBlur=sz*3;
+      // 4-point star
+      tCtx.beginPath();
+      for(let k=0;k<8;k++){
+        const r2 = k%2===0 ? sz : sz*.4;
+        const a = k/8*Math.PI*2 - Math.PI/4;
+        const px2 = sx2 + Math.cos(a)*r2;
+        const py2 = sy2 + Math.sin(a)*r2;
+        k===0 ? tCtx.moveTo(px2,py2) : tCtx.lineTo(px2,py2);
+      }
+      tCtx.closePath();tCtx.fill();
+    });
+    tCtx.restore();
+  });
+
+  // ── ground glow under feet ──
+  add(400, (p)=>{
+    tCtx.save();
+    tCtx.globalAlpha = p * .35;
+    const g = tCtx.createRadialGradient(x, footY, 0, x, footY, W*.8);
+    g.addColorStop(0,'#ff88cc');
+    g.addColorStop(1,'transparent');
+    tCtx.fillStyle = g;
+    tCtx.beginPath();
+    tCtx.ellipse(x, footY, W*.8, H*.06, 0, 0, Math.PI*2);
+    tCtx.fill();
+    tCtx.restore();
+  });
+
+  // ── Run animation ──
   const t0 = performance.now();
-  const totalDur = nodes.reduce((m,n)=>Math.max(m, n.startMs+n.drawDur), 0) + 1800;
-  // store all final heart positions for falling later
-  const heartPositions = [];
+  const totalDur = strokes.reduce((m,s)=>Math.max(m, s.delay+s.dur), 0);
+  let afterDone = false;
+  let pulseT = 0;
 
   function frame(now){
     tCtx.clearRect(0,0,tW,tH);
     const elapsed = now - t0;
+    pulseT += .018;
 
-    for(const b of nodes){
-      const el = elapsed - b.startMs;
+    // draw each stroke up to its progress
+    for(const s of strokes){
+      const el  = elapsed - s.delay;
       if(el <= 0) continue;
-      const prog = Math.min(el/b.drawDur, 1);
-      const eased = 1 - Math.pow(1-prog, 2.5);
-
-      // draw hearts along the branch path as it grows
-      // number of hearts = proportional to depth
-      const numDots = Math.max(3, 8 - b.depth);
-      const showDots = Math.floor(eased * numDots);
-
-      const mx = (b.sx+b.ex)/2 + b.bendX*.5;
-      const my = (b.sy+b.ey)/2 + b.bendY*.5;
-
-      for(let di=0; di<=showDots; di++){
-        const t = di / (numDots);
-        const hx = lerp(lerp(b.sx,mx,t), lerp(mx,b.ex,t), t);
-        const hy = lerp(lerp(b.sy,my,t), lerp(my,b.ey,t), t);
-        // size: larger near root, smaller at tips
-        const sizeFactor = 1 - (b.depth/MAX_DEPTH)*.65;
-        const sz = (6 + (numDots-di)*.8) * sizeFactor;
-        const col = HC[((b.depth*3 + di*2) % HC.length)];
-        const alpha = .45 + eased*.45;
-        drawHeart(hx, hy, Math.max(sz,2), col, alpha);
-      }
-
-      // record tip hearts for falling
-      if(prog >= 1 && b.depth >= MAX_DEPTH-1){
-        heartPositions.push({ x: b.ex, y: b.ey,
-          col: HC[Math.floor(Math.random()*HC.length)] });
-      }
+      const prog = Math.min(el / s.dur, 1);
+      s.fn(prog);
     }
 
-    if(elapsed < totalDur){
-      requestAnimationFrame(frame);
-    } else {
-      // tree done — start gentle heart drip + bday text together
-      startGentleDrip(rootX, rootY, heartPositions);
+    // floating hearts drift up gently around figure after fully drawn
+    if(elapsed > totalDur){
+      // re-draw hearts with pulse
+      const hearts = [
+        { dx:-.52, dy:-.62, sz:9,  col:'#ff6699' },
+        { dx: .55, dy:-.55, sz:7,  col:'#ffcc44' },
+        { dx:-.6,  dy:-.35, sz:6,  col:'#cc44ff' },
+        { dx: .58, dy:-.28, sz:8,  col:'#ff3a6e' },
+        { dx: .1,  dy:-.72, sz:5,  col:'#74c0fc' },
+      ];
+      hearts.forEach((h,i)=>{
+        const bob = Math.sin(pulseT + i*1.2)*4;
+        drawHeart(x + h.dx*W, headCY + h.dy*H*.4 + bob, h.sz, h.col, .7+Math.sin(pulseT+i)*.2);
+      });
+    }
+
+    if(!afterDone && elapsed >= totalDur + 300){
+      afterDone = true;
+      startGentleDrip(x, groundY);
       showBirthdayText();
     }
+
+    // keep looping forever — girl pulses with starlight
+    requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
 }
 
-/* ══ GENTLE HEART DRIP (2-3 hearts, one at a time) ══
-   Not a burst — individual hearts drift down slowly
-   from random branch tips, one after another
-═════════════════════════════════════════════════════ */
-function startGentleDrip(rootX, rootY, positions){
-  const cols = HC;
+/* ══ GENTLE DRIP — hearts drift down from the girl ══ */
+function startGentleDrip(cx, groundY){
+  const positions = PETAL_COLS.map((col,i)=>({
+    x: cx + (Math.random()-.5)*tW*.35,
+    y: groundY - tH*.3 - Math.random()*tH*.2,
+    col
+  }));
 
   function dropOne(delay){
     setTimeout(()=>{
-      // pick a random position near tree canopy
-      const pos = positions.length
-        ? positions[Math.floor(Math.random()*positions.length)]
-        : { x: rootX + (Math.random()-.5)*120,
-            y: rootY - tH*.35,
-            col: HC[Math.floor(Math.random()*HC.length)] };
-
+      const pos = positions[Math.floor(Math.random()*positions.length)];
       const fh = document.createElement('div');
       fh.className = 'fly-heart';
-      const sz  = 16 + Math.random()*14;
+      const sz  = 14 + Math.random()*14;
       const fx  = (Math.random()-.5)*50;
-      const fx2 = fx + (Math.random()-.5)*30;
-      // convert canvas y to bottom-relative for CSS
-      const sb = tH - pos.y + Math.random()*40;
-
-      fh.style.cssText = `
-        left:${pos.x + (Math.random()-.5)*60}px;
-        bottom:${sb}px;
-        font-size:${sz}px;
-        color:${pos.col};
-        --fd:${3.5+Math.random()*2}s;
-        --fdl:0s;
-        --fx:${fx}px; --fx2:${fx2}px;
+      const fx2 = fx + (Math.random()-.5)*28;
+      const sb  = tH - pos.y + Math.random()*40;
+      fh.style.cssText=`
+        left:${pos.x+(Math.random()-.5)*55}px;bottom:${sb}px;
+        font-size:${sz}px;color:${pos.col};
+        --fd:${3.5+Math.random()*2.5}s;--fdl:0s;
+        --fx:${fx}px;--fx2:${fx2}px;
         text-shadow:0 0 10px ${pos.col};
       `;
-      fh.textContent = '♥';
+      fh.textContent = Math.random()>.5?'♥':'✦';
       document.body.appendChild(fh);
-      fh.addEventListener('animationend', ()=>fh.remove());
+      fh.addEventListener('animationend',()=>fh.remove());
     }, delay);
   }
 
-  // drop 3 hearts, staggered 1.8s apart — gentle, not a shower
   dropOne(400);
-  dropOne(2200);
-  dropOne(4000);
-
-  // then repeat very gently every ~6s (just 1 at a time)
-  flyInterval = setInterval(()=>dropOne(0), 6000);
+  dropOne(2000);
+  dropOne(3800);
+  flyInterval = setInterval(()=>dropOne(0), 5500);
 }
 
-/* ══ BIRTHDAY TEXT (types at bottom while hearts drip) ═ */
+/* ══ BIRTHDAY TEXT ═══════════════════════════ */
 function showBirthdayText(){
   const bdayP = document.getElementById('bday-panel');
   const twB   = document.getElementById('tw-bday');
   bdayP.classList.add('show');
-
-  const text = 'Happy Birthday, ' + userName;
-  typeText(twB, text, 62, ()=>{
-    // add pulsing heart
-    const acc = document.createElement('span');
-    acc.id = 'tw-bday-heart';
-    acc.textContent = ' ♥';
+  typeText(twB, 'Happy Birthday, '+userName, 62, ()=>{
+    const acc=document.createElement('span');
+    acc.id='tw-bday-heart';acc.textContent=' ♥';
     twB.appendChild(acc);
-    // show share buttons
     setTimeout(()=>{
       document.getElementById('card-actions').classList.add('show');
       setupWhatsApp();
