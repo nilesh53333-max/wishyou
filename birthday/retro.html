@@ -133,71 +133,64 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .rv-error-text{font-family:'Fredoka One',cursive;font-size:1.05rem;color:#111;line-height:1.7;}
 
 /* WELCOME */
-#rv-welcome{background:#FFE135;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;position:relative;overflow:hidden;}
+#rv-welcome{background:#FFE135;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:24px 28px;position:relative;overflow:hidden;}
 .conf-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
 .conf{position:absolute;animation:cf linear infinite;opacity:0;}
 @keyframes cf{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:0.6;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
 .rv-inner{position:relative;z-index:2;text-align:center;width:100%;}
-.rv-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:22px;display:block;font-family:'Fredoka One',cursive;}
-.rv-cake{font-size:4rem;margin-bottom:18px;display:block;animation:hb2 1.8s ease-in-out infinite;}
+.rv-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:12px;display:block;font-family:'Fredoka One',cursive;}
+.rv-cake{font-size:3.5rem;margin-bottom:10px;display:block;animation:hb2 1.8s ease-in-out infinite;}
 @keyframes hb2{0%,100%{transform:scale(1);}14%{transform:scale(1.15);}28%{transform:scale(1);}42%{transform:scale(1.08);}56%{transform:scale(1);}}
-.rv-headline{font-family:'Fredoka One',cursive;font-size:clamp(1.6rem,7vw,2.4rem);color:#111;line-height:1.1;margin-bottom:8px;}
-.rv-sub{font-size:0.85rem;color:#111;opacity:0.65;margin-bottom:8px;line-height:1.5;font-family:'Patrick Hand',cursive;}
-.rv-from{font-family:'Patrick Hand',cursive;font-style:italic;font-size:0.88rem;color:rgba(0,0,0,0.5);margin-bottom:28px;}
-.rv-open-btn{background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:16px 44px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:4px 4px 0 #111;transition:transform 0.15s;touch-action:manipulation;}
+.rv-headline{font-family:'Fredoka One',cursive;font-size:clamp(1.4rem,6vw,2.2rem);color:#111;line-height:1.1;margin-bottom:6px;}
+.rv-sub{font-size:0.82rem;color:#111;opacity:0.65;margin-bottom:4px;line-height:1.4;font-family:'Patrick Hand',cursive;}
+.rv-from{font-family:'Patrick Hand',cursive;font-style:italic;font-size:0.85rem;color:rgba(0,0,0,0.5);margin-bottom:20px;}
+.rv-open-btn{background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:14px 40px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:4px 4px 0 #111;transition:transform 0.15s;touch-action:manipulation;display:inline-block;}
 .rv-open-btn:active{transform:scale(0.97);}
-.rv-create-btn{margin-top:14px;background:none;border:2px solid #111;color:#111;border-radius:8px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:0.82rem;cursor:pointer;touch-action:manipulation;}
+.rv-create-btn{margin-top:10px;background:none;border:2px solid #111;color:#111;border-radius:8px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:0.82rem;cursor:pointer;touch-action:manipulation;display:inline-block;}
 
 /* Back button for receiver */
-.rv-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.1);border:2px solid #111;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:#111;z-index:10;touch-action:manipulation;}
+.rv-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.12);border:2px solid rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:#111;z-index:10;touch-action:manipulation;}
 
 /* PHOTOS — comic strip style */
 #rv-photos{background:#FFE135;display:flex;flex-direction:column;padding:0;}
-.rv-hdr{padding:52px 24px 14px;text-align:center;flex-shrink:0;}
-.rv-label{font-family:'Fredoka One',cursive;font-size:1rem;color:#111;opacity:0.6;display:block;margin-bottom:4px;}
-.rv-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#111;}
-.comic-strip{flex:1;padding:8px 16px;display:flex;gap:10px;overflow-x:auto;align-items:center;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
+.rv-hdr{padding:46px 24px 10px;text-align:center;flex-shrink:0;}
+.rv-label{font-family:'Fredoka One',cursive;font-size:0.9rem;color:#111;opacity:0.6;display:block;margin-bottom:2px;}
+.rv-title{font-family:'Fredoka One',cursive;font-size:1.3rem;color:#111;}
+.comic-strip{flex:1;padding:8px 12px;display:flex;gap:10px;overflow-x:auto;align-items:stretch;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
 .comic-strip::-webkit-scrollbar{display:none;}
-.comic-panel{flex-shrink:0;scroll-snap-align:center;background:white;border:3px solid #111;box-shadow:4px 4px 0 #111;position:relative;overflow:hidden;width:160px;}
-.comic-panel img{width:160px;height:180px;object-fit:cover;display:block;}
-.comic-cap{position:absolute;bottom:0;left:0;right:0;background:#d90429;color:white;font-family:'Fredoka One',cursive;font-size:0.75rem;text-align:center;padding:4px 6px;border-top:2px solid #111;}
+.comic-panel{flex-shrink:0;scroll-snap-align:center;background:white;border:3px solid #111;box-shadow:4px 4px 0 #111;position:relative;overflow:hidden;width:calc(100vw - 56px);max-width:370px;display:flex;flex-direction:column;}
+@media(min-width:500px){.comic-panel{width:340px;}}
+.comic-panel img{flex:1;width:100%;object-fit:cover;display:block;min-height:0;}
+.comic-cap{flex-shrink:0;background:#d90429;color:white;font-family:'Fredoka One',cursive;font-size:0.85rem;text-align:center;padding:6px 8px;border-top:2px solid #111;}
 .no-comic{flex:1;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:1rem;color:rgba(0,0,0,0.4);}
-.rv-btn{display:block;margin:10px 16px max(16px,env(safe-area-inset-bottom));background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:14px;font-family:'Fredoka One',cursive;font-size:0.9rem;cursor:pointer;touch-action:manipulation;box-shadow:4px 4px 0 #111;text-align:center;transition:transform 0.15s;}
+.rv-btn{display:block;margin:8px 16px max(12px,env(safe-area-inset-bottom));background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:13px;font-family:'Fredoka One',cursive;font-size:0.9rem;cursor:pointer;touch-action:manipulation;box-shadow:4px 4px 0 #111;text-align:center;transition:transform 0.15s;flex-shrink:0;}
 .rv-btn:active{transform:scale(0.97);}
 
-/* SONG */
-#rv-song{background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 20px;}
-.vinyl-wrap{width:170px;height:170px;margin:0 auto 20px;position:relative;}
-.vinyl{
-  width:100%;height:100%;border-radius:50%;position:relative;
-  background:radial-gradient(circle at 50% 50%,
-    #FFE135 0%,#FFE135 14%,
-    #1a1a1a 15%,#1a1a1a 17%,
-    #2d2d2d 18%,#2d2d2d 22%,
-    #1a1a1a 23%,#1a1a1a 27%,
-    #2d2d2d 28%,#2d2d2d 32%,
-    #1a1a1a 33%,#1a1a1a 37%,
-    #2d2d2d 38%,#2d2d2d 42%,
-    #1a1a1a 43%,#1a1a1a 100%
-  );
-  box-shadow:0 16px 48px rgba(0,0,0,0.6),0 0 0 4px rgba(217,4,41,0.4);
-  display:flex;align-items:center;justify-content:center;
-}
-.vinyl-label{
-  width:56px;height:56px;border-radius:50%;
-  background:radial-gradient(circle at 38% 32%,#ff6b6b,#d90429 50%,#a00020);
-  box-shadow:0 3px 10px rgba(0,0,0,0.5);
-  position:relative;z-index:2;
-  display:flex;align-items:center;justify-content:center;
-}
-.vinyl-label::after{content:'';position:absolute;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.95);box-shadow:0 0 0 2px rgba(0,0,0,0.3);}
-.vinyl-spin{animation:vsr 2.8s linear infinite;}
-@keyframes vsr{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.vinyl-pause{animation-play-state:paused;}
-.rv-song-t{font-family:'Fredoka One',cursive;font-size:1.05rem;color:#FFE135;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.rv-song-a{font-size:0.75rem;color:rgba(255,255,255,0.5);text-align:center;margin-bottom:16px;width:100%;}
-.yt-wrap{width:100%;border-radius:8px;overflow:hidden;border:3px solid #FFE135;margin-bottom:14px;display:none;}
-.yt-wrap iframe{width:100%;height:180px;border:none;display:block;}
+/* SONG — Vintage Cassette */
+#rv-song{background:#1a0a00;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px 16px;position:relative;overflow:hidden;}
+#rv-song::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(255,225,53,0.03) 40px,rgba(255,225,53,0.03) 41px);pointer-events:none;}
+.cassette-wrap{width:260px;margin:0 auto 20px;position:relative;}
+.cassette{background:linear-gradient(180deg,#2a1a00 0%,#1a0a00 100%);border:3px solid #FFE135;border-radius:12px;padding:16px 20px 12px;box-shadow:0 0 0 1px #a07000,6px 6px 0 #a07000,inset 0 1px 0 rgba(255,225,53,0.1);position:relative;}
+.cassette-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cassette-brand{font-family:'Fredoka One',cursive;font-size:0.65rem;letter-spacing:3px;color:#FFE135;opacity:0.7;}
+.cassette-side{width:8px;height:28px;background:linear-gradient(180deg,#FFE135,#a07000);border-radius:2px;border:1px solid #a07000;}
+.cassette-window{background:#0a0500;border:2px solid #a07000;border-radius:8px;padding:10px 14px;margin-bottom:10px;position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.cassette-reel{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#333 0%,#1a1a1a 40%,#2a2a2a 41%,#111 55%,#222 56%,#0a0a0a 100%);border:2px solid #555;position:relative;display:flex;align-items:center;justify-content:center;}
+.cassette-reel::after{content:'';position:absolute;width:12px;height:12px;border-radius:50%;background:#FFE135;opacity:0.8;}
+.cassette-reel.spin{animation:reelSpin 1.5s linear infinite;}
+@keyframes reelSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.cassette-tape-line{flex:1;height:4px;background:linear-gradient(90deg,#3d2000,#8b4700,#3d2000);border-radius:2px;position:relative;overflow:hidden;}
+.cassette-tape-line::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,180,0,0.4) 50%,transparent 100%);animation:tapeShine 2s linear infinite;}
+@keyframes tapeShine{from{transform:translateX(-100%);}to{transform:translateX(100%);}}
+.cassette-label{background:linear-gradient(135deg,#d90429,#8b0000);border:1px solid #FFE135;border-radius:4px;padding:6px 10px;text-align:center;margin-bottom:8px;}
+.cassette-label-title{font-family:'Fredoka One',cursive;font-size:0.75rem;color:#FFE135;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cassette-label-sub{font-size:0.6rem;color:rgba(255,225,53,0.6);font-family:'Patrick Hand',cursive;letter-spacing:1px;}
+.cassette-holes{display:flex;justify-content:space-around;margin-top:4px;}
+.cassette-hole{width:10px;height:10px;border-radius:50%;background:#0a0500;border:1px solid #a07000;}
+.rv-song-t{font-family:'Fredoka One',cursive;font-size:1rem;color:#FFE135;text-align:center;margin-bottom:3px;width:100%;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.rv-song-a{font-size:0.72rem;color:rgba(255,225,53,0.5);text-align:center;margin-bottom:12px;width:100%;font-family:'Patrick Hand',cursive;}
+.yt-wrap{width:100%;border-radius:8px;overflow:hidden;border:3px solid #FFE135;margin-bottom:12px;display:none;}
+.yt-wrap iframe{width:100%;height:170px;border:none;display:block;}
 .yt-wrap.show{display:block;}
 .rv-song-nav{display:flex;gap:8px;width:100%;margin-top:4px;}
 
@@ -400,14 +393,30 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 </div>
 
 <div class="screen" id="rv-song">
-  <button class="rv-back" style="background:rgba(255,225,53,0.15);border-color:#FFE135;color:#FFE135;" onclick="goTo('rv-photos')">←</button>
-  <span style="margin-top:52px;margin-bottom:12px;display:block;text-align:center;font-family:'Fredoka One',cursive;color:#FFE135;font-size:0.9rem;">Party Anthem 🎵</span>
-  <div class="vinyl-wrap">
-    <div class="vinyl vinyl-spin vinyl-pause" id="rvVinyl">
-      <div class="vinyl-label">🎵</div>
+  <button class="rv-back" style="background:rgba(255,225,53,0.15);border-color:rgba(255,225,53,0.4);color:#FFE135;" onclick="goTo('rv-photos')">←</button>
+  <span style="margin-top:52px;margin-bottom:10px;display:block;text-align:center;font-family:'Fredoka One',cursive;color:#FFE135;font-size:0.85rem;letter-spacing:2px;opacity:0.7;">🎵 PARTY ANTHEM</span>
+  <div class="cassette-wrap">
+    <div class="cassette">
+      <div class="cassette-top">
+        <div class="cassette-brand">WISHYOU·AI</div>
+        <div class="cassette-side"></div>
+      </div>
+      <div class="cassette-window">
+        <div class="cassette-reel spin" id="reel1"></div>
+        <div class="cassette-tape-line"></div>
+        <div class="cassette-reel spin" id="reel2"></div>
+      </div>
+      <div class="cassette-label">
+        <span class="cassette-label-title" id="rvSongT">Your Party Anthem</span>
+        <span class="cassette-label-sub">SIDE A · BIRTHDAY MIX</span>
+      </div>
+      <div class="cassette-holes">
+        <div class="cassette-hole"></div>
+        <div class="cassette-hole"></div>
+        <div class="cassette-hole"></div>
+      </div>
     </div>
   </div>
-  <div class="rv-song-t" id="rvSongT">Your Party Anthem</div>
   <div class="rv-song-a" id="rvSongA">A song chosen just for you</div>
   <div class="yt-wrap" id="rvYtWrap"><div id="rvYtEmbed"></div></div>
   <div class="rv-song-nav">
@@ -535,9 +544,13 @@ function goTo(id, fromPreview=false){
     const btnId=btnMap[id];
     if(btnId){const b=document.getElementById(btnId);if(b){b.textContent='Done → Back to Preview ✓';b.onclick=()=>goTo('s-preview');}}
   }
-  // FIX: vinyl spin only on song screen
-  const v=document.getElementById('rvVinyl');
-  if(v){if(id==='rv-song')v.classList.remove('vinyl-pause');else v.classList.add('vinyl-pause');}
+  // FIX: cassette reels only spin on song screen
+  const r1=document.getElementById('reel1');
+  const r2=document.getElementById('reel2');
+  if(r1&&r2){
+    if(id==='rv-song'){r1.classList.add('spin');r2.classList.add('spin');}
+    else{r1.classList.remove('spin');r2.classList.remove('spin');}
+  }
   // Stop YouTube when leaving song screen (permanently blank until re-entered)
   if(id!=='rv-song'){
     const iframe=document.querySelector('#rvYtWrap iframe');
@@ -944,10 +957,11 @@ function renderCard(d){
       strip.appendChild(p);
     });
   }else{strip.innerHTML='<div class="no-comic">🎊 A card made with love!</div>';}
-  // Song
+  // Song — cassette label
   const sn=d.songName||'';
+  const songTEl=document.getElementById('rvSongT');
   if(sn&&sn!=='—'){
-    document.getElementById('rvSongT').textContent=sn;
+    if(songTEl)songTEl.textContent=sn;
     document.getElementById('rvSongA').textContent='A song chosen just for you';
     const sp=d.spotify||'';
     if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
