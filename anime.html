@@ -365,48 +365,150 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
   text-shadow:0 0 10px rgba(255,58,110,.6);
 }
 
-/* ── star hint (replaces heart zone) ── */
-#card-star-hint{
+/* ── INTRO TYPEWRITER (before star click) ── */
+#intro-panel{
   position:fixed;
-  bottom:calc(18% + 32px);
-  left:50%;transform:translateX(-50%);
-  display:flex;align-items:center;gap:10px;
-  z-index:45;transition:opacity .6s;
-  pointer-events:none;
+  top:0;left:0;right:0;bottom:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:46;pointer-events:none;
+  gap:18px;
 }
-#hint-arrow{
-  font-size:16px;color:rgba(255,255,255,.45);
+#intro-since{
+  font-family:'Libre Baskerville',serif;
+  font-style:italic;font-weight:400;
+  font-size:clamp(14px,2.2vw,22px);
+  color:rgba(255,255,255,.62);
+  letter-spacing:2px;
+  min-height:1.6em;
+  text-align:center;
+}
+#intro-date{
+  font-family:'Libre Baskerville',serif;
+  font-weight:700;
+  font-size:clamp(22px,3.8vw,40px);
+  color:#f5c842;
+  letter-spacing:5px;
+  text-shadow:0 0 22px rgba(245,200,66,.55),0 0 50px rgba(245,180,50,.2);
+  min-height:1.4em;
+  text-align:center;
+}
+/* blinking cursor for intro */
+.intro-cursor{
+  display:inline-block;
+  border-right:2px solid rgba(255,255,255,.65);
+  animation:cur .55s step-end infinite;
+  margin-left:1px;
+}
+@keyframes cur{0%,100%{border-color:transparent;}50%{border-color:rgba(255,255,255,.8);}}
+.intro-cursor.gold{border-right-color:rgba(245,200,66,.8);}
+
+/* ── BIRTHDAY TEXT (bottom, after tree) ── */
+#bday-panel{
+  position:fixed;
+  bottom:calc(18% + 18px);
+  left:0;right:0;
+  text-align:center;
+  z-index:40;pointer-events:none;
+  opacity:0;transition:opacity .5s ease;
+}
+#bday-panel.show{opacity:1;}
+#tw-bday{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(28px,5vw,52px);
+  color:#fff;
+  letter-spacing:1px;
+  text-shadow:
+    0 0 30px rgba(255,100,160,.5),
+    0 0 60px rgba(255,58,110,.2),
+    0 2px 4px rgba(0,0,0,.8);
+  display:inline-block;
+  min-height:1.3em;
+}
+#tw-bday-heart{
+  display:inline-block;
+  color:#ff3a6e;font-size:.7em;
+  margin-left:8px;vertical-align:middle;
   animation:hb .95s ease infinite;
+  text-shadow:0 0 12px rgba(255,58,110,.7);
+}
+  position:fixed;top:28%;left:50%;
+  transform:translateX(-50%);
+  display:flex;align-items:center;gap:14px;
+  z-index:45;
+  transition:opacity .5s;
+}
+#card-main-heart{
+  font-size:30px;color:#888;
+  text-shadow:0 0 8px rgba(160,160,160,.2);
+  animation:hb .95s ease infinite;
+  cursor:pointer;user-select:none;line-height:1;
+  display:inline-block;
+  transition:color .5s,text-shadow .5s;
 }
 #card-hint{
   font-family:'Jost',sans-serif;font-weight:200;
-  color:rgba(255,255,255,.38);font-size:13px;
-  letter-spacing:1.5px;white-space:nowrap;
-  animation:hp 2.8s ease-in-out infinite;
+  color:rgba(255,255,255,.35);font-size:13px;
+  letter-spacing:1px;white-space:nowrap;
+  animation:hp 2.8s ease-in-out infinite;pointer-events:none;
 }
-@keyframes hp{0%,100%{opacity:.2;}50%{opacity:.8;};}
+@keyframes hp{0%,100%{opacity:.2;}50%{opacity:.72;};}
 
-/* clickable stars layer */
-#card-stars-layer{
+/* ── CLICKABLE STAR LAYER ── */
+#cstar-layer{
   position:fixed;inset:0;
+  pointer-events:none;
   z-index:44;
-  pointer-events:none;/* individual stars have pointer-events:all */
 }
 .cstar{
   position:absolute;
-  cursor:pointer;
   pointer-events:all;
-  line-height:1;
-  transition:transform .15s, filter .15s;
+  cursor:pointer;
   user-select:none;
+  line-height:1;
+  color:#fff;
   animation:twk var(--d,2.5s) ease-in-out var(--dl,0s) infinite;
-  filter:drop-shadow(0 0 3px rgba(255,255,255,.4));
+  transition:transform .18s ease, filter .18s ease, opacity .18s;
+  transform-origin:center;
 }
 .cstar:hover{
-  transform:scale(1.8) !important;
-  filter:drop-shadow(0 0 8px rgba(255,255,200,.95)) drop-shadow(0 0 18px rgba(255,220,100,.6)) !important;
   animation:none !important;
   opacity:1 !important;
+  transform:scale(2) !important;
+  filter:drop-shadow(0 0 8px rgba(255,255,200,.95))
+         drop-shadow(0 0 20px rgba(255,220,120,.7)) !important;
+}
+
+/* star-to-heart morph: scale up + crossfade */
+@keyframes starMorph{
+  0%  {transform:scale(1)    rotate(0deg);  opacity:1; filter:drop-shadow(0 0 6px #fff);}
+  40% {transform:scale(2.8)  rotate(15deg); opacity:.7;filter:drop-shadow(0 0 16px #ff6699);}
+  70% {transform:scale(2.2)  rotate(-8deg); opacity:.9;filter:drop-shadow(0 0 22px #ff3a6e);}
+  100%{transform:scale(0)    rotate(0deg);  opacity:0; filter:none;}
+}
+.cstar.morphing{
+  animation:starMorph .55s ease-in forwards !important;
+  pointer-events:none;
+}
+
+/* hint pulse at bottom of sky */
+#star-hint{
+  position:fixed;
+  bottom:calc(19% + 28px);
+  left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:9px;
+  z-index:45;pointer-events:none;
+  transition:opacity .5s;
+}
+#star-hint span:first-child{
+  font-size:14px;color:rgba(255,255,255,.4);
+  animation:hb 1.8s ease infinite;
+}
+#star-hint-text{
+  font-family:'Jost',sans-serif;font-weight:200;
+  color:rgba(255,255,255,.32);font-size:13px;
+  letter-spacing:1.8px;white-space:nowrap;
+  animation:hp 2.8s ease-in-out infinite;
 }
 /* bottom action bar on card */
 #card-actions{
@@ -481,20 +583,19 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
 <div id="moon-fixed"></div>
 <div id="ground-fixed"></div>
 <canvas id="tree-canvas"></canvas>
-<div id="falling-star" style="position:fixed;display:none;z-index:50;pointer-events:none;font-size:22px;line-height:1;transform-origin:center;"></div>
+<div id="falling-heart">♥</div>
 
 <!-- ════════ SCREEN 1: PREVIEW ════════ -->
 <div id="screen-preview" class="screen active">
   <div id="preview-card">
-    <span id="prev-heart">✦</span>
+    <span id="prev-heart">♥</span>
     <div>
       <span id="prev-sub">A Birthday Card for</span>
     </div>
     <span id="prev-title">Someone Special</span>
     <span id="prev-desc">
-      A sky full of stars waits for you.<br>
-      Pick one — watch it fall to earth and bloom<br>
-      into a tree of hearts, just for them.
+      A night sky fills with stars, a heart falls gently to earth,<br>
+      and a tree of hearts blooms — just for them.
     </span>
     <button class="btn-primary" id="btn-create">Create Your Card</button>
   </div>
@@ -539,20 +640,24 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
 <!-- ════════ SCREEN 3: CARD ════════ -->
 <div id="screen-card" class="screen hidden">
 
-  <!-- clickable stars scattered across the sky -->
-  <div id="card-star-hint">
-    <span id="hint-arrow">✦</span>
-    <span id="card-hint">click on any star</span>
+  <!-- INTRO: types before any star click -->
+  <div id="intro-panel">
+    <div id="intro-since"></div>
+    <div id="intro-date"></div>
   </div>
-  <div id="card-stars-layer"></div>
 
-  <!-- left text panel (hidden until animation) -->
-  <div id="text-panel">
-    <span id="tw-since" class="tw-line"></span>
-    <span id="tw-ornament">✦ · · · ✦</span>
-    <span id="tw-date" class="tw-line"></span>
-    <span id="tw-divider"></span>
-    <span id="tw-name" class="tw-line"></span>
+  <!-- clickable stars scattered in sky -->
+  <div id="cstar-layer"></div>
+
+  <!-- hint at bottom of sky — shown after intro types -->
+  <div id="star-hint" style="opacity:0;">
+    <span>✦</span>
+    <span id="star-hint-text">click on any star</span>
+  </div>
+
+  <!-- BIRTHDAY text bottom (shown after tree grows) -->
+  <div id="bday-panel">
+    <span id="tw-bday"></span>
   </div>
 
   <!-- bottom actions -->
@@ -626,7 +731,8 @@ document.getElementById('btn-make').addEventListener('click',()=>{
   userDate=`${day||'??'} · ${month||'???'} · ${year||'????'}`;
   resetCardState();
   showScreen('screen-card');
-  // stars are built inside resetCardState already
+  // start intro typewriter after screen transition
+  setTimeout(()=>runIntroSequence(), 700);
 });
 
 document.getElementById('btn-restart').addEventListener('click',()=>{
@@ -636,132 +742,183 @@ document.getElementById('btn-restart').addEventListener('click',()=>{
 
 /* ══ RESET CARD STATE ════════════════════════ */
 function resetCardState(){
-  cardAnimRunning=false;animDone=false;
+  cardAnimRunning=false; animDone=false;
   if(flyInterval){clearInterval(flyInterval);flyInterval=null;}
   document.querySelectorAll('.fly-heart,.ripple,.pt').forEach(e=>e.remove());
   tCtx.clearRect(0,0,tW,tH);
 
-  // reset text panel
-  const twLines=[document.getElementById('tw-since'),document.getElementById('tw-date'),document.getElementById('tw-name')];
-  twLines.forEach(el=>{el.style.width='0';el.classList.remove('typing');});
-  document.getElementById('tw-ornament').classList.remove('show');
-  document.getElementById('tw-divider').classList.remove('expand');
+  // reset intro panel
+  const introSince = document.getElementById('intro-since');
+  const introDate  = document.getElementById('intro-date');
+  if(introSince) introSince.textContent = '';
+  if(introDate)  introDate.textContent  = '';
 
-  // reset star hint + stars
-  const hint=document.getElementById('card-star-hint');
-  if(hint){hint.style.opacity='1';hint.style.display='flex';}
+  // hide hint
+  const hint = document.getElementById('star-hint');
+  if(hint) hint.style.opacity = '0';
+
+  // reset bday panel
+  const bdayP = document.getElementById('bday-panel');
+  if(bdayP){ bdayP.classList.remove('show'); }
+  const twB = document.getElementById('tw-bday');
+  if(twB) twB.textContent = '';
+
+  // build stars (hidden until intro done)
   buildClickableStars();
 
-  const fs=document.getElementById('falling-star');
-  if(fs)fs.style.display='none';
+  document.getElementById('falling-heart').style.display='none';
   document.getElementById('card-actions').classList.remove('show');
+}
+
+/* ══ INTRO TYPEWRITER (runs on card screen open) ═══ */
+function runIntroSequence(){
+  const sinceEl = document.getElementById('intro-since');
+  const dateEl  = document.getElementById('intro-date');
+
+  // type "The world just got luckier since" slowly (char speed 75ms)
+  typeTextInto(sinceEl, 'The world just got luckier since', 75, false, ()=>{
+    // pause 400ms then type date in gold
+    setTimeout(()=>{
+      typeTextInto(dateEl, userDate, 90, true, ()=>{
+        // pause 600ms then show stars + hint
+        setTimeout(()=>{
+          const hint = document.getElementById('star-hint');
+          hint.style.transition = 'opacity .8s ease';
+          hint.style.opacity = '1';
+          // make stars clickable now
+          document.querySelectorAll('.cstar').forEach(s=>{
+            s.style.pointerEvents = 'all';
+          });
+        }, 600);
+      });
+    }, 400);
+  });
+}
+
+/* ══ GENERIC TYPEWRITER ══════════════════════
+   types into a plain div (not a tw-line width trick)
+   showCursor = true for the gold date cursor
+════════════════════════════════════════════ */
+function typeTextInto(el, text, speed, isGold, onDone){
+  el.textContent = '';
+  // add blinking cursor span
+  const cur = document.createElement('span');
+  cur.className = 'intro-cursor' + (isGold ? ' gold' : '');
+  el.appendChild(cur);
+
+  let i = 0;
+  function tick(){
+    if(i < text.length){
+      // insert character before cursor
+      el.insertBefore(document.createTextNode(text[i]), cur);
+      i++;
+      setTimeout(tick, speed + (Math.random()*speed*.35));
+    } else {
+      // remove cursor after typing done
+      setTimeout(()=>{
+        if(cur.parentNode) cur.parentNode.removeChild(cur);
+        if(onDone) onDone();
+      }, 300);
+    }
+  }
+  tick();
 }
 
 /* ══ BUILD CLICKABLE STARS ═══════════════════ */
 function buildClickableStars(){
-  const layer=document.getElementById('card-stars-layer');
-  if(!layer)return;
-  layer.innerHTML='';
+  const layer = document.getElementById('cstar-layer');
+  if(!layer) return;
+  layer.innerHTML = '';
 
-  // 28 interactive stars scattered across the sky (top 72% of screen)
-  const positions=[
-    [8,6],[15,18],[24,9],[33,22],[42,7],[50,15],[58,25],[67,10],
-    [75,20],[83,8],[91,17],[12,35],[28,40],[44,32],[60,38],[76,30],
-    [88,42],[20,52],[36,55],[52,48],[68,58],[84,50],[6,62],[30,68],
-    [48,65],[64,60],[80,68],[92,55]
+  const grid = [
+    [5,5],[12,14],[20,7],[28,18],[36,5],[44,12],[52,22],[60,8],
+    [68,16],[76,6],[84,20],[90,10],[8,30],[18,38],[28,32],[38,42],
+    [48,28],[58,36],[68,44],[78,30],[88,38],[4,50],[14,55],[24,48],
+    [34,58],[44,52],[54,62],[64,50],[74,58],[84,48]
   ];
 
-  positions.forEach(([lp, tp], idx)=>{
-    const st = document.createElement('div');
-    st.className = 'cstar';
-    // mix of cross-sparkle and dot stars
-    const isCross = idx % 3 !== 0;
-    const sz = 10 + Math.random()*14;
-    const opacity = 0.45 + Math.random()*0.45;
-    st.style.cssText = `
-      left:${lp + (Math.random()-0.5)*4}vw;
-      top:${tp  + (Math.random()-0.5)*3}vh;
-      font-size:${sz}px;
-      opacity:${opacity};
-      color:#fff;
-      --d:${1.8+Math.random()*3}s;
+  grid.forEach(([lp,tp], i)=>{
+    const el = document.createElement('div');
+    el.className = 'cstar';
+    const left = lp + (Math.random()-0.5)*5;
+    const top  = tp + (Math.random()-0.5)*4;
+    const sz   = 13 + Math.random()*14;
+    const op   = 0.45 + Math.random()*0.45;
+    const sym  = (i%4===0)?'✦':(i%4===1)?'★':(i%4===2)?'✧':'⋆';
+    el.textContent = sym;
+    el.style.cssText = `
+      left:${left}vw; top:${top}vh;
+      font-size:${sz}px; opacity:${op};
+      --d:${1.6+Math.random()*3}s;
       --dl:${Math.random()*5}s;
-      --lo:${opacity*0.4};
-      --hi:${opacity};
+      --lo:${op*.35}; --hi:${op};
+      pointer-events:none;
     `;
-    st.textContent = isCross ? '✦' : '★';
-    st.addEventListener('click', onStarClick);
-    layer.appendChild(st);
+    // stars start non-clickable — enabled after intro finishes
+    el.addEventListener('click', onStarClick);
+    layer.appendChild(el);
   });
 }
 
-/* ══ STAR CLICK ══════════════════════════════ */
+/* ══ STAR CLICK → MORPH → FALL AS HEART ═════ */
 function onStarClick(e){
-  if(cardAnimRunning)return;
-  cardAnimRunning=true;
+  if(cardAnimRunning) return;
+  cardAnimRunning = true;
 
   const st = e.currentTarget;
   const r  = st.getBoundingClientRect();
   const sx = r.left + r.width/2;
   const sy = r.top  + r.height/2;
 
-  // flash the star bright white then remove it
-  st.style.transition='transform .2s, filter .2s, opacity .3s';
-  st.style.transform='scale(2.5)';
-  st.style.filter='drop-shadow(0 0 16px rgba(255,255,220,1)) drop-shadow(0 0 32px rgba(255,220,100,.8))';
-  st.style.opacity='1';
+  // fade out intro text
+  const introPanel = document.getElementById('intro-panel');
+  introPanel.style.transition = 'opacity .5s';
+  introPanel.style.opacity = '0';
 
   // hide hint
-  const hint=document.getElementById('card-star-hint');
-  hint.style.transition='opacity .5s';
-  hint.style.opacity='0';
+  const hint = document.getElementById('star-hint');
+  hint.style.opacity = '0';
+
+  // morph the star
+  st.classList.add('morphing');
 
   setTimeout(()=>{
-    // remove all clickable stars
-    document.getElementById('card-stars-layer').innerHTML='';
-    hint.style.display='none';
+    document.getElementById('cstar-layer').innerHTML = '';
 
-    const targetX = tW*.62;
+    const targetX = tW * .62;
     const ey      = groundY - 14;
-    landX=targetX; landY=ey;
+    landX = targetX; landY = ey;
 
-    // create falling star element
-    const fs=document.getElementById('falling-star');
-    fs.textContent='✦';
-    fs.style.cssText=`
+    const fh = document.getElementById('falling-heart');
+    fh.textContent = '♥';
+    fh.style.cssText = `
       display:block;
-      left:${sx-11}px;
-      top:${sy-11}px;
-      font-size:22px;
-      color:#fffde0;
-      text-shadow:0 0 12px rgba(255,255,200,.9), 0 0 28px rgba(255,220,100,.6);
+      left:${sx-16}px; top:${sy-16}px;
+      font-size:32px; color:#ff3a6e;
+      text-shadow:0 0 18px rgba(255,58,110,.9), 0 0 40px rgba(255,58,110,.3);
+      position:fixed; z-index:50; pointer-events:none;
+      line-height:1; transform-origin:center;
     `;
 
-    let t0=null;
-    const dur=3800;
+    let t0=null; const dur=3800;
     function fall(ts){
-      if(!t0)t0=ts;
-      const p  = Math.min((ts-t0)/dur,1);
+      if(!t0) t0=ts;
+      const p  = Math.min((ts-t0)/dur, 1);
       const ep = p<.5 ? 2*p*p : 1-Math.pow(-2*p+2,2)/2;
-      const cx = sx+(targetX-sx)*ep;
+      const cx = sx + (targetX-sx)*ep;
       const sway = Math.sin(p*Math.PI*3.2)*22*(1-p*.68);
-      const rot  = Math.sin(p*Math.PI*2.4)*25;
-      const scl  = 1+Math.sin(p*Math.PI)*.3;
-      // star gets redder / more heart-like as it falls — colour shifts warm
-      const warmth = Math.floor(p*80);
-      const glow   = 12+p*28;
-
-      fs.style.top      = (sy+(ey-sy)*ep-11)+'px';
-      fs.style.left     = (cx+sway-11)+'px';
-      fs.style.transform= `scale(${scl}) rotate(${rot}deg)`;
-      fs.style.color    = `rgb(255,${Math.max(253-warmth*2,80)},${Math.max(200-warmth*3,20)})`;
-      fs.style.textShadow=`0 0 ${glow}px rgba(255,${220-warmth},${100-warmth},.95), 0 0 ${glow*2}px rgba(255,${180-warmth},80,.3)`;
-
+      const rot  = Math.sin(p*Math.PI*2.4)*20;
+      const scl  = 1 + Math.sin(p*Math.PI)*.26;
+      const glow = 12 + p*24;
+      fh.style.top       = (sy+(ey-sy)*ep-16)+'px';
+      fh.style.left      = (cx+sway-16)+'px';
+      fh.style.transform = `scale(${scl}) rotate(${rot}deg)`;
+      fh.style.textShadow= `0 0 ${glow}px rgba(255,58,110,.92), 0 0 ${glow*2}px rgba(255,58,110,.28)`;
       if(p<1){ requestAnimationFrame(fall); }
-      else   { fs.style.display='none'; onLand(targetX,ey); }
+      else   { fh.style.display='none'; onLand(targetX,ey); }
     }
     requestAnimationFrame(fall);
-  },280);
+  }, 300);
 }
 
 /* ══ LANDING ════════════════════════════════ */
@@ -783,76 +940,32 @@ function spawnBurst(x,y){
 }
 
 function onLand(lx,ly){
-  spawnRipple(lx,ly);spawnBurst(lx,ly);
-  // start artist tree
-  setTimeout(()=>growArtistTree(lx,ly),300);
-  // typewriter sequence
-  setTimeout(()=>typeSequence(),200);
+  spawnRipple(lx,ly); spawnBurst(lx,ly);
+  setTimeout(()=>growHeartTree(lx,ly), 300);
 }
 
-/* ══ TYPEWRITER ENGINE ══════════════════════ */
-function typeText(el,text,speed,onDone){
-  el.style.width='auto';
-  el.textContent='';
-  el.classList.add('typing');
+/* ══ TYPEWRITER ENGINE (for bday text) ══════ */
+function typeText(el, text, speed, onDone){
+  el.textContent = '';
+  const cur = document.createElement('span');
+  cur.className = 'intro-cursor';
+  cur.style.borderColor = 'rgba(255,100,160,.7)';
+  el.appendChild(cur);
   let i=0;
   function tick(){
-    if(i<=text.length){
-      el.textContent=text.slice(0,i);
+    if(i < text.length){
+      el.insertBefore(document.createTextNode(text[i]), cur);
       i++;
-      setTimeout(tick,speed+(Math.random()*speed*.4));
-    }else{
-      el.classList.remove('typing');
-      if(onDone)onDone();
+      setTimeout(tick, speed + Math.random()*speed*.35);
+    } else {
+      setTimeout(()=>{ if(cur.parentNode) cur.parentNode.removeChild(cur); if(onDone)onDone(); },300);
     }
   }
   tick();
 }
 
-function typeSequence(){
-  const sinceEl=document.getElementById('tw-since');
-  const dateEl=document.getElementById('tw-date');
-  const nameEl=document.getElementById('tw-name');
-  const orn=document.getElementById('tw-ornament');
-  const div=document.getElementById('tw-divider');
-
-  const sinceText='The world just got luckier since';
-  const dateText=userDate;
-  const nameText='Happy Birthday, '+userName;
-
-  // Step 1: type "The world..."
-  typeText(sinceEl,sinceText,52,()=>{
-    // Step 2: after 500ms, ornament + date
-    setTimeout(()=>{
-      orn.classList.add('show');
-      setTimeout(()=>{
-        typeText(dateEl,dateText,72,()=>{
-          // Step 3: divider then name
-          setTimeout(()=>{
-            div.classList.add('expand');
-            setTimeout(()=>{
-              typeText(nameEl,nameText,58,()=>{
-                // add beating heart accent
-                const acc=document.createElement('span');
-                acc.id='tw-heart-accent';acc.textContent=' ♥';
-                nameEl.appendChild(acc);
-                // show actions
-                setTimeout(()=>{
-                  document.getElementById('card-actions').classList.add('show');
-                  setupWhatsApp();
-                },600);
-              });
-            },400);
-          },700);
-        });
-      },180);
-    },500);
-  });
-}
-
 /* ══ WHATSAPP ════════════════════════════════ */
 function setupWhatsApp(){
-  // Build shareable card URL with name+date baked in as params
   const base = window.location.origin + window.location.pathname;
   const cardURL = `${base}?name=${encodeURIComponent(userName)}&date=${encodeURIComponent(userDate)}`;
   const msg = `🌙✨ *Happy Birthday, ${userName}!* ✨🌙\n\nThe world just got luckier since ${userDate}.\n\n🎁 Open your birthday card:\n${cardURL}\n\nSent with love ♥`;
@@ -881,85 +994,46 @@ function drawHeart(x,y,sz,col,alpha){
   tCtx.restore();
 }
 
-/* ══ TREE  ══════════════════════════════════
-   Fully pre-computed flat node list.
-   Every node stores its own ABSOLUTE start/end
-   so nothing depends on runtime parent state.
-   Rendered branch-by-branch with a time offset
-   so it appears to "grow" stroke by stroke —
-   like an artist drawing it with a brush pen.
+/* ══ HEART TREE ══════════════════════════════
+   Instead of brush strokes, builds a tree made
+   entirely from colourful hearts of increasing
+   size. The hearts appear from root up, growing
+   the tree shape organically.
 ════════════════════════════════════════════ */
-function growArtistTree(rootX, rootY){
-  const nodes = [];   // flat list, built recursively
-  const MAX_DEPTH = 9;
+function growHeartTree(rootX, rootY){
+  // Build branch skeleton (same recursive system)
+  const nodes = [];
+  const MAX_DEPTH = 8;
 
   function build(sx, sy, angle, len, depth, startMs){
     if(depth > MAX_DEPTH) return;
-
-    // end point with a gentle organic bend
-    const bendX = (Math.random()-.5) * len * .35;
-    const bendY = (Math.random()-.5) * len * .16;
+    const bendX = (Math.random()-.5)*len*.32;
+    const bendY = (Math.random()-.5)*len*.14;
     const ex = sx + Math.sin(angle)*len + bendX;
     const ey = sy - Math.cos(angle)*len + bendY;
-
-    const drawDur  = 300 + depth*30;           // ms to ink this branch
-    const maxWidth = Math.max(11 - depth*1.12, .6);
-    // bark colour: deep brown trunk → warm chestnut tips
-    const rv = Math.round(50  + depth*10);
-    const gv = Math.round(24  + depth*3);
-    const bv = 9;
-    const col = `rgb(${rv},${gv},${bv})`;
-
-    nodes.push({ sx, sy, ex, ey, bendX, bendY,
-      depth, startMs, drawDur, maxWidth, col });
+    const drawDur = 280 + depth*32;
+    nodes.push({ sx, sy, ex, ey, bendX, bendY, depth, startMs, drawDur });
 
     if(depth < MAX_DEPTH){
-      const childStart = startMs + drawDur * .52;
-      const spread = (Math.PI/5.4) + Math.random()*(Math.PI/9);
-      const lenScale = .62 + Math.random()*.12;
-      const bias = (Math.random()-.5)*.14;
-      const threeKids = depth < 4 && Math.random() < .38;
-
-      build(ex, ey, angle - spread + bias, len*lenScale,        depth+1, childStart);
-      build(ex, ey, angle + spread + bias, len*(lenScale-.03),  depth+1, childStart);
-      if(threeKids)
-        build(ex, ey, angle + bias*.3,    len*lenScale*.72,     depth+1, childStart+100);
+      const childStart = startMs + drawDur*.50;
+      const spread = (Math.PI/5.2) + Math.random()*(Math.PI/8.5);
+      const lenScale = .62 + Math.random()*.13;
+      const bias = (Math.random()-.5)*.16;
+      const three = depth < 3 && Math.random() < .4;
+      build(ex, ey, angle - spread + bias, len*lenScale,       depth+1, childStart);
+      build(ex, ey, angle + spread + bias, len*(lenScale-.03), depth+1, childStart);
+      if(three) build(ex, ey, angle + bias*.3, len*lenScale*.7, depth+1, childStart+90);
     }
   }
 
-  build(rootX, rootY, 0, tH*.135, 0, 0);
+  build(rootX, rootY, 0, tH*.13, 0, 0);
 
-  /* ── helpers ── */
   function lerp(a,b,t){ return a+(b-a)*t; }
 
-  // draw one "artist stroke" segment of a branch
-  function paintSegment(b, t0f, t1f){
-    // quadratic bezier mid-point for the organic curve
-    const mx = (b.sx+b.ex)/2 + b.bendX*.5;
-    const my = (b.sy+b.ey)/2 + b.bendY*.5;
-    // points along the bezier
-    const ax = lerp(lerp(b.sx,mx,t0f), lerp(mx,b.ex,t0f), t0f);
-    const ay = lerp(lerp(b.sy,my,t0f), lerp(my,b.ey,t0f), t0f);
-    const bx = lerp(lerp(b.sx,mx,t1f), lerp(mx,b.ex,t1f), t1f);
-    const by = lerp(lerp(b.sy,my,t1f), lerp(my,b.ey,t1f), t1f);
-    // pressure: thick in middle, thin at tips
-    const pr = Math.sin(((t0f+t1f)*.5)*Math.PI);
-    const lw = Math.max(b.maxWidth * pr, .55);
-    // hand-wobble perpendicular to stroke direction
-    const dx=bx-ax, dy=by-ay, len2=Math.sqrt(dx*dx+dy*dy)+.001;
-    const nx=-dy/len2, ny=dx/len2;
-    const wob = (Math.random()-.5) * Math.max(3.5-b.depth*.38,.3);
-    tCtx.lineWidth = lw;
-    tCtx.beginPath();
-    tCtx.moveTo(ax+nx*wob,       ay+ny*wob);
-    tCtx.lineTo(bx+nx*wob*.75,   by+ny*wob*.75);
-    tCtx.stroke();
-  }
-
-  const SEGS = 18;  // segments per branch
   const t0 = performance.now();
-  const totalDur = nodes.reduce((m,n)=>Math.max(m, n.startMs+n.drawDur), 0) + 2400;
-  const heartsPlaced = new Set();
+  const totalDur = nodes.reduce((m,n)=>Math.max(m, n.startMs+n.drawDur), 0) + 1800;
+  // store all final heart positions for falling later
+  const heartPositions = [];
 
   function frame(now){
     tCtx.clearRect(0,0,tW,tH);
@@ -968,115 +1042,139 @@ function growArtistTree(rootX, rootY){
     for(const b of nodes){
       const el = elapsed - b.startMs;
       if(el <= 0) continue;
+      const prog = Math.min(el/b.drawDur, 1);
+      const eased = 1 - Math.pow(1-prog, 2.5);
 
-      const prog  = Math.min(el/b.drawDur, 1);
-      const alpha = (.92 - b.depth*.025) * Math.min(prog*4, 1);
+      // draw hearts along the branch path as it grows
+      // number of hearts = proportional to depth
+      const numDots = Math.max(3, 8 - b.depth);
+      const showDots = Math.floor(eased * numDots);
 
-      tCtx.save();
-      tCtx.globalAlpha = alpha;
-      tCtx.strokeStyle = b.col;
-      tCtx.lineCap = tCtx.lineJoin = 'round';
+      const mx = (b.sx+b.ex)/2 + b.bendX*.5;
+      const my = (b.sy+b.ey)/2 + b.bendY*.5;
 
-      const drawnSegs = Math.floor(prog * SEGS);
-      for(let si=0; si<drawnSegs; si++){
-        paintSegment(b, si/SEGS, (si+1)/SEGS);
+      for(let di=0; di<=showDots; di++){
+        const t = di / (numDots);
+        const hx = lerp(lerp(b.sx,mx,t), lerp(mx,b.ex,t), t);
+        const hy = lerp(lerp(b.sy,my,t), lerp(my,b.ey,t), t);
+        // size: larger near root, smaller at tips
+        const sizeFactor = 1 - (b.depth/MAX_DEPTH)*.65;
+        const sz = (6 + (numDots-di)*.8) * sizeFactor;
+        const col = HC[((b.depth*3 + di*2) % HC.length)];
+        const alpha = .45 + eased*.45;
+        drawHeart(hx, hy, Math.max(sz,2), col, alpha);
       }
-      // partial last segment
-      const partFrac = (prog*SEGS) - drawnSegs;
-      if(partFrac > .01 && drawnSegs < SEGS){
-        paintSegment(b, drawnSegs/SEGS, (drawnSegs+partFrac)/SEGS);
-      }
-      tCtx.restore();
 
-      // colourful heart at tip once fully drawn
-      if(prog >= 1 && b.depth >= MAX_DEPTH-1 && !heartsPlaced.has(b)){
-        heartsPlaced.add(b);
-        const isLeaf = b.depth === MAX_DEPTH;
-        const sz  = isLeaf ? (5+Math.random()*8) : (3.5+Math.random()*5);
-        const col = HC[Math.floor(Math.random()*HC.length)];
-        drawHeart(b.ex, b.ey, sz, col, .55+Math.random()*.42);
+      // record tip hearts for falling
+      if(prog >= 1 && b.depth >= MAX_DEPTH-1){
+        heartPositions.push({ x: b.ex, y: b.ey,
+          col: HC[Math.floor(Math.random()*HC.length)] });
       }
     }
 
     if(elapsed < totalDur){
       requestAnimationFrame(frame);
     } else {
-      startFallingHearts(rootX, rootY);
+      // tree done — start gentle heart drip + bday text together
+      startGentleDrip(rootX, rootY, heartPositions);
+      showBirthdayText();
     }
   }
   requestAnimationFrame(frame);
 }
 
-/* ══ HEARTS RAIN FROM TREE ══════════════════ */
-function startFallingHearts(lx, ly){
-  const spread = Math.min(tW*.30, 230);
+/* ══ GENTLE HEART DRIP (2-3 hearts, one at a time) ══
+   Not a burst — individual hearts drift down slowly
+   from random branch tips, one after another
+═════════════════════════════════════════════════════ */
+function startGentleDrip(rootX, rootY, positions){
+  const cols = HC;
 
-  function spawnOne(){
-    const fh  = document.createElement('div');
-    fh.className = 'fly-heart';
-    const ox  = (Math.random()-.5)*spread*2;
-    const fx  = (Math.random()-.5)*55;
-    const fx2 = fx + (Math.random()-.5)*35;
-    const sz  = 7 + Math.random()*18;
-    const col = HC[Math.floor(Math.random()*HC.length)];
-    // start at a random height within the tree canopy
-    const sb  = tH - ly + 20 + Math.random()*80;
-    fh.style.cssText = `
-      left:${lx+ox}px; bottom:${sb}px;
-      font-size:${sz}px; color:${col};
-      --fd:${2.2+Math.random()*2.8}s;
-      --fdl:${Math.random()*.4}s;
-      --fx:${fx}px; --fx2:${fx2}px;
-      text-shadow:0 0 7px ${col};
-    `;
-    fh.textContent = '♥';
-    document.body.appendChild(fh);
-    fh.addEventListener('animationend', ()=>fh.remove());
+  function dropOne(delay){
+    setTimeout(()=>{
+      // pick a random position near tree canopy
+      const pos = positions.length
+        ? positions[Math.floor(Math.random()*positions.length)]
+        : { x: rootX + (Math.random()-.5)*120,
+            y: rootY - tH*.35,
+            col: HC[Math.floor(Math.random()*HC.length)] };
+
+      const fh = document.createElement('div');
+      fh.className = 'fly-heart';
+      const sz  = 16 + Math.random()*14;
+      const fx  = (Math.random()-.5)*50;
+      const fx2 = fx + (Math.random()-.5)*30;
+      // convert canvas y to bottom-relative for CSS
+      const sb = tH - pos.y + Math.random()*40;
+
+      fh.style.cssText = `
+        left:${pos.x + (Math.random()-.5)*60}px;
+        bottom:${sb}px;
+        font-size:${sz}px;
+        color:${pos.col};
+        --fd:${3.5+Math.random()*2}s;
+        --fdl:0s;
+        --fx:${fx}px; --fx2:${fx2}px;
+        text-shadow:0 0 10px ${pos.col};
+      `;
+      fh.textContent = '♥';
+      document.body.appendChild(fh);
+      fh.addEventListener('animationend', ()=>fh.remove());
+    }, delay);
   }
 
-  // initial burst
-  for(let i=0;i<26;i++) setTimeout(spawnOne, i*65);
-  // continuous shower
-  flyInterval = setInterval(()=>{
-    const n = 3 + Math.floor(Math.random()*4);
-    for(let i=0;i<n;i++) setTimeout(spawnOne, i*110);
-  }, 800);
+  // drop 3 hearts, staggered 1.8s apart — gentle, not a shower
+  dropOne(400);
+  dropOne(2200);
+  dropOne(4000);
+
+  // then repeat very gently every ~6s (just 1 at a time)
+  flyInterval = setInterval(()=>dropOne(0), 6000);
 }
 
-/* ══ URL PARAM AUTO-LOAD ════════════════════
-   When someone opens a shared link like:
-   wishyou.ai/anime.html?name=Nilesh&date=25+·+JAN+·+1981
-   → skip straight to card screen and auto-play
-════════════════════════════════════════════ */
+/* ══ BIRTHDAY TEXT (types at bottom while hearts drip) ═ */
+function showBirthdayText(){
+  const bdayP = document.getElementById('bday-panel');
+  const twB   = document.getElementById('tw-bday');
+  bdayP.classList.add('show');
+
+  const text = 'Happy Birthday, ' + userName;
+  typeText(twB, text, 62, ()=>{
+    // add pulsing heart
+    const acc = document.createElement('span');
+    acc.id = 'tw-bday-heart';
+    acc.textContent = ' ♥';
+    twB.appendChild(acc);
+    // show share buttons
+    setTimeout(()=>{
+      document.getElementById('card-actions').classList.add('show');
+      setupWhatsApp();
+    }, 800);
+  });
+}
+/* ══ URL PARAM AUTO-LOAD ════════════════════ */
 (function(){
   const params = new URLSearchParams(window.location.search);
   const pName  = params.get('name');
   const pDate  = params.get('date');
-
   if(pName && pDate){
-    // Pre-fill inputs (in case user goes back)
-    document.getElementById('inp-name').value  = pName;
-    // Parse date back into day/month/year fields
+    document.getElementById('inp-name').value = pName;
     const parts = pDate.split('·').map(s=>s.trim());
     if(parts[0]) document.getElementById('inp-day').value   = parts[0];
     if(parts[1]) document.getElementById('inp-month').value = parts[1];
     if(parts[2]) document.getElementById('inp-year').value  = parts[2];
-
-    // Set state and jump straight to card
-    userName = pName;
-    userDate = pDate;
+    userName = pName; userDate = pDate;
     resetCardState();
     showScreen('screen-card');
-
-    // Auto-trigger a random star click after short delay
-    // so recipient sees the full animation
+    // run intro then auto-click a star
+    setTimeout(()=>runIntroSequence(), 500);
+    // auto-click after intro finishes (~8s for slow typing)
     setTimeout(()=>{
       const stars = document.querySelectorAll('.cstar');
       if(stars.length){
-        const pick = stars[Math.floor(Math.random()*stars.length)];
-        pick.dispatchEvent(new Event('click'));
+        stars[Math.floor(stars.length/2)].dispatchEvent(new Event('click'));
       }
-    }, 1200);
+    }, 9500);
   }
 })();
 </script>
