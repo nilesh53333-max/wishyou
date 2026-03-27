@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — A Message for You</title>
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;💬&lt;/text&gt;&lt;/svg&gt;">
+<meta property="og:title" content="You have a message 💬">
+<meta property="og:description" content="Someone sent you something special. Open it.">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;overflow:hidden;height:100%;}
+body{font-family:'DM Sans',sans-serif;background:#111;}
+.app{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;background:#111;}
+@media(min-width:500px){
+  .app{position:fixed;top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);width:430px;height:90vh;max-height:900px;border-radius:40px;box-shadow:0 40px 120px rgba(0,0,0,0.8);overflow:hidden;}
+}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.4s ease;overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;}
+.screen.slide-out{opacity:0;}
+
+/* ── CREATOR ── */
+.creator-screen{align-items:stretch;justify-content:flex-start;background:#ECE5DD;}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
+.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
+.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom)+16px);}
+.step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,0.08);}
+.step-progress-fill{height:100%;transition:width 0.5s ease;background:linear-gradient(90deg,#25D366,#128C7E);}
+.step-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;touch-action:manipulation;z-index:5;background:rgba(0,0,0,0.07);color:#333;}
+.step-counter{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0.4;color:#333;}
+.step-emoji{font-size:2.2rem;margin-bottom:10px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
+@keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.step-title{font-size:clamp(1.5rem,5vw,1.9rem);font-weight:700;line-height:1.2;margin-bottom:6px;color:#111;}
+.step-sub{font-size:0.82rem;line-height:1.6;margin-bottom:20px;opacity:0.55;color:#333;}
+.field-label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;opacity:0.45;color:#333;}
+.big-input{width:100%;border:none;border-bottom:2px solid rgba(37,211,102,0.35);background:transparent;padding:10px 0;font-size:1.7rem;font-weight:700;outline:none;transition:border-color 0.3s;text-align:center;color:#111;}
+.big-input::placeholder{opacity:0.2;color:#333;}
+.big-input:focus{border-color:#25D366;}
+.regular-input{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:12px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:rgba(255,255,255,0.8);outline:none;transition:border-color 0.3s;margin-bottom:12px;color:#111;}
+.regular-input::placeholder{opacity:0.35;font-style:italic;}
+.regular-input:focus{border-color:#25D366;background:white;}
+.letter-area{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:16px;font-family:'DM Sans','Noto Sans Devanagari',sans-serif;font-size:1rem;line-height:1.8;background:rgba(255,255,255,0.8);outline:none;resize:none;min-height:160px;transition:border-color 0.3s;color:#111;}
+.letter-area:focus{border-color:#25D366;}
+.letter-area::placeholder{opacity:0.35;font-style:italic;}
+.btn-next{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;touch-action:manipulation;margin-top:8px;transition:transform 0.15s;}
+.btn-next:active{transform:scale(0.97);}
+.btn-chat{background:linear-gradient(135deg,#25D366,#128C7E);color:white;box-shadow:0 8px 24px rgba(37,211,102,0.35);}
+.btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.4;font-family:'DM Sans',sans-serif;color:#333;}
+.btn-wa{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(37,211,102,0.3);margin-top:8px;touch-action:manipulation;}
+.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;margin:6px 0;color:#555;}
+.ai-loading.show{display:flex;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#25D366;animation:aiPulse 1s ease-in-out infinite;}
+@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;font-size:1.3rem;background:rgba(37,211,102,0.07);border:1.5px dashed rgba(37,211,102,0.3);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#25D366;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+.song-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;background:rgba(255,255,255,0.7);border:1.5px solid rgba(37,211,102,0.12);}
+.song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.song-use-btn{padding:6px 12px;border:none;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#25D366,#128C7E);color:white;}
+.song-selected-box{border-radius:14px;padding:12px 14px;margin-bottom:10px;display:none;background:linear-gradient(135deg,#075E54,#128C7E);}
+
+/* SAVE OVERLAY */
+.save-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay.show{display:flex;}
+.save-box{border-radius:20px;padding:28px 24px;width:100%;max-width:320px;text-align:center;background:white;}
+.save-spinner{position:relative;width:64px;height:64px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
+.save-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(37,211,102,0.15);border-top-color:#25D366;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.save-emoji{font-size:1.8rem;position:relative;z-index:1;}
+.save-label{font-size:1rem;font-weight:600;margin-bottom:14px;color:#111;}
+.save-bar-wrap{height:8px;border-radius:50px;overflow:hidden;width:100%;margin-bottom:8px;background:rgba(37,211,102,0.12);}
+.save-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s ease;background:linear-gradient(90deg,#25D366,#128C7E);}
+.save-step{font-size:0.75rem;opacity:0.5;display:none;}
+
+/* SHARE MODAL */
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.75);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{border-radius:20px;padding:26px 22px;width:100%;max-width:360px;text-align:center;background:white;}
+.share-link-row{border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.2);}
+.share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;color:#333;}
+.copy-btn{padding:6px 12px;border:none;border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;background:#25D366;color:white;}
+.modal-close{width:100%;padding:12px;background:none;border:1.5px solid rgba(37,211,102,0.25);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:6px;color:#128C7E;}
+
+/* ── RECEIVER — CHAT UI ── */
+#rv-loading,#rv-error,#rv-chat{position:absolute;inset:0;}
+#rv-loading{background:#075E54;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+.wa-logo-wrap{width:80px;height:80px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.wa-loading-text{font-size:0.78rem;color:rgba(255,255,255,0.45);letter-spacing:0.12em;}
+.wa-dots{display:flex;gap:6px;}
+.wa-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.5);animation:waDot 1.2s ease-in-out infinite;}
+.wa-dot:nth-child(2){animation-delay:0.2s;}
+.wa-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes waDot{0%,80%,100%{transform:scale(0.6);opacity:0.3;}40%{transform:scale(1);opacity:1;}}
+#rv-error{background:#ECE5DD;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
+#rv-chat{background:#ECE5DD;display:flex;flex-direction:column;}
+
+/* Top bar */
+.wa-topbar{background:#075E54;flex-shrink:0;display:flex;align-items:center;gap:12px;padding:max(12px,env(safe-area-inset-top)) 16px 12px;}
+.wa-back{color:white;font-size:1.2rem;background:none;border:none;cursor:pointer;padding:4px;line-height:1;flex-shrink:0;}
+.wa-avatar{width:38px;height:38px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.wa-contact-info{flex:1;min-width:0;}
+.wa-contact-name{font-size:0.95rem;font-weight:600;color:white;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.wa-contact-status{font-size:0.7rem;color:rgba(255,255,255,0.55);margin-top:1px;}
+.wa-topbar-icons{display:flex;gap:18px;color:rgba(255,255,255,0.7);font-size:1.1rem;}
+
+/* Chat area */
+.chat-bg{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 12px 80px;display:flex;flex-direction:column;gap:3px;}
+.chat-bg::-webkit-scrollbar{display:none;}
+.chat-date{text-align:center;margin:8px 0;}
+.chat-date-pill{background:rgba(255,255,255,0.75);border-radius:8px;padding:4px 12px;font-size:0.7rem;color:#667781;display:inline-block;}
+
+/* Bubbles */
+.bubble-wrap{display:flex;flex-direction:column;max-width:78%;}
+.bubble-wrap.from-them{align-self:flex-start;}
+.bubble-wrap.from-me{align-self:flex-end;}
+.bubble{padding:8px 10px 6px;border-radius:8px;position:relative;word-break:break-word;}
+.bubble.them{background:white;border-top-left-radius:0;}
+.bubble.me{background:#DCF8C6;border-top-right-radius:0;}
+.bubble-text{font-size:0.9rem;color:#111;line-height:1.55;font-family:'DM Sans','Noto Sans Devanagari',sans-serif;}
+.bubble-meta{display:flex;align-items:center;gap:4px;justify-content:flex-end;margin-top:3px;}
+.bubble-time{font-size:0.65rem;color:#667781;}
+.bubble-tick{font-size:0.7rem;color:#53BDEB;}
+
+/* Photo bubble */
+.bubble-photo{padding:4px 4px 6px;border-radius:8px;overflow:hidden;cursor:pointer;max-width:220px;}
+.bubble-photo.them{background:white;border-top-left-radius:0;}
+.bubble-photo img{width:100%;max-width:200px;max-height:220px;border-radius:6px;display:block;object-fit:cover;}
+
+/* Song bubble */
+.bubble-song{padding:10px 12px 6px;border-radius:8px;display:flex;align-items:center;gap:10px;min-width:200px;cursor:pointer;}
+.bubble-song.them{background:white;border-top-left-radius:0;}
+.song-play-btn{width:42px;height:42px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;border:none;cursor:pointer;color:white;}
+.song-title-wrap{flex:1;min-width:0;}
+.song-title-txt{font-size:0.78rem;font-weight:600;color:#111;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.song-sub-txt{font-size:0.65rem;color:#667781;margin-top:2px;}
+
+/* Typing */
+.typing-wrap{display:flex;align-self:flex-start;}
+.typing-bubble{background:white;border-radius:8px;border-top-left-radius:0;padding:10px 14px;display:flex;gap:4px;align-items:center;}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:#aaa;animation:typingBounce 1.2s ease-in-out infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+
+/* Bottom bar */
+.wa-bottombar{position:absolute;bottom:0;left:0;right:0;padding:8px 12px max(12px,env(safe-area-inset-bottom));background:#F0F0F0;display:flex;align-items:center;gap:8px;}
+.wa-input-fake{flex:1;background:white;border-radius:24px;padding:10px 16px;font-size:0.9rem;color:#aaa;font-style:italic;}
+.wa-mic{width:44px;height:44px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+
+/* Photo fullscreen */
+.photo-full{position:absolute;inset:0;z-index:200;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;}
+.photo-full.show{display:flex;}
+.photo-full img{max-width:100%;max-height:85vh;object-fit:contain;}
+.photo-full-close{position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;}
+
+/* Song player */
+.song-player{position:absolute;inset:0;z-index:200;background:linear-gradient(160deg,#075E54,#128C7E);display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px;}
+.song-player.show{display:flex;}
+.song-player-close{position:absolute;top:max(16px,env(safe-area-inset-top));left:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;}
+.sp-disc{width:130px;height:130px;border-radius:50%;margin:0 auto 24px;background:radial-gradient(circle,#DCF8C6 0%,#DCF8C6 14%,#064e3b 15%,#065f46 28%,#064e3b 40%,#065f46 55%,#064e3b 100%);display:flex;align-items:center;justify-content:center;animation:discSpin 3s linear infinite;}
+@keyframes discSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.sp-disc-center{width:30px;height:30px;border-radius:50%;background:#25D366;position:relative;}
+.sp-disc-center::after{content:'';position:absolute;width:8px;height:8px;border-radius:50%;background:white;top:50%;left:50%;transform:translate(-50%,-50%);}
+.sp-title{font-size:1.2rem;font-weight:700;color:white;text-align:center;margin-bottom:6px;}
+.sp-sub{font-size:0.8rem;color:rgba(255,255,255,0.5);text-align:center;margin-bottom:24px;}
+.sp-yt{width:100%;border-radius:12px;overflow:hidden;display:none;}
+.sp-yt iframe{width:100%;height:180px;border:none;display:block;}
+.sp-yt.show{display:block;}
+
+.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(255,255,255,0.1);}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- CREATOR -->
+<div class="screen creator-screen" id="s-name">
+  <div class="step-progress"><div class="step-progress-fill" style="width:20%"></div></div>
+  <button class="step-back" onclick="window.location.href='/'">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 1 of 4</div>
+      <span class="step-emoji">💬</span>
+      <div class="step-title">Who is this chat for?</div>
+      <div class="step-sub">Their name appears on the contact header</div>
+      <div id="nameInputWrap"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-chat" id="btn-name" onclick="goTo('s-photos')">Continue → Photos</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen" id="s-photos">
+  <div class="step-progress"><div class="step-progress-fill" style="width:40%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 2 of 4</div>
+      <span class="step-emoji">📸</span>
+      <div class="step-title">Send some photos</div>
+      <div class="step-sub">They'll arrive like photo messages in a chat</div>
+      <div class="photos-grid" id="photosGrid"></div>
+      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-chat" id="btn-photos" onclick="goTo('s-song')">Continue → Song</button>
+      <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen" id="s-song">
+  <div class="step-progress"><div class="step-progress-fill" style="width:60%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 3 of 4</div>
+      <span class="step-emoji">🎵</span>
+      <div class="step-title">Share a song</div>
+      <div class="step-sub">Appears as an audio message in the chat</div>
+      <div class="song-selected-box" id="songSelectedBox">
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Selected:</div>
+        <div style="font-size:0.88rem;font-weight:600;color:white;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
+        <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;color:white;background:linear-gradient(135deg,#25D366,#128C7E);">🔍</button>
+      </div>
+      <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
+      <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(37,211,102,0.15);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#128C7E;margin-bottom:8px;">✨ AI Song Suggestions</div>
+        <input id="aiSongContext" class="regular-input" placeholder="e.g. romantic Hindi, 90s nostalgic..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
+        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#25D366,#128C7E);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Suggest Songs</button>
+        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Finding songs...</span></div>
+        <div id="songAiResults" style="margin-top:6px;"></div>
+      </div>
+      <input type="hidden" id="cSpotify">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-chat" id="btn-song" onclick="goTo('s-letter')">Continue → Message</button>
+      <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen" id="s-letter">
+  <div class="step-progress"><div class="step-progress-fill" style="width:80%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 4 of 4</div>
+      <span class="step-emoji">💌</span>
+      <div class="step-title">Write your message</div>
+      <div class="step-sub">Arrives as the final heartfelt message in the chat</div>
+      <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(37,211,102,0.15);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#128C7E;margin-bottom:8px;">✨ Write with AI</div>
+        <input id="letterTone" class="regular-input" placeholder="e.g. emotional, funny, Hindi, Marathi..." style="margin-bottom:8px;" maxlength="60">
+        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#25D366,#128C7E);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✨ Write with AI</button>
+        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Writing...</span></div>
+        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#128C7E;margin-top:6px;">↑ Tap again for a different message</div>
+      </div>
+      <div id="letterInputWrap"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-chat" id="btn-letter" onclick="goTo('s-preview')">Preview Chat →</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen" id="s-preview">
+  <div class="step-progress"><div class="step-progress-fill" style="width:100%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-title" style="margin-bottom:4px;padding-top:4px;">Ready to send! 💬</div>
+      <div class="step-sub" style="margin-bottom:16px;">Review — tap Edit to change anything</div>
+      <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-chat" id="btn-share" onclick="saveAndShare()">💬 Send the Chat</button>
+    </div>
+  </div>
+</div>
+
+<!-- RECEIVER -->
+<div class="screen" id="rv-loading">
+  <div class="wa-logo-wrap">💬</div>
+  <div class="wa-dots"><div class="wa-dot"></div><div class="wa-dot"></div><div class="wa-dot"></div></div>
+  <div class="wa-loading-text">Opening your message...</div>
+</div>
+
+<div class="screen" id="rv-error">
+  <div style="text-align:center;padding:40px;background:#ECE5DD;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+    <span style="font-size:3rem;display:block;margin-bottom:16px;">💬</span>
+    <div style="font-size:1rem;color:#667781;line-height:1.7;">This message has expired<br>or couldn't be found.</div>
+    <button onclick="window.location.href='/'" style="margin-top:28px;background:linear-gradient(135deg,#25D366,#128C7E);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">Create your own →</button>
+  </div>
+</div>
+
+<div class="screen" id="rv-chat">
+  <div class="wa-topbar">
+    <button class="wa-back" onclick="window.location.href='/'">←</button>
+    <div class="wa-avatar">😊</div>
+    <div class="wa-contact-info">
+      <div class="wa-contact-name" id="waContactName">Someone Special</div>
+      <div class="wa-contact-status" id="waStatus">typing...</div>
+    </div>
+    <div class="wa-topbar-icons"><span>📹</span><span>📞</span></div>
+  </div>
+  <div class="chat-bg" id="chatBg">
+    <div class="chat-date"><span class="chat-date-pill">Today</span></div>
+  </div>
+  <div class="wa-bottombar">
+    <div class="wa-input-fake">Type a message</div>
+    <div class="wa-mic">🎤</div>
+  </div>
+  <!-- Photo fullscreen -->
+  <div class="photo-full" id="photoFull">
+    <button class="photo-full-close" onclick="closePhotoFull()">✕</button>
+    <img id="photoFullImg" src="" alt="">
+  </div>
+  <!-- Song player -->
+  <div class="song-player" id="songPlayer">
+    <button class="song-player-close" onclick="closeSongPlayer()">✕</button>
+    <div class="sp-disc"><div class="sp-disc-center"></div></div>
+    <div class="sp-title" id="spTitle">Your Song</div>
+    <div class="sp-sub">Tap play to listen 🎵</div>
+    <div class="sp-yt" id="spYt"><div id="spYtEmbed"></div></div>
+  </div>
+</div>
+
+<!-- Save overlay -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-box">
+    <div class="save-spinner"><div class="save-ring"></div><span class="save-emoji" id="saveEmoji">💬</span></div>
+    <div class="save-label" id="saveLabel">Sending your message...</div>
+    <div class="save-bar-wrap"><div class="save-bar" id="saveBar"></div></div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:2rem;margin-bottom:8px;">💬</div>
+    <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;color:#111;">Chat is ready! 🎉</div>
+    <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;color:#333;">Send this link to them</div>
+    <div style="font-size:0.72rem;opacity:0.5;padding:7px 12px;margin-bottom:12px;color:#333;" id="expiryNote">⏳ Expires in 3 days</div>
+    <div class="share-link-row">
+      <span class="share-link-txt" id="shareLinkTxt"></span>
+      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
+    <button class="modal-close" onclick="closeShare()">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div><!-- /app -->
+
+<script>
+const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const CLOUDINARY_CLOUD='dkvbjazfe';
+const CLOUDINARY_PRESET='wishyou-uploads';
+const WORKER_URL='https://wild-fog-b15e.nilesh53333.workers.dev/';
+const CFG={
+  cardType:'birthday-fakechat',
+  defaultMsg:'Happy Birthday! 🎂\n\nI\'ve been thinking about what to say for days. And I still don\'t have the perfect words. But I know this — having you in my life is something I\'m grateful for every single day.\n\nToday is your day. Celebrate hard. You deserve every bit of it. 💚',
+  shareMsg:(name,sender,link)=>`💬 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' sent you a special birthday chat 💬\n\n':'Someone sent you a birthday message 💬\n\n'}👆 Open here:\n${link}`,
+  shareUrl:(id)=>`https://wishyou.ai/birthday/fakechat.html?card=${id}`
+};
+let curScreen='',photos=[],uploadedUrls={},currentSlotIdx=0,shareLink='',returnToPreview=false,aiLetterCount=0;
+const IS_RECEIVER=new URLSearchParams(window.location.search).has('card');
+const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter','s-preview'];
+
+function goTo(id,fromPreview=false){
+  const prev=document.getElementById(curScreen),next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
+  next.classList.add('active');curScreen=id;returnToPreview=fromPreview;
+  if(id==='s-letter'){aiLetterCount=0;const b=document.getElementById('aiLetterBtn');if(b)b.textContent='✨ Write with AI';const h=document.getElementById('letterAiResult');if(h)h.style.display='none';}
+  if(id==='s-preview')buildPreview();
+  if(!fromPreview&&id!=='s-preview'){
+    const nf={'s-name':{btn:'btn-name',label:'Continue → Photos',dest:'s-photos'},'s-photos':{btn:'btn-photos',label:'Continue → Song',dest:'s-song'},'s-song':{btn:'btn-song',label:'Continue → Message',dest:'s-letter'},'s-letter':{btn:'btn-letter',label:'Preview Chat →',dest:'s-preview'}};
+    const fl=nf[id];if(fl){const b=document.getElementById(fl.btn);if(b){b.textContent=fl.label;b.onclick=()=>goTo(fl.dest);}}
+  }
+  if(fromPreview){
+    const bm={'s-name':'btn-name','s-photos':'btn-photos','s-song':'btn-song','s-letter':'btn-letter'};
+    const bid=bm[id];if(bid){const b=document.getElementById(bid);if(b){b.textContent='Done → Back to Preview ✓';b.onclick=()=>goTo('s-preview');}}
+  }
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
+}
+function goBackCreator(){
+  if(returnToPreview){goTo('s-preview');return;}
+  const idx=CREATOR_ORDER.indexOf(curScreen);
+  if(idx>0)goTo(CREATOR_ORDER[idx-1]);else window.location.href='/';
+}
+
+window.addEventListener('DOMContentLoaded',function(){
+  if(IS_RECEIVER){goTo('rv-loading');loadCard();}
+  else{
+    document.getElementById('nameInputWrap').innerHTML=`
+      <label class="field-label">Their Name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">`;
+    document.getElementById('letterInputWrap').innerHTML=`
+      <textarea class="letter-area" id="cMsg" placeholder="Type your birthday message here...">${CFG.defaultMsg}</textarea>`;
+    buildPhotoSlots();goTo('s-name');
+  }
+});
+
+function buildPhotoSlots(){
+  const grid=document.getElementById('photosGrid');grid.innerHTML='';photos=[];
+  for(let i=0;i<5;i++){
+    const slot=document.createElement('div');slot.className='photo-slot';slot.id='slot'+i;
+    slot.innerHTML='<span style="opacity:0.4;color:#25D366;">+</span>';
+    slot.onclick=()=>triggerUpload(i);grid.appendChild(slot);
+  }
+}
+function triggerUpload(idx){currentSlotIdx=idx;document.getElementById('photoFileInput').click();}
+function handlePhotoUpload(inp){
+  const files=Array.from(inp.files);if(!files.length)return;
+  files.forEach((file,offset)=>{
+    let ti=-1;
+    for(let i=0;i<5;i++){
+      if(offset===0&&i===0){ti=currentSlotIdx;break;}
+      if(!photos[(currentSlotIdx+offset)%5]||offset>0){ti=(currentSlotIdx+offset)%5;break;}
+    }
+    if(ti<0||ti>4)return;
+    const url=URL.createObjectURL(file);photos[ti]=url;delete uploadedUrls[ti];
+    const slot=document.getElementById('slot'+ti);
+    if(slot){
+      slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${ti})">✕</button>`;
+      const ind=document.createElement('div');ind.id='upind'+ti;
+      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(37,211,102,0.2);border-radius:2px;overflow:hidden;';
+      ind.innerHTML=`<div style="height:100%;background:#25D366;width:0%;transition:width 0.3s;" id="upbar${ti}"></div>`;
+      slot.appendChild(ind);
+    }
+    uploadPhotoInBackground(file,ti);
+  });
+  inp.value='';
+}
+async function uploadPhotoInBackground(file,idx){
+  try{
+    const bar=document.getElementById('upbar'+idx);if(bar)bar.style.width='40%';
+    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    if(bar)bar.style.width='70%';
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+    const d=await res.json();
+    if(d.secure_url){uploadedUrls[idx]=d.secure_url;if(bar){bar.style.width='100%';setTimeout(()=>{const ind=document.getElementById('upind'+idx);if(ind)ind.remove();},600);}}
+  }catch(e){console.error(e);}
+}
+function removePhoto(e,idx){
+  e.stopPropagation();photos[idx]=null;delete uploadedUrls[idx];
+  const slot=document.getElementById('slot'+idx);
+  slot.innerHTML='<span style="opacity:0.4;color:#25D366;">+</span>';
+  slot.onclick=()=>triggerUpload(idx);
+}
+
+async function searchSong(){
+  const q=document.getElementById('ytSearchInput').value.trim();
+  if(!q){alert('Please type a song name.');return;}
+  const rd=document.getElementById('songResults');
+  rd.innerHTML='<div style="text-align:center;padding:12px;font-size:0.85rem;color:#25D366;">🔍 Searching...</div>';
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query:q})});
+    const data=await res.json();
+    if(!data.items||!data.items.length){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>';return;}
+    rd.innerHTML='';
+    data.items.slice(0,4).forEach(item=>{
+      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
+      const card=document.createElement('div');card.className='song-result';
+      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#111;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;">${channelTitle}</div></div><button class="song-use-btn">✓ Use</button>`;
+      card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
+      rd.appendChild(card);
+    });
+  }catch(e){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>';}
+}
+function selectSong(videoId,title,artist){
+  document.getElementById('cSpotify').value='https://www.youtube.com/watch?v='+videoId;
+  document.getElementById('songSelectedName').textContent=title+' — '+artist;
+  document.getElementById('songSelectedBox').style.display='block';
+  document.getElementById('songResults').innerHTML=`<div style="font-size:0.8rem;font-weight:600;padding:6px 0;color:#25D366;">✅ ${title} added!</div>`;
+}
+async function suggestSongs(){
+  const loading=document.getElementById('songAiLoading'),results=document.getElementById('songAiResults'),btn=document.getElementById('aiSongBtn');
+  loading.classList.add('show');results.innerHTML='';btn.disabled=true;
+  const context=document.getElementById('aiSongContext')?.value.trim()||'';
+  const name=document.getElementById('cName')?.value.trim()||'';
+  let prompt=`Suggest 4 real popular songs for a Birthday WhatsApp message`;
+  if(name)prompt+=` for ${name}`;
+  if(context)prompt+=`. Wants: "${context}"`;else prompt+=`. Mix Indian and international`;
+  prompt+=`. Return ONLY JSON: [{"name":"Song","artist":"Artist"}]`;
+  const text=await callClaude(prompt);
+  try{
+    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    songs.forEach(s=>{
+      const el=document.createElement('div');
+      el.style.cssText='display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.7);border:1px solid rgba(37,211,102,0.12);';
+      el.innerHTML=`<span style="font-size:1.1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:600;color:#111;">${s.name}</div><div style="font-size:0.72rem;color:#667781;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#25D366;">Search ›</span>`;
+      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
+      results.appendChild(el);
+    });
+  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Could not fetch. Try again.</div>';}
+  loading.classList.remove('show');btn.disabled=false;
+}
+
+async function runAILetter(){
+  const name=document.getElementById('cName')?.value.trim()||'them';
+  const sender=document.getElementById('cSender')?.value.trim()||'someone';
+  const toneInput=document.getElementById('letterTone')?.value.trim()||'';
+  const btn=document.getElementById('aiLetterBtn'),loading=document.getElementById('letterAiLoading');
+  aiLetterCount++;btn.disabled=true;loading.classList.add('show');
+  const langs=['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
+  const det=langs.find(l=>toneInput.toLowerCase().includes(l));
+  let langNote=det?` CRITICAL: Write ENTIRE message in ${det.charAt(0).toUpperCase()+det.slice(1)} script only.`:'';
+  const vari=aiLetterCount>1?` Attempt #${aiLetterCount} — COMPLETELY DIFFERENT.`:'';
+  const prompt=`Write a Birthday WhatsApp message from ${sender} to ${name} (3-5 sentences, casual style, may use emojis). Tone: ${toneInput||'warm heartfelt'}.${langNote}${vari} Return ONLY the message text.`;
+  const text=await callClaude(prompt);
+  if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
+  btn.disabled=false;loading.classList.remove('show');
+  const h=document.getElementById('letterAiResult');if(h)h.style.display='block';
+  btn.textContent='✨ Write Another';
+}
+async function callClaude(prompt){
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();if(data.error)return'';
+    return data.content&&data.content[0]?data.content[0].text:'';
+  }catch(e){return'';}
+}
+function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
+
+function buildPreview(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=document.getElementById('cMsg')?.value.trim()||'';
+  const songName=document.getElementById('songSelectedName')?.textContent||'';
+  const realPhotos=photos.filter(Boolean);
+  const wrap=document.getElementById('cardPagesPreview');wrap.innerHTML='';
+  function makePage(icon,label,content,editScreen){
+    const page=document.createElement('div');
+    page.style.cssText='background:rgba(255,255,255,0.7);border-radius:16px;padding:16px;border:1.5px solid rgba(37,211,102,0.15);';
+    page.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:1.1rem;">${icon}</span><span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.5;">${label}</span></div><button onclick="goTo('${editScreen}',true)" style="font-size:0.68rem;font-weight:600;color:#25D366;background:none;border:1px solid #25D366;border-radius:20px;padding:4px 10px;cursor:pointer;">Edit</button></div>${content}`;
+    wrap.appendChild(page);
+  }
+  makePage('💬','Chat',`<div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:1rem;">😊</div><div><div style="font-weight:600;color:#111;">${name||'—'}</div><div style="font-size:0.72rem;color:#667781;">from ${sender||'—'}</div></div></div>`,'s-name');
+  makePage('📸','Photos',realPhotos.length?`<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map(u=>`<img src="${u}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;">`).join('')}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No photos added yet</div>`,'s-photos');
+  makePage('🎵','Song',songName&&songName!=='—'?`<div style="font-size:0.85rem;font-weight:600;color:#128C7E;">🎵 ${songName}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No song selected yet</div>`,'s-song');
+  makePage('💌','Message',msg?`<div style="font-size:0.85rem;color:#111;line-height:1.6;white-space:pre-wrap;">${msg.length>140?msg.slice(0,140)+'...':msg}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No message written yet</div>`,'s-letter');
+}
+
+async function saveAndShare(){
+  const overlay=document.getElementById('saveOverlay'),bar=document.getElementById('saveBar'),label=document.getElementById('saveLabel');
+  function setProgress(pct,lbl){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;}
+  overlay.classList.add('show');setProgress(10,'Preparing your chat... 💬');
+  let photoUrls=[];
+  const slots=photos.map((p,i)=>({blob:p,idx:i})).filter(s=>s.blob);
+  let uploaded=0;
+  for(const s of slots){
+    if(uploadedUrls[s.idx]){photoUrls.push(uploadedUrls[s.idx]);uploaded++;setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Packing photos...');}
+    else{
+      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Uploading photo '+(uploaded+1)+'...');
+      try{
+        const fd=new FormData();fd.append('file',await fetch(s.blob).then(r=>r.blob()));fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+        const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+        const d=await res.json();if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
+      }catch(e){console.error(e);}
+      uploaded++;
+    }
+  }
+  setProgress(70,'Almost there... 💬');
+  const now=Date.now();
+  const cardData={
+    type:CFG.cardType,
+    name:document.getElementById('cName')?.value.trim()||'',
+    sender:document.getElementById('cSender')?.value.trim()||'',
+    msg:document.getElementById('cMsg')?.value.trim()||'',
+    spotify:document.getElementById('cSpotify')?.value.trim()||'',
+    songName:document.getElementById('songSelectedName')?.textContent||'',
+    photos:photoUrls,created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
+  };
+  try{
+    setProgress(85,'Creating your chat... 💬');
+    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
+    const data=await res.json();const cardId=data.name;
+    shareLink=CFG.shareUrl(cardId);
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
+    setProgress(100,'Sent! 🎉');
+    setTimeout(()=>{overlay.classList.remove('show');document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');document.getElementById('shareModal').classList.add('show');},600);
+  }catch(e){overlay.classList.remove('show');alert('Could not save. Please try again.');}
+}
+function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
+function openWhatsApp(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=CFG.shareMsg(name,sender,shareLink);
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&isMobile){navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));}
+  else{window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');}
+}
+function closeShare(){document.getElementById('shareModal').classList.remove('show');}
+
+// ── RECEIVER ──
+async function loadCard(){
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  try{
+    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
+    const d=await res.json();
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderChat(d);
+  }catch(e){goTo('rv-error');}
+}
+
+function getTime(){
+  const d=new Date();
+  return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+}
+
+function renderChat(d){
+  const name=d.name||'';
+  const sender=d.sender||'Someone Special';
+  document.getElementById('waContactName').textContent=sender;
+  document.getElementById('waStatus').textContent='online';
+  goTo('rv-chat');
+  const chatBg=document.getElementById('chatBg');
+
+  // Build sequence
+  const seq=[];
+  seq.push({type:'text',text:'Hey! 🎉',delay:800});
+  seq.push({type:'typing',delay:1500});
+  seq.push({type:'text',text:name?`Happy Birthday ${name}!! 🎂🥳`:'Happy Birthday!! 🎂🥳',delay:2400});
+
+  let d2=3200;
+  if(d.photos&&d.photos.length>0){
+    seq.push({type:'typing',delay:d2});
+    d.photos.forEach((url,i)=>{
+      d2+=900;
+      seq.push({type:'photo',url,delay:d2+(i*800)});
+    });
+    d2+=d.photos.length*800+400;
+  }
+
+  if(d.songName&&d.songName!=='—'){
+    seq.push({type:'typing',delay:d2});
+    d2+=900;
+    seq.push({type:'text',text:'I found a song that made me think of you 🎵',delay:d2});
+    d2+=1000;
+    seq.push({type:'song',songName:d.songName,spotify:d.spotify||'',delay:d2});
+    d2+=1200;
+  }
+
+  if(d.msg){
+    seq.push({type:'typing',delay:d2});
+    d2+=1000;
+    const chunks=splitMessage(d.msg);
+    chunks.forEach((chunk,i)=>{
+      seq.push({type:'text',text:chunk,delay:d2+(i*1400)});
+    });
+  }
+
+  playSequence(seq,chatBg);
+}
+
+function splitMessage(msg){
+  const sentences=msg.split(/(?<=[.!?])\s+/);
+  if(sentences.length<=2)return[msg];
+  const third=Math.ceil(sentences.length/3);
+  return[
+    sentences.slice(0,third).join(' ').trim(),
+    sentences.slice(third,third*2).join(' ').trim(),
+    sentences.slice(third*2).join(' ').trim()
+  ].filter(s=>s.length>0);
+}
+
+function showTyping(chatBg){
+  removeTyping();
+  const wrap=document.createElement('div');wrap.className='typing-wrap';wrap.id='typingIndicator';
+  wrap.innerHTML='<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  chatBg.appendChild(wrap);
+  chatBg.scrollTop=chatBg.scrollHeight;
+}
+function removeTyping(){const el=document.getElementById('typingIndicator');if(el)el.remove();}
+
+function addBubble(chatBg,html,from='them'){
+  removeTyping();
+  const wrap=document.createElement('div');
+  wrap.className='bubble-wrap '+(from==='me'?'from-me':'from-them');
+  wrap.innerHTML=html;chatBg.appendChild(wrap);
+  chatBg.scrollTop=chatBg.scrollHeight;
+}
+
+function playSequence(seq,chatBg){
+  let i=0;
+  function next(){
+    if(i>=seq.length)return;
+    const item=seq[i];i++;
+    const prevDelay=i>1?seq[i-2].delay:0;
+    const wait=Math.max(item.delay-prevDelay,80);
+    setTimeout(()=>{
+      const t=getTime();
+      if(item.type==='typing'){
+        showTyping(chatBg);
+      } else if(item.type==='text'){
+        addBubble(chatBg,`<div class="bubble them"><div class="bubble-text">${item.text.replace(/\n/g,'<br>')}</div><div class="bubble-meta"><span class="bubble-time">${t}</span></div></div>`);
+      } else if(item.type==='photo'){
+        removeTyping();
+        const wrap=document.createElement('div');wrap.className='bubble-wrap from-them';
+        wrap.innerHTML=`<div class="bubble-photo them" onclick="openPhotoFull('${item.url}')"><img src="${item.url}" onerror="this.parentNode.style.display='none'"><div class="bubble-meta" style="padding:0 4px 2px;"><span class="bubble-time">${t}</span></div></div>`;
+        chatBg.appendChild(wrap);chatBg.scrollTop=chatBg.scrollHeight;
+      } else if(item.type==='song'){
+        const sn=item.songName.replace(/'/g,"\\'");
+        const sp=item.spotify.replace(/'/g,"\\'");
+        addBubble(chatBg,`<div class="bubble-song them" onclick="openSongPlayer('${sn}','${sp}')"><button class="song-play-btn">▶</button><div class="song-title-wrap"><div class="song-title-txt">${item.songName}</div><div class="song-sub-txt">Tap to play 🎵</div></div><div class="bubble-meta" style="align-self:flex-end;padding-bottom:2px;"><span class="bubble-time">${t}</span></div></div>`);
+      }
+      next();
+    },wait);
+  }
+  next();
+}
+
+function openPhotoFull(url){
+  document.getElementById('photoFullImg').src=url;
+  document.getElementById('photoFull').classList.add('show');
+}
+function closePhotoFull(){document.getElementById('photoFull').classList.remove('show');}
+
+function openSongPlayer(songName,spotify){
+  document.getElementById('spTitle').textContent=songName;
+  const ytM=spotify.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  const ytWrap=document.getElementById('spYt');
+  if(ytM){
+    document.getElementById('spYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
+    ytWrap.classList.add('show');
+  }
+  document.getElementById('songPlayer').classList.add('show');
+}
+function closeSongPlayer(){
+  document.getElementById('songPlayer').classList.remove('show');
+  const iframe=document.querySelector('#spYtEmbed iframe');
+  if(iframe)iframe.src=iframe.src;
+}
+</script>
+</body>
+</html>
