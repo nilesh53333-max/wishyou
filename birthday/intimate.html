@@ -1142,6 +1142,8 @@ async function fetchOnThisDay(dateStr, name){
     }
   }catch(e){/* silently skip if API fails */}
 }
+
+function typewriteLetter(){
   const el=document.getElementById('rvLBody');
   const signEl=document.getElementById('rvLSign');
   if(!el||!rvLetterText) return;
