@@ -8,7 +8,7 @@
 <meta property="og:title" content="WishYou.ai — Birthday Cards">
 <meta property="og:description" content="Choose your birthday card style">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Fredoka+One&family=Patrick+Hand&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html{scroll-behavior:smooth;}
@@ -111,7 +111,16 @@ h1 em{font-style:italic;color:#f0c040;}
 
 
 
-/* animations */
+/* Cinematic card */
+.style-card.cinematic{background:#0a0a0a;border:1px solid rgba(255,215,0,0.2);}
+.style-card.cinematic:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(255,215,0,0.1);}
+
+/* Memory Jar card */
+.style-card.memoryjar{background:linear-gradient(160deg,#fef3e2,#fde8c8);border:1.5px solid rgba(196,92,26,0.2);}
+.style-card.memoryjar:hover{transform:translateY(-4px);box-shadow:0 20px 60px rgba(196,92,26,0.2);}
+
+.card-btn.cinematic-btn{background:#FFD700;color:#0a0a0a;border-radius:4px;font-weight:700;letter-spacing:0.06em;}
+.card-btn.jar-btn{background:linear-gradient(135deg,#c45c1a,#e8883a);color:white;box-shadow:0 6px 20px rgba(196,92,26,0.35);}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 .hero-eyebrow{animation:fadeUp 0.8s ease both;}
 h1{animation:fadeUp 0.8s 0.08s ease both;}
@@ -259,6 +268,109 @@ h1{animation:fadeUp 0.8s 0.08s ease both;}
       </div>
     </div>
 
+    <!-- CINEMATIC -->
+    <div class="style-card cinematic" id="prev-cinematic" onclick="window.location.href='/birthday/cinematic.html'">
+      <div class="card-inner">
+        <div class="slide-viewport" style="background:#0a0a0a;">
+          <div class="preview-slide active-slide">
+            <div class="slide-screen-label" style="color:rgba(255,215,0,0.5);letter-spacing:0.2em;">TITLE CARD</div>
+            <div style="font-size:2rem;margin-bottom:6px;">🎬</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:white;font-style:italic;">Nilesh</div>
+            <div style="font-size:0.6rem;color:rgba(255,215,0,0.4);margin-top:4px;letter-spacing:0.1em;">A story created by piyu</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:rgba(255,215,0,0.5);letter-spacing:0.2em;">FILM STILLS</div>
+            <div style="display:flex;gap:3px;justify-content:center;margin:6px 0;">
+              <div style="width:40px;height:52px;background:#111;border:1px solid rgba(255,215,0,0.2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1rem;">📸</div>
+              <div style="width:40px;height:52px;background:#111;border:1px solid rgba(255,215,0,0.2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1rem;">🎞️</div>
+              <div style="width:40px;height:52px;background:#111;border:1px solid rgba(255,215,0,0.2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1rem;">📸</div>
+            </div>
+            <div style="font-size:0.6rem;color:rgba(255,215,0,0.35);letter-spacing:0.1em;">Chapter I · Chapter II · Chapter III</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:rgba(255,215,0,0.5);letter-spacing:0.2em;">BACKGROUND SCORE</div>
+            <div style="font-size:2.2rem;margin:4px 0;">🎬</div>
+            <div style="font-size:0.65rem;color:rgba(255,215,0,0.6);font-style:italic;">The Background Score 🎵</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:rgba(255,215,0,0.5);letter-spacing:0.2em;">FROM THE DIRECTOR</div>
+            <div style="font-size:2.2rem;margin:4px 0;">🎞️</div>
+            <div style="font-size:0.62rem;color:rgba(255,255,255,0.3);letter-spacing:0.1em;">TAP TO REVEAL</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:rgba(255,215,0,0.5);letter-spacing:0.2em;">THE FINAL MESSAGE</div>
+            <div style="padding:8px;width:100%;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:0.68rem;color:rgba(255,255,255,0.7);font-style:italic;line-height:1.8;">Dear Nilesh,<br>Every great story has a moment that changes everything...</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.65rem;color:rgba(255,215,0,0.5);margin-top:6px;">— With love 🎬</div>
+            </div>
+          </div>
+        </div>
+        <div class="slide-dots">
+          <div class="slide-dot active" style="background:rgba(255,215,0,0.3);"></div>
+          <div class="slide-dot" style="background:rgba(255,215,0,0.15);"></div>
+          <div class="slide-dot" style="background:rgba(255,215,0,0.15);"></div>
+          <div class="slide-dot" style="background:rgba(255,215,0,0.15);"></div>
+          <div class="slide-dot" style="background:rgba(255,215,0,0.15);"></div>
+        </div>
+        <div class="card-info">
+          <div class="card-style-name" style="font-family:'Cormorant Garamond',serif;color:white;font-style:italic;">🎬 Cinematic</div>
+          <div class="card-style-desc" style="color:rgba(255,215,0,0.4);">Dark & dramatic • Film stills • Subtitle letter</div>
+        </div>
+        <a class="card-btn cinematic-btn" href="/birthday/cinematic.html" onclick="event.stopPropagation();">🎬 Make this card →</a>
+      </div>
+    </div>
+
+    <!-- MEMORY JAR -->
+    <div class="style-card memoryjar" id="prev-memoryjar" onclick="window.location.href='/birthday/memoryjar.html'">
+      <div class="card-inner">
+        <div class="slide-viewport" style="background:linear-gradient(160deg,#2d1a0a,#1a0f0a);">
+          <div class="preview-slide active-slide">
+            <div class="slide-screen-label" style="color:rgba(255,220,150,0.5);">THE JAR</div>
+            <div style="font-size:2.5rem;margin-bottom:6px;animation:jarBob2 2s ease-in-out infinite;">🫙</div>
+            <div style="font-family:'Caveat',cursive;font-size:0.85rem;color:rgba(255,220,150,0.7);">Tap a note to open it 💛</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:rgba(255,220,150,0.5);">PHOTO NOTES</div>
+            <div style="display:flex;gap:6px;justify-content:center;margin:6px 0;">
+              <div style="width:38px;height:32px;background:#fef9c3;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:2px 2px 6px rgba(0,0,0,0.3);">📸</div>
+              <div style="width:38px;height:32px;background:#fde8c8;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:2px 2px 6px rgba(0,0,0,0.3);">📸</div>
+              <div style="width:38px;height:32px;background:#fce4ec;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:2px 2px 6px rgba(0,0,0,0.3);">📸</div>
+            </div>
+            <div style="font-family:'Caveat',cursive;font-size:0.75rem;color:rgba(255,220,150,0.5);">Each photo is a folded note</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:rgba(255,220,150,0.5);">SONG NOTE</div>
+            <div style="width:44px;height:44px;border-radius:50%;background:radial-gradient(circle,#fef3e2 0%,#fef3e2 14%,#1a0812 15%,#2d1020 30%,#1a0812 45%,#2d1020 60%,#1a0812 100%);margin:6px auto;animation:vinylSpin 3s linear infinite;display:flex;align-items:center;justify-content:center;"></div>
+            <div style="font-family:'Caveat',cursive;font-size:0.78rem;color:rgba(255,220,150,0.6);">🎵 A golden music note</div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:rgba(255,220,150,0.5);">LETTER NOTE</div>
+            <div style="background:#fef9f0;border-radius:8px;padding:8px;width:90%;margin:4px auto;">
+              <div style="font-family:'Caveat',cursive;font-size:0.65rem;color:rgba(196,92,26,0.5);text-align:center;margin-bottom:4px;">— a note, folded with love —</div>
+              <div style="font-family:'Caveat',cursive;font-size:0.72rem;color:#3d1a06;line-height:1.6;">Dear Priya,<br>Every time I look...</div>
+            </div>
+          </div>
+          <div class="preview-slide">
+            <div class="slide-screen-label" style="color:rgba(255,220,150,0.5);">JAR IS EMPTY</div>
+            <div style="font-size:2rem;margin-bottom:6px;">🫙</div>
+            <div style="font-family:'Caveat',cursive;font-size:0.78rem;color:rgba(255,220,150,0.5);font-style:italic;">"That's everything I wanted to say."</div>
+          </div>
+        </div>
+        <div class="slide-dots">
+          <div class="slide-dot active" style="background:rgba(196,92,26,0.5);"></div>
+          <div class="slide-dot" style="background:rgba(196,92,26,0.2);"></div>
+          <div class="slide-dot" style="background:rgba(196,92,26,0.2);"></div>
+          <div class="slide-dot" style="background:rgba(196,92,26,0.2);"></div>
+          <div class="slide-dot" style="background:rgba(196,92,26,0.2);"></div>
+        </div>
+        <div class="card-info">
+          <div class="card-style-name" style="font-family:'Caveat',cursive;color:#3d1a06;font-size:1.2rem;">🫙 Memory Jar</div>
+          <div class="card-style-desc" style="color:#8b4513;">Non-linear • Tap notes to open • Unique experience</div>
+        </div>
+        <a class="card-btn jar-btn" href="/birthday/memoryjar.html" onclick="event.stopPropagation();">🫙 Make this jar →</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -280,8 +392,13 @@ function startSlideshow(cardId,totalSlides){
 }
 window.addEventListener('DOMContentLoaded',function(){
   startSlideshow('prev-intimate',5);
-  setTimeout(()=>startSlideshow('prev-retro',5),1100);
+  setTimeout(()=>startSlideshow('prev-retro',5),800);
+  setTimeout(()=>startSlideshow('prev-cinematic',5),1400);
+  setTimeout(()=>startSlideshow('prev-memoryjar',5),2000);
 });
 </script>
+<style>
+@keyframes jarBob2{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+</style>
 </body>
 </html>
