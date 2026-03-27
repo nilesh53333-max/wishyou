@@ -162,7 +162,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a0f0a;}
 
 /* Photo note card */
 .photo-card{background:#fff;}
-.photo-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+.photo-card-img{width:100%;max-height:320px;object-fit:cover;display:block;}
 .photo-card-footer{padding:14px 16px;background:white;}
 .photo-card-caption{font-family:'Caveat',cursive;font-size:1.1rem;color:#3d1a06;text-align:center;}
 
@@ -331,6 +331,7 @@ body{font-family:'DM Sans',sans-serif;background:#1a0f0a;}
 <!-- THE JAR SCREEN -->
 <div class="screen" id="rv-jar">
   <div class="stars-bg" id="starsJar"></div>
+  <button style="position:absolute;top:max(14px,env(safe-area-inset-top));left:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,220,150,0.1);border:none;color:rgba(255,220,150,0.6);font-size:1rem;cursor:pointer;z-index:20;display:flex;align-items:center;justify-content:center;" onclick="window.location.href='/'">←</button>
 
   <!-- Header -->
   <div class="jar-header">
@@ -563,8 +564,7 @@ function handlePhotoUpload(inp){
 async function uploadPhotoInBackground(file,idx){
   try{
     const bar=document.getElementById('upbar'+idx);if(bar)bar.style.width='40%';
-    const blob=await fetch(URL.createObjectURL(file)).then(r=>r.blob());
-    const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
     if(bar)bar.style.width='70%';
     const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
     const d=await res.json();

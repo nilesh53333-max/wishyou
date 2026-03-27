@@ -156,7 +156,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .cinema-bar-title{font-family:'Playfair Display',serif;font-size:0.75rem;color:rgba(255,215,0,0.5);letter-spacing:0.2em;text-transform:uppercase;font-style:italic;}
 .cinema-strip{flex:1;overflow-x:auto;display:flex;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
 .cinema-strip::-webkit-scrollbar{display:none;}
-.cinema-frame{flex-shrink:0;width:100%;scroll-snap-align:center;position:relative;overflow:hidden;}
+.cinema-frame{flex-shrink:0;width:100%;height:100%;scroll-snap-align:center;position:relative;overflow:hidden;}
 .cinema-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
 .cinema-caption{position:absolute;bottom:0;left:0;right:0;padding:12px 20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);text-align:center;}
 .cinema-caption-text{font-family:'Playfair Display',serif;font-size:0.78rem;color:rgba(255,215,0,0.7);font-style:italic;letter-spacing:0.12em;}
@@ -599,8 +599,8 @@ function handlePhotoUpload(inp){
       // show upload indicator
       const ind=document.createElement('div');
       ind.id='upind'+targetIdx;
-      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(233,30,99,0.3);border-radius:2px;overflow:hidden;';
-      ind.innerHTML='<div style="height:100%;background:#e91e63;width:0%;transition:width 0.3s;" id="upbar'+targetIdx+'"></div>';
+      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(255,215,0,0.2);border-radius:2px;overflow:hidden;';
+      ind.innerHTML='<div style="height:100%;background:#FFD700;width:0%;transition:width 0.3s;" id="upbar'+targetIdx+'"></div>';
       slot.appendChild(ind);
     }
     // Upload in background immediately
@@ -613,8 +613,7 @@ async function uploadPhotoInBackground(file, idx){
   try{
     const bar=document.getElementById('upbar'+idx);
     if(bar)bar.style.width='40%';
-    const blob=await fetch(URL.createObjectURL(file)).then(r=>r.blob());
-    const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
     if(bar)bar.style.width='70%';
     const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
     const d=await res.json();
