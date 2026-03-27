@@ -365,30 +365,49 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
   text-shadow:0 0 10px rgba(255,58,110,.6);
 }
 
-/* heart zone on card screen */
-#card-heart-zone{
-  position:fixed;top:28%;left:50%;
-  transform:translateX(-50%);
-  display:flex;align-items:center;gap:14px;
-  z-index:45;
-  transition:opacity .5s;
+/* ── star hint (replaces heart zone) ── */
+#card-star-hint{
+  position:fixed;
+  bottom:calc(18% + 32px);
+  left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:10px;
+  z-index:45;transition:opacity .6s;
+  pointer-events:none;
 }
-#card-main-heart{
-  font-size:30px;color:#888;
-  text-shadow:0 0 8px rgba(160,160,160,.2);
+#hint-arrow{
+  font-size:16px;color:rgba(255,255,255,.45);
   animation:hb .95s ease infinite;
-  cursor:pointer;user-select:none;line-height:1;
-  display:inline-block;
-  transition:color .5s,text-shadow .5s;
 }
 #card-hint{
   font-family:'Jost',sans-serif;font-weight:200;
-  color:rgba(255,255,255,.35);font-size:13px;
-  letter-spacing:1px;white-space:nowrap;
-  animation:hp 2.8s ease-in-out infinite;pointer-events:none;
+  color:rgba(255,255,255,.38);font-size:13px;
+  letter-spacing:1.5px;white-space:nowrap;
+  animation:hp 2.8s ease-in-out infinite;
 }
-@keyframes hp{0%,100%{opacity:.2;}50%{opacity:.72;};}
+@keyframes hp{0%,100%{opacity:.2;}50%{opacity:.8;};}
 
+/* clickable stars layer */
+#card-stars-layer{
+  position:fixed;inset:0;
+  z-index:44;
+  pointer-events:none;/* individual stars have pointer-events:all */
+}
+.cstar{
+  position:absolute;
+  cursor:pointer;
+  pointer-events:all;
+  line-height:1;
+  transition:transform .15s, filter .15s;
+  user-select:none;
+  animation:twk var(--d,2.5s) ease-in-out var(--dl,0s) infinite;
+  filter:drop-shadow(0 0 3px rgba(255,255,255,.4));
+}
+.cstar:hover{
+  transform:scale(1.8) !important;
+  filter:drop-shadow(0 0 8px rgba(255,255,200,.95)) drop-shadow(0 0 18px rgba(255,220,100,.6)) !important;
+  animation:none !important;
+  opacity:1 !important;
+}
 /* bottom action bar on card */
 #card-actions{
   position:fixed;bottom:24px;left:50%;
@@ -462,19 +481,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
 <div id="moon-fixed"></div>
 <div id="ground-fixed"></div>
 <canvas id="tree-canvas"></canvas>
-<div id="falling-heart">♥</div>
+<div id="falling-star" style="position:fixed;display:none;z-index:50;pointer-events:none;font-size:22px;line-height:1;transform-origin:center;"></div>
 
 <!-- ════════ SCREEN 1: PREVIEW ════════ -->
 <div id="screen-preview" class="screen active">
   <div id="preview-card">
-    <span id="prev-heart">♥</span>
+    <span id="prev-heart">✦</span>
     <div>
       <span id="prev-sub">A Birthday Card for</span>
     </div>
     <span id="prev-title">Someone Special</span>
     <span id="prev-desc">
-      A night sky fills with stars, a heart falls gently to earth,<br>
-      and a tree of hearts blooms — just for them.
+      A sky full of stars waits for you.<br>
+      Pick one — watch it fall to earth and bloom<br>
+      into a tree of hearts, just for them.
     </span>
     <button class="btn-primary" id="btn-create">Create Your Card</button>
   </div>
@@ -519,11 +539,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#05080f;}
 <!-- ════════ SCREEN 3: CARD ════════ -->
 <div id="screen-card" class="screen hidden">
 
-  <!-- grey heart to click -->
-  <div id="card-heart-zone">
-    <span id="card-main-heart">♥</span>
-    <span id="card-hint">click on heart</span>
+  <!-- clickable stars scattered across the sky -->
+  <div id="card-star-hint">
+    <span id="hint-arrow">✦</span>
+    <span id="card-hint">click on any star</span>
   </div>
+  <div id="card-stars-layer"></div>
 
   <!-- left text panel (hidden until animation) -->
   <div id="text-panel">
@@ -605,6 +626,7 @@ document.getElementById('btn-make').addEventListener('click',()=>{
   userDate=`${day||'??'} · ${month||'???'} · ${year||'????'}`;
   resetCardState();
   showScreen('screen-card');
+  // stars are built inside resetCardState already
 });
 
 document.getElementById('btn-restart').addEventListener('click',()=>{
@@ -625,58 +647,122 @@ function resetCardState(){
   document.getElementById('tw-ornament').classList.remove('show');
   document.getElementById('tw-divider').classList.remove('expand');
 
-  // reset heart zone
-  const chz=document.getElementById('card-heart-zone');
-  chz.style.opacity='1';chz.style.display='flex';
-  const cmh=document.getElementById('card-main-heart');
-  cmh.style.color='#888';
-  cmh.style.textShadow='0 0 8px rgba(160,160,160,.2)';
+  // reset star hint + stars
+  const hint=document.getElementById('card-star-hint');
+  if(hint){hint.style.opacity='1';hint.style.display='flex';}
+  buildClickableStars();
 
-  document.getElementById('falling-heart').style.display='none';
+  const fs=document.getElementById('falling-star');
+  if(fs)fs.style.display='none';
   document.getElementById('card-actions').classList.remove('show');
 }
 
-/* ══ HEART CLICK ═════════════════════════════ */
-document.getElementById('card-main-heart').addEventListener('click',function(){
+/* ══ BUILD CLICKABLE STARS ═══════════════════ */
+function buildClickableStars(){
+  const layer=document.getElementById('card-stars-layer');
+  if(!layer)return;
+  layer.innerHTML='';
+
+  // 28 interactive stars scattered across the sky (top 72% of screen)
+  const positions=[
+    [8,6],[15,18],[24,9],[33,22],[42,7],[50,15],[58,25],[67,10],
+    [75,20],[83,8],[91,17],[12,35],[28,40],[44,32],[60,38],[76,30],
+    [88,42],[20,52],[36,55],[52,48],[68,58],[84,50],[6,62],[30,68],
+    [48,65],[64,60],[80,68],[92,55]
+  ];
+
+  positions.forEach(([lp, tp], idx)=>{
+    const st = document.createElement('div');
+    st.className = 'cstar';
+    // mix of cross-sparkle and dot stars
+    const isCross = idx % 3 !== 0;
+    const sz = 10 + Math.random()*14;
+    const opacity = 0.45 + Math.random()*0.45;
+    st.style.cssText = `
+      left:${lp + (Math.random()-0.5)*4}vw;
+      top:${tp  + (Math.random()-0.5)*3}vh;
+      font-size:${sz}px;
+      opacity:${opacity};
+      color:#fff;
+      --d:${1.8+Math.random()*3}s;
+      --dl:${Math.random()*5}s;
+      --lo:${opacity*0.4};
+      --hi:${opacity};
+    `;
+    st.textContent = isCross ? '✦' : '★';
+    st.addEventListener('click', onStarClick);
+    layer.appendChild(st);
+  });
+}
+
+/* ══ STAR CLICK ══════════════════════════════ */
+function onStarClick(e){
   if(cardAnimRunning)return;
   cardAnimRunning=true;
-  const cmh=this;
 
-  // turn red
-  cmh.style.color='#ff3a6e';
-  cmh.style.textShadow='0 0 18px rgba(255,58,110,.9),0 0 45px rgba(255,58,110,.3)';
+  const st = e.currentTarget;
+  const r  = st.getBoundingClientRect();
+  const sx = r.left + r.width/2;
+  const sy = r.top  + r.height/2;
+
+  // flash the star bright white then remove it
+  st.style.transition='transform .2s, filter .2s, opacity .3s';
+  st.style.transform='scale(2.5)';
+  st.style.filter='drop-shadow(0 0 16px rgba(255,255,220,1)) drop-shadow(0 0 32px rgba(255,220,100,.8))';
+  st.style.opacity='1';
+
+  // hide hint
+  const hint=document.getElementById('card-star-hint');
+  hint.style.transition='opacity .5s';
+  hint.style.opacity='0';
 
   setTimeout(()=>{
-    const chz=document.getElementById('card-heart-zone');
-    chz.style.opacity='0';
-    setTimeout(()=>chz.style.display='none',600);
+    // remove all clickable stars
+    document.getElementById('card-stars-layer').innerHTML='';
+    hint.style.display='none';
 
-    const r=cmh.getBoundingClientRect();
-    const sx=r.left+r.width/2, sy=r.top+r.height/2;
-    const targetX=tW*.62, ey=groundY-14;
-    landX=targetX;landY=ey;
+    const targetX = tW*.62;
+    const ey      = groundY - 14;
+    landX=targetX; landY=ey;
 
-    const fh=document.getElementById('falling-heart');
-    fh.style.cssText=`display:block;left:${sx-16}px;top:${sy-16}px;color:#ff3a6e;text-shadow:0 0 14px rgba(255,58,110,.85);`;
+    // create falling star element
+    const fs=document.getElementById('falling-star');
+    fs.textContent='✦';
+    fs.style.cssText=`
+      display:block;
+      left:${sx-11}px;
+      top:${sy-11}px;
+      font-size:22px;
+      color:#fffde0;
+      text-shadow:0 0 12px rgba(255,255,200,.9), 0 0 28px rgba(255,220,100,.6);
+    `;
 
-    let t0=null;const dur=3800;
+    let t0=null;
+    const dur=3800;
     function fall(ts){
       if(!t0)t0=ts;
-      const p=Math.min((ts-t0)/dur,1);
-      const ep=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
-      const cx=sx+(targetX-sx)*ep;
-      const sway=Math.sin(p*Math.PI*3.2)*22*(1-p*.68);
-      const rot=Math.sin(p*Math.PI*2.4)*20;
-      const scl=1+Math.sin(p*Math.PI)*.24;
-      fh.style.top=(sy+(ey-sy)*ep-16)+'px';
-      fh.style.left=(cx+sway-16)+'px';
-      fh.style.transform=`scale(${scl}) rotate(${rot}deg)`;
-      fh.style.textShadow=`0 0 ${12+p*24}px rgba(255,58,110,.92),0 0 ${22+p*40}px rgba(255,58,110,.28)`;
-      if(p<1){requestAnimationFrame(fall);}else{fh.style.display='none';onLand(targetX,ey);}
+      const p  = Math.min((ts-t0)/dur,1);
+      const ep = p<.5 ? 2*p*p : 1-Math.pow(-2*p+2,2)/2;
+      const cx = sx+(targetX-sx)*ep;
+      const sway = Math.sin(p*Math.PI*3.2)*22*(1-p*.68);
+      const rot  = Math.sin(p*Math.PI*2.4)*25;
+      const scl  = 1+Math.sin(p*Math.PI)*.3;
+      // star gets redder / more heart-like as it falls — colour shifts warm
+      const warmth = Math.floor(p*80);
+      const glow   = 12+p*28;
+
+      fs.style.top      = (sy+(ey-sy)*ep-11)+'px';
+      fs.style.left     = (cx+sway-11)+'px';
+      fs.style.transform= `scale(${scl}) rotate(${rot}deg)`;
+      fs.style.color    = `rgb(255,${Math.max(253-warmth*2,80)},${Math.max(200-warmth*3,20)})`;
+      fs.style.textShadow=`0 0 ${glow}px rgba(255,${220-warmth},${100-warmth},.95), 0 0 ${glow*2}px rgba(255,${180-warmth},80,.3)`;
+
+      if(p<1){ requestAnimationFrame(fall); }
+      else   { fs.style.display='none'; onLand(targetX,ey); }
     }
     requestAnimationFrame(fall);
-  },320);
-});
+  },280);
+}
 
 /* ══ LANDING ════════════════════════════════ */
 function spawnRipple(x,y){
@@ -982,11 +1068,14 @@ function startFallingHearts(lx, ly){
     resetCardState();
     showScreen('screen-card');
 
-    // Auto-trigger the heart click after a short delay
-    // so the recipient sees the full animation play out
+    // Auto-trigger a random star click after short delay
+    // so recipient sees the full animation
     setTimeout(()=>{
-      const cmh = document.getElementById('card-main-heart');
-      cmh.dispatchEvent(new Event('click'));
+      const stars = document.querySelectorAll('.cstar');
+      if(stars.length){
+        const pick = stars[Math.floor(Math.random()*stars.length)];
+        pick.dispatchEvent(new Event('click'));
+      }
     }, 1200);
   }
 })();
