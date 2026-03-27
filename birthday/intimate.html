@@ -128,9 +128,17 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 
 /* ── RECEIVER SCREENS ── */
 /* FIX: all receiver screens fill 100% — no black edges */
-#rv-loading,#rv-error,#rv-welcome,#rv-photos,#rv-song,#rv-envelope,#rv-letter{
+#rv-loading,#rv-error,#rv-welcome,#rv-photos,#rv-song,#rv-envelope,#rv-letter,#rv-gif{
   position:absolute;inset:0;
 }
+
+/* GIF SCREEN */
+#rv-gif{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px;text-align:center;}
+.gif-label{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:6px;}
+.gif-sub{font-size:0.82rem;color:#8d3a5a;opacity:0.6;margin-bottom:20px;}
+.gif-img-wrap{width:100%;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(74,14,42,0.15);margin-bottom:24px;}
+.gif-img-wrap img{width:100%;display:block;}
+.gif-foot{display:flex;flex-direction:column;gap:10px;width:100%;}
 #rv-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;align-items:center;justify-content:center;flex-direction:column;}
 .rv-loading-heart{font-size:3rem;animation:hb 1.2s ease-in-out infinite;}
 @keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
@@ -240,6 +248,14 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}
 .l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;color:#3d1c2e;line-height:2.1;white-space:pre-wrap;}
 .l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#e91e63;margin-top:22px;display:block;}
+
+/* ON THIS DAY */
+.otd-block{margin-top:22px;border-top:1px dashed rgba(233,30,99,0.2);padding-top:16px;}
+.otd-label{font-size:0.6rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(233,30,99,0.5);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.otd-label::after{content:'';flex:1;height:1px;background:rgba(233,30,99,0.15);}
+.otd-fact{font-family:'Cormorant Garamond',serif;font-size:0.92rem;color:#4a0e2a;line-height:1.7;font-style:italic;}
+.otd-year{font-family:'Cormorant Garamond',serif;font-weight:700;color:#e91e63;font-style:normal;}
+.otd-source{font-size:0.6rem;color:#8d3a5a;opacity:0.4;margin-top:6px;}
 .letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(253,232,240,1) 70%,rgba(253,232,240,0));}
 .letter-foot-row{display:flex;gap:8px;}
 .replay-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
@@ -264,11 +280,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
       <span class="step-emoji" id="emoji-name">💝</span>
       <div class="step-title" id="title-name">Who is this card for?</div>
       <div class="step-sub" id="sub-name">They'll see their name on the card</div>
-      <div class="input-wrap" id="nameInputWrap">
-      <label class="field-label">Their Name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
-      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30"></div>
+      <div class="input-wrap" id="nameInputWrap"></div>
     </div>
     <div class="step-actions">
       <button class="btn-next btn-intimate" id="btn-name" onclick="goTo(&#39;s-photos&#39;)">Continue → Photos</button>
@@ -290,6 +302,20 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
       </div>
       <div class="photos-grid" id="photosGrid"><div class="photo-slot soft-slot" id="slot0"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot1"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot2"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot3"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot4"><span style="opacity:0.4;">+</span></div></div>
       <input type="file" accept="image/*" multiple="" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+      <!-- GIF PICKER -->
+      <div style="margin-top:4px;">
+        <div style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;opacity:0.5;">Add a Surprise GIF 🎭</div>
+        <div id="gifSelectedBox" style="display:none;border-radius:12px;overflow:hidden;margin-bottom:8px;position:relative;">
+          <img id="gifPreview" style="width:100%;border-radius:12px;display:block;" src="" alt="Selected GIF">
+          <button onclick="removeGif()" style="position:absolute;top:6px;right:6px;background:#e91e63;color:white;border:none;border-radius:50%;width:22px;height:22px;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <input id="gifSearchInput" class="regular-input" placeholder="Search GIFs... e.g. birthday party" style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchGifs()" maxlength="60">
+          <button onclick="searchGifs()" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;background:linear-gradient(135deg,#e91e63,#f06292);">🔍</button>
+        </div>
+        <div id="gifResults" style="display:flex;gap:6px;flex-wrap:wrap;max-height:160px;overflow-y:auto;"></div>
+        <div style="font-size:0.6rem;color:#8d3a5a;opacity:0.5;margin-top:4px;text-align:center;">Powered by GIPHY</div>
+      </div>
     </div>
     <div class="step-actions">
       <button class="btn-next btn-intimate" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
@@ -348,12 +374,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
         <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span style="font-size:0.78rem;color:#8d3a5a;">Writing your letter...</span></div>
         <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#8d3a5a;margin-top:6px;">↑ Tap again for a different letter</div>
       </div>
-      <div id="letterInputWrap">
-      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,
-
-There are no words...">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.</textarea>
-      <label class="field-label" style="margin-top:12px;">Sign Off</label>
-      <input class="regular-input" id="cSign" value="Forever yours 💕" maxlength="60"></div>
+      <div id="letterInputWrap"></div>
     </div>
     <div class="step-actions">
       <button class="btn-next btn-intimate" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)">Preview My Card →</button>
@@ -450,19 +471,40 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 
 <div class="screen" id="rv-letter">
   <div class="letter-bar"></div>
-  <button class="rv-back" onclick="goTo(&#39;rv-envelope&#39;)" style="top:16px;">←</button>
+  <button class="rv-back" onclick="goTo('rv-envelope')" style="top:16px;">←</button>
   <div class="letter-paper-wrap">
     <div class="letter-paper">
       <div class="l-greet" id="rvLGreet">Dear you,</div>
       <div class="l-body" id="rvLBody"></div>
       <span class="l-sign" id="rvLSign"></span>
+      <!-- ON THIS DAY -->
+      <div class="otd-block" id="otdBlock" style="display:none;">
+        <div class="otd-label">📅 On This Day</div>
+        <div class="otd-fact" id="otdFact"></div>
+        <div class="otd-source">via Wikipedia</div>
+      </div>
     </div>
   </div>
   <div class="letter-foot">
     <div class="letter-foot-row">
-      <button class="replay-btn" onclick="goTo(&#39;rv-welcome&#39;)">💝 Replay</button>
-      <button class="create-again-btn" onclick="window.location.href=&#39;/&#39;">✨ Create a card like this</button>
+      <button class="replay-btn" id="letterNextBtn" onclick="goTo('rv-gif')">One last thing... 🎭</button>
+      <button class="create-again-btn" onclick="window.location.href='/'">✨ Create one</button>
     </div>
+  </div>
+</div>
+
+<!-- GIF SCREEN -->
+<div class="screen" id="rv-gif">
+  <button class="rv-back" onclick="goTo('rv-letter')">←</button>
+  <div class="gif-label">One last thing... 🎭</div>
+  <div class="gif-sub" id="gifSub">A little something just for you</div>
+  <div class="gif-img-wrap" id="gifImgWrap" style="display:none;">
+    <img id="rvGifImg" src="" alt="GIF">
+  </div>
+  <div id="gifNoGif" style="font-size:3rem;margin-bottom:16px;">🎊</div>
+  <div class="gif-foot">
+    <button class="replay-btn" onclick="goTo('rv-welcome')">💝 Replay from start</button>
+    <button class="create-again-btn" onclick="window.location.href='/'">✨ Create a card like this</button>
   </div>
 </div>
 
@@ -483,7 +525,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <!-- Share modal -->
 <div class="share-modal" id="shareModal">
   <div class="share-box soft-share" id="shareBox">
-    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">💝</div>
+    <div style="font-size:2rem;margin-bottom:8px;">💝</div>
     <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Card is ready! 🎉</div>
     <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;">Send this link to them 💝</div>
     <div style="font-size:0.72rem;opacity:0.5;border-radius:10px;padding:7px 12px;margin-bottom:12px;" id="expiryNote">⏳ Card expires in 3 days</div>
@@ -527,11 +569,12 @@ let currentSlotIdx = 0;
 let shareLink = '';
 let returnToPreview = false;
 let aiLetterCount = 0;
+let selectedGifUrl = '';  // Giphy GIF URL chosen by sender
 
 const IS_RECEIVER = new URLSearchParams(window.location.search).has('card');
 
 // ── NAVIGATION ──
-const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
+const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter','rv-gif'];
 
 function goTo(id, fromPreview=false){
   const prev=document.getElementById(curScreen);
@@ -599,7 +642,9 @@ window.addEventListener('DOMContentLoaded',function(){
       <label class="field-label">Their Name</label>
       <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
       <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">`;
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">
+      <label class="field-label" style="margin-top:4px;">Their Birthday <span style="opacity:0.4;font-size:0.6rem;text-transform:none;letter-spacing:0;">(for On This Day feature)</span></label>
+      <input class="regular-input" id="cBirthday" type="date" style="margin-bottom:0;">`;
     // Build letter inputs
     document.getElementById('letterInputWrap').innerHTML=`
       <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words...">${CFG.defaultMsg}</textarea>
@@ -878,7 +923,9 @@ async function saveAndShare(){
     spotify:document.getElementById('cSpotify')?.value.trim()||'',
     songName:document.getElementById('songSelectedName')?.textContent||'',
     memoriesHeading:document.getElementById('photosHeading')?.value.trim()||'Our Memories',
-    photos:photoUrls,created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
+    photos:photoUrls,created:now,createdAt:now,expiresAt:now+3*24*60*60*1000,
+    gifUrl:selectedGifUrl||'',
+    birthdayDate:document.getElementById('cBirthday')?.value||''
   };
   try{
     setProgress(85,'Creating your card... '+CFG.emoji);
@@ -972,6 +1019,18 @@ function renderCard(d){
   rvLetterSign = d.sign||(sender?`With love, ${sender} 💕`:'With love 💕');
   document.getElementById('rvLBody').textContent=rvLetterText;
   document.getElementById('rvLSign').textContent=rvLetterSign;
+  // GIF screen
+  const gifUrl=d.gifUrl||'';
+  if(gifUrl){
+    document.getElementById('gifImgWrap').style.display='block';
+    document.getElementById('rvGifImg').src=gifUrl;
+    document.getElementById('gifNoGif').style.display='none';
+  }
+  if(sender)document.getElementById('gifSub').textContent=`${sender} picked this just for you 🎭`;
+  // Hide letter "One last thing" button if no gif
+  if(!gifUrl){const btn=document.getElementById('letterNextBtn');if(btn){btn.textContent='💝 Replay';btn.onclick=()=>goTo('rv-welcome');}}
+  // On This Day
+  if(d.birthdayDate){fetchOnThisDay(d.birthdayDate,name);}
   goTo('rv-welcome');
 }
 
@@ -1022,7 +1081,67 @@ function openLetter(){
   setTimeout(()=>{e.style.transform='';goTo('rv-letter');setTimeout(typewriteLetter,300);},380);
 }
 
-function typewriteLetter(){
+// ════ GIPHY FUNCTIONS ════
+const GIPHY_KEY = 'sXpGFDGZs0Dv1mmNFvYaGUgzCe5BRfCl'; // Giphy public beta key
+
+async function searchGifs(){
+  const q=document.getElementById('gifSearchInput')?.value.trim();
+  if(!q)return;
+  const rd=document.getElementById('gifResults');
+  rd.innerHTML=`<div style="font-size:0.8rem;color:#e91e63;padding:8px;">Searching...</div>`;
+  try{
+    const res=await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${GIPHY_KEY}&q=${encodeURIComponent(q)}&limit=9&rating=g`);
+    const data=await res.json();
+    rd.innerHTML='';
+    if(!data.data||!data.data.length){rd.innerHTML=`<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No GIFs found. Try different words.</div>`;return;}
+    data.data.forEach(gif=>{
+      const preview=gif.images.fixed_width_small.url;
+      const full=gif.images.downsized.url;
+      const el=document.createElement('div');
+      el.style.cssText='width:calc(33.33% - 4px);aspect-ratio:1;overflow:hidden;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s;';
+      el.innerHTML=`<img src="${preview}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+      el.onclick=()=>selectGif(full,preview);
+      rd.appendChild(el);
+    });
+  }catch(e){rd.innerHTML=`<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>`;}
+}
+
+function selectGif(fullUrl, previewUrl){
+  selectedGifUrl=fullUrl;
+  document.getElementById('gifPreview').src=previewUrl;
+  document.getElementById('gifSelectedBox').style.display='block';
+  document.getElementById('gifResults').innerHTML='';
+  document.getElementById('gifSearchInput').value='';
+}
+
+function removeGif(){
+  selectedGifUrl='';
+  document.getElementById('gifSelectedBox').style.display='none';
+  document.getElementById('gifPreview').src='';
+}
+
+// ════ ON THIS DAY ════
+async function fetchOnThisDay(dateStr, name){
+  try{
+    const d=new Date(dateStr);
+    const month=d.getMonth()+1;
+    const day=d.getDate();
+    const year=d.getFullYear();
+    const res=await fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`);
+    const data=await res.json();
+    if(!data.events||!data.events.length)return;
+    // Pick a random interesting event
+    const events=data.events.filter(e=>e.year>1900&&e.year<year);
+    if(!events.length)return;
+    const evt=events[Math.floor(Math.random()*Math.min(events.length,10))];
+    const block=document.getElementById('otdBlock');
+    const fact=document.getElementById('otdFact');
+    if(block&&fact){
+      fact.innerHTML=`In <span class="otd-year">${evt.year}</span>, ${evt.text}${name?` — and years later, <strong>${name}</strong> was born, which turned out to be the best thing.`:''}`;
+      block.style.display='block';
+    }
+  }catch(e){/* silently skip if API fails */}
+}
   const el=document.getElementById('rvLBody');
   const signEl=document.getElementById('rvLSign');
   if(!el||!rvLetterText) return;
