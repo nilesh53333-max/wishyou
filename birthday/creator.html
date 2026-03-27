@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Create a Birthday Card</title>
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;🎂&lt;/text&gt;&lt;/svg&gt;">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;overflow:hidden;height:100%;}
+body{font-family:'DM Sans',sans-serif;background:#111;}
+.app{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;background:#fdf6f0;}
+@media(min-width:500px){
+  .app{position:fixed;top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);width:430px;height:90vh;max-height:900px;border-radius:40px;box-shadow:0 40px 120px rgba(0,0,0,0.8);overflow:hidden;}
+}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);transform:translateX(60px);overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.screen.slide-out{opacity:0;transform:translateX(-60px);}
+
+/* ── STEP SCREENS ── */
+.step-screen{background:linear-gradient(160deg,#fef9f5,#fdf0e8,#fef6f0);}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
+.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
+.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom)+16px);}
+.step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,0.07);}
+.step-bar{height:100%;background:linear-gradient(90deg,#e91e63,#f06292);transition:width 0.5s ease;}
+.step-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;touch-action:manipulation;z-index:5;background:rgba(0,0,0,0.07);color:#333;}
+.step-counter{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0.4;color:#333;}
+.step-emoji{font-size:2.4rem;margin-bottom:10px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
+@keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.step-title{font-size:clamp(1.5rem,5vw,2rem);font-weight:700;line-height:1.2;margin-bottom:6px;color:#111;}
+.step-sub{font-size:0.82rem;line-height:1.6;margin-bottom:20px;opacity:0.5;color:#333;}
+
+/* INPUTS */
+.field-label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;opacity:0.4;color:#333;}
+.big-input{width:100%;border:none;border-bottom:2px solid rgba(233,30,99,0.2);background:transparent;padding:10px 0;font-size:1.8rem;font-weight:700;outline:none;transition:border-color 0.3s;text-align:center;color:#111;}
+.big-input::placeholder{opacity:0.2;}
+.big-input:focus{border-color:rgba(233,30,99,0.5);}
+.regular-input{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:rgba(255,255,255,0.8);outline:none;transition:border-color 0.3s;margin-bottom:12px;color:#111;}
+.regular-input::placeholder{opacity:0.35;font-style:italic;}
+.regular-input:focus{border-color:rgba(233,30,99,0.35);background:white;}
+.letter-area{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:16px;padding:16px;font-family:'DM Sans',sans-serif;font-size:0.95rem;line-height:1.8;background:rgba(255,255,255,0.8);outline:none;resize:none;min-height:150px;transition:border-color 0.3s;color:#111;}
+.letter-area:focus{border-color:rgba(233,30,99,0.35);}
+.letter-area::placeholder{opacity:0.35;font-style:italic;}
+
+/* BUTTONS */
+.btn-next{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;touch-action:manipulation;margin-top:8px;transition:transform 0.15s;background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 8px 24px rgba(233,30,99,0.3);}
+.btn-next:active{transform:scale(0.97);}
+.btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.4;font-family:'DM Sans',sans-serif;color:#333;}
+.btn-wa{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(37,211,102,0.3);margin-top:8px;touch-action:manipulation;}
+
+/* PHOTOS */
+.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;font-size:1.3rem;background:rgba(233,30,99,0.06);border:1.5px dashed rgba(233,30,99,0.22);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#e91e63;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+
+/* SONG */
+.song-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;background:rgba(255,255,255,0.7);border:1.5px solid rgba(233,30,99,0.1);}
+.song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.song-use-btn{padding:6px 12px;border:none;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#e91e63,#f06292);color:white;}
+.song-selected-box{border-radius:14px;padding:12px 14px;margin-bottom:10px;display:none;background:linear-gradient(135deg,#2d1048,#1a0a2e);}
+.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;margin:6px 0;color:#8d3a5a;}
+.ai-loading.show{display:flex;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#e91e63;animation:aiPulse 1s ease-in-out infinite;}
+@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+
+/* ── STYLE PICKER SCREEN ── */
+#s-pick{background:#0d0d0d;}
+.pick-header{flex-shrink:0;padding:max(16px,env(safe-area-inset-top)) 20px 12px;text-align:center;}
+.pick-title{font-size:1.1rem;font-weight:700;color:white;margin-bottom:4px;}
+.pick-sub{font-size:0.75rem;color:rgba(255,255,255,0.35);}
+.pick-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 14px max(20px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;}
+.pick-list::-webkit-scrollbar{display:none;}
+
+/* Style card in picker */
+.style-pick-card{border-radius:18px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s;position:relative;flex-shrink:0;}
+.style-pick-card:active{transform:scale(0.97);}
+.spc-preview{height:120px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.spc-info{padding:12px 14px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.spc-name{font-size:0.95rem;font-weight:700;}
+.spc-desc{font-size:0.7rem;opacity:0.6;margin-top:2px;}
+.spc-btn{padding:9px 18px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+
+/* Intimate style card */
+.spc-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec);border:1.5px solid rgba(233,30,99,0.15);}
+.spc-intimate .spc-name{color:#4a0e2a;}
+.spc-intimate .spc-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;}
+
+/* Retro style card */
+.spc-retro{background:#FFE135;border:3px solid #111;}
+.spc-retro .spc-name{color:#111;font-family:'DM Sans',sans-serif;}
+.spc-retro .spc-desc{color:#333;}
+.spc-retro .spc-btn{background:#d90429;color:white;border:2px solid #111;border-radius:6px;}
+
+/* Cinematic style card */
+.spc-cinematic{background:#0a0a0a;border:1px solid rgba(255,215,0,0.2);}
+.spc-cinematic .spc-name{color:white;font-style:italic;}
+.spc-cinematic .spc-desc{color:rgba(255,215,0,0.4);}
+.spc-cinematic .spc-btn{background:#FFD700;color:#0a0a0a;border-radius:4px;}
+
+/* Memory Jar style card */
+.spc-memoryjar{background:linear-gradient(160deg,#fef3e2,#fde8c8);border:1.5px solid rgba(196,92,26,0.2);}
+.spc-memoryjar .spc-name{color:#3d1a06;}
+.spc-memoryjar .spc-desc{color:#8b4513;}
+.spc-memoryjar .spc-btn{background:linear-gradient(135deg,#c45c1a,#e8883a);color:white;}
+
+/* Fake Chat style card */
+.spc-fakechat{background:#ECE5DD;border:1.5px solid rgba(37,211,102,0.2);}
+.spc-fakechat .spc-name{color:#111;}
+.spc-fakechat .spc-desc{color:#667781;}
+.spc-fakechat .spc-btn{background:linear-gradient(135deg,#25D366,#128C7E);color:white;}
+
+/* Creating overlay — shown while saving */
+.creating-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.88);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.creating-overlay.show{display:flex;}
+.creating-card-name{font-size:1rem;font-weight:600;color:white;margin-bottom:24px;text-align:center;}
+.creating-spinner{width:64px;height:64px;position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.creating-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(255,255,255,0.1);border-top-color:#e91e63;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.creating-emoji{font-size:1.8rem;position:relative;z-index:1;}
+.creating-label{font-size:0.9rem;color:rgba(255,255,255,0.6);margin-bottom:16px;}
+.creating-bar-wrap{height:4px;border-radius:50px;overflow:hidden;width:200px;background:rgba(255,255,255,0.1);}
+.creating-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s ease;background:linear-gradient(90deg,#e91e63,#f06292);}
+
+/* Share modal */
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.8);z-index:700;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;background:white;}
+.share-link-row{border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(233,30,99,0.05);border:1px solid rgba(233,30,99,0.15);}
+.share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;color:#333;}
+.copy-btn{padding:6px 12px;border:none;border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;background:#e91e63;color:white;}
+.modal-close{width:100%;padding:12px;background:none;border:1.5px solid rgba(233,30,99,0.2);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:6px;color:#8d3a5a;}
+.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(255,255,255,0.1);}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- ══ STEP 1: Names ══ -->
+<div class="screen step-screen" id="s-name">
+  <div class="step-progress"><div class="step-bar" id="bar-name" style="width:20%"></div></div>
+  <button class="step-back" onclick="window.location.href='/'">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 1 of 4</div>
+      <span class="step-emoji">🎂</span>
+      <div class="step-title">Who is this for?</div>
+      <div class="step-sub">Fill once — then pick any card style you like</div>
+      <label class="field-label">Their Name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next" onclick="goTo('s-photos')">Continue → Photos 📸</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 2: Photos ══ -->
+<div class="screen step-screen" id="s-photos">
+  <div class="step-progress"><div class="step-bar" style="width:40%"></div></div>
+  <button class="step-back" onclick="goBack()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 2 of 4</div>
+      <span class="step-emoji">📸</span>
+      <div class="step-title">Add your photos</div>
+      <div class="step-sub">Up to 5 photos — used in whichever style you pick</div>
+      <div class="photos-grid" id="photosGrid"></div>
+      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next" onclick="goTo('s-song')">Continue → Song 🎵</button>
+      <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 3: Song ══ -->
+<div class="screen step-screen" id="s-song">
+  <div class="step-progress"><div class="step-bar" style="width:60%"></div></div>
+  <button class="step-back" onclick="goBack()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 3 of 4</div>
+      <span class="step-emoji">🎵</span>
+      <div class="step-title">A song for them</div>
+      <div class="step-sub">Search by name or let AI suggest one</div>
+      <div class="song-selected-box" id="songSelectedBox">
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Selected:</div>
+        <div style="font-size:0.88rem;font-weight:600;color:white;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
+        <button onclick="searchSong()" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;color:white;background:linear-gradient(135deg,#e91e63,#f06292);">🔍</button>
+      </div>
+      <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
+      <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(233,30,99,0.12);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ AI Song Suggestions</div>
+        <input id="aiSongContext" class="regular-input" placeholder="e.g. romantic Hindi, 90s nostalgic, fun party..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
+        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Suggest Songs</button>
+        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Finding songs...</span></div>
+        <div id="songAiResults" style="margin-top:6px;"></div>
+      </div>
+      <input type="hidden" id="cSpotify">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next" onclick="goTo('s-letter')">Continue → Letter 💌</button>
+      <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 4: Letter ══ -->
+<div class="screen step-screen" id="s-letter">
+  <div class="step-progress"><div class="step-bar" style="width:80%"></div></div>
+  <button class="step-back" onclick="goBack()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 4 of 4</div>
+      <span class="step-emoji">💌</span>
+      <div class="step-title">Write from the heart</div>
+      <div class="step-sub">Type in any language — or let AI write it for you</div>
+      <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(233,30,99,0.12);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ Write with AI</div>
+        <input id="letterTone" class="regular-input" placeholder="e.g. emotional, funny, Hindi, Marathi..." style="margin-bottom:8px;" maxlength="60">
+        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✨ Write with AI</button>
+        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Writing your letter...</span></div>
+        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#8d3a5a;margin-top:6px;">↑ Tap again for a different letter</div>
+      </div>
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words...">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.</textarea>
+      <label class="field-label" style="margin-top:12px;">Sign Off</label>
+      <input class="regular-input" id="cSign" value="Forever yours 💕" maxlength="60">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next" onclick="goTo('s-pick')">Pick Your Style → 🎨</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 5: Style Picker ══ -->
+<div class="screen" id="s-pick">
+  <div class="pick-header">
+    <button class="step-back" style="background:rgba(255,255,255,0.1);color:white;" onclick="goBack()">←</button>
+    <div class="pick-title">Pick your card style 🎨</div>
+    <div class="pick-sub">All your details are saved — just tap any style to create</div>
+  </div>
+  <div class="pick-list">
+
+    <!-- Intimate -->
+    <div class="style-pick-card spc-intimate" onclick="createCard('intimate')">
+      <div class="spc-preview" style="background:linear-gradient(160deg,#fde8f0,#fce4ec);">
+        <div style="text-align:center;">
+          <div style="font-size:2.2rem;margin-bottom:6px;">💝</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;">Happy Birthday!</div>
+          <div style="font-size:0.65rem;color:#8d3a5a;margin-top:4px;opacity:0.7;">Soft & emotional</div>
+        </div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:30px;background:linear-gradient(to top,#fce4ec,transparent);"></div>
+      </div>
+      <div class="spc-info">
+        <div>
+          <div class="spc-name">💌 Intimate</div>
+          <div class="spc-desc">Polaroids • Vinyl • Typewriter letter</div>
+        </div>
+        <button class="spc-btn" onclick="event.stopPropagation();createCard('intimate')">Create →</button>
+      </div>
+    </div>
+
+    <!-- Retro -->
+    <div class="style-pick-card spc-retro" onclick="createCard('retro')">
+      <div class="spc-preview" style="background:#FFE135;border-bottom:3px solid #111;">
+        <div style="text-align:center;">
+          <div style="font-size:2rem;margin-bottom:4px;">🎊</div>
+          <div style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:1rem;color:#d90429;">HAPPY BIRTHDAY!!</div>
+          <div style="font-size:0.65rem;color:#333;margin-top:4px;">Fun & loud</div>
+        </div>
+      </div>
+      <div class="spc-info">
+        <div>
+          <div class="spc-name">🎊 Retro Party</div>
+          <div class="spc-desc">Comic panels • Cassette • Newspaper letter</div>
+        </div>
+        <button class="spc-btn" onclick="event.stopPropagation();createCard('retro')">Create →</button>
+      </div>
+    </div>
+
+    <!-- Cinematic -->
+    <div class="style-pick-card spc-cinematic" onclick="createCard('cinematic')">
+      <div class="spc-preview" style="background:#0a0a0a;">
+        <div style="text-align:center;">
+          <div style="font-size:2rem;margin-bottom:6px;">🎬</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;font-weight:700;color:white;" id="pick-cinematic-name">Your Name</div>
+          <div style="font-size:0.6rem;color:rgba(255,215,0,0.4);margin-top:4px;letter-spacing:0.15em;">A CINEMATIC BIRTHDAY</div>
+        </div>
+        <div style="position:absolute;top:0;left:0;right:0;height:20px;background:#0a0a0a;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;height:20px;background:#0a0a0a;"></div>
+      </div>
+      <div class="spc-info">
+        <div>
+          <div class="spc-name">🎬 Cinematic</div>
+          <div class="spc-desc">Film stills • Dark & dramatic • Subtitle letter</div>
+        </div>
+        <button class="spc-btn" onclick="event.stopPropagation();createCard('cinematic')">Create →</button>
+      </div>
+    </div>
+
+    <!-- Memory Jar -->
+    <div class="style-pick-card spc-memoryjar" onclick="createCard('memoryjar')">
+      <div class="spc-preview" style="background:linear-gradient(180deg,#2d1a0a,#1a0f0a);">
+        <div style="text-align:center;">
+          <div style="font-size:2.4rem;margin-bottom:4px;animation:softFloat 2s ease-in-out infinite;">🫙</div>
+          <div style="font-family:'Caveat',cursive;font-size:0.9rem;color:rgba(255,220,150,0.7);">tap a note to open it 💛</div>
+        </div>
+      </div>
+      <div class="spc-info">
+        <div>
+          <div class="spc-name">🫙 Memory Jar</div>
+          <div class="spc-desc">Tap notes • Non-linear • Unique experience</div>
+        </div>
+        <button class="spc-btn" onclick="event.stopPropagation();createCard('memoryjar')">Create →</button>
+      </div>
+    </div>
+
+    <!-- Fake Chat -->
+    <div class="style-pick-card spc-fakechat" onclick="createCard('fakechat')">
+      <div class="spc-preview" style="background:#ECE5DD;">
+        <div style="width:100%;padding:0 12px;">
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:8px 10px;max-width:70%;margin-bottom:6px;">
+            <div style="font-size:0.8rem;color:#111;">Hey! 🎉</div>
+          </div>
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:8px 10px;max-width:80%;">
+            <div style="font-size:0.8rem;color:#111;" id="pick-chat-name">Happy Birthday!! 🎂🥳</div>
+          </div>
+        </div>
+      </div>
+      <div class="spc-info">
+        <div>
+          <div class="spc-name">💬 Fake Chat</div>
+          <div class="spc-desc">WhatsApp style • Yes/No buttons • Interactive</div>
+        </div>
+        <button class="spc-btn" onclick="event.stopPropagation();createCard('fakechat')">Create →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Creating overlay -->
+<div class="creating-overlay" id="creatingOverlay">
+  <div class="creating-emoji" id="creatingEmoji">💝</div>
+  <div class="creating-card-name" id="creatingCardName">Creating your card...</div>
+  <div class="creating-spinner"><div class="creating-ring"></div></div>
+  <div class="creating-label" id="creatingLabel">Uploading photos...</div>
+  <div class="creating-bar-wrap"><div class="creating-bar" id="creatingBar"></div></div>
+</div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:2rem;margin-bottom:8px;" id="shareEmoji">💝</div>
+    <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;color:#111;">Card is ready! 🎉</div>
+    <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;color:#333;">Send this link to them</div>
+    <div style="font-size:0.72rem;opacity:0.5;padding:7px 12px;margin-bottom:12px;color:#333;" id="expiryNote">⏳ Card expires in 3 days</div>
+    <div class="share-link-row">
+      <span class="share-link-txt" id="shareLinkTxt"></span>
+      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
+    <button class="modal-close" onclick="closeShare()">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div><!-- /app -->
+
+<script>
+const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const CLOUDINARY_CLOUD='dkvbjazfe';
+const CLOUDINARY_PRESET='wishyou-uploads';
+const WORKER_URL='https://wild-fog-b15e.nilesh53333.workers.dev/';
+
+// Card configs — all 5 styles
+const CARDS={
+  intimate:{
+    label:'💌 Intimate',emoji:'💝',
+    cardType:'birthday-intimate',
+    shareUrl:(id)=>`https://wishyou.ai/birthday/intimate.html?card=${id}`,
+    shareMsg:(name,sender,link)=>`💝 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a special card 💌\n\n':'Someone made you a special card 💌\n\n'}👆 Open here:\n${link}`
+  },
+  retro:{
+    label:'🎊 Retro Party',emoji:'🎊',
+    cardType:'birthday-retro',
+    shareUrl:(id)=>`https://wishyou.ai/birthday/retro.html?card=${id}`,
+    shareMsg:(name,sender,link)=>`🎊 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a Retro Party card 🎉\n\n':'Someone made you a special card 🎉\n\n'}👆 Open here:\n${link}`
+  },
+  cinematic:{
+    label:'🎬 Cinematic',emoji:'🎬',
+    cardType:'birthday-cinematic',
+    shareUrl:(id)=>`https://wishyou.ai/birthday/cinematic.html?card=${id}`,
+    shareMsg:(name,sender,link)=>`🎬 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a cinematic birthday card 🎞️\n\n':'Someone made you a special card 🎞️\n\n'}▶ Open here:\n${link}`
+  },
+  memoryjar:{
+    label:'🫙 Memory Jar',emoji:'🫙',
+    cardType:'birthday-memoryjar',
+    shareUrl:(id)=>`https://wishyou.ai/birthday/memoryjar.html?card=${id}`,
+    shareMsg:(name,sender,link)=>`🫙 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' filled a memory jar just for you 💛\n\n':'Someone filled a memory jar for you 💛\n\n'}👆 Open it here:\n${link}`
+  },
+  fakechat:{
+    label:'💬 Fake Chat',emoji:'💬',
+    cardType:'birthday-fakechat',
+    shareUrl:(id)=>`https://wishyou.ai/birthday/fakechat.html?card=${id}`,
+    shareMsg:(name,sender,link)=>`💬 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' sent you a special birthday chat 💬\n\n':'Someone sent you a birthday message 💬\n\n'}👆 Open here:\n${link}`
+  }
+};
+
+let curScreen='';
+let photos=[];
+let uploadedUrls={};
+let currentSlotIdx=0;
+let shareLink='';
+let shareCardCFG=null;
+let aiLetterCount=0;
+const STEPS=['s-name','s-photos','s-song','s-letter','s-pick'];
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
+  next.classList.add('active');
+  curScreen=id;
+  if(id==='s-pick')updatePickerPreviews();
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
+}
+
+function goBack(){
+  const idx=STEPS.indexOf(curScreen);
+  if(idx>0)goTo(STEPS[idx-1]);
+  else window.location.href='/';
+}
+
+function updatePickerPreviews(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  // Update cinematic preview with name
+  const cinName=document.getElementById('pick-cinematic-name');
+  if(cinName)cinName.textContent=name||'Your Name';
+  // Update chat preview with name
+  const chatName=document.getElementById('pick-chat-name');
+  if(chatName)chatName.textContent=name?`Happy Birthday ${name}!! 🎂🥳`:'Happy Birthday!! 🎂🥳';
+}
+
+window.addEventListener('DOMContentLoaded',function(){
+  buildPhotoSlots();
+  goTo('s-name');
+});
+
+// ── PHOTOS ──
+function buildPhotoSlots(){
+  const grid=document.getElementById('photosGrid');grid.innerHTML='';photos=[];
+  for(let i=0;i<5;i++){
+    const slot=document.createElement('div');slot.className='photo-slot';slot.id='slot'+i;
+    slot.innerHTML='<span style="opacity:0.4;color:#e91e63;">+</span>';
+    slot.onclick=()=>triggerUpload(i);grid.appendChild(slot);
+  }
+}
+function triggerUpload(idx){currentSlotIdx=idx;document.getElementById('photoFileInput').click();}
+function handlePhotoUpload(inp){
+  const files=Array.from(inp.files);if(!files.length)return;
+  files.forEach((file,offset)=>{
+    let ti=-1;
+    for(let i=0;i<5;i++){
+      if(offset===0&&i===0){ti=currentSlotIdx;break;}
+      if(!photos[(currentSlotIdx+offset)%5]||offset>0){ti=(currentSlotIdx+offset)%5;break;}
+    }
+    if(ti<0||ti>4)return;
+    const url=URL.createObjectURL(file);photos[ti]=url;delete uploadedUrls[ti];
+    const slot=document.getElementById('slot'+ti);
+    if(slot){
+      slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${ti})">✕</button>`;
+      const ind=document.createElement('div');ind.id='upind'+ti;
+      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(233,30,99,0.2);border-radius:2px;overflow:hidden;';
+      ind.innerHTML=`<div style="height:100%;background:#e91e63;width:0%;transition:width 0.3s;" id="upbar${ti}"></div>`;
+      slot.appendChild(ind);
+    }
+    uploadPhotoInBackground(file,ti);
+  });
+  inp.value='';
+}
+async function uploadPhotoInBackground(file,idx){
+  try{
+    const bar=document.getElementById('upbar'+idx);if(bar)bar.style.width='40%';
+    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    if(bar)bar.style.width='70%';
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+    const d=await res.json();
+    if(d.secure_url){uploadedUrls[idx]=d.secure_url;if(bar){bar.style.width='100%';setTimeout(()=>{const ind=document.getElementById('upind'+idx);if(ind)ind.remove();},600);}}
+  }catch(e){console.error(e);}
+}
+function removePhoto(e,idx){
+  e.stopPropagation();photos[idx]=null;delete uploadedUrls[idx];
+  const slot=document.getElementById('slot'+idx);
+  slot.innerHTML='<span style="opacity:0.4;color:#e91e63;">+</span>';
+  slot.onclick=()=>triggerUpload(idx);
+}
+
+// ── SONG ──
+async function searchSong(){
+  const q=document.getElementById('ytSearchInput').value.trim();
+  if(!q){alert('Please type a song name.');return;}
+  const rd=document.getElementById('songResults');
+  rd.innerHTML='<div style="text-align:center;padding:12px;font-size:0.85rem;color:#e91e63;">🔍 Searching...</div>';
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query:q})});
+    const data=await res.json();
+    if(!data.items||!data.items.length){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>';return;}
+    rd.innerHTML='';
+    data.items.slice(0,4).forEach(item=>{
+      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
+      const card=document.createElement('div');card.className='song-result';
+      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#111;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;">${channelTitle}</div></div><button class="song-use-btn">✓ Use</button>`;
+      card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
+      rd.appendChild(card);
+    });
+  }catch(e){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>';}
+}
+function selectSong(videoId,title,artist){
+  document.getElementById('cSpotify').value='https://www.youtube.com/watch?v='+videoId;
+  document.getElementById('songSelectedName').textContent=title+' — '+artist;
+  document.getElementById('songSelectedBox').style.display='block';
+  document.getElementById('songResults').innerHTML=`<div style="font-size:0.8rem;font-weight:600;padding:6px 0;color:#e91e63;">✅ ${title} added!</div>`;
+}
+async function suggestSongs(){
+  const loading=document.getElementById('songAiLoading'),results=document.getElementById('songAiResults'),btn=document.getElementById('aiSongBtn');
+  loading.classList.add('show');results.innerHTML='';btn.disabled=true;
+  const context=document.getElementById('aiSongContext')?.value.trim()||'';
+  const name=document.getElementById('cName')?.value.trim()||'';
+  let prompt=`Suggest 4 real popular songs for a Birthday card`;
+  if(name)prompt+=` for someone named ${name}`;
+  if(context)prompt+=`. User wants: "${context}". Follow exactly.`;
+  else prompt+=`. Mix languages, emotional and upbeat`;
+  prompt+=`. Return ONLY JSON array: [{"name":"Song Name","artist":"Artist Name"}]`;
+  const text=await callClaude(prompt);
+  try{
+    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    songs.forEach(s=>{
+      const el=document.createElement('div');
+      el.style.cssText='display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.7);border:1px solid rgba(233,30,99,0.1);';
+      el.innerHTML=`<span style="font-size:1.1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:600;color:#111;">${s.name}</div><div style="font-size:0.72rem;color:#8d3a5a;opacity:0.7;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#e91e63;">Search ›</span>`;
+      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
+      results.appendChild(el);
+    });
+  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Could not fetch. Try again.</div>';}
+  loading.classList.remove('show');btn.disabled=false;
+}
+
+// ── AI LETTER ──
+async function runAILetter(){
+  const name=document.getElementById('cName')?.value.trim()||'them';
+  const sender=document.getElementById('cSender')?.value.trim()||'someone';
+  const toneInput=document.getElementById('letterTone')?.value.trim()||'';
+  const btn=document.getElementById('aiLetterBtn'),loading=document.getElementById('letterAiLoading');
+  aiLetterCount++;btn.disabled=true;loading.classList.add('show');
+  const langs=['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
+  const det=langs.find(l=>toneInput.toLowerCase().includes(l));
+  let langNote=det?` CRITICAL: Write ENTIRE letter in ${det.charAt(0).toUpperCase()+det.slice(1)} script only. Natural everyday language, not formal.`:'';
+  const vari=aiLetterCount>1?` Attempt #${aiLetterCount} — COMPLETELY DIFFERENT.`:'';
+  const prompt=`Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${toneInput||'warm heartfelt'}.${langNote}${vari} Return ONLY the letter body — no greeting, no sign off.`;
+  const text=await callClaude(prompt);
+  if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
+  btn.disabled=false;loading.classList.remove('show');
+  const h=document.getElementById('letterAiResult');if(h)h.style.display='block';
+  btn.textContent='✨ Write Another';
+}
+async function callClaude(prompt){
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();if(data.error)return'';
+    return data.content&&data.content[0]?data.content[0].text:'';
+  }catch(e){return'';}
+}
+function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
+
+// ── CREATE CARD ──
+async function createCard(style){
+  const cfg=CARDS[style];
+  if(!cfg)return;
+  shareCardCFG=cfg;
+
+  const overlay=document.getElementById('creatingOverlay');
+  const bar=document.getElementById('creatingBar');
+  const label=document.getElementById('creatingLabel');
+  document.getElementById('creatingEmoji').textContent=cfg.emoji;
+  document.getElementById('creatingCardName').textContent='Creating your '+cfg.label+' card...';
+  overlay.classList.add('show');
+
+  function setProgress(pct,lbl){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;}
+  setProgress(10,'Getting photos ready...');
+
+  // Upload any remaining photos
+  let photoUrls=[];
+  const slots=photos.map((p,i)=>({blob:p,idx:i})).filter(s=>s.blob);
+  let uploaded=0;
+  for(const s of slots){
+    if(uploadedUrls[s.idx]){
+      photoUrls.push(uploadedUrls[s.idx]);uploaded++;
+      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Packing photos... '+cfg.emoji);
+    } else {
+      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Uploading photo '+(uploaded+1)+'...');
+      try{
+        const fd=new FormData();fd.append('file',await fetch(s.blob).then(r=>r.blob()));fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+        const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+        const d=await res.json();if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
+      }catch(e){console.error(e);}
+      uploaded++;
+    }
+  }
+
+  setProgress(70,'Creating your card... '+cfg.emoji);
+  const now=Date.now();
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=document.getElementById('cMsg')?.value.trim()||'';
+  const sign=document.getElementById('cSign')?.value.trim()||'';
+  const spotify=document.getElementById('cSpotify')?.value.trim()||'';
+  const songName=document.getElementById('songSelectedName')?.textContent||'';
+
+  const cardData={
+    type:cfg.cardType,
+    name,sender,msg,sign,spotify,songName,
+    memoriesHeading:'Our Memories',
+    songScreenTitle:'Song that reminds me of you 🎵',
+    photos:photoUrls,
+    created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
+  };
+
+  try{
+    setProgress(85,'Almost done... '+cfg.emoji);
+    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
+    const data=await res.json();const cardId=data.name;
+    shareLink=cfg.shareUrl(cardId);
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
+    setProgress(100,'Card ready! 🎉');
+    setTimeout(()=>{
+      overlay.classList.remove('show');
+      document.getElementById('shareEmoji').textContent=cfg.emoji;
+      document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');
+      document.getElementById('shareModal').classList.add('show');
+    },600);
+  }catch(e){
+    overlay.classList.remove('show');
+    alert('Could not save card. Please try again.');
+  }
+}
+
+// ── SHARE ──
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(()=>{
+    const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+function openWhatsApp(){
+  if(!shareCardCFG)return;
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=shareCardCFG.shareMsg(name,sender,shareLink);
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&isMobile){navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));}
+  else{window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');}
+}
+function closeShare(){
+  document.getElementById('shareModal').classList.remove('show');
+  // After sharing, let them create another style without re-entering details
+  goTo('s-pick');
+}
+</script>
+</body>
+</html>
