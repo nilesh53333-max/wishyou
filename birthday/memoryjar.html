@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Memory Jar</title>
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;🫙&lt;/text&gt;&lt;/svg&gt;">
+<meta property="og:title" content="Someone filled a jar with memories for you 🫙">
+<meta property="og:description" content="Open the jar. Pull out the notes. Each one is something special.">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;overflow:hidden;height:100%;}
+body{font-family:'DM Sans',sans-serif;background:#1a0f0a;}
+.app{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;background:#1a0f0a;}
+@media(min-width:500px){
+  .app{
+    position:fixed;
+    top:50%;left:50%;right:auto;bottom:auto;
+    transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;
+    border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.8);
+    overflow:hidden;
+  }
+}
+
+/* ── SCREEN SYSTEM ── */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.5s ease;overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;}
+.screen.slide-out{opacity:0;}
+
+/* ── CREATOR — reuse intimate pattern ── */
+.creator-screen{align-items:stretch;justify-content:flex-start;}
+.theme-jar{background:linear-gradient(160deg,#fef3e2,#fde8c8,#fef6ee);}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
+.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
+.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom) + 16px);}
+.step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,0.08);}
+.step-progress-fill{height:100%;transition:width 0.5s ease;}
+.jar-progress{background:linear-gradient(90deg,#c45c1a,#e8883a);}
+.step-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;touch-action:manipulation;z-index:5;background:rgba(0,0,0,0.08);color:#5a3010;}
+.step-counter{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0.45;color:#5a3010;}
+.step-emoji{font-size:2.5rem;margin-bottom:10px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
+@keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.step-title{font-family:'Caveat',cursive;font-size:clamp(1.7rem,5vw,2.1rem);font-weight:700;line-height:1.2;margin-bottom:6px;word-break:break-word;color:#3d1a06;}
+.step-sub{font-size:0.82rem;line-height:1.6;margin-bottom:20px;opacity:0.55;color:#3d1a06;}
+.field-label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;opacity:0.45;color:#5a3010;}
+.big-input{width:100%;border:none;border-bottom:2px solid rgba(196,92,26,0.25);background:transparent;padding:10px 0;font-family:'Caveat',cursive;font-size:1.9rem;font-weight:700;outline:none;transition:border-color 0.3s;text-align:center;color:#3d1a06;}
+.big-input::placeholder{opacity:0.2;color:#3d1a06;}
+.big-input:focus{border-color:rgba(196,92,26,0.6);}
+.regular-input{width:100%;border:1.5px solid rgba(196,92,26,0.15);border-radius:14px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:rgba(255,255,255,0.6);outline:none;transition:border-color 0.3s;margin-bottom:12px;color:#3d1a06;}
+.regular-input::placeholder{opacity:0.35;font-style:italic;}
+.regular-input:focus{border-color:rgba(196,92,26,0.4);background:rgba(255,255,255,0.85);}
+.letter-area{width:100%;border:1.5px solid rgba(196,92,26,0.15);border-radius:16px;padding:16px;font-family:'Caveat','Noto Sans Devanagari',cursive;font-size:1.15rem;line-height:1.9;background:rgba(255,255,255,0.6);outline:none;resize:none;min-height:160px;transition:border-color 0.3s;color:#3d1a06;}
+.letter-area:focus{border-color:rgba(196,92,26,0.4);}
+.letter-area::placeholder{opacity:0.35;font-style:italic;}
+.btn-next{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;touch-action:manipulation;margin-top:8px;transition:transform 0.15s;}
+.btn-next:active{transform:scale(0.97);}
+.btn-jar{background:linear-gradient(135deg,#c45c1a,#e8883a);color:white;box-shadow:0 8px 24px rgba(196,92,26,0.35);}
+.btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.4;font-family:'DM Sans',sans-serif;color:#3d1a06;}
+.btn-wa{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(37,211,102,0.3);margin-top:8px;touch-action:manipulation;}
+.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;margin:6px 0;color:#5a3010;}
+.ai-loading.show{display:flex;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#c45c1a;animation:aiPulse 1s ease-in-out infinite;}
+@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;font-size:1.3rem;}
+.photo-slot.jar-slot{background:rgba(196,92,26,0.07);border:1.5px dashed rgba(196,92,26,0.25);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#c45c1a;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+.song-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;background:rgba(255,255,255,0.6);border:1.5px solid rgba(196,92,26,0.1);}
+.song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.song-use-btn{padding:6px 12px;border:none;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#c45c1a,#e8883a);color:white;}
+.song-selected-box{border-radius:14px;padding:12px 14px;margin-bottom:10px;display:none;background:linear-gradient(135deg,#3d1a06,#5a2a0a);}
+
+/* SAVE OVERLAY */
+.save-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay.show{display:flex;}
+.save-box{border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;background:white;box-shadow:0 20px 60px rgba(196,92,26,0.2);}
+.save-spinner{position:relative;width:64px;height:64px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
+.save-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(196,92,26,0.15);border-top-color:#c45c1a;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.save-emoji{font-size:1.8rem;position:relative;z-index:1;}
+.save-label{font-size:1rem;font-weight:600;margin-bottom:14px;color:#3d1a06;}
+.save-bar-wrap{height:8px;border-radius:50px;overflow:hidden;width:100%;margin-bottom:8px;background:rgba(196,92,26,0.12);}
+.save-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s ease;background:linear-gradient(90deg,#c45c1a,#e8883a);}
+.save-step{font-size:0.75rem;opacity:0.6;display:none;}
+
+/* SHARE MODAL */
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.75);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;background:white;}
+.share-link-row{border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(196,92,26,0.06);border:1px solid rgba(196,92,26,0.15);}
+.share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;color:#3d1a06;}
+.copy-btn{padding:6px 12px;border:none;border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;background:#c45c1a;color:white;}
+.modal-close{width:100%;padding:12px;background:none;border:1.5px solid rgba(196,92,26,0.2);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:6px;color:#8b4513;}
+
+/* ── RECEIVER SCREENS ── */
+#rv-loading,#rv-error,#rv-jar,#rv-done{position:absolute;inset:0;}
+
+/* LOADING */
+#rv-loading{background:#1a0f0a;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.jar-loading-icon{font-size:3.5rem;animation:jarBob 1.5s ease-in-out infinite;}
+@keyframes jarBob{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
+.jar-loading-text{font-family:'Caveat',cursive;font-size:1.1rem;color:rgba(255,220,150,0.6);margin-top:16px;letter-spacing:0.05em;}
+
+/* ERROR */
+#rv-error{background:#1a0f0a;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
+
+/* ── JAR SCREEN — the main experience ── */
+#rv-jar{background:linear-gradient(180deg,#2d1a0a 0%,#1a0f0a 100%);}
+
+/* Ambient stars */
+.stars-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.star{position:absolute;border-radius:50%;background:rgba(255,220,120,0.4);animation:twinkle linear infinite;}
+@keyframes twinkle{0%,100%{opacity:0.2;}50%{opacity:0.8;}}
+
+/* Jar header */
+.jar-header{position:absolute;top:0;left:0;right:0;padding:max(16px,env(safe-area-inset-top)) 20px 12px;text-align:center;z-index:10;}
+.jar-header-name{font-family:'Caveat',cursive;font-size:1.1rem;color:rgba(255,220,150,0.7);letter-spacing:0.05em;}
+.jar-header-sub{font-size:0.7rem;color:rgba(255,220,150,0.35);margin-top:2px;letter-spacing:0.08em;}
+.notes-counter{font-size:0.65rem;color:rgba(255,220,150,0.4);letter-spacing:0.1em;margin-top:4px;}
+
+/* The Jar SVG area */
+.jar-scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.jar-container{position:relative;width:220px;height:280px;}
+
+/* Floating notes inside jar */
+.note{position:absolute;cursor:pointer;touch-action:manipulation;transition:transform 0.2s ease;z-index:5;}
+.note:active{transform:scale(0.92)!important;}
+.note-paper{width:52px;height:44px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:2px 3px 8px rgba(0,0,0,0.3);position:relative;overflow:hidden;}
+.note-paper::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 11px,rgba(0,0,0,0.06) 11px,rgba(0,0,0,0.06) 12px);}
+.note-fold{position:absolute;top:0;right:0;width:10px;height:10px;background:rgba(0,0,0,0.12);clip-path:polygon(100% 0,0 0,100% 100%);}
+.note-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-family:'Caveat',cursive;font-size:0.65rem;color:rgba(255,220,150,0.5);white-space:nowrap;}
+
+/* Note animations — floating */
+@keyframes float1{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-8px) rotate(-4deg);}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(5deg);}50%{transform:translateY(-10px) rotate(8deg);}}
+@keyframes float3{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-6px) rotate(-6deg);}}
+@keyframes float4{0%,100%{transform:translateY(0) rotate(8deg);}50%{transform:translateY(-12px) rotate(5deg);}}
+@keyframes float5{0%,100%{transform:translateY(0) rotate(-10deg);}50%{transform:translateY(-7px) rotate(-7deg);}}
+
+/* Note opened/removed state */
+.note.opened{opacity:0.25;pointer-events:none;transform:scale(0.8)!important;}
+
+/* Jar SVG */
+.jar-svg{position:absolute;inset:0;width:100%;height:100%;}
+
+/* Bottom hint */
+.jar-hint{position:absolute;bottom:max(24px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;}
+.jar-hint-text{font-family:'Caveat',cursive;font-size:0.95rem;color:rgba(255,220,150,0.45);animation:hintPulse 2.5s ease-in-out infinite;}
+@keyframes hintPulse{0%,100%{opacity:0.4;}50%{opacity:0.8;}}
+
+/* ── OVERLAY — when a note is tapped ── */
+.note-overlay{position:absolute;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;pointer-events:none;opacity:0;transition:opacity 0.4s ease;}
+.note-overlay.show{opacity:1;pointer-events:all;}
+.note-overlay-bg{position:absolute;inset:0;background:rgba(0,0,0,0.82);}
+.note-card{position:relative;z-index:1;width:100%;max-width:340px;border-radius:20px;padding:0;overflow:hidden;transform:scale(0.85);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.note-overlay.show .note-card{transform:scale(1);}
+
+/* Photo note card */
+.photo-card{background:#fff;}
+.photo-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+.photo-card-footer{padding:14px 16px;background:white;}
+.photo-card-caption{font-family:'Caveat',cursive;font-size:1.1rem;color:#3d1a06;text-align:center;}
+
+/* Song note card */
+.song-card{background:linear-gradient(135deg,#1a0a2e,#2d1048);padding:28px 24px;text-align:center;}
+.song-card-disc{width:90px;height:90px;border-radius:50%;margin:0 auto 16px;background:radial-gradient(circle,#fef3e2 0%,#fef3e2 14%,#1a0812 15%,#2d1020 25%,#1a0812 35%,#2d1020 45%,#1a0812 55%,#2d1020 65%,#1a0812 100%);display:flex;align-items:center;justify-content:center;animation:discSpin 3s linear infinite;}
+@keyframes discSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.song-card-disc-center{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#f48fb1,#c45c1a 50%,#8b3a10);position:relative;}
+.song-card-disc-center::after{content:'';position:absolute;width:6px;height:6px;border-radius:50%;background:white;top:50%;left:50%;transform:translate(-50%,-50%);}
+.song-card-title{font-family:'Caveat',cursive;font-size:1.3rem;color:white;margin-bottom:4px;}
+.song-card-sub{font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:16px;}
+.yt-wrap{width:100%;border-radius:10px;overflow:hidden;display:none;margin-bottom:8px;}
+.yt-wrap iframe{width:100%;height:160px;border:none;display:block;}
+.yt-wrap.show{display:block;}
+
+/* Letter note card */
+.letter-card{background:#fef9f0;padding:24px 20px;}
+.letter-card-top{font-family:'Caveat',cursive;font-size:0.85rem;color:rgba(196,92,26,0.5);margin-bottom:12px;text-align:center;letter-spacing:0.1em;}
+.letter-card-greet{font-family:'Caveat',cursive;font-size:1.2rem;color:#3d1a06;margin-bottom:12px;font-weight:700;}
+.letter-card-body{font-family:'Caveat','Noto Sans Devanagari',cursive;font-size:1.05rem;color:#5a3010;line-height:1.9;white-space:pre-wrap;}
+.letter-card-sign{font-family:'Caveat',cursive;font-size:1rem;color:#c45c1a;margin-top:16px;display:block;font-style:italic;}
+
+/* Close button on overlay */
+.note-close{position:absolute;top:12px;right:12px;z-index:2;background:rgba(0,0,0,0.3);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* ── DONE SCREEN ── */
+#rv-done{background:linear-gradient(180deg,#2d1a0a,#1a0f0a);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center;}
+.done-jar{font-size:5rem;margin-bottom:20px;animation:doneFloat 3s ease-in-out infinite;}
+@keyframes doneFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.done-title{font-family:'Caveat',cursive;font-size:1.8rem;color:rgba(255,220,150,0.9);margin-bottom:10px;}
+.done-sub{font-size:0.88rem;color:rgba(255,220,150,0.45);margin-bottom:32px;line-height:1.6;font-style:italic;}
+.done-replay{background:transparent;color:rgba(255,220,150,0.7);border:1px solid rgba(255,220,150,0.3);border-radius:50px;padding:12px 32px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;margin-bottom:10px;}
+.done-create{background:none;border:none;color:rgba(255,255,255,0.2);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;}
+
+.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(255,255,255,0.1);}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- ══ CREATOR SCREENS ══ -->
+<div class="screen creator-screen theme-jar" id="s-name">
+  <div class="step-progress"><div class="step-progress-fill jar-progress" style="width:20%"></div></div>
+  <button class="step-back" onclick="window.location.href='/'">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 1 of 4</div>
+      <span class="step-emoji">🫙</span>
+      <div class="step-title">Whose jar is this?</div>
+      <div class="step-sub">Their name will be on the jar</div>
+      <div id="nameInputWrap"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-jar" id="btn-name" onclick="goTo('s-photos')">Fill the jar → 📸</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen theme-jar" id="s-photos">
+  <div class="step-progress"><div class="step-progress-fill jar-progress" style="width:40%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 2 of 4</div>
+      <span class="step-emoji">📸</span>
+      <div class="step-title">Drop in some photos</div>
+      <div class="step-sub">Each photo becomes a note they'll unfold</div>
+      <div class="photos-grid" id="photosGrid"></div>
+      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-jar" id="btn-photos" onclick="goTo('s-song')">Add a song → 🎵</button>
+      <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen theme-jar" id="s-song">
+  <div class="step-progress"><div class="step-progress-fill jar-progress" style="width:60%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 3 of 4</div>
+      <span class="step-emoji">🎵</span>
+      <div class="step-title">Roll up a song</div>
+      <div class="step-sub">It'll be a golden note in the jar</div>
+      <div class="song-selected-box" id="songSelectedBox">
+        <div style="font-size:0.7rem;color:rgba(255,220,150,0.6);margin-bottom:3px;">Selected:</div>
+        <div style="font-size:0.88rem;font-weight:600;color:white;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
+        <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;color:white;background:linear-gradient(135deg,#c45c1a,#e8883a);">🔍</button>
+      </div>
+      <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
+      <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(196,92,26,0.15);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#8b4513;margin-bottom:8px;">✨ AI Song Suggestions</div>
+        <input id="aiSongContext" class="regular-input" placeholder="e.g. nostalgic Hindi, emotional, 90s..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
+        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#c45c1a,#e8883a);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Suggest Songs</button>
+        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Finding songs...</span></div>
+        <div id="songAiResults" style="margin-top:6px;"></div>
+      </div>
+      <input type="hidden" id="cSpotify">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-jar" id="btn-song" onclick="goTo('s-letter')">Write the letter → 💌</button>
+      <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen theme-jar" id="s-letter">
+  <div class="step-progress"><div class="step-progress-fill jar-progress" style="width:80%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 4 of 4</div>
+      <span class="step-emoji">💌</span>
+      <div class="step-title">Fold in a letter</div>
+      <div class="step-sub">Write in any language — or let AI write it</div>
+      <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(196,92,26,0.15);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#8b4513;margin-bottom:8px;">✨ Write with AI</div>
+        <input id="letterTone" class="regular-input" placeholder="e.g. emotional, funny, simple Hindi..." style="margin-bottom:8px;" maxlength="60">
+        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#c45c1a,#e8883a);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✨ Write with AI</button>
+        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Writing your letter...</span></div>
+        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#8b4513;margin-top:6px;">↑ Tap again for a different letter</div>
+      </div>
+      <div id="letterInputWrap"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-jar" id="btn-letter" onclick="goTo('s-preview')">Preview My Jar →</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen theme-jar" id="s-preview">
+  <div class="step-progress"><div class="step-progress-fill jar-progress" style="width:100%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-title" style="margin-bottom:4px;padding-top:4px;">Jar is ready! 🫙</div>
+      <div class="step-sub" style="margin-bottom:16px;">Review what's inside — tap Edit to change</div>
+      <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-jar" id="btn-share" onclick="saveAndShare()">🫙 Seal &amp; Share Jar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RECEIVER SCREENS ══ -->
+<div class="screen" id="rv-loading">
+  <div class="stars-bg" id="starsLoading"></div>
+  <span class="jar-loading-icon">🫙</span>
+  <div class="jar-loading-text">Opening your jar...</div>
+</div>
+
+<div class="screen" id="rv-error">
+  <div style="text-align:center;padding:40px;">
+    <span style="font-size:3rem;display:block;margin-bottom:16px;">🫙</span>
+    <div style="font-family:'Caveat',cursive;font-size:1.1rem;color:rgba(255,220,150,0.5);line-height:1.7;">This jar has expired<br>or couldn't be found.</div>
+    <button onclick="window.location.href='/'" style="margin-top:28px;background:linear-gradient(135deg,#c45c1a,#e8883a);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">🫙 Create your own jar</button>
+  </div>
+</div>
+
+<!-- THE JAR SCREEN -->
+<div class="screen" id="rv-jar">
+  <div class="stars-bg" id="starsJar"></div>
+
+  <!-- Header -->
+  <div class="jar-header">
+    <div class="jar-header-name" id="jarHeaderName">Happy Birthday! 🎂</div>
+    <div class="jar-header-sub" id="jarHeaderSub">Someone filled this jar with love</div>
+    <div class="notes-counter" id="notesCounter"></div>
+  </div>
+
+  <!-- The Jar Scene -->
+  <div class="jar-scene">
+    <div class="jar-container" id="jarContainer">
+      <!-- Jar SVG drawn in JS -->
+      <svg class="jar-svg" viewBox="0 0 220 280" id="jarSvg">
+        <!-- Jar body -->
+        <defs>
+          <linearGradient id="jarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:rgba(255,220,150,0.08)"/>
+            <stop offset="30%" style="stop-color:rgba(255,220,150,0.18)"/>
+            <stop offset="70%" style="stop-color:rgba(255,220,150,0.22)"/>
+            <stop offset="100%" style="stop-color:rgba(255,220,150,0.06)"/>
+          </linearGradient>
+          <linearGradient id="lidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:rgba(196,92,26,0.9)"/>
+            <stop offset="100%" style="stop-color:rgba(139,58,10,0.9)"/>
+          </linearGradient>
+        </defs>
+        <!-- Jar lid -->
+        <rect x="52" y="28" width="116" height="22" rx="6" fill="url(#lidGrad)" stroke="rgba(255,220,150,0.3)" stroke-width="1"/>
+        <rect x="60" y="32" width="100" height="4" rx="2" fill="rgba(255,255,255,0.15)"/>
+        <!-- Jar neck -->
+        <rect x="62" y="48" width="96" height="14" rx="2" fill="url(#jarGrad)" stroke="rgba(255,220,150,0.2)" stroke-width="1"/>
+        <!-- Jar body -->
+        <path d="M48,62 Q44,70 42,90 L38,220 Q38,240 50,248 L170,248 Q182,248 182,220 L178,90 Q176,70 172,62 Z" fill="url(#jarGrad)" stroke="rgba(255,220,150,0.25)" stroke-width="1.5"/>
+        <!-- Jar shine left -->
+        <path d="M58,70 Q55,100 54,150" stroke="rgba(255,255,255,0.12)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <!-- Jar shine right -->
+        <path d="M160,72 Q163,110 163,160" stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- Bottom glow -->
+        <ellipse cx="110" cy="248" rx="62" ry="6" fill="rgba(196,92,26,0.15)"/>
+      </svg>
+      <!-- Notes will be injected here by JS -->
+    </div>
+  </div>
+
+  <!-- Hint -->
+  <div class="jar-hint">
+    <div class="jar-hint-text" id="jarHint">tap a note to open it 💛</div>
+  </div>
+
+  <!-- NOTE OVERLAY -->
+  <div class="note-overlay" id="noteOverlay">
+    <div class="note-overlay-bg" onclick="closeNote()"></div>
+    <div class="note-card" id="noteCard">
+      <button class="note-close" onclick="closeNote()">✕</button>
+      <!-- Content injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- DONE SCREEN -->
+<div class="screen" id="rv-done">
+  <div class="stars-bg" id="starsDone"></div>
+  <div class="done-jar">🫙</div>
+  <div class="done-title" id="doneTitle">The jar is empty.</div>
+  <div class="done-sub">"That's everything I wanted to say."</div>
+  <button class="done-replay" onclick="replayJar()">🫙 Open again</button>
+  <button class="done-create" onclick="window.location.href='/'">✨ Create a jar like this</button>
+</div>
+
+<!-- Save overlay -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-box" id="saveBox">
+    <div class="save-spinner">
+      <div class="save-ring"></div>
+      <span class="save-emoji" id="saveEmoji">🫙</span>
+    </div>
+    <div class="save-label" id="saveLabel">Sealing your jar...</div>
+    <div class="save-bar-wrap" id="saveBarWrap"><div class="save-bar" id="saveBar"></div></div>
+    <div class="save-step" id="saveStep"></div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box" id="shareBox">
+    <div style="font-size:2rem;margin-bottom:8px;">🫙</div>
+    <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;color:#3d1a06;">Jar is sealed! 🎉</div>
+    <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;color:#5a3010;">Send this link to them</div>
+    <div style="font-size:0.72rem;opacity:0.5;border-radius:10px;padding:7px 12px;margin-bottom:12px;color:#5a3010;" id="expiryNote">⏳ Jar expires in 3 days</div>
+    <div class="share-link-row" id="shareLinkRow">
+      <span class="share-link-txt" id="shareLinkTxt"></span>
+      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
+    <button class="modal-close" id="modalClose" onclick="closeShare()">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+
+</div><!-- /app -->
+
+<script>
+// ── CONFIG ──
+const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const CLOUDINARY_CLOUD='dkvbjazfe';
+const CLOUDINARY_PRESET='wishyou-uploads';
+const WORKER_URL='https://wild-fog-b15e.nilesh53333.workers.dev/';
+
+const CFG={
+  cardType:'birthday-memoryjar',
+  emoji:'🫙',stepEmoji:'🫙',
+  defaultMsg:"Every time I look at this jar, I think of all the reasons I'm grateful you exist. Today is your day — and I just want you to know that having you in my life is the best thing that ever happened to me.",
+  defaultSign:'With all my love 🫙',
+  shareMsg:(name,sender,link)=>`🫙 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' filled a memory jar just for you 💛\n\n':'Someone filled a memory jar for you 💛\n\n'}👆 Open it here:\n${link}`,
+  shareUrl:(id)=>`https://wishyou.ai/birthday/memoryjar.html?card=${id}`
+};
+
+// ── STATE ──
+let curScreen='';
+let photos=[];
+let uploadedUrls={};
+let currentSlotIdx=0;
+let shareLink='';
+let returnToPreview=false;
+let aiLetterCount=0;
+const IS_RECEIVER=new URLSearchParams(window.location.search).has('card');
+
+// ── CREATOR NAV ──
+const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter','s-preview'];
+
+function goTo(id,fromPreview=false){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
+  next.classList.add('active');
+  curScreen=id;
+  returnToPreview=fromPreview;
+  if(id==='s-letter'){aiLetterCount=0;const btn=document.getElementById('aiLetterBtn');if(btn)btn.textContent='✨ Write with AI';const h=document.getElementById('letterAiResult');if(h)h.style.display='none';}
+  if(id==='s-preview')buildPreview();
+  if(!fromPreview&&id!=='s-preview'){
+    const nf={'s-name':{btn:'btn-name',label:'Fill the jar → 📸',dest:'s-photos'},'s-photos':{btn:'btn-photos',label:'Add a song → 🎵',dest:'s-song'},'s-song':{btn:'btn-song',label:'Write the letter → 💌',dest:'s-letter'},'s-letter':{btn:'btn-letter',label:'Preview My Jar →',dest:'s-preview'}};
+    const fl=nf[id];if(fl){const b=document.getElementById(fl.btn);if(b){b.textContent=fl.label;b.onclick=()=>goTo(fl.dest);}}
+  }
+  if(fromPreview){
+    const bm={'s-name':'btn-name','s-photos':'btn-photos','s-song':'btn-song','s-letter':'btn-letter'};
+    const bid=bm[id];if(bid){const b=document.getElementById(bid);if(b){b.textContent='Done → Back to Preview ✓';b.onclick=()=>goTo('s-preview');}}
+  }
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
+}
+
+function goBackCreator(){
+  if(returnToPreview){goTo('s-preview');return;}
+  const idx=CREATOR_ORDER.indexOf(curScreen);
+  if(idx>0)goTo(CREATOR_ORDER[idx-1]);
+  else window.location.href='/';
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',function(){
+  makeStars('starsLoading',30);
+  makeStars('starsJar',40);
+  makeStars('starsDone',35);
+  if(IS_RECEIVER){
+    goTo('rv-loading');
+    loadCard();
+  } else {
+    document.getElementById('nameInputWrap').innerHTML=`
+      <label class="field-label">Their Name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">`;
+    document.getElementById('letterInputWrap').innerHTML=`
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;I folded this note just for you...">${CFG.defaultMsg}</textarea>
+      <label class="field-label" style="margin-top:12px;">Sign Off</label>
+      <input class="regular-input" id="cSign" value="${CFG.defaultSign}" maxlength="60">`;
+    buildPhotoSlots();
+    goTo('s-name');
+  }
+});
+
+// ── STARS ──
+function makeStars(id,count){
+  const wrap=document.getElementById(id);if(!wrap)return;
+  for(let i=0;i<count;i++){
+    const s=document.createElement('div');s.className='star';
+    const size=1+Math.random()*2.5;
+    s.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${2+Math.random()*4}s;animation-delay:${Math.random()*4}s;`;
+    wrap.appendChild(s);
+  }
+}
+
+// ── PHOTO SLOTS ──
+function buildPhotoSlots(){
+  const grid=document.getElementById('photosGrid');
+  grid.innerHTML='';photos=[];
+  for(let i=0;i<5;i++){
+    const slot=document.createElement('div');
+    slot.className='photo-slot jar-slot';slot.id='slot'+i;
+    slot.innerHTML='<span style="opacity:0.4;color:#c45c1a;">+</span>';
+    slot.onclick=()=>triggerUpload(i);
+    grid.appendChild(slot);
+  }
+}
+function triggerUpload(idx){currentSlotIdx=idx;document.getElementById('photoFileInput').click();}
+function handlePhotoUpload(inp){
+  const files=Array.from(inp.files);if(!files.length)return;
+  files.forEach((file,offset)=>{
+    let ti=-1;
+    for(let i=0;i<5;i++){
+      if(offset===0&&i===0){ti=currentSlotIdx;break;}
+      if(!photos[(currentSlotIdx+offset)%5]||offset>0){ti=(currentSlotIdx+offset)%5;break;}
+    }
+    if(ti<0||ti>4)return;
+    const url=URL.createObjectURL(file);
+    photos[ti]=url;delete uploadedUrls[ti];
+    const slot=document.getElementById('slot'+ti);
+    if(slot){
+      slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${ti})">✕</button>`;
+      const ind=document.createElement('div');ind.id='upind'+ti;
+      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(196,92,26,0.3);border-radius:2px;overflow:hidden;';
+      ind.innerHTML=`<div style="height:100%;background:#c45c1a;width:0%;transition:width 0.3s;" id="upbar${ti}"></div>`;
+      slot.appendChild(ind);
+    }
+    uploadPhotoInBackground(file,ti);
+  });
+  inp.value='';
+}
+async function uploadPhotoInBackground(file,idx){
+  try{
+    const bar=document.getElementById('upbar'+idx);if(bar)bar.style.width='40%';
+    const blob=await fetch(URL.createObjectURL(file)).then(r=>r.blob());
+    const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    if(bar)bar.style.width='70%';
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+    const d=await res.json();
+    if(d.secure_url){uploadedUrls[idx]=d.secure_url;if(bar){bar.style.width='100%';setTimeout(()=>{const ind=document.getElementById('upind'+idx);if(ind)ind.remove();},600);}}
+  }catch(e){console.error(e);}
+}
+function removePhoto(e,idx){
+  e.stopPropagation();photos[idx]=null;delete uploadedUrls[idx];
+  const slot=document.getElementById('slot'+idx);
+  slot.innerHTML='<span style="opacity:0.4;color:#c45c1a;">+</span>';
+  slot.onclick=()=>triggerUpload(idx);
+}
+
+// ── SONG SEARCH ──
+async function searchSong(){
+  const q=document.getElementById('ytSearchInput').value.trim();
+  if(!q){alert('Please type a song name.');return;}
+  const rd=document.getElementById('songResults');
+  rd.innerHTML=`<div style="text-align:center;padding:12px;font-size:0.85rem;color:#c45c1a;">🔍 Searching...</div>`;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query:q})});
+    const data=await res.json();
+    if(!data.items||!data.items.length){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>';return;}
+    rd.innerHTML='';
+    data.items.slice(0,4).forEach(item=>{
+      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
+      const card=document.createElement('div');card.className='song-result';
+      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#3d1a06;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;color:#5a3010;">${channelTitle}</div></div><button class="song-use-btn">✓ Use</button>`;
+      card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
+      rd.appendChild(card);
+    });
+  }catch(e){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>';}
+}
+function selectSong(videoId,title,artist){
+  const ytUrl='https://www.youtube.com/watch?v='+videoId;
+  document.getElementById('cSpotify').value=ytUrl;
+  document.getElementById('songSelectedName').textContent=title+' — '+artist;
+  document.getElementById('songSelectedBox').style.display='block';
+  document.getElementById('songResults').innerHTML=`<div style="font-size:0.8rem;font-weight:600;padding:6px 0;color:#c45c1a;">✅ ${title} added!</div>`;
+}
+async function suggestSongs(){
+  const loading=document.getElementById('songAiLoading');
+  const results=document.getElementById('songAiResults');
+  const btn=document.getElementById('aiSongBtn');
+  loading.classList.add('show');results.innerHTML='';btn.disabled=true;
+  const context=document.getElementById('aiSongContext')?.value.trim()||'';
+  const name=document.getElementById('cName')?.value.trim()||'';
+  let prompt=`Suggest 4 real popular songs for a Birthday card`;
+  if(name)prompt+=` for someone named ${name}`;
+  if(context)prompt+=`. User wants: "${context}". Follow exactly.`;
+  else prompt+=`. Mix languages, emotional and upbeat`;
+  prompt+=`. Return ONLY JSON array: [{"name":"Song Name","artist":"Artist Name"}]`;
+  const text=await callClaude(prompt);
+  try{
+    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    songs.forEach(s=>{
+      const el=document.createElement('div');
+      el.style.cssText='display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.6);border:1px solid rgba(196,92,26,0.1);';
+      el.innerHTML=`<span style="font-size:1.1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:600;color:#3d1a06;">${s.name}</div><div style="font-size:0.72rem;color:#8b4513;opacity:0.7;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#c45c1a;">Search ›</span>`;
+      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
+      results.appendChild(el);
+    });
+  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Could not fetch. Try again.</div>';}
+  loading.classList.remove('show');btn.disabled=false;
+}
+
+// ── AI LETTER ──
+async function runAILetter(){
+  const name=document.getElementById('cName')?.value.trim()||'them';
+  const sender=document.getElementById('cSender')?.value.trim()||'someone';
+  const toneInput=document.getElementById('letterTone')?.value.trim()||'';
+  const btn=document.getElementById('aiLetterBtn');
+  const loading=document.getElementById('letterAiLoading');
+  const resultHint=document.getElementById('letterAiResult');
+  aiLetterCount++;
+  btn.disabled=true;loading.classList.add('show');
+  const variationHint=aiLetterCount>1?` Attempt #${aiLetterCount} — write COMPLETELY DIFFERENT.`:'';
+  const langs=['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
+  const detectedLang=langs.find(l=>toneInput.toLowerCase().includes(l));
+  let langNote='';
+  if(detectedLang){const ln=detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1);langNote=` CRITICAL: Write ENTIRE letter in ${ln} script only. Natural everyday ${ln}, not formal.`;}
+  const toneDesc=toneInput||'warm and heartfelt';
+  const prompt=`Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${toneDesc}.${langNote}${variationHint} Return ONLY the letter body — no greeting, no sign off.`;
+  const text=await callClaude(prompt);
+  if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
+  btn.disabled=false;loading.classList.remove('show');
+  if(resultHint)resultHint.style.display='block';
+  btn.textContent='✨ Write Another';
+}
+async function callClaude(prompt){
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();if(data.error)return'';
+    return data.content&&data.content[0]?data.content[0].text:'';
+  }catch(e){return'';}
+}
+function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
+
+// ── PREVIEW ──
+function buildPreview(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=document.getElementById('cMsg')?.value.trim()||'';
+  const sign=document.getElementById('cSign')?.value.trim()||CFG.defaultSign;
+  const songName=document.getElementById('songSelectedName')?.textContent||'';
+  const realPhotos=photos.filter(Boolean);
+  const wrap=document.getElementById('cardPagesPreview');wrap.innerHTML='';
+  function makePage(icon,label,content,editScreen){
+    const page=document.createElement('div');
+    page.style.cssText='background:rgba(255,255,255,0.6);border-radius:16px;padding:16px;border:1.5px solid rgba(196,92,26,0.12);';
+    page.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:1.1rem;">${icon}</span><span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.5;color:#3d1a06;">${label}</span></div><button onclick="goTo('${editScreen}',true)" style="font-size:0.68rem;font-weight:600;color:#c45c1a;background:none;border:1px solid #c45c1a;border-radius:20px;padding:4px 10px;cursor:pointer;">Edit</button></div>${content}`;
+    wrap.appendChild(page);
+  }
+  makePage('🫙','The Jar',`<div style="text-align:center;font-family:'Caveat',cursive;font-size:1.1rem;font-weight:700;color:#3d1a06;">${name?name:'Birthday'}'s Memory Jar</div>`+(sender?`<div style="text-align:center;font-size:0.72rem;opacity:0.6;margin-top:4px;color:#5a3010;">Filled by ${sender} 🫙</div>`:''),'s-name');
+  makePage('📸','Photo Notes',realPhotos.length?`<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map(u=>`<img src="${u}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;border:2px solid rgba(196,92,26,0.2);">`).join('')}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;color:#3d1a06;">No photos added yet</div>`,'s-photos');
+  makePage('🎵','Song Note',songName&&songName!=='—'?`<div style="font-size:0.85rem;font-weight:600;color:#c45c1a;">🎵 ${songName}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;color:#3d1a06;">No song selected yet</div>`,'s-song');
+  makePage('💌','Letter Note',msg?`<div style="font-family:'Caveat',cursive;font-size:0.95rem;line-height:1.7;color:#3d1a06;">${msg.length>140?msg.slice(0,140)+'...':msg}</div><div style="font-family:'Caveat',cursive;font-style:italic;font-size:0.88rem;color:#c45c1a;margin-top:8px;">${sign}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;color:#3d1a06;">No letter written yet</div>`,'s-letter');
+}
+
+// ── SAVE ──
+async function saveAndShare(){
+  const overlay=document.getElementById('saveOverlay');
+  const bar=document.getElementById('saveBar');
+  const label=document.getElementById('saveLabel');
+  function setProgress(pct,lbl){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;}
+  overlay.classList.add('show');
+  setProgress(10,'Sealing your jar... 🫙');
+  let photoUrls=[];
+  const slots=photos.map((p,i)=>({blob:p,idx:i})).filter(s=>s.blob);
+  let uploaded=0;
+  for(const s of slots){
+    if(uploadedUrls[s.idx]){photoUrls.push(uploadedUrls[s.idx]);uploaded++;setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Packing photos... 🫙');}
+    else{
+      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Uploading photo '+(uploaded+1)+'...');
+      try{
+        const blob=await fetch(s.blob).then(r=>r.blob());
+        const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+        const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+        const d=await res.json();if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
+      }catch(e){console.error(e);}
+      uploaded++;
+    }
+  }
+  setProgress(70,'Almost ready... 🫙');
+  const now=Date.now();
+  const cardData={
+    type:CFG.cardType,
+    name:document.getElementById('cName')?.value.trim()||'',
+    sender:document.getElementById('cSender')?.value.trim()||'',
+    msg:document.getElementById('cMsg')?.value.trim()||'',
+    sign:document.getElementById('cSign')?.value.trim()||'',
+    spotify:document.getElementById('cSpotify')?.value.trim()||'',
+    songName:document.getElementById('songSelectedName')?.textContent||'',
+    photos:photoUrls,created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
+  };
+  try{
+    setProgress(85,'Creating your jar... 🫙');
+    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
+    const data=await res.json();const cardId=data.name;
+    shareLink=CFG.shareUrl(cardId);
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
+    setProgress(100,'Jar sealed! 🎉');
+    setTimeout(()=>{overlay.classList.remove('show');document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');document.getElementById('shareModal').classList.add('show');},600);
+  }catch(e){overlay.classList.remove('show');alert('Could not save. Please try again.');}
+}
+function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
+function openWhatsApp(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=CFG.shareMsg(name,sender,shareLink);
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&isMobile){navigator.share({text:msg}).catch(()=>{window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');});}
+  else{window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');}
+}
+function closeShare(){document.getElementById('shareModal').classList.remove('show');}
+
+// ══════════════════════════════════════
+// ── RECEIVER — THE JAR EXPERIENCE ──
+// ══════════════════════════════════════
+
+let cardData=null;
+let openedCount=0;
+let totalNotes=0;
+
+async function loadCard(){
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  try{
+    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
+    const d=await res.json();
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    cardData=d;
+    renderJar(d);
+  }catch(e){goTo('rv-error');}
+}
+
+function renderJar(d){
+  const name=d.name||'';const sender=d.sender||'';
+  document.getElementById('jarHeaderName').textContent=name?`Happy Birthday, ${name}! 🎂`:'Happy Birthday! 🎂';
+  document.getElementById('jarHeaderSub').textContent=sender?`${sender} filled this jar with love`:'Someone filled this jar with love';
+
+  // Build notes array
+  const notes=[];
+  // Photo notes
+  if(d.photos&&d.photos.length>0){
+    d.photos.forEach((url,i)=>{
+      notes.push({type:'photo',url,index:i});
+    });
+  }
+  // Song note
+  if(d.songName&&d.songName!=='—'){
+    notes.push({type:'song',songName:d.songName,spotify:d.spotify||''});
+  }
+  // Letter note
+  if(d.msg){
+    notes.push({type:'letter',name,msg:d.msg,sign:d.sign||(sender?`With love, ${sender} 💕`:'With love 💕'),sender});
+  }
+
+  totalNotes=notes.length;
+  updateCounter();
+
+  if(totalNotes===0){
+    document.getElementById('jarHint').textContent='This jar is empty 🫙';
+    goTo('rv-jar');return;
+  }
+
+  // Place notes inside jar
+  placeNotes(notes);
+  goTo('rv-jar');
+}
+
+// Note visual config
+const NOTE_COLORS=['#fef9c3','#fde8c8','#fce4ec','#e8f5e9','#e3f2fd'];
+const NOTE_EMOJIS={photo:'📸',song:'🎵',letter:'💌'};
+
+function placeNotes(notes){
+  const container=document.getElementById('jarContainer');
+  // Remove old notes
+  container.querySelectorAll('.note').forEach(n=>n.remove());
+
+  // Jar inner area: roughly x:55-165, y:65-235
+  const positions=generatePositions(notes.length);
+  const floatAnims=['float1','float2','float3','float4','float5'];
+
+  notes.forEach((note,i)=>{
+    const el=document.createElement('div');
+    el.className='note';
+    el.id='note-'+i;
+    const pos=positions[i];
+    const color=NOTE_COLORS[i%NOTE_COLORS.length];
+    const anim=floatAnims[i%floatAnims.length];
+    const delay=(i*0.4).toFixed(1);
+    el.style.cssText=`left:${pos.x}px;top:${pos.y}px;animation:${anim} ${2.5+i*0.3}s ease-in-out ${delay}s infinite;`;
+    el.innerHTML=`
+      <div class="note-paper" style="background:${color};">
+        <span style="font-size:1.4rem;position:relative;z-index:1;">${NOTE_EMOJIS[note.type]}</span>
+        <div class="note-fold"></div>
+      </div>
+      <div class="note-label">${note.type==='photo'?'photo':'note'}</div>`;
+    el.onclick=()=>openNote(note,i);
+    container.appendChild(el);
+  });
+}
+
+function generatePositions(count){
+  // Place notes nicely inside the jar
+  const slots=[
+    {x:72,y:90},{x:128,y:82},{x:100,y:130},
+    {x:68,y:160},{x:140,y:148},{x:98,y:185}
+  ];
+  const pos=[];
+  for(let i=0;i<count;i++){
+    if(i<slots.length){pos.push(slots[i]);}
+    else{pos.push({x:70+Math.random()*80,y:80+Math.random()*120});}
+  }
+  return pos;
+}
+
+function openNote(note,idx){
+  const overlay=document.getElementById('noteOverlay');
+  const card=document.getElementById('noteCard');
+  let html='';
+
+  if(note.type==='photo'){
+    html=`<div class="photo-card">
+      <img class="photo-card-img" src="${note.url}" alt="Memory">
+      <div class="photo-card-footer">
+        <div class="photo-card-caption">Memory #${note.index+1} 📸</div>
+      </div>
+    </div>`;
+  } else if(note.type==='song'){
+    let ytEmbed='';
+    const ytM=note.spotify.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if(ytM)ytEmbed=`<div class="yt-wrap show"><iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe></div>`;
+    html=`<div class="song-card">
+      <div class="song-card-disc"><div class="song-card-disc-center"></div></div>
+      <div class="song-card-title">${note.songName}</div>
+      <div class="song-card-sub">A song chosen just for you</div>
+      ${ytEmbed}
+    </div>`;
+  } else if(note.type==='letter'){
+    html=`<div class="letter-card">
+      <div class="letter-card-top">— a note, folded with love —</div>
+      <div class="letter-card-greet">Dear ${note.name||'you'},</div>
+      <div class="letter-card-body" id="letterBody"></div>
+      <span class="letter-card-sign" id="letterSign"></span>
+    </div>`;
+  }
+
+  card.innerHTML=`<button class="note-close" onclick="closeNote()">✕</button>${html}`;
+  overlay.classList.add('show');
+
+  // Typewrite letter
+  if(note.type==='letter'){
+    const el=document.getElementById('letterBody');
+    const signEl=document.getElementById('letterSign');
+    if(el){
+      el.textContent='';
+      if(signEl)signEl.style.opacity='0';
+      const chars=(note.msg||'').split('');
+      let i=0;
+      function next(){
+        if(i<chars.length){el.textContent+=chars[i];i++;setTimeout(next,16);}
+        else{setTimeout(()=>{if(signEl){signEl.textContent=note.sign||'';signEl.style.transition='opacity 0.6s ease';signEl.style.opacity='1';}},300);}
+      }
+      next();
+    }
+  }
+
+  // Mark note as opened
+  const noteEl=document.getElementById('note-'+idx);
+  if(noteEl)noteEl.classList.add('opened');
+  openedCount++;
+  updateCounter();
+}
+
+function closeNote(){
+  const overlay=document.getElementById('noteOverlay');
+  overlay.classList.remove('show');
+  // Stop YouTube if playing
+  const iframe=overlay.querySelector('iframe');
+  if(iframe)iframe.src=iframe.src;
+
+  // Check if all notes opened
+  if(openedCount>=totalNotes){
+    setTimeout(()=>goTo('rv-done'),600);
+  }
+}
+
+function updateCounter(){
+  const el=document.getElementById('notesCounter');
+  if(!el)return;
+  const remaining=totalNotes-openedCount;
+  if(remaining>0){el.textContent=`${remaining} note${remaining===1?'':'s'} left to open`;}
+  else{el.textContent='You opened everything 🫙';}
+}
+
+function replayJar(){
+  openedCount=0;
+  // Reset all notes
+  document.querySelectorAll('.note').forEach(n=>n.classList.remove('opened'));
+  updateCounter();
+  goTo('rv-jar');
+}
+</script>
+
+</body></html>
