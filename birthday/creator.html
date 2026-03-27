@@ -77,11 +77,36 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 /* Style card in picker */
 .style-pick-card{border-radius:18px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s;position:relative;flex-shrink:0;}
 .style-pick-card:active{transform:scale(0.97);}
-.spc-preview{height:120px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
-.spc-info{padding:12px 14px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.spc-info{padding:10px 14px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .spc-name{font-size:0.95rem;font-weight:700;}
 .spc-desc{font-size:0.7rem;opacity:0.6;margin-top:2px;}
 .spc-btn{padding:9px 18px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+
+/* Slideshow inside picker cards */
+.spc-preview{height:130px;position:relative;overflow:hidden;}
+.preview-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
+.preview-slide.active-slide{opacity:1;}
+.slide-dots{display:flex;gap:4px;justify-content:center;padding:4px 0 0;}
+.slide-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;}
+/* Intimate dots */
+.idot{background:rgba(233,30,99,0.2);}
+.idot.active{background:#e91e63;}
+/* Retro dots */
+.rdot{background:rgba(17,17,17,0.15);}
+.rdot.active{background:#d90429;}
+/* Cinematic dots */
+.cdot{background:rgba(255,215,0,0.15);}
+.cdot.active{background:#FFD700;}
+/* Jar dots */
+.jdot{background:rgba(196,92,26,0.2);}
+.jdot.active{background:#c45c1a;}
+/* Chat dots */
+.wdot{background:rgba(37,211,102,0.2);}
+.wdot.active{background:#25D366;}
+
+/* Vinyl */
+.mini-vinyl{width:36px;height:36px;border-radius:50%;background:conic-gradient(#111 0deg,#222 20deg,#111 40deg,#222 60deg,#111 80deg,#222 100deg,#111 120deg,#222 140deg,#111 160deg,#222 180deg,#111 200deg,#222 220deg,#111 240deg,#222 260deg,#111 280deg,#222 300deg,#111 320deg,#222 340deg,#111 360deg);animation:vinylSpin 3s linear infinite;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;}
+@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 
 /* Intimate style card */
 .spc-intimate{background:linear-gradient(160deg,#fde8f0,#fce4ec);border:1.5px solid rgba(233,30,99,0.15);}
@@ -112,7 +137,8 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .spc-fakechat .spc-desc{color:#667781;}
 .spc-fakechat .spc-btn{background:linear-gradient(135deg,#25D366,#128C7E);color:white;}
 
-/* Creating overlay — shown while saving */
+@keyframes envWiggle{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+@keyframes ballFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
 .creating-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.88);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
 .creating-overlay.show{display:flex;}
 .creating-card-name{font-size:1rem;font-weight:600;color:white;margin-bottom:24px;text-align:center;}
@@ -251,96 +277,204 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
   <div class="pick-list">
 
     <!-- Intimate -->
-    <div class="style-pick-card spc-intimate" onclick="createCard('intimate')">
+    <div class="style-pick-card spc-intimate" id="prev-intimate" onclick="createCard('intimate')">
       <div class="spc-preview" style="background:linear-gradient(160deg,#fde8f0,#fce4ec);">
-        <div style="text-align:center;">
-          <div style="font-size:2.2rem;margin-bottom:6px;">💝</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;">Happy Birthday!</div>
-          <div style="font-size:0.65rem;color:#8d3a5a;margin-top:4px;opacity:0.7;">Soft & emotional</div>
+        <div class="preview-slide active-slide">
+          <div style="font-size:2rem;margin-bottom:6px;">💝</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;" id="pick-intimate-name">Happy Birthday!</div>
+          <div style="font-size:0.62rem;color:#8d3a5a;margin-top:3px;opacity:0.7;">made this just for you 🌸</div>
         </div>
-        <div style="position:absolute;bottom:0;left:0;right:0;height:30px;background:linear-gradient(to top,#fce4ec,transparent);"></div>
+        <div class="preview-slide">
+          <div style="display:flex;gap:4px;justify-content:center;margin-bottom:6px;">
+            <div style="width:36px;height:48px;background:white;border-radius:2px;box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:3px 3px 10px;transform:rotate(-2deg);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">📸</div>
+            <div style="width:36px;height:48px;background:white;border-radius:2px;box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:3px 3px 10px;transform:rotate(2deg);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">🌸</div>
+            <div style="width:36px;height:48px;background:white;border-radius:2px;box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:3px 3px 10px;transform:rotate(-1deg);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">💕</div>
+          </div>
+          <div style="font-size:0.62rem;color:#8d3a5a;opacity:0.7;">Your photos as polaroids</div>
+        </div>
+        <div class="preview-slide">
+          <div class="mini-vinyl"><div style="width:11px;height:11px;border-radius:50%;background:#e91e63;position:absolute;"></div></div>
+          <div style="font-size:0.65rem;color:#4a0e2a;font-weight:600;">Your Special Song 🎵</div>
+        </div>
+        <div class="preview-slide">
+          <div style="font-size:2rem;animation:envWiggle 2s ease-in-out infinite;">💌</div>
+          <div style="font-size:0.62rem;color:#8d3a5a;margin-top:6px;opacity:0.7;">Tap to open the letter...</div>
+        </div>
+        <div class="preview-slide">
+          <div style="background:rgba(255,255,255,0.9);border-radius:8px;padding:8px 10px;width:90%;border-top:3px solid #e91e63;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:0.7rem;color:#4a0e2a;font-weight:600;margin-bottom:3px;" id="pick-intimate-greet">Dear you,</div>
+            <div style="height:2px;border-radius:2px;background:rgba(74,14,42,0.12);margin-bottom:3px;width:100%;"></div>
+            <div style="height:2px;border-radius:2px;background:rgba(74,14,42,0.12);margin-bottom:3px;width:90%;"></div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.65rem;color:#e91e63;margin-top:4px;">Forever yours 💕</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-dots" style="background:linear-gradient(160deg,#fde8f0,#fce4ec);padding:0 0 6px;">
+        <div class="slide-dot idot active"></div><div class="slide-dot idot"></div><div class="slide-dot idot"></div><div class="slide-dot idot"></div><div class="slide-dot idot"></div>
       </div>
       <div class="spc-info">
-        <div>
-          <div class="spc-name">💌 Intimate</div>
-          <div class="spc-desc">Polaroids • Vinyl • Typewriter letter</div>
-        </div>
+        <div><div class="spc-name">💌 Intimate</div><div class="spc-desc">Polaroids • Vinyl • Typewriter letter</div></div>
         <button class="spc-btn" onclick="event.stopPropagation();createCard('intimate')">Create →</button>
       </div>
     </div>
 
     <!-- Retro -->
-    <div class="style-pick-card spc-retro" onclick="createCard('retro')">
+    <div class="style-pick-card spc-retro" id="prev-retro" onclick="createCard('retro')">
       <div class="spc-preview" style="background:#FFE135;border-bottom:3px solid #111;">
-        <div style="text-align:center;">
-          <div style="font-size:2rem;margin-bottom:4px;">🎊</div>
-          <div style="font-family:'DM Sans',sans-serif;font-weight:800;font-size:1rem;color:#d90429;">HAPPY BIRTHDAY!!</div>
-          <div style="font-size:0.65rem;color:#333;margin-top:4px;">Fun & loud</div>
+        <div class="preview-slide active-slide">
+          <div style="font-size:1.8rem;margin-bottom:4px;">🎂</div>
+          <div style="font-weight:800;font-size:0.95rem;color:#d90429;">HAPPY BIRTHDAY!!</div>
+          <div style="font-size:0.6rem;color:#333;margin-top:3px;">Fun & loud 🎊</div>
+        </div>
+        <div class="preview-slide">
+          <div style="display:flex;gap:3px;justify-content:center;margin-bottom:4px;">
+            <div style="width:38px;height:50px;border:2px solid #111;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;background:#fff9c4;">🎂</div>
+            <div style="width:38px;height:50px;border:2px solid #111;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;background:#ffe0b2;">🎉</div>
+            <div style="width:38px;height:50px;border:2px solid #111;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;background:#fce4ec;">🎈</div>
+          </div>
+          <div style="font-size:0.6rem;color:#333;">Comic strip photos!</div>
+        </div>
+        <div class="preview-slide">
+          <div style="background:linear-gradient(135deg,#1a0a00,#2d1500);border-radius:6px;padding:8px 12px;width:80%;">
+            <div style="display:flex;justify-content:center;margin-bottom:4px;"><div class="mini-vinyl" style="margin:0;"><div style="width:11px;height:11px;border-radius:50%;background:#FFE135;position:absolute;"></div></div></div>
+            <div style="font-size:0.62rem;color:#FFE135;text-align:center;">Party Anthem 🎵</div>
+          </div>
+        </div>
+        <div class="preview-slide">
+          <div style="font-size:2.2rem;animation:ballFloat 1.5s ease-in-out infinite;">🎈</div>
+          <div style="font-size:0.62rem;color:#d90429;font-weight:600;margin-top:4px;">Pop to reveal the letter!</div>
+        </div>
+        <div class="preview-slide">
+          <div style="background:#fdf8e7;border:2px solid #111;border-radius:4px;padding:6px 8px;width:90%;">
+            <div style="font-size:0.5rem;color:#111;border-bottom:2px double #111;margin-bottom:3px;padding-bottom:2px;">🗞️ THE BIRTHDAY GAZETTE</div>
+            <div style="background:#d90429;color:white;font-size:0.5rem;padding:2px 4px;border-radius:2px;margin-bottom:3px;">BREAKING: IT'S YOUR BIRTHDAY!</div>
+            <div style="height:2px;background:rgba(0,0,0,0.12);border-radius:1px;margin-bottom:2px;"></div>
+            <div style="height:2px;background:rgba(0,0,0,0.12);border-radius:1px;width:85%;"></div>
+          </div>
         </div>
       </div>
+      <div class="slide-dots" style="background:#FFE135;padding:0 0 6px;">
+        <div class="slide-dot rdot active"></div><div class="slide-dot rdot"></div><div class="slide-dot rdot"></div><div class="slide-dot rdot"></div><div class="slide-dot rdot"></div>
+      </div>
       <div class="spc-info">
-        <div>
-          <div class="spc-name">🎊 Retro Party</div>
-          <div class="spc-desc">Comic panels • Cassette • Newspaper letter</div>
-        </div>
+        <div><div class="spc-name">🎊 Retro Party</div><div class="spc-desc">Comic panels • Cassette • Newspaper letter</div></div>
         <button class="spc-btn" onclick="event.stopPropagation();createCard('retro')">Create →</button>
       </div>
     </div>
 
     <!-- Cinematic -->
-    <div class="style-pick-card spc-cinematic" onclick="createCard('cinematic')">
+    <div class="style-pick-card spc-cinematic" id="prev-cinematic" onclick="createCard('cinematic')">
       <div class="spc-preview" style="background:#0a0a0a;">
-        <div style="text-align:center;">
-          <div style="font-size:2rem;margin-bottom:6px;">🎬</div>
+        <div class="preview-slide active-slide">
+          <div style="font-size:1.8rem;margin-bottom:6px;">🎬</div>
           <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;font-weight:700;color:white;" id="pick-cinematic-name">Your Name</div>
-          <div style="font-size:0.6rem;color:rgba(255,215,0,0.4);margin-top:4px;letter-spacing:0.15em;">A CINEMATIC BIRTHDAY</div>
+          <div style="font-size:0.55rem;color:rgba(255,215,0,0.4);margin-top:4px;letter-spacing:0.15em;">A CINEMATIC BIRTHDAY</div>
         </div>
-        <div style="position:absolute;top:0;left:0;right:0;height:20px;background:#0a0a0a;"></div>
-        <div style="position:absolute;bottom:0;left:0;right:0;height:20px;background:#0a0a0a;"></div>
+        <div class="preview-slide">
+          <div style="display:flex;gap:3px;justify-content:center;margin-bottom:4px;">
+            <div style="width:38px;height:50px;background:#111;border:1px solid rgba(255,215,0,0.2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;">📸</div>
+            <div style="width:38px;height:50px;background:#111;border:1px solid rgba(255,215,0,0.2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;">🎞️</div>
+            <div style="width:38px;height:50px;background:#111;border:1px solid rgba(255,215,0,0.2);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;">📸</div>
+          </div>
+          <div style="font-size:0.58rem;color:rgba(255,215,0,0.35);letter-spacing:0.1em;">Chapter I · Chapter II · Chapter III</div>
+        </div>
+        <div class="preview-slide">
+          <div style="font-size:2rem;margin-bottom:4px;">🎬</div>
+          <div style="font-size:0.62rem;color:rgba(255,215,0,0.55);font-style:italic;">The Background Score 🎵</div>
+        </div>
+        <div class="preview-slide">
+          <div style="font-size:2rem;margin-bottom:4px;">🎞️</div>
+          <div style="font-size:0.58rem;color:rgba(255,255,255,0.25);letter-spacing:0.12em;">TAP TO REVEAL</div>
+        </div>
+        <div class="preview-slide">
+          <div style="padding:8px 10px;width:95%;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:0.65rem;color:rgba(255,255,255,0.6);font-style:italic;line-height:1.7;">Dear Nilesh,<br>Every great story has a moment...</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.62rem;color:rgba(255,215,0,0.45);margin-top:4px;">— With love 🎬</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-dots" style="background:#0a0a0a;padding:0 0 6px;">
+        <div class="slide-dot cdot active"></div><div class="slide-dot cdot"></div><div class="slide-dot cdot"></div><div class="slide-dot cdot"></div><div class="slide-dot cdot"></div>
       </div>
       <div class="spc-info">
-        <div>
-          <div class="spc-name">🎬 Cinematic</div>
-          <div class="spc-desc">Film stills • Dark & dramatic • Subtitle letter</div>
-        </div>
+        <div><div class="spc-name">🎬 Cinematic</div><div class="spc-desc">Film stills • Dark & dramatic • Subtitle letter</div></div>
         <button class="spc-btn" onclick="event.stopPropagation();createCard('cinematic')">Create →</button>
       </div>
     </div>
 
     <!-- Memory Jar -->
-    <div class="style-pick-card spc-memoryjar" onclick="createCard('memoryjar')">
+    <div class="style-pick-card spc-memoryjar" id="prev-memoryjar" onclick="createCard('memoryjar')">
       <div class="spc-preview" style="background:linear-gradient(180deg,#2d1a0a,#1a0f0a);">
-        <div style="text-align:center;">
-          <div style="font-size:2.4rem;margin-bottom:4px;animation:softFloat 2s ease-in-out infinite;">🫙</div>
-          <div style="font-family:'Caveat',cursive;font-size:0.9rem;color:rgba(255,220,150,0.7);">tap a note to open it 💛</div>
+        <div class="preview-slide active-slide">
+          <div style="font-size:2.2rem;animation:softFloat 2s ease-in-out infinite;">🫙</div>
+          <div style="font-family:'Caveat',cursive;font-size:0.82rem;color:rgba(255,220,150,0.65);margin-top:4px;">tap a note to open it 💛</div>
+        </div>
+        <div class="preview-slide">
+          <div style="display:flex;gap:5px;justify-content:center;margin-bottom:5px;">
+            <div style="width:34px;height:28px;background:#fef9c3;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;box-shadow:2px 2px 6px rgba(0,0,0,0.3);">📸</div>
+            <div style="width:34px;height:28px;background:#fde8c8;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;box-shadow:2px 2px 6px rgba(0,0,0,0.3);">📸</div>
+            <div style="width:34px;height:28px;background:#fce4ec;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;box-shadow:2px 2px 6px rgba(0,0,0,0.3);">📸</div>
+          </div>
+          <div style="font-family:'Caveat',cursive;font-size:0.72rem;color:rgba(255,220,150,0.45);">Each photo is a folded note</div>
+        </div>
+        <div class="preview-slide">
+          <div class="mini-vinyl" style="background:radial-gradient(circle,#fef3e2 0%,#fef3e2 14%,#1a0812 15%,#2d1020 30%,#1a0812 100%);"><div style="width:11px;height:11px;border-radius:50%;background:#c45c1a;position:absolute;"></div></div>
+          <div style="font-family:'Caveat',cursive;font-size:0.72rem;color:rgba(255,220,150,0.45);margin-top:4px;">🎵 A golden music note</div>
+        </div>
+        <div class="preview-slide">
+          <div style="background:#fef9f0;border-radius:8px;padding:7px 10px;width:88%;">
+            <div style="font-family:'Caveat',cursive;font-size:0.58rem;color:rgba(196,92,26,0.5);text-align:center;margin-bottom:3px;">— folded with love —</div>
+            <div style="font-family:'Caveat',cursive;font-size:0.65rem;color:#3d1a06;line-height:1.5;">Dear you,<br>Every time I look...</div>
+          </div>
+        </div>
+        <div class="preview-slide">
+          <div style="font-size:1.9rem;margin-bottom:5px;">🫙</div>
+          <div style="font-family:'Caveat',cursive;font-size:0.72rem;color:rgba(255,220,150,0.4);font-style:italic;">"That's everything I wanted to say."</div>
         </div>
       </div>
+      <div class="slide-dots" style="background:#1a0f0a;padding:0 0 6px;">
+        <div class="slide-dot jdot active"></div><div class="slide-dot jdot"></div><div class="slide-dot jdot"></div><div class="slide-dot jdot"></div><div class="slide-dot jdot"></div>
+      </div>
       <div class="spc-info">
-        <div>
-          <div class="spc-name">🫙 Memory Jar</div>
-          <div class="spc-desc">Tap notes • Non-linear • Unique experience</div>
-        </div>
+        <div><div class="spc-name">🫙 Memory Jar</div><div class="spc-desc">Tap notes • Non-linear • Unique experience</div></div>
         <button class="spc-btn" onclick="event.stopPropagation();createCard('memoryjar')">Create →</button>
       </div>
     </div>
 
     <!-- Fake Chat -->
-    <div class="style-pick-card spc-fakechat" onclick="createCard('fakechat')">
+    <div class="style-pick-card spc-fakechat" id="prev-fakechat" onclick="createCard('fakechat')">
       <div class="spc-preview" style="background:#ECE5DD;">
-        <div style="width:100%;padding:0 12px;">
-          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:8px 10px;max-width:70%;margin-bottom:6px;">
-            <div style="font-size:0.8rem;color:#111;">Hey! 🎉</div>
+        <div class="preview-slide active-slide" style="align-items:flex-start;padding:10px 14px;">
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:7px 10px;max-width:75%;margin-bottom:5px;"><div style="font-size:0.8rem;color:#111;">Hey! 🎉</div></div>
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:7px 10px;max-width:85%;"><div style="font-size:0.8rem;color:#111;" id="pick-chat-name">Happy Birthday!! 🎂🥳</div></div>
+        </div>
+        <div class="preview-slide" style="align-items:flex-start;padding:10px 14px;">
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:7px 10px;max-width:75%;margin-bottom:5px;"><div style="font-size:0.78rem;color:#111;">Can I send you something? 👀</div></div>
+          <div style="display:flex;gap:6px;margin-left:auto;">
+            <div style="background:white;border:1.5px solid #ddd;border-radius:20px;padding:5px 12px;font-size:0.72rem;color:#667781;">No 😢</div>
+            <div style="background:#25D366;border-radius:20px;padding:5px 12px;font-size:0.72rem;color:white;font-weight:600;">Yes! 😍</div>
           </div>
-          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:8px 10px;max-width:80%;">
-            <div style="font-size:0.8rem;color:#111;" id="pick-chat-name">Happy Birthday!! 🎂🥳</div>
+        </div>
+        <div class="preview-slide" style="align-items:flex-start;padding:10px 14px;">
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:6px;max-width:75%;margin-bottom:5px;"><div style="width:90px;height:56px;background:#ddd;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📸</div></div>
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:6px;max-width:75%;"><div style="width:90px;height:56px;background:#ddd;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📸</div></div>
+        </div>
+        <div class="preview-slide" style="align-items:flex-start;padding:10px 14px;">
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:7px 10px;max-width:80%;margin-bottom:5px;"><div style="font-size:0.78rem;color:#111;">I found a song that made me think of you 🎵</div></div>
+          <div style="background:white;border-radius:8px;border-top-left-radius:0;padding:8px 10px;max-width:80%;display:flex;align-items:center;gap:8px;">
+            <div style="width:32px;height:32px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0;">▶</div>
+            <div style="font-size:0.72rem;font-weight:600;color:#111;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Your Song 🎵</div>
           </div>
+        </div>
+        <div class="preview-slide" style="align-items:flex-start;padding:10px 14px;">
+          <div style="background:#DCF8C6;border-radius:8px;border-top-right-radius:0;padding:7px 10px;max-width:85%;align-self:flex-end;margin-left:auto;"><div style="font-size:0.78rem;color:#111;line-height:1.5;">Happy Birthday! You deserve every bit of it 💚</div></div>
         </div>
       </div>
+      <div class="slide-dots" style="background:#ECE5DD;padding:0 0 6px;">
+        <div class="slide-dot wdot active"></div><div class="slide-dot wdot"></div><div class="slide-dot wdot"></div><div class="slide-dot wdot"></div><div class="slide-dot wdot"></div>
+      </div>
       <div class="spc-info">
-        <div>
-          <div class="spc-name">💬 Fake Chat</div>
-          <div class="spc-desc">WhatsApp style • Yes/No buttons • Interactive</div>
-        </div>
+        <div><div class="spc-name">💬 Fake Chat</div><div class="spc-desc">WhatsApp style • Yes/No buttons • Interactive</div></div>
         <button class="spc-btn" onclick="event.stopPropagation();createCard('fakechat')">Create →</button>
       </div>
     </div>
@@ -442,14 +576,39 @@ function goBack(){
   else window.location.href='/';
 }
 
+// ── SLIDESHOWS ──
+const slideshowTimers={};
+function startSlideshow(cardId,totalSlides){
+  if(slideshowTimers[cardId])clearInterval(slideshowTimers[cardId]);
+  let idx=0;
+  function next(){
+    const slides=document.querySelectorAll('#'+cardId+' .preview-slide');
+    const dots=document.querySelectorAll('#'+cardId+' .slide-dot');
+    slides.forEach(s=>s.classList.remove('active-slide'));
+    dots.forEach(d=>d.classList.remove('active'));
+    idx=(idx+1)%totalSlides;
+    if(slides[idx])slides[idx].classList.add('active-slide');
+    if(dots[idx])dots[idx].classList.add('active');
+  }
+  slideshowTimers[cardId]=setInterval(next,2000);
+}
+
 function updatePickerPreviews(){
   const name=document.getElementById('cName')?.value.trim()||'';
-  // Update cinematic preview with name
   const cinName=document.getElementById('pick-cinematic-name');
   if(cinName)cinName.textContent=name||'Your Name';
-  // Update chat preview with name
+  const intName=document.getElementById('pick-intimate-name');
+  if(intName)intName.textContent=name?`Happy Birthday, ${name}!`:'Happy Birthday!';
+  const intGreet=document.getElementById('pick-intimate-greet');
+  if(intGreet)intGreet.textContent=name?`Dear ${name},`:'Dear you,';
   const chatName=document.getElementById('pick-chat-name');
   if(chatName)chatName.textContent=name?`Happy Birthday ${name}!! 🎂🥳`:'Happy Birthday!! 🎂🥳';
+  // Start all slideshows with staggered timing
+  startSlideshow('prev-intimate',5);
+  setTimeout(()=>startSlideshow('prev-retro',5),500);
+  setTimeout(()=>startSlideshow('prev-cinematic',5),900);
+  setTimeout(()=>startSlideshow('prev-memoryjar',5),1300);
+  setTimeout(()=>startSlideshow('prev-fakechat',5),1700);
 }
 
 window.addEventListener('DOMContentLoaded',function(){
