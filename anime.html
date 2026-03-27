@@ -766,8 +766,11 @@ function typeSequence(){
 
 /* ══ WHATSAPP ════════════════════════════════ */
 function setupWhatsApp(){
-  const msg=`🌙✨ *Happy Birthday, ${userName}!* ✨🌙\n\nThe world just got luckier since ${userDate}.\n\nSent with love ♥`;
-  document.getElementById('btn-wa').href=`https://wa.me/?text=${encodeURIComponent(msg)}`;
+  // Build shareable card URL with name+date baked in as params
+  const base = window.location.origin + window.location.pathname;
+  const cardURL = `${base}?name=${encodeURIComponent(userName)}&date=${encodeURIComponent(userDate)}`;
+  const msg = `🌙✨ *Happy Birthday, ${userName}!* ✨🌙\n\nThe world just got luckier since ${userDate}.\n\n🎁 Open your birthday card:\n${cardURL}\n\nSent with love ♥`;
+  document.getElementById('btn-wa').href = `https://wa.me/?text=${encodeURIComponent(msg)}`;
 }
 
 /* ══ HEART COLOURS ══════════════════════════ */
@@ -953,6 +956,40 @@ function startFallingHearts(lx, ly){
     for(let i=0;i<n;i++) setTimeout(spawnOne, i*110);
   }, 800);
 }
+
+/* ══ URL PARAM AUTO-LOAD ════════════════════
+   When someone opens a shared link like:
+   wishyou.ai/anime.html?name=Nilesh&date=25+·+JAN+·+1981
+   → skip straight to card screen and auto-play
+════════════════════════════════════════════ */
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const pName  = params.get('name');
+  const pDate  = params.get('date');
+
+  if(pName && pDate){
+    // Pre-fill inputs (in case user goes back)
+    document.getElementById('inp-name').value  = pName;
+    // Parse date back into day/month/year fields
+    const parts = pDate.split('·').map(s=>s.trim());
+    if(parts[0]) document.getElementById('inp-day').value   = parts[0];
+    if(parts[1]) document.getElementById('inp-month').value = parts[1];
+    if(parts[2]) document.getElementById('inp-year').value  = parts[2];
+
+    // Set state and jump straight to card
+    userName = pName;
+    userDate = pDate;
+    resetCardState();
+    showScreen('screen-card');
+
+    // Auto-trigger the heart click after a short delay
+    // so the recipient sees the full animation play out
+    setTimeout(()=>{
+      const cmh = document.getElementById('card-main-heart');
+      cmh.dispatchEvent(new Event('click'));
+    }, 1200);
+  }
+})();
 </script>
 </body>
 </html>
