@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>WishYou.ai — Retro Party Birthday Card</title>
-<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%8E%8A&lt;/text&gt;&lt;/svg&gt;">
 <meta property="og:title" content="You have a birthday surprise! 🎊">
-<meta property="og:description" content="Someone made you a Retro Party birthday card!">
+<meta property="og:description" content="Someone made you a Retro Party birthday card with photos, music &amp; a fun letter!">
 <meta property="og:image" content="https://wishyou.ai/og-image.png">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Patrick+Hand&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
 <style>
@@ -55,20 +55,20 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 
 /* INPUTS */
 .field-label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;opacity:0.5;}
-.big-input{width:100%;border:none;border-bottom:2px solid rgba(233,30,99,0.25);background:transparent;padding:10px 0;font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;outline:none;transition:border-color 0.3s;text-align:center;}
+.big-input{width:100%;border:none;border-bottom:3px solid rgba(0,0,0,0.2);background:transparent;padding:10px 0;font-family:'Fredoka One',cursive;font-size:1.7rem;font-weight:400;outline:none;transition:border-color 0.3s;text-align:center;color:#111;}
 .big-input::placeholder{opacity:0.25;font-style:italic;}
 .big-input:focus{border-color:rgba(233,30,99,0.6);}
 .regular-input{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:rgba(255,255,255,0.7);outline:none;transition:border-color 0.3s;margin-bottom:12px;backdrop-filter:blur(10px);}
 .regular-input::placeholder{opacity:0.35;font-style:italic;}
 .regular-input:focus{border-color:rgba(233,30,99,0.4);background:rgba(255,255,255,0.9);}
-.letter-area{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:16px;padding:16px;font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;line-height:2;background:rgba(255,255,255,0.7);outline:none;resize:none;min-height:160px;transition:border-color 0.3s;backdrop-filter:blur(10px);}
+.letter-area{width:100%;border:2px solid rgba(0,0,0,0.15);border-radius:8px;padding:16px;font-family:'Patrick Hand','Noto Sans Devanagari',cursive;font-size:1.05rem;line-height:2;background:rgba(255,255,255,0.7);outline:none;resize:none;min-height:160px;transition:border-color 0.3s;}
 .letter-area:focus{border-color:rgba(233,30,99,0.4);}
 .letter-area::placeholder{opacity:0.35;font-style:italic;}
 
 /* BUTTONS */
 .btn-next{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;touch-action:manipulation;margin-top:8px;position:relative;overflow:hidden;transition:transform 0.15s,box-shadow 0.15s;}
 .btn-next:active{transform:scale(0.97);}
-.btn-intimate{background:linear-gradient(135deg,#e91e63,#f06292);color:white;box-shadow:0 8px 24px rgba(233,30,99,0.35);}
+.btn-retro{background:#d90429;color:white;border:3px solid #111;box-shadow:4px 4px 0 #111;border-radius:8px;font-family:'Fredoka One',cursive;}
 .btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.5;font-family:'DM Sans',sans-serif;}
 .btn-wa{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(37,211,102,0.3);margin-top:8px;touch-action:manipulation;}
 
@@ -84,7 +84,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 /* PHOTOS */
 .photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
 .photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;transition:background 0.2s;font-size:1.3rem;}
-.photo-slot.retro-slot{background:white;border:3px solid #111;}
+.photo-slot.retro-slot{background:white;border:3px solid #111;box-shadow:2px 2px 0 #111;}
 .photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
 .photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#d90429;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 
@@ -93,185 +93,166 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .song-result.retro-result{background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
 .song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
 .song-use-btn{padding:6px 12px;border:none;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
-.retro-use{background:linear-gradient(135deg,#e91e63,#f06292);color:white;}
-.song-selected-box{border-radius:14px;padding:12px 14px;margin-bottom:10px;display:none;}
-.soft-selected{background:linear-gradient(135deg,#2d1048,#1a0a2e);}
+.retro-use{background:#d90429;color:white;border:2px solid #111;}
+.song-selected-box{border-radius:8px;padding:12px 14px;margin-bottom:10px;display:none;background:#111;border:2px solid #FFE135;}
 
 /* SAVE OVERLAY */
 .save-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
 .save-overlay.show{display:flex;}
 .save-box{border-radius:8px;padding:28px 24px;width:100%;max-width:320px;text-align:center;background:#FFE135;border:4px solid #111;box-shadow:8px 8px 0 #111;}
-.save-box.soft-save{background:white;box-shadow:0 20px 60px rgba(233,30,99,0.2);}
 .save-spinner{position:relative;width:64px;height:64px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
-.save-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(233,30,99,0.15);border-top-color:#e91e63;animation:spin 1s linear infinite;}
+.save-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(0,0,0,0.15);border-top-color:#d90429;animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .save-emoji{font-size:1.8rem;position:relative;z-index:1;}
 .save-label{font-size:1rem;font-weight:600;margin-bottom:14px;font-family:'Fredoka One',cursive;color:#111;}
 .save-bar-wrap{height:8px;overflow:hidden;width:100%;margin-bottom:8px;background:rgba(0,0,0,0.15);border:1px solid #111;border-radius:4px;}
-.soft-bar-wrap{background:rgba(233,30,99,0.12);}
 .save-bar{height:100%;width:0%;transition:width 0.4s ease;background:#d90429;}
-.soft-bar{background:linear-gradient(90deg,#e91e63,#f06292);}
 .save-step{font-size:0.75rem;opacity:0.6;display:none;}
 
 /* SHARE MODAL */
 .share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
 .share-modal.show{display:flex;}
 .share-box{border-radius:8px;padding:26px 22px;width:100%;max-width:360px;text-align:center;background:#FFE135;border:4px solid #111;box-shadow:8px 8px 0 #111;}
-.share-box.soft-share{background:white;}
 .share-link-row{border-radius:6px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:white;border:2px solid #111;box-shadow:2px 2px 0 #111;}
-.soft-link-row{background:rgba(233,30,99,0.06);border:1px solid rgba(233,30,99,0.15);}
 .share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;color:#111;}
-.copy-btn{padding:6px 12px;border:none;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;background:#d90429;color:white;border:2px solid #111;border-radius:6px;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;}
-.soft-copy{background:#e91e63;color:white;}
+.copy-btn{padding:6px 12px;border:2px solid #111;border-radius:6px;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;background:#d90429;color:white;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;}
 .modal-close{width:100%;padding:12px;background:none;font-family:'Fredoka One',cursive;font-size:0.85rem;cursor:pointer;margin-top:6px;border:2px solid #111;color:#111;border-radius:8px;box-shadow:2px 2px 0 #111;}
-.soft-close{border:1.5px solid rgba(233,30,99,0.2);color:#8d3a5a;}
 
 /* ── RECEIVER SCREENS ── */
 /* FIX: all receiver screens fill 100% — no black edges */
 #rv-loading,#rv-error,#rv-welcome,#rv-photos,#rv-song,#rv-envelope,#rv-letter{
   position:absolute;inset:0;
 }
-#rv-loading{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;align-items:center;justify-content:center;flex-direction:column;}
+#rv-loading{background:#FFE135;display:flex;align-items:center;justify-content:center;flex-direction:column;}
 .rv-loading-heart{font-size:3rem;animation:hb 1.2s ease-in-out infinite;}
 @keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
-.rv-loading-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#8d3a5a;margin-top:14px;opacity:0.6;}
+.rv-loading-text{font-family:'Fredoka One',cursive;font-size:1rem;color:#111;margin-top:14px;opacity:0.7;}
 
-#rv-error{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
+#rv-error{background:#FFE135;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
 .rv-error-emoji{font-size:3rem;margin-bottom:16px;display:block;}
-.rv-error-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:#8d3a5a;line-height:1.7;}
+.rv-error-text{font-family:'Fredoka One',cursive;font-size:1.05rem;color:#111;line-height:1.7;}
 
 /* WELCOME */
-#rv-welcome{background:linear-gradient(160deg,#fde8f0 0%,#fce4ec 50%,#fdf0f5 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;}
-.petals-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-.petal{position:absolute;animation:pf linear infinite;opacity:0;}
-@keyframes pf{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:0.4;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
+#rv-welcome{background:#FFE135;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;position:relative;overflow:hidden;}
+.conf-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.conf{position:absolute;animation:cf linear infinite;opacity:0;}
+@keyframes cf{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:0.6;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
 .rv-inner{position:relative;z-index:2;text-align:center;width:100%;}
-.rv-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(233,30,99,0.45);margin-bottom:22px;display:block;}
-.rv-emoji{font-size:4rem;margin-bottom:18px;display:block;animation:hb2 1.8s ease-in-out infinite;}
+.rv-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,0,0,0.4);margin-bottom:22px;display:block;font-family:'Fredoka One',cursive;}
+.rv-cake{font-size:4rem;margin-bottom:18px;display:block;animation:hb2 1.8s ease-in-out infinite;}
 @keyframes hb2{0%,100%{transform:scale(1);}14%{transform:scale(1.15);}28%{transform:scale(1);}42%{transform:scale(1.08);}56%{transform:scale(1);}}
-.rv-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,7vw,2.6rem);font-weight:700;color:#4a0e2a;line-height:1.1;margin-bottom:8px;}
-.rv-sub{font-size:0.85rem;color:#8d3a5a;opacity:0.65;margin-bottom:8px;line-height:1.5;}
-.rv-from{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:rgba(74,14,42,0.45);margin-bottom:28px;}
-.rv-open-btn{background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 8px 28px rgba(233,30,99,0.4);transition:transform 0.2s;touch-action:manipulation;animation:bp 2.5s ease-in-out infinite;}
-@keyframes bp{0%,100%{box-shadow:0 8px 28px rgba(233,30,99,0.4);}50%{box-shadow:0 12px 36px rgba(233,30,99,0.6);}}
+.rv-headline{font-family:'Fredoka One',cursive;font-size:clamp(1.6rem,7vw,2.4rem);color:#111;line-height:1.1;margin-bottom:8px;}
+.rv-sub{font-size:0.85rem;color:#111;opacity:0.65;margin-bottom:8px;line-height:1.5;font-family:'Patrick Hand',cursive;}
+.rv-from{font-family:'Patrick Hand',cursive;font-style:italic;font-size:0.88rem;color:rgba(0,0,0,0.5);margin-bottom:28px;}
+.rv-open-btn{background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:16px 44px;font-family:'Fredoka One',cursive;font-size:1rem;cursor:pointer;box-shadow:4px 4px 0 #111;transition:transform 0.15s;touch-action:manipulation;}
 .rv-open-btn:active{transform:scale(0.97);}
-.rv-create-btn{margin-top:14px;background:none;border:1.5px solid rgba(233,30,99,0.3);color:#e91e63;border-radius:50px;padding:10px 28px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:all 0.2s;}
-.rv-create-btn:active{background:rgba(233,30,99,0.08);}
+.rv-create-btn{margin-top:14px;background:none;border:2px solid #111;color:#111;border-radius:8px;padding:10px 28px;font-family:'Fredoka One',cursive;font-size:0.82rem;cursor:pointer;touch-action:manipulation;}
 
-/* FIX: Back button for receiver */
-.rv-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(233,30,99,0.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:#8d3a5a;z-index:10;touch-action:manipulation;transition:background 0.2s;}
-.rv-back:active{background:rgba(233,30,99,0.2);}
+/* Back button for receiver */
+.rv-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.1);border:2px solid #111;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:#111;z-index:10;touch-action:manipulation;}
 
-/* PHOTOS */
-#rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;padding:0;}
-.rv-sec-hdr{padding:52px 24px 14px;text-align:center;flex-shrink:0;}
-.rv-sec-tag{display:none;}
-.rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;}
-.pol-strip{flex:1;padding:8px 16px 8px;display:flex;gap:12px;overflow-x:auto;align-items:center;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
-.pol-strip::-webkit-scrollbar{display:none;}
-.pol{flex-shrink:0;scroll-snap-align:center;background:white;padding:8px 8px 28px;box-shadow:0 8px 24px rgba(74,14,42,0.12);border-radius:2px;}
-.pol:nth-child(odd){transform:rotate(-2.5deg);}
-.pol:nth-child(even){transform:rotate(2deg);}
-.pol-strip:has(.pol:only-child) .pol{transform:rotate(0deg) !important;}
-.pol img{width:180px;height:200px;object-fit:cover;display:block;}
-.pol-lbl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.72rem;color:#8d3a5a;text-align:center;margin-top:6px;opacity:0.55;}
-.no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
-.rv-nav-row{display:flex;gap:8px;padding:10px 16px max(16px,env(safe-area-inset-bottom));flex-shrink:0;}
-.rv-next-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
-.rv-next-btn:active{transform:scale(0.97);}
+/* PHOTOS — comic strip style */
+#rv-photos{background:#FFE135;display:flex;flex-direction:column;padding:0;}
+.rv-hdr{padding:52px 24px 14px;text-align:center;flex-shrink:0;}
+.rv-label{font-family:'Fredoka One',cursive;font-size:1rem;color:#111;opacity:0.6;display:block;margin-bottom:4px;}
+.rv-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#111;}
+.comic-strip{flex:1;padding:8px 16px;display:flex;gap:10px;overflow-x:auto;align-items:center;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
+.comic-strip::-webkit-scrollbar{display:none;}
+.comic-panel{flex-shrink:0;scroll-snap-align:center;background:white;border:3px solid #111;box-shadow:4px 4px 0 #111;position:relative;overflow:hidden;width:160px;}
+.comic-panel img{width:160px;height:180px;object-fit:cover;display:block;}
+.comic-cap{position:absolute;bottom:0;left:0;right:0;background:#d90429;color:white;font-family:'Fredoka One',cursive;font-size:0.75rem;text-align:center;padding:4px 6px;border-top:2px solid #111;}
+.no-comic{flex:1;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:1rem;color:rgba(0,0,0,0.4);}
+.rv-btn{display:block;margin:10px 16px max(16px,env(safe-area-inset-bottom));background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:14px;font-family:'Fredoka One',cursive;font-size:0.9rem;cursor:pointer;touch-action:manipulation;box-shadow:4px 4px 0 #111;text-align:center;transition:transform 0.15s;}
+.rv-btn:active{transform:scale(0.97);}
 
-/* SONG — Beautiful vinyl */
-#rv-song{background:linear-gradient(160deg,#fde8f0,#fce4ec);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 20px;}
+/* SONG */
+#rv-song{background:#111;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 20px;}
 .vinyl-wrap{width:170px;height:170px;margin:0 auto 20px;position:relative;}
 .vinyl{
   width:100%;height:100%;border-radius:50%;position:relative;
   background:radial-gradient(circle at 50% 50%,
-    #fce4ec 0%,#fce4ec 14%,
-    #1a0812 15%,#1a0812 17%,
-    #2d1020 18%,#2d1020 22%,
-    #1a0812 23%,#1a0812 27%,
-    #2d1020 28%,#2d1020 32%,
-    #1a0812 33%,#1a0812 37%,
-    #2d1020 38%,#2d1020 42%,
-    #1a0812 43%,#1a0812 47%,
-    #2d1020 48%,#2d1020 52%,
-    #1a0812 53%,#1a0812 100%
+    #FFE135 0%,#FFE135 14%,
+    #1a1a1a 15%,#1a1a1a 17%,
+    #2d2d2d 18%,#2d2d2d 22%,
+    #1a1a1a 23%,#1a1a1a 27%,
+    #2d2d2d 28%,#2d2d2d 32%,
+    #1a1a1a 33%,#1a1a1a 37%,
+    #2d2d2d 38%,#2d2d2d 42%,
+    #1a1a1a 43%,#1a1a1a 100%
   );
-  box-shadow:0 16px 48px rgba(74,14,42,0.4),0 0 0 4px rgba(233,30,99,0.2),inset 0 2px 8px rgba(255,255,255,0.05);
+  box-shadow:0 16px 48px rgba(0,0,0,0.6),0 0 0 4px rgba(217,4,41,0.4);
   display:flex;align-items:center;justify-content:center;
 }
 .vinyl-label{
   width:56px;height:56px;border-radius:50%;
-  background:radial-gradient(circle at 38% 32%,#f48fb1,#e91e63 50%,#c2185b);
-  box-shadow:0 3px 10px rgba(0,0,0,0.5),inset 0 1px 3px rgba(255,255,255,0.25);
+  background:radial-gradient(circle at 38% 32%,#ff6b6b,#d90429 50%,#a00020);
+  box-shadow:0 3px 10px rgba(0,0,0,0.5);
   position:relative;z-index:2;
   display:flex;align-items:center;justify-content:center;
 }
-.vinyl-label::after{
-  content:'';position:absolute;
-  width:9px;height:9px;border-radius:50%;
-  background:rgba(255,255,255,0.95);
-  box-shadow:0 0 0 2px rgba(0,0,0,0.3);
-}
+.vinyl-label::after{content:'';position:absolute;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.95);box-shadow:0 0 0 2px rgba(0,0,0,0.3);}
 .vinyl-spin{animation:vsr 2.8s linear infinite;}
 @keyframes vsr{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .vinyl-pause{animation-play-state:paused;}
-.rv-song-t{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:#4a0e2a;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.rv-song-a{font-size:0.75rem;color:#8d3a5a;opacity:0.55;text-align:center;margin-bottom:16px;width:100%;}
-.yt-wrap{width:100%;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(74,14,42,0.12);margin-bottom:14px;display:none;}
+.rv-song-t{font-family:'Fredoka One',cursive;font-size:1.05rem;color:#FFE135;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.rv-song-a{font-size:0.75rem;color:rgba(255,255,255,0.5);text-align:center;margin-bottom:16px;width:100%;}
+.yt-wrap{width:100%;border-radius:8px;overflow:hidden;border:3px solid #FFE135;margin-bottom:14px;display:none;}
 .yt-wrap iframe{width:100%;height:180px;border:none;display:block;}
 .yt-wrap.show{display:block;}
 .rv-song-nav{display:flex;gap:8px;width:100%;margin-top:4px;}
 
-/* ENVELOPE */
-#rv-envelope{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;align-items:center;justify-content:center;flex-direction:column;}
+/* ENVELOPE — balloon for retro */
+#rv-envelope{background:#FFE135;display:flex;align-items:center;justify-content:center;flex-direction:column;}
 .env-inner{text-align:center;padding:28px;}
-.env-t{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;margin-bottom:8px;}
-.env-h{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:#8d3a5a;opacity:0.6;margin-bottom:28px;}
+.env-t{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#111;margin-bottom:8px;}
+.env-h{font-family:'Patrick Hand',cursive;font-size:0.88rem;color:#111;opacity:0.6;margin-bottom:28px;}
 .env-icon{font-size:5rem;display:block;cursor:pointer;animation:ef 2s ease-in-out infinite;transition:transform 0.2s;}
 @keyframes ef{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
 .env-icon:active{transform:scale(0.9)!important;}
 
-/* LETTER — full screen, centered, nice paper */
-#rv-letter{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;overflow:hidden;}
-.letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
-.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:48px 16px 100px;}
-.letter-paper{background:white;border-radius:16px;padding:22px 20px;box-shadow:0 4px 20px rgba(74,14,42,0.08);border-top:3px solid #e91e63;}
-.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}
-.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;color:#3d1c2e;line-height:2.1;white-space:pre-wrap;}
-.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#e91e63;margin-top:22px;display:block;}
-.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(253,232,240,1) 70%,rgba(253,232,240,0));}
-.letter-foot-row{display:flex;gap:8px;}
-.replay-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
-.create-again-btn{background:none;border:1.5px solid rgba(233,30,99,0.35);color:#e91e63;border-radius:50px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;}
+/* LETTER — newspaper style */
+#rv-letter{background:#f5f0e8;display:flex;flex-direction:column;overflow:hidden;}
+.news-bar{height:6px;background:#d90429;flex-shrink:0;}
+.news-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 100px;}
+.newspaper{background:white;border:3px solid #111;box-shadow:6px 6px 0 #111;padding:20px;}
+.news-top{display:flex;align-items:center;justify-content:space-between;border-bottom:3px double #111;padding-bottom:10px;margin-bottom:10px;}
+.news-masthead{font-family:'Fredoka One',cursive;font-size:1.1rem;color:#111;}
+.news-date-txt{font-size:0.65rem;color:#111;opacity:0.5;font-family:'Patrick Hand',cursive;}
+.news-hl-bar{background:#d90429;margin:-0px;padding:8px 0;margin-bottom:12px;text-align:center;}
+.news-hl{font-family:'Fredoka One',cursive;font-size:1rem;color:white;letter-spacing:0.5px;}
+.news-body{font-family:'Patrick Hand',cursive;font-size:1rem;line-height:1.8;color:#111;}
+.news-to{display:block;font-family:'Fredoka One',cursive;font-size:0.85rem;margin-bottom:10px;color:#d90429;}
+.news-text{white-space:pre-wrap;margin-bottom:16px;}
+.news-sign{font-family:'Patrick Hand',cursive;font-style:italic;font-size:1rem;color:#d90429;border-top:2px solid #111;padding-top:10px;margin-top:10px;}
+.rv-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 16px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,#f5f0e8 70%,transparent);}
 
-.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(74,14,42,0.18);}
+.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(0,0,0,0.18);}
 @keyframes ripple{to{transform:scale(4);opacity:0;}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-@keyframes letterFade{to{opacity:1;}}
 </style>
 </head>
 <body>
 <div class="app" id="mainApp">
 
-<!-- ══ CREATOR SCREENS ══ -->
 <div class="screen creator-screen theme-retro" id="s-name">
   <div class="step-progress"><div class="step-progress-fill retro-progress" id="prog-name" style="width:20%"></div></div>
-  <button class="step-back dark" onclick="window.location.href=&#39;/&#39;">←</button>
+  <button class="step-back dark" onclick="window.location.href='/'">←</button>
   <div class="step-wrap">
     <div class="step-content">
       <div class="step-counter dark">Step 1 of 4</div>
-      <span class="step-emoji" id="emoji-name">💝</span>
+      <span class="step-emoji" id="emoji-name">🎊</span>
       <div class="step-title" id="title-name">Who is this card for?</div>
       <div class="step-sub" id="sub-name">They'll see their name on the card</div>
       <div class="input-wrap" id="nameInputWrap">
       <label class="field-label">Their Name</label>
       <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Their Age (optional)</label>
+      <input class="regular-input" id="cAge" placeholder="e.g. 25" maxlength="4" type="number">
       <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
       <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30"></div>
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-retro" id="btn-name" onclick="goTo(&#39;s-photos&#39;)">Continue → Photos</button>
+      <button class="btn-next btn-retro" id="btn-name" onclick="goTo('s-photos')">Continue → Photos 📸</button>
     </div>
   </div>
 </div>
@@ -285,15 +266,15 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
       <span class="step-emoji">📸</span>
       <div class="step-title" id="title-photos">Add your photos</div>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
-        <div style="font-size:0.75rem;color:#8d3a5a;opacity:0.6;">Section title on card:</div>
+        <div style="font-size:0.75rem;color:#555;opacity:0.8;">Section title on card:</div>
         <input id="photosHeading" class="regular-input" value="Our Memories" maxlength="30" style="flex:1;font-size:0.85rem;padding:8px 12px;">
       </div>
-      <div class="photos-grid" id="photosGrid"><div class="photo-slot soft-slot" id="slot0"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot1"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot2"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot3"><span style="opacity:0.4;">+</span></div><div class="photo-slot soft-slot" id="slot4"><span style="opacity:0.4;">+</span></div></div>
-      <input type="file" accept="image/*" multiple="" style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+      <div class="photos-grid" id="photosGrid"></div>
+      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-retro" id="btn-photos" onclick="goTo(&#39;s-song&#39;)">Continue → Song</button>
-      <button class="btn-skip" onclick="goTo(&#39;s-song&#39;)">Skip for now</button>
+      <button class="btn-next btn-retro" id="btn-photos" onclick="goTo('s-song')">Continue → Song 🎵</button>
+      <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
     </div>
   </div>
 </div>
@@ -307,27 +288,27 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
       <span class="step-emoji">🎵</span>
       <div class="step-title" id="title-song">A song that reminds you of them</div>
       <div class="step-sub">Search by name or describe what you want</div>
-      <div class="song-selected-box soft-selected" id="songSelectedBox">
+      <div class="song-selected-box" id="songSelectedBox">
         <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Selected:</div>
-        <div style="font-size:0.88rem;font-weight:600;color:white;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
+        <div style="font-size:0.88rem;font-weight:600;color:#FFE135;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key===&#39;Enter&#39;)searchSong()" maxlength="100">
-        <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;background:linear-gradient(135deg,#e91e63,#f06292);">🔍</button>
+        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
+        <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:3px solid #111;border-radius:8px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;background:#d90429;box-shadow:2px 2px 0 #111;">🔍</button>
       </div>
       <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
-      <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(233,30,99,0.15);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
-        <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ AI Song Suggestions</div>
-        <input id="aiSongContext" class="regular-input" placeholder="Describe what you want: e.g. romantic Hindi, 90s nostalgic, fun party song..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
-        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;">Suggest Songs</button>
-        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span style="font-size:0.78rem;color:#8d3a5a;">Finding songs...</span></div>
+      <div style="background:rgba(255,255,255,0.5);border:2px solid #111;border-radius:8px;padding:12px 14px;margin-bottom:8px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#111;margin-bottom:8px;font-family:'Fredoka One',cursive;">✨ AI Song Suggestions</div>
+        <input id="aiSongContext" class="regular-input" placeholder="Describe: e.g. fun party song, 90s nostalgic, romantic Hindi..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
+        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:#d90429;color:white;border:3px solid #111;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;">Suggest Songs 🎵</button>
+        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot yellow-dot"></div><div class="ai-dot yellow-dot"></div><div class="ai-dot yellow-dot"></div><span style="font-size:0.78rem;color:#111;">Finding songs...</span></div>
         <div id="songAiResults" style="margin-top:6px;"></div>
       </div>
       <input type="hidden" id="cSpotify">
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-retro" id="btn-song" onclick="goTo(&#39;s-letter&#39;)">Continue → Letter</button>
-      <button class="btn-skip" onclick="goTo(&#39;s-letter&#39;)">Skip for now</button>
+      <button class="btn-next btn-retro" id="btn-song" onclick="goTo('s-letter')">Continue → Letter 💌</button>
+      <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
     </div>
   </div>
 </div>
@@ -338,25 +319,23 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
   <div class="step-wrap">
     <div class="step-content">
       <div class="step-counter dark">Step 4 of 4</div>
-      <span class="step-emoji">💌</span>
-      <div class="step-title" id="title-letter">Write from the heart</div>
-      <div class="step-sub">You can type directly in Hindi, Marathi or any language using your keyboard — or use AI to write it for you</div>
-      <div style="background:rgba(255,255,255,0.5);border:1px solid rgba(233,30,99,0.15);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
-        <div style="font-size:0.72rem;font-weight:600;color:#8d3a5a;margin-bottom:8px;">✨ Write Letter with AI</div>
-        <input id="letterTone" class="regular-input" placeholder="e.g. emotional, funny, simple Hindi, Marathi..." style="margin-bottom:8px;" maxlength="60">
-        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:&#39;DM Sans&#39;,sans-serif;">✨ Write Letter with AI</button>
-        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><div class="ai-dot pink-dot"></div><span style="font-size:0.78rem;color:#8d3a5a;">Writing your letter...</span></div>
-        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#8d3a5a;margin-top:6px;">↑ Tap again for a different letter</div>
+      <span class="step-emoji">🗞️</span>
+      <div class="step-title" id="title-letter">Write the party letter!</div>
+      <div class="step-sub">Type in any language — or let AI write it for you</div>
+      <div style="background:rgba(255,255,255,0.5);border:2px solid #111;border-radius:8px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#111;margin-bottom:8px;font-family:'Fredoka One',cursive;">✨ Write Letter with AI</div>
+        <input id="letterTone" class="regular-input" placeholder="e.g. funny, emotional, simple Hindi, Marathi..." style="margin-bottom:8px;" maxlength="60">
+        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:#d90429;color:white;border:3px solid #111;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;">✨ Write Letter with AI</button>
+        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot yellow-dot"></div><div class="ai-dot yellow-dot"></div><div class="ai-dot yellow-dot"></div><span style="font-size:0.78rem;color:#111;">Writing your letter...</span></div>
+        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#555;margin-top:6px;">↑ Tap again for a different letter</div>
       </div>
       <div id="letterInputWrap">
-      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,
-
-There are no words...">Before I met you, the world was simply ordinary. After you walked into my life, every day began to glow with warmth and meaning. On this special day, I just want you to know how deeply grateful I am for you.</textarea>
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;Today the whole world celebrates you..."></textarea>
       <label class="field-label" style="margin-top:12px;">Sign Off</label>
-      <input class="regular-input" id="cSign" value="Forever yours 💕" maxlength="60"></div>
+      <input class="regular-input" id="cSign" value="From your biggest fan 🎊" maxlength="60"></div>
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-retro" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)">Preview My Card →</button>
+      <button class="btn-next btn-retro" id="btn-letter" onclick="goTo('s-preview')">Preview My Card →</button>
     </div>
   </div>
 </div>
@@ -371,15 +350,14 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
       <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;"></div>
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-retro" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
+      <button class="btn-next btn-retro" id="btn-share" onclick="saveAndShare()">🎊 Create &amp; Share Card</button>
     </div>
   </div>
 </div>
 
 <!-- ══ RECEIVER SCREENS ══ -->
-<!-- ══ RECEIVER ══ -->
 <div class="screen" id="rv-loading">
-  <span class="rv-loading-cake">🎂</span>
+  <span class="rv-loading-heart">🎂</span>
   <div class="rv-loading-text">Loading your party card...</div>
 </div>
 
@@ -394,25 +372,36 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   <div class="rv-inner">
     <span class="rv-tag">WishYou.ai</span>
     <span class="rv-cake">🎂</span>
-    <div class="rv-headline" id="rvHeadline">Happy Birthday!</div>
+    <div class="rv-headline" id="rvName">Happy Birthday!</div>
     <div class="rv-sub" id="rvSub">Someone special made this for you 🎊</div>
     <div class="rv-from" id="rvFrom"></div>
     <button class="rv-open-btn" onclick="goTo('rv-photos')">🎉 Open Your Card!</button>
-    <button class="rv-create-btn" style="margin-top:16px;" onclick="window.location.href='/'">🎊 Create a card like this</button>
+    <button class="rv-create-btn" onclick="window.location.href='/'">🎊 Create a card like this</button>
   </div>
 </div>
 
 <div class="screen" id="rv-photos">
+  <button class="rv-back" onclick="goTo('rv-welcome')">←</button>
   <div class="rv-hdr">
-    <span class="rv-label" id="rvPhotoLabel">Comic Strip 📸</span>
-    <div class="rv-title">Your memories!</div>
+    <span class="rv-label" id="rvPhotoTitle">Our Memories</span>
+    <div class="rv-title">📸 Comic Strip!</div>
   </div>
-  <div class="comic-strip" id="comicStrip"></div>
+  <div class="comic-strip" id="polStrip"></div>
   <button class="rv-btn" onclick="goTo('rv-song')">Next → Party Anthem 🎵</button>
 </div>
 
+<!-- Lightbox with swipe/arrows -->
+<div id="photoLightbox" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
+  <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
+  <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
+  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;transition:opacity 0.18s ease;" src="" alt="">
+  <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
+  <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
+</div>
+
 <div class="screen" id="rv-song">
-  <span class="rv-label" style="margin-top:52px;margin-bottom:12px;display:block;text-align:center;">Party Anthem 🎵</span>
+  <button class="rv-back" style="background:rgba(255,225,53,0.15);border-color:#FFE135;color:#FFE135;" onclick="goTo('rv-photos')">←</button>
+  <span style="margin-top:52px;margin-bottom:12px;display:block;text-align:center;font-family:'Fredoka One',cursive;color:#FFE135;font-size:0.9rem;">Party Anthem 🎵</span>
   <div class="vinyl-wrap">
     <div class="vinyl vinyl-spin vinyl-pause" id="rvVinyl">
       <div class="vinyl-label">🎵</div>
@@ -421,18 +410,23 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
   <div class="rv-song-t" id="rvSongT">Your Party Anthem</div>
   <div class="rv-song-a" id="rvSongA">A song chosen just for you</div>
   <div class="yt-wrap" id="rvYtWrap"><div id="rvYtEmbed"></div></div>
-  <button class="rv-btn" onclick="goTo('rv-balloon')">Next → Your Letter 🎈</button>
+  <div class="rv-song-nav">
+    <button class="rv-btn" onclick="goTo('rv-envelope')" style="margin:0;flex:1;">Next → Your Letter 🎈</button>
+  </div>
 </div>
 
-<div class="screen" id="rv-balloon">
-  <div class="balloon-inner">
-    <div class="balloon-t">A letter from them!</div>
-    <div class="balloon-h">Pop the balloon to reveal it 👆</div>
-    <span class="balloon-icon" onclick="popBalloon()">🎈</span>
+<div class="screen" id="rv-envelope">
+  <button class="rv-back" onclick="goTo('rv-song')">←</button>
+  <div class="env-inner">
+    <div class="env-t">A letter from them!</div>
+    <div class="env-h">Pop the balloon to reveal it 👆</div>
+    <span class="env-icon" onclick="openLetter()">🎈</span>
   </div>
 </div>
 
 <div class="screen" id="rv-letter">
+  <div class="news-bar"></div>
+  <button class="rv-back" onclick="goTo('rv-envelope')" style="top:20px;">←</button>
   <div class="news-scroll">
     <div class="newspaper">
       <div class="news-top">
@@ -444,8 +438,8 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
       </div>
       <div class="news-body">
         <span class="news-to" id="newsTo">DEAR BIRTHDAY STAR,</span>
-        <div class="news-text" id="newsText"></div>
-        <div class="news-sign" id="newsSign"></div>
+        <div class="news-text" id="rvLBody"></div>
+        <div class="news-sign" id="rvLSign"></div>
       </div>
     </div>
   </div>
@@ -458,7 +452,10 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 <!-- Save overlay -->
 <div class="save-overlay" id="saveOverlay">
   <div class="save-box" id="saveBox">
-    <span class="save-emoji" id="saveEmoji">🎊</span>
+    <div class="save-spinner">
+      <div class="save-ring"></div>
+      <span class="save-emoji" id="saveEmoji">🎊</span>
+    </div>
     <div class="save-label" id="saveLabel">Creating your card...</div>
     <div class="save-bar-wrap" id="saveBarWrap"><div class="save-bar" id="saveBar"></div></div>
     <div class="save-step" id="saveStep"></div>
@@ -494,13 +491,13 @@ const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
 
 const CFG = {
   cardType:'birthday-retro',
-  emoji:'🎊', stepEmoji:'🎂',
+  emoji:'🎊', stepEmoji:'🎊',
   photosTitle:'Add your photos',
-  songTitle:'Your party anthem 🎵',
-  letterTitle:'Write the newspaper letter',
-  defaultMsg:"It's a BIG day and you deserve to feel like a superstar! Thank you for being exactly who you are — hilarious, brilliant and absolutely one of a kind.",
-  defaultSign:'Reported with love 💛',
-  shareMsg:(name,sender,link)=>`🎊 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a Retro Party card 🎉\n\n':'Someone made you a Retro Party card 🎉\n\n'}👆 Open here:\n${link}`,
+  songTitle:'A song that reminds you of them',
+  letterTitle:'Write the party letter!',
+  defaultMsg:"Today the whole world stops to celebrate YOU! Every laugh, every memory, every crazy moment — it all led to this day. Here's to you, superstar!",
+  defaultSign:'From your biggest fan 🎊',
+  shareMsg:(name,sender,link)=>`🎊 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a Retro Party card 🎉\n\n':'Someone made you a special card 🎉\n\n'}👆 Open here:\n${link}`,
   shareUrl:(id)=>`https://wishyou.ai/birthday/retro.html?card=${id}`
 };
 
@@ -508,7 +505,6 @@ const CFG = {
 let curScreen = '';
 let photos = [];
 let uploadedUrls = {}; // slot index -> cloudinary URL (pre-uploaded)
-let photoCaptions = ['Memory 1','Memory 2','Memory 3','Memory 4','Memory 5'];
 let currentSlotIdx = 0;
 let shareLink = '';
 let returnToPreview = false;
@@ -517,7 +513,7 @@ let aiLetterCount = 0;
 const IS_RECEIVER = new URLSearchParams(window.location.search).has('card');
 
 // ── NAVIGATION ──
-const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-balloon','rv-letter'];
+const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
 
 function goTo(id, fromPreview=false){
   const prev=document.getElementById(curScreen);
@@ -582,16 +578,16 @@ window.addEventListener('DOMContentLoaded',function(){
   } else {
     // Build name inputs
     document.getElementById('nameInputWrap').innerHTML=`
-      <label class="retro-label">Their Name</label>
-      <input class="regular-input" id="cName" placeholder="e.g. Rahul" maxlength="30">
-      <label class="retro-label" style="margin-top:8px;">Their Age (for headline)</label>
-      <input class="regular-input" id="cAge" type="number" placeholder="e.g. 25" min="1" max="120">
-      <label class="retro-label" style="margin-top:8px;">Your Name (From)</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Nilesh" maxlength="30">`;
+      <label class="field-label">Their Name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Their Age (optional)</label>
+      <input class="regular-input" id="cAge" placeholder="e.g. 25" maxlength="4" type="number">
+      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">`;
     // Build letter inputs
     document.getElementById('letterInputWrap').innerHTML=`
-      <textarea class="letter-area" id="cMsg" placeholder="Write something fun and heartfelt...">${CFG.defaultMsg}</textarea>
-      <label class="retro-label" style="margin-top:10px;">Sign Off</label>
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words...">${CFG.defaultMsg}</textarea>
+      <label class="field-label" style="margin-top:12px;">Sign Off</label>
       <input class="regular-input" id="cSign" value="${CFG.defaultSign}" maxlength="60">`;
     // Build photo slots
     buildPhotoSlots();
@@ -697,7 +693,7 @@ async function searchSong(){
       const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
       const card=document.createElement('div');
       card.className='song-result retro-result';
-      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;">${channelTitle}</div></div><button class="song-use-btn soft-use">✓ Use</button>`;
+      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;">${channelTitle}</div></div><button class="song-use-btn retro-use">✓ Use</button>`;
       card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
       rd.appendChild(card);
     });
@@ -781,48 +777,48 @@ function buildPreview(){
   const msg=document.getElementById('cMsg')?.value.trim()||'';
   const sign=document.getElementById('cSign')?.value.trim()||CFG.defaultSign;
   const songName=document.getElementById('songSelectedName')?.textContent||'';
-  const accentColor='#e91e63';
-  const titleText=`Happy Birthday${name?', '+name:''}! ${CFG.emoji}`;
+  const accentColor='#d90429';
+  const titleText=name&&document.getElementById('cAge')?.value?`${name} turns ${document.getElementById('cAge').value}! 🎂`:name?`Happy Birthday, ${name}! 🎊`:'Happy Birthday! 🎊';
   const realPhotos=photos.filter(Boolean);
   const wrap=document.getElementById('cardPagesPreview');
   wrap.innerHTML='';
 
   function makePage(icon,label,content,editScreen){
     const page=document.createElement('div');
-    page.style.cssText=`background:linear-gradient(135deg,#fde8f0,#fce4ec);border-radius:16px;padding:16px;border:1.5px solid rgba(233,30,99,0.12);box-shadow:0 4px 16px rgba(233,30,99,0.1);`;
+    page.style.cssText=`background:#FFE135;border-radius:8px;padding:16px;border:3px solid #111;box-shadow:4px 4px 0 #111;`;
     page.innerHTML=`
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:1.1rem;">${icon}</span>
-          <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.5;">${label}</span>
+          <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.6;font-family:'Fredoka One',cursive;">${label}</span>
         </div>
-        <button onclick="goTo('${editScreen}', true)" style="font-size:0.68rem;font-weight:600;color:${accentColor};background:none;border:1px solid ${accentColor};border-radius:20px;padding:4px 10px;cursor:pointer;opacity:0.8;">Edit</button>
+        <button onclick="goTo('${editScreen}', true)" style="font-size:0.68rem;font-weight:600;color:white;background:${accentColor};border:2px solid #111;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;">Edit</button>
       </div>
       ${content}`;
     wrap.appendChild(page);
   }
 
-  makePage(CFG.emoji,'Welcome Screen',`
-    <div style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;">${titleText}</div>
-    ${sender?`<div style="text-align:center;font-size:0.72rem;opacity:0.6;margin-top:4px;">From ${sender} 💝</div>`:''}
+  makePage('🎊','Welcome Screen',`
+    <div style="text-align:center;font-family:'Fredoka One',cursive;font-size:1rem;color:#111;">${titleText}</div>
+    ${sender?`<div style="text-align:center;font-size:0.72rem;opacity:0.6;margin-top:4px;font-family:'Patrick Hand',cursive;">From ${sender} 🎊</div>`:''}
   `,'s-name');
 
   const photosHeading=document.getElementById('photosHeading')?.value.trim()||'Our Memories';
   makePage('📸',photosHeading,
     realPhotos.length?
-      `<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map(u=>`<img src="${u}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;border:2px solid rgba(233,30,99,0.2);">`).join('')}</div>`
-      :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No photos added yet</div>`,
+      `<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map(u=>`<img src="${u}" style="width:52px;height:52px;border-radius:4px;object-fit:cover;border:2px solid #111;">`).join('')}</div>`
+      :`<div style="font-size:0.8rem;opacity:0.5;font-style:italic;font-family:'Patrick Hand',cursive;">No photos added yet</div>`,
   's-photos');
 
   makePage('🎵','Song',
     songName&&songName!=='—'?
-      `<div style="font-size:0.85rem;font-weight:600;color:${accentColor};">🎵 ${songName}</div>`
-      :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No song selected yet</div>`,
+      `<div style="font-size:0.85rem;font-weight:600;color:${accentColor};font-family:'Fredoka One',cursive;">🎵 ${songName}</div>`
+      :`<div style="font-size:0.8rem;opacity:0.5;font-style:italic;font-family:'Patrick Hand',cursive;">No song selected yet</div>`,
   's-song');
 
-  makePage('💌','Letter',
-    msg?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.88rem;line-height:1.7;color:#3d1c1c;">${msg.length>140?msg.slice(0,140)+'...':msg}</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.82rem;color:${accentColor};margin-top:8px;">${sign}</div>`
-    :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No letter written yet</div>`,
+  makePage('🗞️','Letter',
+    msg?`<div style="font-family:'Patrick Hand',cursive;font-size:0.88rem;line-height:1.7;color:#111;">${msg.length>140?msg.slice(0,140)+'...':msg}</div><div style="font-family:'Patrick Hand',cursive;font-style:italic;font-size:0.82rem;color:${accentColor};margin-top:8px;">${sign}</div>`
+    :`<div style="font-size:0.8rem;opacity:0.5;font-style:italic;font-family:'Patrick Hand',cursive;">No letter written yet</div>`,
   's-letter');
 }
 
@@ -928,44 +924,99 @@ async function loadCard(){
 
 function renderCard(d){
   const name=d.name||'',age=d.age||'',sender=d.sender||'';
-  let headline=name&&age?`${name} turns ${age}! 🎂`:name?`Happy Birthday, ${name}!`:'Happy Birthday! 🎂';
-  document.getElementById('rvHeadline').textContent=headline;
-  document.getElementById('rvSub').textContent=sender?`${sender} made this for you 🎊`:'Someone made this for you 🎊';
+  let headline=name&&age?`${name} turns ${age}! 🎂`:name?`Happy Birthday, ${name}! 🎊`:'Happy Birthday! 🎊';
+  document.getElementById('rvName').textContent=headline;
+  document.getElementById('rvSub').textContent=sender?`${sender} made this for you 🎊`:'Someone special made this for you 🎊';
   document.getElementById('rvFrom').textContent=sender?`From: ${sender} 🎉`:'';
-  if(name&&age)document.getElementById('newsHl').textContent=`BREAKING: ${name.toUpperCase()} TURNS ${age} TODAY!`;
-  else if(name)document.getElementById('newsHl').textContent=`BREAKING: HAPPY BIRTHDAY ${name.toUpperCase()}!`;
-  document.getElementById('newsDate').textContent=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+  // Photos heading
   const heading=d.memoriesHeading||'Our Memories';
-  document.getElementById('rvPhotoLabel').textContent=heading+' 📸';
-  const strip=document.getElementById('comicStrip');strip.innerHTML='';
+  document.getElementById('rvPhotoTitle').textContent=heading;
+  // Photos — comic strip panels with lightbox tap
+  const strip=document.getElementById('polStrip');strip.innerHTML='';
   const caps=['POW! 💥','WOW! ⭐','YAY! 🎉','ZAP! ✨','BOOM! 🎊'];
   if(d.photos&&d.photos.length>0){
+    lbPhotos=d.photos;
     d.photos.forEach((url,i)=>{
       const p=document.createElement('div');p.className='comic-panel';
-      p.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="comic-cap">${caps[i]||'🎉'}</div>`;
+      p.style.cursor='pointer';
+      p.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="comic-cap">${caps[i%caps.length]}</div>`;
+      p.onclick=()=>openLightbox(i);
       strip.appendChild(p);
     });
-  }else{strip.innerHTML='<div class="no-comic"><span style="font-family:\'Fredoka One\',cursive;font-size:1rem;color:#111;opacity:0.4;">🎊 A card made with love!</span></div>';}
+  }else{strip.innerHTML='<div class="no-comic">🎊 A card made with love!</div>';}
+  // Song
   const sn=d.songName||'';
   if(sn&&sn!=='—'){
     document.getElementById('rvSongT').textContent=sn;
+    document.getElementById('rvSongA').textContent='A song chosen just for you';
     const sp=d.spotify||'';
     if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
   }
-  document.getElementById('newsTo').textContent=name?`DEAR ${name.toUpperCase()},`:'DEAR BIRTHDAY STAR,';
-  document.getElementById('newsText').textContent=d.msg||'';
-  document.getElementById('newsSign').textContent=d.sign||(sender?`Reported with love, ${sender} 💛`:'Reported with love 💛');
+  // Newspaper letter
+  const newsHlEl=document.getElementById('newsHl');
+  if(newsHlEl){
+    if(name&&age)newsHlEl.textContent=`BREAKING: ${name.toUpperCase()} TURNS ${age} TODAY!`;
+    else if(name)newsHlEl.textContent=`BREAKING: HAPPY BIRTHDAY ${name.toUpperCase()}!`;
+  }
+  const newsDateEl=document.getElementById('newsDate');
+  if(newsDateEl)newsDateEl.textContent=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+  const newsToEl=document.getElementById('newsTo');
+  if(newsToEl)newsToEl.textContent=name?`DEAR ${name.toUpperCase()},`:'DEAR BIRTHDAY STAR,';
+  // Letter body & sign stored for balloon reveal
+  rvLetterText=d.msg||'';
+  rvLetterSign=d.sign||(sender?`Reported with love, ${sender} 🎊`:'Reported with love 🎊');
+  document.getElementById('rvLBody').textContent=rvLetterText;
+  document.getElementById('rvLSign').textContent=rvLetterSign;
   goTo('rv-welcome');
 }
 
 // ── LIGHTBOX with left/right navigation ──
+let lbPhotos=[];
+let lbIdx=0;
 
-function popBalloon(){
-  const b=document.querySelector('.balloon-icon');
-  if(!b)return;
-  b.style.transform='scale(1.4)';b.textContent='💥';
-  setTimeout(()=>{b.style.transform='';b.textContent='🎈';goTo('rv-letter');},400);
+function openLightbox(idx){
+  lbIdx=idx;
+  const lb=document.getElementById('photoLightbox');
+  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
+  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+  document.getElementById('lbPrev').style.display=lbPhotos.length>1?'block':'none';
+  document.getElementById('lbNext').style.display=lbPhotos.length>1?'block':'none';
+  lb.style.display='flex';
+  // swipe inside lightbox
+  let _lx=0;
+  lb.ontouchstart=e=>{_lx=e.changedTouches[0].clientX;e.stopPropagation();};
+  lb.ontouchend=e=>{
+    e.stopPropagation();
+    const dx=e.changedTouches[0].clientX-_lx;
+    if(Math.abs(dx)>40) lbNav(dx<0?1:-1);
+  };
 }
+
+function lbNav(dir){
+  if(lbPhotos.length<=1) return;
+  const img=document.getElementById('lightboxImg');
+  img.style.opacity='0';
+  setTimeout(()=>{
+    lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
+    img.src=lbPhotos[lbIdx];
+    img.style.opacity='1';
+    document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+  },180);
+}
+
+function closeLightbox(){
+  document.getElementById('photoLightbox').style.display='none';
+}
+
+function openLetter(){
+  const e=document.querySelector('.env-icon');
+  if(!e)return;
+  e.style.transform='scale(1.4)';e.textContent='💥';
+  setTimeout(()=>{e.style.transform='';e.textContent='🎈';goTo('rv-letter');},400);
+}
+
+let rvLetterText='';
+let rvLetterSign='';
 </script>
 
 
