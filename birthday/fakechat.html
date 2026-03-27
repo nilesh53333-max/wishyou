@@ -170,6 +170,16 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .sp-yt iframe{width:100%;height:180px;border:none;display:block;}
 .sp-yt.show{display:block;}
 
+/* Yes/No reply buttons */
+.yesno-wrap{display:flex;align-self:flex-end;gap:8px;margin:4px 0 6px;}
+.yesno-btn{padding:8px 22px;border-radius:20px;border:none;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:transform 0.15s,opacity 0.2s;}
+.yesno-btn:active{transform:scale(0.95);}
+.yesno-yes{background:#25D366;color:white;}
+.yesno-no{background:white;color:#667781;border:1.5px solid #ddd;}
+.yesno-btn.disabled{opacity:0.4;pointer-events:none;}
+/* "Me" reply bubble */
+.bubble.me{background:#DCF8C6;border-top-right-radius:0;}
+
 .wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(255,255,255,0.1);}
 </style>
 </head>
@@ -634,41 +644,84 @@ function renderChat(d){
   goTo('rv-chat');
   const chatBg=document.getElementById('chatBg');
 
-  // Build sequence
+  // Build interactive sequence
+  // Each item has a type. 'yesno' items PAUSE the sequence until user taps Yes.
+  // The callback resumes with the next items.
   const seq=[];
+
+  // Opener
   seq.push({type:'text',text:'Hey! 🎉',delay:800});
   seq.push({type:'typing',delay:1500});
   seq.push({type:'text',text:name?`Happy Birthday ${name}!! 🎂🥳`:'Happy Birthday!! 🎂🥳',delay:2400});
+  seq.push({type:'typing',delay:3300});
+  seq.push({type:'text',text:'I made something special for you 🥹',delay:4100});
 
-  let d2=3200;
+  // Photos gated behind Yes/No
   if(d.photos&&d.photos.length>0){
-    seq.push({type:'typing',delay:d2});
-    d.photos.forEach((url,i)=>{
-      d2+=900;
-      seq.push({type:'photo',url,delay:d2+(i*800)});
+    seq.push({type:'typing',delay:5000});
+    seq.push({type:'text',text:'Can I send you something? 👀',delay:5800});
+    seq.push({type:'yesno',yesText:'Yes! 😍',noText:'No 😢',myReply:'Yes!! Send it 😍',delay:6200,
+      onYes:()=>{
+        const photoSeq=[];
+        photoSeq.push({type:'typing',delay:400});
+        d.photos.forEach((url,i)=>{
+          photoSeq.push({type:'photo',url,delay:1000+(i*900)});
+        });
+        // After photos, queue song or message
+        const afterPhotos=buildAfterPhotos(d,chatBg);
+        photoSeq.push(...afterPhotos);
+        playSequence(photoSeq,chatBg);
+      }
     });
-    d2+=d.photos.length*800+400;
-  }
-
-  if(d.songName&&d.songName!=='—'){
-    seq.push({type:'typing',delay:d2});
-    d2+=900;
-    seq.push({type:'text',text:'I found a song that made me think of you 🎵',delay:d2});
-    d2+=1000;
-    seq.push({type:'song',songName:d.songName,spotify:d.spotify||'',delay:d2});
-    d2+=1200;
-  }
-
-  if(d.msg){
-    seq.push({type:'typing',delay:d2});
-    d2+=1000;
-    const chunks=splitMessage(d.msg);
-    chunks.forEach((chunk,i)=>{
-      seq.push({type:'text',text:chunk,delay:d2+(i*1400)});
-    });
+  } else {
+    // No photos — go straight to song or message
+    const afterSeq=buildAfterPhotos(d,chatBg);
+    afterSeq.forEach(item=>{item.delay+=5800;seq.push(item);});
+    playSequence(seq,chatBg);
+    return;
   }
 
   playSequence(seq,chatBg);
+}
+
+function buildAfterPhotos(d,chatBg){
+  const seq=[];
+  let d2=0;
+  const hasPhotos=d.photos&&d.photos.length>0;
+
+  if(d.songName&&d.songName!=='—'){
+    d2+=hasPhotos?d.photos.length*900+600:0;
+    seq.push({type:'typing',delay:d2+300});
+    seq.push({type:'text',text:'I found a song that made me think of you 🎵',delay:d2+1100});
+    seq.push({type:'yesno',yesText:'Yes 🎵',noText:'Skip',myReply:'Yes, play it! 🎵',delay:d2+1600,
+      onYes:()=>{
+        const songSeq=[];
+        songSeq.push({type:'typing',delay:400});
+        songSeq.push({type:'song',songName:d.songName,spotify:d.spotify||'',delay:1100});
+        // After song, queue message
+        const afterSong=buildMessage(d);
+        afterSong.forEach(item=>{item.delay+=1400;songSeq.push(item);});
+        playSequence(songSeq,chatBg);
+      }
+    });
+  } else {
+    // No song — go straight to message
+    const msgSeq=buildMessage(d);
+    msgSeq.forEach(item=>{item.delay+=d2+400;seq.push(item);});
+  }
+
+  return seq;
+}
+
+function buildMessage(d){
+  const seq=[];
+  if(!d.msg)return seq;
+  const chunks=splitMessage(d.msg);
+  seq.push({type:'typing',delay:300});
+  chunks.forEach((chunk,i)=>{
+    seq.push({type:'text',text:chunk,delay:1000+(i*1400)});
+  });
+  return seq;
 }
 
 function splitMessage(msg){
@@ -686,8 +739,7 @@ function showTyping(chatBg){
   removeTyping();
   const wrap=document.createElement('div');wrap.className='typing-wrap';wrap.id='typingIndicator';
   wrap.innerHTML='<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
-  chatBg.appendChild(wrap);
-  chatBg.scrollTop=chatBg.scrollHeight;
+  chatBg.appendChild(wrap);chatBg.scrollTop=chatBg.scrollHeight;
 }
 function removeTyping(){const el=document.getElementById('typingIndicator');if(el)el.remove();}
 
@@ -697,6 +749,7 @@ function addBubble(chatBg,html,from='them'){
   wrap.className='bubble-wrap '+(from==='me'?'from-me':'from-them');
   wrap.innerHTML=html;chatBg.appendChild(wrap);
   chatBg.scrollTop=chatBg.scrollHeight;
+  return wrap;
 }
 
 function playSequence(seq,chatBg){
@@ -710,19 +763,50 @@ function playSequence(seq,chatBg){
       const t=getTime();
       if(item.type==='typing'){
         showTyping(chatBg);
+        next();
       } else if(item.type==='text'){
         addBubble(chatBg,`<div class="bubble them"><div class="bubble-text">${item.text.replace(/\n/g,'<br>')}</div><div class="bubble-meta"><span class="bubble-time">${t}</span></div></div>`);
+        next();
       } else if(item.type==='photo'){
         removeTyping();
         const wrap=document.createElement('div');wrap.className='bubble-wrap from-them';
         wrap.innerHTML=`<div class="bubble-photo them" onclick="openPhotoFull('${item.url}')"><img src="${item.url}" onerror="this.parentNode.style.display='none'"><div class="bubble-meta" style="padding:0 4px 2px;"><span class="bubble-time">${t}</span></div></div>`;
         chatBg.appendChild(wrap);chatBg.scrollTop=chatBg.scrollHeight;
+        next();
       } else if(item.type==='song'){
         const sn=item.songName.replace(/'/g,"\\'");
         const sp=item.spotify.replace(/'/g,"\\'");
         addBubble(chatBg,`<div class="bubble-song them" onclick="openSongPlayer('${sn}','${sp}')"><button class="song-play-btn">▶</button><div class="song-title-wrap"><div class="song-title-txt">${item.songName}</div><div class="song-sub-txt">Tap to play 🎵</div></div><div class="bubble-meta" style="align-self:flex-end;padding-bottom:2px;"><span class="bubble-time">${t}</span></div></div>`);
+        next();
+      } else if(item.type==='yesno'){
+        // Show Yes/No buttons — PAUSE sequence here
+        removeTyping();
+        const btnWrap=document.createElement('div');btnWrap.className='yesno-wrap';
+        const yesBtn=document.createElement('button');yesBtn.className='yesno-btn yesno-yes';yesBtn.textContent=item.yesText;
+        const noBtn=document.createElement('button');noBtn.className='yesno-btn yesno-no';noBtn.textContent=item.noText;
+        btnWrap.appendChild(noBtn);btnWrap.appendChild(yesBtn);
+        chatBg.appendChild(btnWrap);chatBg.scrollTop=chatBg.scrollHeight;
+        // Yes tap
+        yesBtn.onclick=()=>{
+          // Disable both buttons
+          yesBtn.classList.add('disabled');noBtn.classList.add('disabled');
+          btnWrap.remove();
+          // Show "me" reply bubble
+          const myT=getTime();
+          addBubble(chatBg,`<div class="bubble me"><div class="bubble-text">${item.myReply}</div><div class="bubble-meta"><span class="bubble-time">${myT}</span><span class="bubble-tick">✓✓</span></div></div>`,'me');
+          // Resume with onYes callback
+          setTimeout(()=>{if(item.onYes)item.onYes();else next();},600);
+        };
+        // No tap — just continue past this section
+        noBtn.onclick=()=>{
+          yesBtn.classList.add('disabled');noBtn.classList.add('disabled');
+          btnWrap.remove();
+          const myT=getTime();
+          addBubble(chatBg,`<div class="bubble me"><div class="bubble-text">${item.noText} 😅</div><div class="bubble-meta"><span class="bubble-time">${myT}</span><span class="bubble-tick">✓✓</span></div></div>`,'me');
+          setTimeout(()=>next(),600);
+        };
+        // Don't call next() — sequence is paused
       }
-      next();
     },wait);
   }
   next();
@@ -746,8 +830,8 @@ function openSongPlayer(songName,spotify){
 }
 function closeSongPlayer(){
   document.getElementById('songPlayer').classList.remove('show');
-  const iframe=document.querySelector('#spYtEmbed iframe');
-  if(iframe)iframe.src=iframe.src;
+  document.getElementById('spYtEmbed').innerHTML='';
+  document.getElementById('spYt').classList.remove('show');
 }
 </script>
 </body>
