@@ -175,7 +175,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .pol-grid.count-3 .pol:first-child{grid-column:1/-1;}
 .pol-grid.count-5 .pol:last-child{grid-column:1/-1;}
 
-.pol{background:white;padding:6px 6px 22px;box-shadow:0 8px 28px rgba(74,14,42,0.14),0 2px 6px rgba(74,14,42,0.06);border-radius:2px;cursor:pointer;touch-action:manipulation;position:relative;animation:polReveal 0.55s cubic-bezier(0.22,1,0.36,1) both;}
+.pol{background:white;padding:6px 6px 22px;box-shadow:0 8px 28px rgba(74,14,42,0.14),0 2px 6px rgba(74,14,42,0.06);border-radius:2px;cursor:pointer;touch-action:pan-y;position:relative;animation:polReveal 0.55s cubic-bezier(0.22,1,0.36,1) both;}
 .pol:nth-child(1){animation-delay:0.06s;}
 .pol:nth-child(2){animation-delay:0.14s;}
 .pol:nth-child(3){animation-delay:0.22s;}
@@ -688,8 +688,7 @@ async function uploadPhotoInBackground(file, idx){
   try{
     const bar=document.getElementById('upbar'+idx);
     if(bar)bar.style.width='40%';
-    const blob=await fetch(URL.createObjectURL(file)).then(r=>r.blob());
-    const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
     if(bar)bar.style.width='70%';
     const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
     const d=await res.json();
