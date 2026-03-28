@@ -46,10 +46,15 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .eyebrow-line{width:18px;height:1px;background:rgba(240,192,64,0.3);}
 .eyebrow-txt{font-size:0.56rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,192,64,0.4);}
 
-/* Title */
-.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,6vw,2.2rem);font-weight:300;line-height:1.15;color:rgba(224,240,238,0.92);margin-bottom:4px;}
+/* Title — left aligned */
+.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,6vw,2.2rem);font-weight:300;line-height:1.15;color:rgba(224,240,238,0.92);margin-bottom:4px;text-align:left;}
 .page-title em{font-style:italic;color:#f0c040;}
-.page-sub{font-size:0.78rem;color:rgba(160,220,210,0.3);line-height:1.7;margin-bottom:20px;}
+.page-sub{font-size:0.78rem;color:rgba(160,220,210,0.3);line-height:1.7;margin-bottom:20px;text-align:left;}
+
+/* Editable section label input */
+.sec-hdr-input{background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.1);outline:none;font-size:0.78rem;font-weight:500;color:rgba(160,220,210,0.55);padding:2px 4px;width:160px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;}
+.sec-hdr-input:focus{border-bottom-color:rgba(20,160,140,0.35);color:rgba(160,220,210,0.85);}
+.sec-hdr-input::placeholder{color:rgba(160,220,210,0.2);}
 
 /* Section header */
 .sec-hdr{display:flex;align-items:center;gap:10px;margin:18px 0 11px;}
@@ -201,13 +206,23 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;">
 
       <!-- Photos -->
-      <div class="sec-hdr"><span class="sec-hdr-line"></span><span class="sec-hdr-txt">📸 Photos</span><span class="sec-hdr-line"></span></div>
+      <div class="sec-hdr">
+        <span class="sec-hdr-line"></span>
+        <span class="sec-hdr-txt">📸</span>
+        <input class="sec-hdr-input" id="photosHeading" value="Our Memories" maxlength="30" placeholder="Section title..." autocomplete="off">
+        <span class="sec-hdr-line"></span>
+      </div>
       <div class="photos-grid" id="photosGrid"></div>
       <div class="photo-hint">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> done ✓</div>
       <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
 
       <!-- Song -->
-      <div class="sec-hdr"><span class="sec-hdr-line"></span><span class="sec-hdr-txt">🎵 Song</span><span class="sec-hdr-line"></span></div>
+      <div class="sec-hdr">
+        <span class="sec-hdr-line"></span>
+        <span class="sec-hdr-txt">🎵</span>
+        <input class="sec-hdr-input" id="songScreenTitle" value="Song that reminds me of you 🎵" maxlength="35" placeholder="Song screen title..." autocomplete="off">
+        <span class="sec-hdr-line"></span>
+      </div>
       <div class="song-selected-box" id="songSelectedBox">
         <div class="song-sel-lbl">Selected song</div>
         <div class="song-sel-name" id="songSelectedName">—</div>
@@ -580,8 +595,8 @@ async function createCard(occ, style) {
     sign: document.getElementById('cSign').value.trim() || '',
     spotify: selectedVideoId ? `https://www.youtube.com/watch?v=${selectedVideoId}` : '',
     songName: document.getElementById('songSelectedName').textContent || '',
-    memoriesHeading: style.defaultMemoriesHeading || 'Our Memories',
-    songScreenTitle: style.defaultSongTitle || 'Song that reminds me of you 🎵',
+    memoriesHeading: document.getElementById('photosHeading').value.trim() || style.defaultMemoriesHeading || 'Our Memories',
+    songScreenTitle: document.getElementById('songScreenTitle').value.trim() || style.defaultSongTitle || 'Song that reminds me of you 🎵',
     photos: photoUrls, created: now, createdAt: now, expiresAt: now + 3 * 24 * 60 * 60 * 1000
   };
 
