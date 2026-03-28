@@ -127,21 +127,19 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .btn-primary:active{transform:scale(0.97);}
 .rule{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(20,160,140,0.12),rgba(240,192,64,0.07),transparent);margin:18px 0 0;}
 
-/* ── FIX 2: Occasion tiles — premium box style ── */
+/* ── Occasions — all equal boxes ── */
 .occasions-list{display:flex;flex-direction:column;gap:10px;}
-.occasion-tile{border-radius:16px;padding:16px 18px;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:14px;transition:all 0.2s ease;position:relative;overflow:hidden;}
-.occasion-tile.live{background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(160,220,210,0.12);box-shadow:0 2px 16px rgba(0,0,0,0.2);}
-.occasion-tile.live::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(20,160,140,0.05),transparent);opacity:0;transition:opacity 0.2s;}
-.occasion-tile.live:active{transform:scale(0.98);}
-.occasion-tile.live:active::before{opacity:1;}
-.occasion-tile.live:hover{border-color:rgba(20,160,140,0.28);box-shadow:0 4px 24px rgba(20,160,140,0.1);}
-.occasion-tile.soon{background:rgba(255,255,255,0.018);border:1px solid rgba(160,220,210,0.06);opacity:0.5;pointer-events:none;}
-.occ-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;background:rgba(255,255,255,0.04);border:1px solid rgba(160,220,210,0.07);}
+.occasion-tile{border-radius:16px;padding:15px 17px;display:flex;align-items:center;gap:14px;transition:all 0.2s ease;border:1px solid rgba(160,220,210,0.12);background:rgba(255,255,255,0.04);box-shadow:0 2px 14px rgba(0,0,0,0.15);}
+.occasion-tile.live{cursor:pointer;touch-action:manipulation;}
+.occasion-tile.live:active{transform:scale(0.98);background:rgba(20,160,140,0.08);}
+.occasion-tile.live:hover{border-color:rgba(20,160,140,0.3);box-shadow:0 4px 24px rgba(20,160,140,0.1);}
+.occasion-tile.soon{opacity:0.5;pointer-events:none;}
+.occ-icon-wrap{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.55rem;flex-shrink:0;background:rgba(255,255,255,0.06);border:1px solid rgba(160,220,210,0.1);}
 .occ-info{flex:1;}
-.occ-name{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-weight:600;color:rgba(224,240,238,0.85);margin-bottom:2px;}
-.occ-desc{font-size:0.63rem;color:rgba(160,220,210,0.3);}
-.occ-arrow{font-size:0.88rem;color:rgba(240,192,64,0.35);flex-shrink:0;}
-.soon-badge{font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(160,220,210,0.25);border:1px solid rgba(160,220,210,0.08);border-radius:50px;padding:3px 9px;flex-shrink:0;}
+.occ-name{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:rgba(224,240,238,0.88);margin-bottom:2px;}
+.occ-desc{font-size:0.63rem;color:rgba(160,220,210,0.32);}
+.occ-arrow{font-size:0.88rem;color:rgba(240,192,64,0.4);flex-shrink:0;}
+.soon-badge{font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(160,220,210,0.3);border:1px solid rgba(160,220,210,0.1);border-radius:50px;padding:3px 9px;flex-shrink:0;}
 
 /* ── Card style slideshow previews ── */
 .styles-list-v{display:flex;flex-direction:column;gap:16px;}
@@ -155,15 +153,17 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-lbl{font-size:0.5rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
 
 /* Dots */
-.sv-dots{display:flex;gap:5px;justify-content:center;padding:8px 0 6px;}
+.sv-dots{display:flex;gap:5px;justify-content:center;padding:6px 0 4px;}
 .sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.25;}
 .sv-dot.sv-dot-active{width:16px;border-radius:3px;opacity:1;}
+/* Thin rule between slideshow and info */
+.sv-rule{height:1px;margin:0 16px;opacity:0.15;background:currentColor;}
 
-/* Card info row */
-.sv-info{padding:10px 16px 14px;}
+/* Card info row — same bg as preview, no border */
+.sv-info{padding:10px 16px 16px;}
 .sv-name{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:700;margin-bottom:2px;}
 .sv-desc{font-size:0.6rem;opacity:0.55;line-height:1.5;}
-.sv-cta{margin-top:8px;font-size:0.64rem;font-weight:700;letter-spacing:0.06em;opacity:0.7;}
+.sv-cta{margin-top:8px;font-size:0.64rem;font-weight:700;letter-spacing:0.06em;opacity:0.75;}
 
 /* Shared slide elements */
 .sv-emoji{font-size:2.2rem;margin-bottom:6px;display:block;}
@@ -177,7 +177,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-intimate .sv-sub{color:#8d3a5a;}
 .sv-intimate .sv-dot{background:#e91e63;}
 .sv-intimate .sv-dot.sv-dot-active{background:#e91e63;}
-.sv-intimate .sv-info{background:linear-gradient(135deg,#fde8f0,#fce4ec);}
+.sv-intimate .sv-info{background:linear-gradient(160deg,#fde8f0,#fce4ec);}
 .sv-intimate .sv-name{color:#4a0e2a;}
 .sv-intimate .sv-desc{color:#8d3a5a;}
 .sv-intimate .sv-cta{color:#e91e63;}
@@ -206,7 +206,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-retro .sv-sub{color:#555;}
 .sv-retro .sv-dot{background:#d90429;}
 .sv-retro .sv-dot.sv-dot-active{background:#d90429;}
-.sv-retro .sv-info{background:#FFE135;border-top:2px solid #111;}
+.sv-retro .sv-info{background:#FFE135;}
 .sv-retro .sv-name{color:#d90429;font-family:'Fredoka One',cursive;}
 .sv-retro .sv-desc{color:#555;}
 .sv-retro .sv-cta{color:#d90429;}
@@ -230,7 +230,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-cinematic .sv-sub{color:rgba(255,215,0,0.4);}
 .sv-cinematic .sv-dot{background:#FFD700;}
 .sv-cinematic .sv-dot.sv-dot-active{background:#FFD700;}
-.sv-cinematic .sv-info{background:#0a0a0a;border-top:1px solid rgba(255,215,0,0.15);}
+.sv-cinematic .sv-info{background:#0a0a0a;}
 .sv-cinematic .sv-name{color:white;}
 .sv-cinematic .sv-desc{color:rgba(255,215,0,0.4);}
 .sv-cinematic .sv-cta{color:#FFD700;}
@@ -268,7 +268,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-chat .sv-sub{color:rgba(255,255,255,0.35);}
 .sv-chat .sv-dot{background:#25d366;}
 .sv-chat .sv-dot.sv-dot-active{background:#25d366;}
-.sv-chat .sv-info{background:linear-gradient(135deg,#1a1a2e,#16213e);border-top:1px solid rgba(255,255,255,0.06);}
+.sv-chat .sv-info{background:linear-gradient(160deg,#1a1a2e,#16213e);}
 .sv-chat .sv-name{color:white;}
 .sv-chat . sv-desc{color:rgba(255,255,255,0.35);}
 .sv-chat .sv-cta{color:#25d366;}
@@ -708,6 +708,7 @@ function buildStylesList(occ) {
         ${slidesHtml}
       </div>
       <div class="sv-dots">${dotsHtml}</div>
+      <div class="sv-rule"></div>
       <div class="sv-info ${sw.theme}">
         <div class="sv-name">${style.name}</div>
         <div class="sv-desc">${style.desc}</div>
