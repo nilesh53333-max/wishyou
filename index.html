@@ -127,43 +127,49 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .btn-primary:active{transform:scale(0.97);}
 .rule{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(20,160,140,0.12),rgba(240,192,64,0.07),transparent);margin:18px 0 0;}
 
-/* ── Occasions — all equal visible boxes ── */
-.occasions-list{display:flex;flex-direction:column;gap:10px;}
-.occasion-tile{border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:all 0.2s ease;border:1px solid rgba(160,220,210,0.18);background:rgba(255,255,255,0.07);box-shadow:0 2px 14px rgba(0,0,0,0.2);}
+/* ── Occasions — all equal boxes ── */
+/* ── Occasions — 3-column grid ── */
+.occasions-list{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.occasion-tile{border-radius:14px;padding:14px 10px 12px;display:flex;flex-direction:column;align-items:flex-start;transition:all 0.2s ease;border:1px solid rgba(160,220,210,0.14);background:rgba(255,255,255,0.06);box-shadow:0 2px 12px rgba(0,0,0,0.2);position:relative;min-height:100px;}
 .occasion-tile.live{cursor:pointer;touch-action:manipulation;}
-.occasion-tile.live:active{transform:scale(0.97);background:rgba(20,160,140,0.12);}
-.occasion-tile.live:hover{border-color:rgba(20,160,140,0.4);box-shadow:0 4px 24px rgba(20,160,140,0.12);}
+.occasion-tile.live:active{transform:scale(0.95);background:rgba(20,160,140,0.12);}
 .occasion-tile.soon{opacity:0.55;pointer-events:none;}
-.occ-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;background:rgba(255,255,255,0.08);border:1px solid rgba(160,220,210,0.12);}
+.occ-icon-wrap{font-size:1.9rem;margin-bottom:8px;line-height:1;}
 .occ-info{flex:1;}
-.occ-name{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-weight:600;color:rgba(224,240,238,0.9);margin-bottom:2px;}
-.occ-desc{font-size:0.63rem;color:rgba(160,220,210,0.4);}
-.occ-arrow{font-size:0.9rem;color:rgba(240,192,64,0.5);flex-shrink:0;}
-.soon-badge{font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(160,220,210,0.35);border:1px solid rgba(160,220,210,0.15);border-radius:50px;padding:3px 9px;flex-shrink:0;}
+.occ-name{font-family:'Cormorant Garamond',serif;font-size:0.88rem;font-weight:600;color:rgba(224,240,238,0.9);line-height:1.25;}
+.occ-desc{display:none;}
+.occ-arrow{display:none;}
+.occ-badge{position:absolute;top:8px;right:8px;font-size:0.44rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;border-radius:50px;padding:2px 7px;}
+.occ-badge.live-badge{color:rgba(20,160,140,0.9);border:1px solid rgba(20,160,140,0.35);background:rgba(20,160,140,0.1);}
+.occ-badge.soon-badge{color:rgba(160,220,210,0.4);border:1px solid rgba(160,220,210,0.15);}
 
 /* ── Card style slideshow previews ── */
 .styles-list-v{display:flex;flex-direction:column;gap:16px;}
 .style-card-wrap{border-radius:20px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;}
 .style-card-wrap:active{transform:scale(0.97);}
 
-/* Slideshow viewport */
-.sv{width:100%;height:248px;position:relative;overflow:hidden;}
-.sv-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 12px 88px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
+/* Slideshow viewport — taller to fit info inside */
+.sv{width:100%;height:220px;position:relative;overflow:hidden;}
+.sv-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 12px 60px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
 .sv-slide.sv-active{opacity:1;}
 .sv-lbl{font-size:0.5rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
-/* Info overlaid at bottom */
-.sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:8px 14px 13px;z-index:5;}
-.sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(253,232,240,1) 0%,rgba(253,232,240,0.96) 65%,transparent);}
-.sv-retro .sv-overlay-info{background:linear-gradient(to top,rgba(255,225,53,1) 0%,rgba(255,225,53,0.96) 65%,transparent);}
-.sv-cinematic .sv-overlay-info{background:linear-gradient(to top,rgba(10,10,10,1) 0%,rgba(10,10,10,0.96) 65%,transparent);}
-.sv-jar .sv-overlay-info{background:linear-gradient(to top,rgba(254,243,226,1) 0%,rgba(254,243,226,0.96) 65%,transparent);}
-.sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,1) 0%,rgba(22,21,46,0.96) 65%,transparent);}
-.sv-dots{display:flex;gap:5px;justify-content:center;margin-bottom:5px;}
+
+/* Info overlaid at bottom of card with gradient */
+.sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:10px 14px 12px;z-index:5;}
+.sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(253,232,240,0.97) 0%,rgba(253,232,240,0.7) 70%,transparent);}
+.sv-retro .sv-overlay-info{background:linear-gradient(to top,rgba(255,225,53,0.97) 0%,rgba(255,225,53,0.7) 70%,transparent);}
+.sv-cinematic .sv-overlay-info{background:linear-gradient(to top,rgba(10,10,10,0.97) 0%,rgba(10,10,10,0.7) 70%,transparent);}
+.sv-jar .sv-overlay-info{background:linear-gradient(to top,rgba(254,243,226,0.97) 0%,rgba(254,243,226,0.7) 70%,transparent);}
+.sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,0.97) 0%,rgba(22,21,46,0.7) 70%,transparent);}
+
+/* Dots inside card at bottom */
+.sv-dots{display:flex;gap:5px;justify-content:center;margin-bottom:6px;}
 .sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.3;}
 .sv-dot.sv-dot-active{width:14px;border-radius:3px;opacity:0.9;}
-.sv-name{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:700;margin-bottom:1px;line-height:1.2;}
-.sv-desc{font-size:0.56rem;opacity:0.6;line-height:1.4;}
-.sv-cta{margin-top:4px;font-size:0.58rem;font-weight:700;letter-spacing:0.05em;opacity:0.75;}
+
+.sv-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;margin-bottom:1px;}
+.sv-desc{font-size:0.58rem;opacity:0.6;line-height:1.4;}
+.sv-cta{margin-top:5px;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;opacity:0.75;}
 
 /* Shared slide elements */
 .sv-emoji{font-size:2.2rem;margin-bottom:6px;display:block;}
@@ -422,28 +428,48 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <div class="occasions-list">
         <div class="occasion-tile live" onclick="selectOccasion('birthday')">
           <div class="occ-icon-wrap">🎂</div>
-          <div class="occ-info"><div class="occ-name">Birthday</div><div class="occ-desc">Celebrate their special day</div></div>
-          <span class="occ-arrow">→</span>
-        </div>
-        <div class="occasion-tile soon">
-          <div class="occ-icon-wrap">💑</div>
-          <div class="occ-info"><div class="occ-name">Anniversary</div><div class="occ-desc">Celebrate your love story</div></div>
-          <span class="soon-badge">Coming soon</span>
+          <div class="occ-info"><div class="occ-name">Birthday</div></div>
+          <span class="occ-badge live-badge">LIVE</span>
         </div>
         <div class="occasion-tile soon">
           <div class="occ-icon-wrap">🌸</div>
-          <div class="occ-info"><div class="occ-name">Mother's Day</div><div class="occ-desc">For the one who loves most</div></div>
-          <span class="soon-badge">Coming soon</span>
+          <div class="occ-info"><div class="occ-name">Mother's Day</div></div>
+          <span class="occ-badge soon-badge">SOON</span>
         </div>
         <div class="occasion-tile soon">
-          <div class="occ-icon-wrap">🎓</div>
-          <div class="occ-info"><div class="occ-name">Graduation</div><div class="occ-desc">Celebrate their achievement</div></div>
-          <span class="soon-badge">Coming soon</span>
+          <div class="occ-icon-wrap">❤️</div>
+          <div class="occ-info"><div class="occ-name">Valentine's Day</div></div>
+          <span class="occ-badge soon-badge">SOON</span>
         </div>
         <div class="occasion-tile soon">
           <div class="occ-icon-wrap">💍</div>
-          <div class="occ-info"><div class="occ-name">Engagement</div><div class="occ-desc">A new chapter begins</div></div>
-          <span class="soon-badge">Coming soon</span>
+          <div class="occ-info"><div class="occ-name">Anniversary</div></div>
+          <span class="occ-badge soon-badge">SOON</span>
+        </div>
+        <div class="occasion-tile soon">
+          <div class="occ-icon-wrap">🤝</div>
+          <div class="occ-info"><div class="occ-name">Friendship Day</div></div>
+          <span class="occ-badge soon-badge">SOON</span>
+        </div>
+        <div class="occasion-tile soon">
+          <div class="occ-icon-wrap">👨</div>
+          <div class="occ-info"><div class="occ-name">Father's Day</div></div>
+          <span class="occ-badge soon-badge">SOON</span>
+        </div>
+        <div class="occasion-tile soon">
+          <div class="occ-icon-wrap">🎓</div>
+          <div class="occ-info"><div class="occ-name">Graduation</div></div>
+          <span class="occ-badge soon-badge">SOON</span>
+        </div>
+        <div class="occasion-tile soon">
+          <div class="occ-icon-wrap">👶</div>
+          <div class="occ-info"><div class="occ-name">New Baby</div></div>
+          <span class="occ-badge soon-badge">SOON</span>
+        </div>
+        <div class="occasion-tile soon">
+          <div class="occ-icon-wrap">🎄</div>
+          <div class="occ-info"><div class="occ-name">Christmas</div></div>
+          <span class="occ-badge soon-badge">SOON</span>
         </div>
       </div>
       <div class="rule"></div>
@@ -591,6 +617,7 @@ function goTo(id) {
   next.classList.add('active');
   curScreen = id;
   setTimeout(() => { const sc = next.querySelector('.step-content'); if (sc) sc.scrollTo(0, 0); }, 50);
+  saveDraft(); // persist current screen so refresh returns here
 }
 
 function goToPage2() {
@@ -733,12 +760,14 @@ function buildStylesList(occ) {
   });
 }
 
+// ── INIT ──
 // ── LOCALSTORAGE PERSISTENCE ──
-const STORAGE_KEY = 'wishyou_draft';
+const DRAFT_KEY = 'wishyou_draft';
 
 function saveDraft() {
   try {
-    const draft = {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({
+      screen: curScreen,
       cName: document.getElementById('cName')?.value || '',
       cSender: document.getElementById('cSender')?.value || '',
       photosHeading: document.getElementById('photosHeading')?.value || '',
@@ -748,19 +777,21 @@ function saveDraft() {
       cSign: document.getElementById('cSign')?.value || '',
       songSelectedName: document.getElementById('songSelectedName')?.textContent || '—',
       selectedVideoId,
+      selectedOccasion,
       signManuallyEdited,
       uploadedUrls
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+    }));
   } catch(e) {}
 }
 
 function restoreDraft() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(DRAFT_KEY);
     if (!raw) return;
     const d = JSON.parse(raw);
-    if (!d.cName && !d.cSender) return;
+    if (!d.cName && !d.cSender) return; // nothing to restore
+
+    // Restore all inputs
     if (d.cName) document.getElementById('cName').value = d.cName;
     if (d.cSender) document.getElementById('cSender').value = d.cSender;
     if (d.photosHeading) document.getElementById('photosHeading').value = d.photosHeading;
@@ -775,17 +806,34 @@ function restoreDraft() {
     if (d.selectedVideoId) selectedVideoId = d.selectedVideoId;
     if (d.signManuallyEdited) signManuallyEdited = true;
     if (d.uploadedUrls) uploadedUrls = d.uploadedUrls;
+    if (d.selectedOccasion) selectedOccasion = d.selectedOccasion;
+
+    // Restore screen — navigate directly back to where user was
+    const screen = d.screen;
+    if (screen && screen !== 'p-info') {
+      if (screen === 'p-style' && d.selectedOccasion) {
+        buildStylesList(d.selectedOccasion);
+      }
+      // Jump directly to saved screen
+      const el = document.getElementById(screen);
+      if (el) {
+        document.getElementById('p-info').classList.remove('active');
+        el.classList.add('active');
+        curScreen = screen;
+      }
+    }
   } catch(e) {}
 }
 
 function clearDraft() {
-  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  try { localStorage.removeItem(DRAFT_KEY); } catch(e) {}
 }
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
   buildPhotoSlots();
   restoreDraft();
+  // Save on every input change
   document.addEventListener('input', saveDraft);
 });
 
