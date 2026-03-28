@@ -24,19 +24,21 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
 .screen.slide-out{opacity:0;transform:translateX(-60px);}
 
-/* Progress */
-.progress-bar{position:absolute;top:0;left:0;right:0;height:2px;background:rgba(160,220,210,0.06);z-index:10;}
-.progress-fill{height:100%;background:linear-gradient(90deg,rgba(20,160,140,0.8),rgba(240,192,64,0.7));transition:width 0.6s ease;}
+/* ── FIX 1: Step dots instead of progress bar ── */
+.step-dots{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:center;gap:6px;padding-top:12px;}
+.step-dot{width:6px;height:6px;border-radius:50%;background:rgba(160,220,210,0.15);transition:all 0.4s ease;}
+.step-dot.active{width:20px;border-radius:3px;background:rgba(20,160,140,0.7);}
+.step-dot.done{background:rgba(20,160,140,0.35);}
 
 /* Nav */
-.top-nav{position:absolute;top:0;left:0;right:0;z-index:10;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;}
+.top-nav{position:absolute;top:0;left:0;right:0;z-index:10;padding:28px 22px 0;display:flex;align-items:center;justify-content:space-between;}
 .back-btn{width:34px;height:34px;border-radius:50%;background:rgba(160,220,210,0.05);border:1px solid rgba(160,220,210,0.1);display:flex;align-items:center;justify-content:center;color:rgba(160,220,210,0.45);font-size:0.95rem;cursor:pointer;touch-action:manipulation;}
 .back-btn:active{background:rgba(160,220,210,0.1);}
 .nav-logo{font-family:'Cormorant Garamond',serif;font-size:0.82rem;font-weight:400;letter-spacing:0.16em;text-transform:uppercase;color:rgba(160,220,210,0.3);}
 .step-pill{font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,192,64,0.4);border:1px solid rgba(240,192,64,0.14);border-radius:50px;padding:4px 11px;}
 
 /* Step wrap */
-.step-wrap{flex:1;display:flex;flex-direction:column;padding:68px 22px 0;overflow:hidden;min-height:0;}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:76px 22px 0;overflow:hidden;min-height:0;}
 .step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:10px;min-height:0;}
 .step-content::-webkit-scrollbar{display:none;}
 .step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom) + 18px);}
@@ -52,14 +54,14 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .page-sub{font-size:0.78rem;color:rgba(160,220,210,0.3);line-height:1.7;margin-bottom:20px;text-align:left;}
 
 /* Editable section label input */
-.sec-hdr-input{background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.1);outline:none;font-size:0.78rem;font-weight:500;color:rgba(160,220,210,0.55);padding:2px 4px;width:160px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;}
+.sec-hdr-input{background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.1);outline:none;font-size:0.78rem;font-weight:500;color:rgba(160,220,210,0.55);padding:2px 4px;width:auto;min-width:80px;max-width:200px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;}
 .sec-hdr-input:focus{border-bottom-color:rgba(20,160,140,0.35);color:rgba(160,220,210,0.85);}
 .sec-hdr-input::placeholder{color:rgba(160,220,210,0.2);}
 
 /* Section header */
-.sec-hdr{display:flex;align-items:center;gap:10px;margin:18px 0 11px;}
+.sec-hdr{display:flex;align-items:center;gap:8px;margin:18px 0 11px;}
 .sec-hdr-line{flex:1;height:1px;background:rgba(160,220,210,0.07);}
-.sec-hdr-txt{font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(160,220,210,0.24);}
+.sec-hdr-txt{font-size:0.9rem;flex-shrink:0;}
 
 /* Inputs */
 .field-label{display:block;font-size:0.58rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.27);margin-bottom:8px;}
@@ -123,33 +125,42 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .btn-primary{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:transform 0.15s;background:linear-gradient(135deg,rgba(20,160,140,0.88),rgba(16,130,115,0.88));color:rgba(224,240,238,0.95);box-shadow:0 8px 28px rgba(20,160,140,0.2);letter-spacing:0.04em;position:relative;overflow:hidden;}
 .btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.06),transparent);}
 .btn-primary:active{transform:scale(0.97);}
-
 .rule{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(20,160,140,0.12),rgba(240,192,64,0.07),transparent);margin:18px 0 0;}
 
-/* Occasions */
-.occasions-list{display:flex;flex-direction:column;gap:9px;}
-.occasion-tile{border-radius:14px;padding:15px 17px;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:14px;transition:transform 0.15s,box-shadow 0.15s;}
-.occasion-tile.live{background:rgba(255,255,255,0.032);border:1px solid rgba(160,220,210,0.09);}
+/* ── FIX 2: Occasion tiles — premium box style ── */
+.occasions-list{display:flex;flex-direction:column;gap:10px;}
+.occasion-tile{border-radius:16px;padding:16px 18px;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:14px;transition:all 0.2s ease;position:relative;overflow:hidden;}
+.occasion-tile.live{background:linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));border:1px solid rgba(160,220,210,0.12);box-shadow:0 2px 16px rgba(0,0,0,0.2);}
+.occasion-tile.live::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(20,160,140,0.05),transparent);opacity:0;transition:opacity 0.2s;}
 .occasion-tile.live:active{transform:scale(0.98);}
-.occasion-tile.live:hover{border-color:rgba(20,160,140,0.26);box-shadow:0 5px 24px rgba(20,160,140,0.08);}
-.occasion-tile.soon{background:rgba(255,255,255,0.014);border:1px dashed rgba(160,220,210,0.05);opacity:0.42;pointer-events:none;}
-.occ-emoji{font-size:1.8rem;flex-shrink:0;}
+.occasion-tile.live:active::before{opacity:1;}
+.occasion-tile.live:hover{border-color:rgba(20,160,140,0.28);box-shadow:0 4px 24px rgba(20,160,140,0.1);}
+.occasion-tile.soon{background:rgba(255,255,255,0.018);border:1px solid rgba(160,220,210,0.06);opacity:0.5;pointer-events:none;}
+.occ-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;background:rgba(255,255,255,0.04);border:1px solid rgba(160,220,210,0.07);}
 .occ-info{flex:1;}
-.occ-name{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:600;color:rgba(224,240,238,0.8);margin-bottom:1px;}
-.occ-desc{font-size:0.63rem;color:rgba(160,220,210,0.27);}
-.occ-arrow{font-size:0.88rem;color:rgba(240,192,64,0.27);flex-shrink:0;}
-.soon-badge{font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(160,220,210,0.2);border:1px solid rgba(160,220,210,0.07);border-radius:50px;padding:3px 8px;flex-shrink:0;}
+.occ-name{font-family:'Cormorant Garamond',serif;font-size:1.12rem;font-weight:600;color:rgba(224,240,238,0.85);margin-bottom:2px;}
+.occ-desc{font-size:0.63rem;color:rgba(160,220,210,0.3);}
+.occ-arrow{font-size:0.88rem;color:rgba(240,192,64,0.35);flex-shrink:0;}
+.soon-badge{font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(160,220,210,0.25);border:1px solid rgba(160,220,210,0.08);border-radius:50px;padding:3px 9px;flex-shrink:0;}
 
-/* Styles */
-.styles-list{display:flex;flex-direction:column;gap:9px;}
-.style-tile{border-radius:13px;padding:14px 16px;cursor:pointer;touch-action:manipulation;display:flex;align-items:center;gap:13px;background:rgba(255,255,255,0.026);border:1px solid rgba(160,220,210,0.07);transition:transform 0.15s,border-color 0.2s,box-shadow 0.2s;}
-.style-tile:active{transform:scale(0.97);}
-.style-tile:hover{border-color:rgba(20,160,140,0.22);box-shadow:0 5px 20px rgba(20,160,140,0.07);}
-.style-preview{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0;}
-.style-info{flex:1;}
-.style-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:rgba(224,240,238,0.8);margin-bottom:2px;}
-.style-desc{font-size:0.61rem;color:rgba(160,220,210,0.27);}
-.style-arrow{font-size:0.86rem;color:rgba(240,192,64,0.27);flex-shrink:0;}
+/* ── FIX 3: Card style — horizontal scrolling cards ── */
+.styles-scroll-wrap{overflow-x:auto;margin:0 -22px;padding:0 22px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.styles-scroll-wrap::-webkit-scrollbar{display:none;}
+.styles-scroll{display:flex;gap:12px;width:max-content;}
+.style-card-big{width:200px;flex-shrink:0;scroll-snap-align:start;border-radius:18px;overflow:hidden;cursor:pointer;touch-action:manipulation;border:1px solid rgba(160,220,210,0.08);transition:transform 0.2s,box-shadow 0.2s;position:relative;}
+.style-card-big:active{transform:scale(0.96);}
+.style-card-big:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,0.3);}
+.style-card-preview{height:140px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;position:relative;overflow:hidden;}
+.style-card-preview::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.4));}
+.style-card-body{padding:12px 14px 14px;background:rgba(255,255,255,0.03);}
+.style-card-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:rgba(224,240,238,0.88);margin-bottom:3px;}
+.style-card-desc{font-size:0.6rem;color:rgba(160,220,210,0.35);line-height:1.5;}
+.style-card-tap{display:inline-block;margin-top:8px;font-size:0.62rem;font-weight:600;color:rgba(240,192,64,0.6);letter-spacing:0.06em;}
+
+/* Scroll hint */
+.scroll-hint{font-size:0.62rem;color:rgba(160,220,210,0.22);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.scroll-hint::after{content:'→';animation:scrollPulse 1.5s ease-in-out infinite;}
+@keyframes scrollPulse{0%,100%{transform:translateX(0);opacity:0.4;}50%{transform:translateX(4px);opacity:0.8;}}
 
 /* Save overlay */
 .save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
@@ -182,45 +193,47 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 <div class="bg-glow"></div>
 
 <!-- ════════════════════════════════
-     PAGE 1 — NAMES + PHOTOS + SONG + LETTER
+     PAGE 1 — ALL INPUTS
 ════════════════════════════════ -->
 <div class="screen active" id="p-info">
-  <div class="progress-bar"><div class="progress-fill" style="width:33%"></div></div>
+  <!-- FIX 4: Step dots instead of progress bar -->
+  <div class="step-dots">
+    <div class="step-dot active" id="dot-1"></div>
+    <div class="step-dot" id="dot-2"></div>
+    <div class="step-dot" id="dot-3"></div>
+  </div>
   <div class="top-nav">
     <div class="nav-logo">WishYou.ai</div>
     <span class="step-pill">Step 1 of 3</span>
   </div>
   <div class="step-wrap">
     <div class="step-content">
-
-      <!-- Names -->
       <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">Let's begin</span><span class="eyebrow-line"></span></div>
       <div class="page-title">Create a card<br><em>they'll never forget.</em></div>
       <div class="page-sub">Fill in the details — takes about 2 minutes.</div>
 
       <label class="field-label">To — Their name</label>
       <input class="big-input" id="cName" placeholder="e.g. Priya" maxlength="30" autocomplete="off">
-
       <div style="height:18px;"></div>
       <label class="field-label">From — Your name</label>
       <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;">
 
-      <!-- Photos -->
+      <!-- FIX 5: Photos heading default = "Memories" -->
       <div class="sec-hdr">
         <span class="sec-hdr-line"></span>
         <span class="sec-hdr-txt">📸</span>
-        <input class="sec-hdr-input" id="photosHeading" value="Our Memories" maxlength="30" placeholder="Section title..." autocomplete="off">
+        <input class="sec-hdr-input" id="photosHeading" value="Memories" maxlength="30" placeholder="Section title..." autocomplete="off">
         <span class="sec-hdr-line"></span>
       </div>
       <div class="photos-grid" id="photosGrid"></div>
-      <div class="photo-hint">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> done ✓</div>
+      <div class="photo-hint">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
       <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
 
-      <!-- Song -->
+      <!-- FIX 5: Song heading default = "Song for you" -->
       <div class="sec-hdr">
         <span class="sec-hdr-line"></span>
         <span class="sec-hdr-txt">🎵</span>
-        <input class="sec-hdr-input" id="songScreenTitle" value="Song that reminds me of you 🎵" maxlength="35" placeholder="Song screen title..." autocomplete="off">
+        <input class="sec-hdr-input" id="songScreenTitle" value="Song for you 🎵" maxlength="35" placeholder="Song screen title..." autocomplete="off">
         <span class="sec-hdr-line"></span>
       </div>
       <div class="song-selected-box" id="songSelectedBox">
@@ -233,8 +246,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       </div>
       <div id="songResults"></div>
 
-      <!-- Letter -->
-      <div class="sec-hdr"><span class="sec-hdr-line"></span><span class="sec-hdr-txt">💌 Letter</span><span class="sec-hdr-line"></span></div>
+      <div class="sec-hdr"><span class="sec-hdr-line"></span><span class="sec-hdr-txt">💌</span><span style="font-size:0.72rem;color:rgba(160,220,210,0.35);letter-spacing:0.1em;">Letter</span><span class="sec-hdr-line"></span></div>
       <div class="ai-box">
         <div class="ai-box-lbl">✨ Write with AI</div>
         <div class="ai-row">
@@ -247,9 +259,10 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
         </div>
       </div>
       <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words..." rows="5"></textarea>
+      <!-- FIX 6: sign-input default = "With love, [sender name]" — set dynamically -->
       <div class="sign-row">
         <span class="sign-lbl">Sign off</span>
-        <input class="sign-input" id="cSign" value="With love 💕" maxlength="60">
+        <input class="sign-input" id="cSign" placeholder="With love, Aryan 💕" maxlength="60">
       </div>
       <div class="rule"></div>
     </div>
@@ -263,7 +276,11 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
      PAGE 2 — OCCASION
 ════════════════════════════════ -->
 <div class="screen" id="p-occasion">
-  <div class="progress-bar"><div class="progress-fill" style="width:66%"></div></div>
+  <div class="step-dots">
+    <div class="step-dot done" id="dot2-1"></div>
+    <div class="step-dot active" id="dot2-2"></div>
+    <div class="step-dot" id="dot2-3"></div>
+  </div>
   <div class="top-nav">
     <button class="back-btn" onclick="goTo('p-info')">←</button>
     <span class="step-pill">Step 2 of 3</span>
@@ -275,27 +292,27 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <div class="page-sub" style="margin-bottom:20px;">Pick what you're celebrating</div>
       <div class="occasions-list">
         <div class="occasion-tile live" onclick="selectOccasion('birthday')">
-          <span class="occ-emoji">🎂</span>
+          <div class="occ-icon-wrap">🎂</div>
           <div class="occ-info"><div class="occ-name">Birthday</div><div class="occ-desc">Celebrate their special day</div></div>
           <span class="occ-arrow">→</span>
         </div>
         <div class="occasion-tile soon">
-          <span class="occ-emoji">💑</span>
+          <div class="occ-icon-wrap">💑</div>
           <div class="occ-info"><div class="occ-name">Anniversary</div><div class="occ-desc">Celebrate your love story</div></div>
           <span class="soon-badge">Coming soon</span>
         </div>
         <div class="occasion-tile soon">
-          <span class="occ-emoji">🌸</span>
+          <div class="occ-icon-wrap">🌸</div>
           <div class="occ-info"><div class="occ-name">Mother's Day</div><div class="occ-desc">For the one who loves most</div></div>
           <span class="soon-badge">Coming soon</span>
         </div>
         <div class="occasion-tile soon">
-          <span class="occ-emoji">🎓</span>
+          <div class="occ-icon-wrap">🎓</div>
           <div class="occ-info"><div class="occ-name">Graduation</div><div class="occ-desc">Celebrate their achievement</div></div>
           <span class="soon-badge">Coming soon</span>
         </div>
         <div class="occasion-tile soon">
-          <span class="occ-emoji">💍</span>
+          <div class="occ-icon-wrap">💍</div>
           <div class="occ-info"><div class="occ-name">Engagement</div><div class="occ-desc">A new chapter begins</div></div>
           <span class="soon-badge">Coming soon</span>
         </div>
@@ -306,10 +323,14 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 </div>
 
 <!-- ════════════════════════════════
-     PAGE 3 — CARD STYLE
+     PAGE 3 — CARD STYLE (horizontal scroll cards)
 ════════════════════════════════ -->
 <div class="screen" id="p-style">
-  <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+  <div class="step-dots">
+    <div class="step-dot done" id="dot3-1"></div>
+    <div class="step-dot done" id="dot3-2"></div>
+    <div class="step-dot active" id="dot3-3"></div>
+  </div>
   <div class="top-nav">
     <button class="back-btn" onclick="goTo('p-occasion')">←</button>
     <span class="step-pill">Step 3 of 3</span>
@@ -318,8 +339,12 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
     <div class="step-content">
       <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">Card Style</span><span class="eyebrow-line"></span></div>
       <div class="page-title">Pick your<br><em>style.</em></div>
-      <div class="page-sub" id="styleSubLine" style="margin-bottom:20px;">Same love, different feeling.</div>
-      <div class="styles-list" id="stylesList"></div>
+      <div class="page-sub" id="styleSubLine" style="margin-bottom:10px;">Swipe to explore · tap to create</div>
+      <div class="scroll-hint">Scroll to see all styles</div>
+      <!-- FIX 7: Horizontal scrolling card previews -->
+      <div class="styles-scroll-wrap">
+        <div class="styles-scroll" id="stylesList"></div>
+      </div>
       <div class="rule"></div>
     </div>
   </div>
@@ -339,8 +364,8 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
   <div class="share-box">
     <div style="font-size:2rem;margin-bottom:10px;" id="shareEmoji">💝</div>
     <div class="share-title">Card is ready! 🎉</div>
-    <div class="share-sub">Send this link to <span id="shareReceiverName">them</span> 💝</div>
-    <div class="share-expiry">⏳ Card expires in 3 days</div>
+    <div class="share-sub">Send this to <span id="shareReceiverName">them</span> 💝</div>
+    <div class="share-expiry">⏳ Link expires in 3 days</div>
     <div class="share-link-row">
       <span class="share-link-txt" id="shareLinkTxt"></span>
       <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
@@ -366,6 +391,7 @@ let currentSlotIdx = 0;
 let selectedOccasion = '';
 let selectedVideoId = '';
 let shareLink = '';
+let shareLinkShort = ''; // FIX 8: short link for display
 let aiLetterCount = 0;
 
 // ── OCCASIONS CONFIG ──
@@ -373,11 +399,56 @@ const OCCASIONS = {
   birthday: {
     label: 'Birthday', emoji: '🎂',
     styles: [
-      { id:'intimate', name:'💌 Intimate', desc:'Soft & emotional · Envelope reveal · Polaroid photos', preview:'linear-gradient(135deg,#fde8f0,#fce4ec)', cardType:'birthday-intimate', defaultSongTitle:'Song that reminds me of you 🎵', defaultMemoriesHeading:'Our Memories', receiverUrl:id=>`https://wishyou.ai/birthday/intimate.html?card=${id}`, shareMsg:(n,s,l)=>`💝 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a special card 💌\n\n':'Someone made you a special card 💌\n\n'}👆 Open here:\n${l}` },
-      { id:'retro', name:'🎊 Retro Party', desc:'Fun & loud · Balloon pop · Newspaper letter', preview:'linear-gradient(135deg,#FFE135,#ffd000)', cardType:'birthday-retro', defaultSongTitle:'Party Anthem 🎵', defaultMemoriesHeading:'Our Memories', receiverUrl:id=>`https://wishyou.ai/birthday/retro.html?card=${id}`, shareMsg:(n,s,l)=>`🎊 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a Retro Party card 🎉\n\n':'Someone made you a special card 🎉\n\n'}👆 Open here:\n${l}` },
-      { id:'cinematic', name:'🎬 Cinematic', desc:'Dark & dramatic · Film frames · Gold subtitle letter', preview:'linear-gradient(135deg,#111,#1a1a1a)', cardType:'birthday-cinematic', defaultSongTitle:'The Background Score 🎵', defaultMemoriesHeading:'The Story So Far', receiverUrl:id=>`https://wishyou.ai/birthday/cinematic.html?card=${id}`, shareMsg:(n,s,l)=>`🎬 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a cinematic card 🎞️\n\n':'Someone made you a special card 🎞️\n\n'}▶ Open here:\n${l}` },
-      { id:'memoryjar', name:'🫙 Memory Jar', desc:'Cozy & warm · Pull notes from a jar · Handwritten feel', preview:'linear-gradient(135deg,#fef3e2,#fde8c8)', cardType:'birthday-memoryjar', defaultSongTitle:'A song in the jar 🎵', defaultMemoriesHeading:'Our Memories', receiverUrl:id=>`https://wishyou.ai/birthday/memoryjar.html?card=${id}`, shareMsg:(n,s,l)=>`🫙 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' filled a memory jar for you 💛\n\n':'Someone filled a memory jar for you 💛\n\n'}👆 Open here:\n${l}` },
-      { id:'fakechat', name:'💬 Fake Chat', desc:'Playful & modern · Chat bubble reveal · Surprise ending', preview:'linear-gradient(135deg,#1a1a2e,#16213e)', cardType:'birthday-fakechat', defaultSongTitle:'Song that reminds me of you 🎵', defaultMemoriesHeading:'Our Memories', receiverUrl:id=>`https://wishyou.ai/birthday/fakechat.html?card=${id}`, shareMsg:(n,s,l)=>`💬 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' sent you a surprise message 💌\n\n':'Someone sent you a special message 💌\n\n'}👆 Open here:\n${l}` }
+      {
+        id:'intimate', name:'💌 Intimate',
+        desc:'Soft & emotional · Envelope reveal · Polaroid photos',
+        preview:'linear-gradient(160deg,#fde8f0,#fce4ec)', previewEmoji:'💌',
+        cardType:'birthday-intimate',
+        defaultSongTitle:'Song for you 🎵',
+        defaultMemoriesHeading:'Memories',
+        receiverUrl: id => `https://wishyou.ai/birthday/intimate.html?card=${id}`,
+        shareMsg: (n,s,l) => `💝 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a card 💌\n\n':'Someone made you a card 💌\n\n'}👆 Open:\n${l}`
+      },
+      {
+        id:'retro', name:'🎊 Retro Party',
+        desc:'Fun & loud · Balloon pop · Newspaper letter',
+        preview:'linear-gradient(160deg,#FFE135,#ffd000)', previewEmoji:'🎊',
+        cardType:'birthday-retro',
+        defaultSongTitle:'Party Anthem 🎵',
+        defaultMemoriesHeading:'Memories',
+        receiverUrl: id => `https://wishyou.ai/birthday/retro.html?card=${id}`,
+        shareMsg: (n,s,l) => `🎊 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a card 🎉\n\n':'Someone made you a card 🎉\n\n'}👆 Open:\n${l}`
+      },
+      {
+        id:'cinematic', name:'🎬 Cinematic',
+        desc:'Dark & dramatic · Film frames · Gold subtitle letter',
+        preview:'linear-gradient(160deg,#111,#1a1a1a)', previewEmoji:'🎬',
+        cardType:'birthday-cinematic',
+        defaultSongTitle:'The Score 🎵',
+        defaultMemoriesHeading:'The Story',
+        receiverUrl: id => `https://wishyou.ai/birthday/cinematic.html?card=${id}`,
+        shareMsg: (n,s,l) => `🎬 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a card 🎞️\n\n':'Someone made you a card 🎞️\n\n'}▶ Open:\n${l}`
+      },
+      {
+        id:'memoryjar', name:'🫙 Memory Jar',
+        desc:'Cozy & warm · Pull notes from a jar · Handwritten',
+        preview:'linear-gradient(160deg,#fef3e2,#fde8c8)', previewEmoji:'🫙',
+        cardType:'birthday-memoryjar',
+        defaultSongTitle:'Song for you 🎵',
+        defaultMemoriesHeading:'Memories',
+        receiverUrl: id => `https://wishyou.ai/birthday/memoryjar.html?card=${id}`,
+        shareMsg: (n,s,l) => `🫙 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a memory jar 💛\n\n':'Someone made you a jar 💛\n\n'}👆 Open:\n${l}`
+      },
+      {
+        id:'fakechat', name:'💬 Fake Chat',
+        desc:'Playful & modern · Chat bubble reveal · Surprise ending',
+        preview:'linear-gradient(160deg,#1a1a2e,#16213e)', previewEmoji:'💬',
+        cardType:'birthday-fakechat',
+        defaultSongTitle:'Song for you 🎵',
+        defaultMemoriesHeading:'Memories',
+        receiverUrl: id => `https://wishyou.ai/birthday/fakechat.html?card=${id}`,
+        shareMsg: (n,s,l) => `💬 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' sent you a surprise 💌\n\n':'Someone sent you a surprise 💌\n\n'}👆 Open:\n${l}`
+      }
     ]
   }
 };
@@ -402,6 +473,12 @@ function goToPage2() {
     setTimeout(() => inp.style.borderBottomColor = '', 1800);
     return;
   }
+  // FIX 6: Auto-set sign-off with sender name
+  const sender = document.getElementById('cSender').value.trim();
+  const signInp = document.getElementById('cSign');
+  if (!signInp.value || signInp.value === 'With love 💕') {
+    signInp.value = sender ? `With love, ${sender} 💕` : 'With love 💕';
+  }
   goTo('p-occasion');
 }
 
@@ -411,15 +488,24 @@ function selectOccasion(occ) {
   goTo('p-style');
 }
 
+// FIX 3: Horizontal card scroll with rich previews
 function buildStylesList(occ) {
   const config = OCCASIONS[occ]; if (!config) return;
-  document.getElementById('styleSubLine').textContent = `${config.label} · pick the vibe that feels right`;
+  document.getElementById('styleSubLine').textContent = `${config.label} · swipe & pick the vibe`;
   const list = document.getElementById('stylesList'); list.innerHTML = '';
   config.styles.forEach(style => {
-    const tile = document.createElement('div'); tile.className = 'style-tile';
-    tile.innerHTML = `<div class="style-preview" style="background:${style.preview};">${style.name.split(' ')[0]}</div><div class="style-info"><div class="style-name">${style.name}</div><div class="style-desc">${style.desc}</div></div><span class="style-arrow">→</span>`;
-    tile.onclick = () => createCard(occ, style);
-    list.appendChild(tile);
+    const card = document.createElement('div'); card.className = 'style-card-big';
+    card.innerHTML = `
+      <div class="style-card-preview" style="background:${style.preview};">
+        <span style="position:relative;z-index:1;">${style.previewEmoji}</span>
+      </div>
+      <div class="style-card-body">
+        <div class="style-card-name">${style.name}</div>
+        <div class="style-card-desc">${style.desc}</div>
+        <span class="style-card-tap">Tap to create →</span>
+      </div>`;
+    card.onclick = () => createCard(occ, style);
+    list.appendChild(card);
   });
 }
 
@@ -454,8 +540,7 @@ function handlePhotoUpload(inp) {
       slot.innerHTML = `<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${ti})">✕</button><div class="up-dot uploading" id="updot${ti}"></div><div class="upind"><div class="upbar" id="upbar${ti}"></div></div>`;
     }
     updateUploadCount();
-    // Upload immediately — file object passed directly, not blob URL
-    uploadPhotoInBackground(file, ti);
+    uploadPhotoInBackground(file, ti); // FIX: upload immediately
   });
   inp.value = '';
 }
@@ -466,7 +551,7 @@ async function uploadPhotoInBackground(file, idx) {
     const dot = document.getElementById('updot' + idx);
     if (bar) bar.style.width = '35%';
     const fd = new FormData();
-    fd.append('file', file); // ← direct file object
+    fd.append('file', file); // pass file directly — no blob URL fetch
     fd.append('upload_preset', CLOUDINARY_PRESET);
     fd.append('folder', 'wishyou');
     if (bar) bar.style.width = '70%';
@@ -540,8 +625,8 @@ async function runAILetter() {
   const langs = ['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
   const detectedLang = langs.find(l => toneInput.toLowerCase().includes(l));
   let langNote = '';
-  if (detectedLang) { const ln = detectedLang.charAt(0).toUpperCase() + detectedLang.slice(1); langNote = ` CRITICAL: Write ENTIRE letter in ${ln} script only. Natural everyday ${ln}, not formal.`; }
-  const prompt = `Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${toneInput || 'warm and heartfelt'}.${langNote}${variationHint} Return ONLY the letter body — no greeting line, no sign off.`;
+  if (detectedLang) { const ln = detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1); langNote = ` CRITICAL: Write ENTIRE letter in ${ln} script only. Natural everyday ${ln}, not formal.`; }
+  const prompt = `Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${toneInput||'warm and heartfelt'}.${langNote}${variationHint} Return ONLY the letter body — no greeting line, no sign off.`;
   const text = await callClaude(prompt);
   if (text) { const el = document.getElementById('cMsg'); if (el) el.value = stripMarkdown(text); }
   btn.disabled = false; loading.classList.remove('show');
@@ -550,10 +635,10 @@ async function runAILetter() {
 
 async function callClaude(prompt) {
   try {
-    const res = await fetch(WORKER_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 800, messages: [{ role: 'user', content: prompt }] }) });
+    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]}) });
     const data = await res.json(); if (data.error) return '';
     return data.content && data.content[0] ? data.content[0].text : '';
-  } catch (e) { return ''; }
+  } catch(e) { return ''; }
 }
 function stripMarkdown(t) { return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim(); }
 
@@ -562,10 +647,11 @@ async function createCard(occ, style) {
   const overlay = document.getElementById('saveOverlay');
   const bar = document.getElementById('saveBar');
   const label = document.getElementById('saveLabel');
-  document.getElementById('saveEmoji').textContent = style.name.split(' ')[0];
+  document.getElementById('saveEmoji').textContent = style.previewEmoji;
   function setP(pct, lbl) { bar.style.width = pct + '%'; if (lbl) label.textContent = lbl; }
   overlay.classList.add('show'); setP(10, 'Preparing your card...');
 
+  // Use pre-uploaded photos — fallback upload only if needed
   let photoUrls = [];
   const slots = photos.map((p, i) => ({ blob: p, idx: i })).filter(s => s.blob);
   let uploaded = 0;
@@ -578,14 +664,14 @@ async function createCard(occ, style) {
       try {
         const blob = await fetch(s.blob).then(r => r.blob());
         const fd = new FormData(); fd.append('file', blob); fd.append('upload_preset', CLOUDINARY_PRESET); fd.append('folder', 'wishyou');
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method: 'POST', body: fd });
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, { method:'POST', body:fd });
         const d = await res.json(); if (d.secure_url) { photoUrls.push(d.secure_url); uploadedUrls[s.idx] = d.secure_url; }
-      } catch (e) { console.error(e); }
+      } catch(e) { console.error(e); }
       uploaded++;
     }
   }
 
-  setP(70, 'Saving to Firebase...');
+  setP(70, 'Saving your card...');
   const now = Date.now();
   const cardData = {
     type: style.cardType,
@@ -595,26 +681,29 @@ async function createCard(occ, style) {
     sign: document.getElementById('cSign').value.trim() || '',
     spotify: selectedVideoId ? `https://www.youtube.com/watch?v=${selectedVideoId}` : '',
     songName: document.getElementById('songSelectedName').textContent || '',
-    memoriesHeading: document.getElementById('photosHeading').value.trim() || style.defaultMemoriesHeading || 'Our Memories',
-    songScreenTitle: document.getElementById('songScreenTitle').value.trim() || style.defaultSongTitle || 'Song that reminds me of you 🎵',
-    photos: photoUrls, created: now, createdAt: now, expiresAt: now + 3 * 24 * 60 * 60 * 1000
+    memoriesHeading: document.getElementById('photosHeading').value.trim() || style.defaultMemoriesHeading || 'Memories',
+    songScreenTitle: document.getElementById('songScreenTitle').value.trim() || style.defaultSongTitle || 'Song for you 🎵',
+    photos: photoUrls, created: now, createdAt: now, expiresAt: now + 3*24*60*60*1000
   };
 
   try {
     setP(85, 'Almost there...');
-    const res = await fetch(FIREBASE_URL + '.json', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(cardData) });
+    const res = await fetch(FIREBASE_URL + '.json', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(cardData) });
     const data = await res.json(); const cardId = data.name;
     shareLink = style.receiverUrl(cardId);
-    fetch(FIREBASE_URL + '/' + cardId + '/views.json', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: '0' }).catch(() => {});
+    // FIX 8: Short display link — just show "wishyou.ai/..." without full path clutter
+    shareLinkShort = `wishyou.ai/b/${cardId}`;
+
+    fetch(FIREBASE_URL + '/' + cardId + '/views.json', { method:'PUT', headers:{'Content-Type':'application/json'}, body:'0' }).catch(() => {});
     setP(100, 'Card created! 🎉');
     setTimeout(() => {
       overlay.classList.remove('show');
-      document.getElementById('shareEmoji').textContent = style.name.split(' ')[0];
+      document.getElementById('shareEmoji').textContent = style.previewEmoji;
       document.getElementById('shareReceiverName').textContent = cardData.name || 'them';
-      document.getElementById('shareLinkTxt').textContent = shareLink.replace('https://', '');
+      document.getElementById('shareLinkTxt').textContent = shareLinkShort;
       document.getElementById('shareModal').classList.add('show');
     }, 700);
-  } catch (e) { overlay.classList.remove('show'); alert('Could not save card. Please try again.'); }
+  } catch(e) { overlay.classList.remove('show'); alert('Could not save card. Please try again.'); }
 }
 
 // ── SHARE ──
