@@ -53,15 +53,15 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .page-title em{font-style:italic;color:#f0c040;}
 .page-sub{font-size:0.78rem;color:rgba(160,220,210,0.3);line-height:1.7;margin-bottom:20px;text-align:left;}
 
-/* Editable section label input */
-.sec-hdr-input{background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.1);outline:none;font-size:0.78rem;font-weight:500;color:rgba(160,220,210,0.55);padding:2px 4px;width:auto;min-width:80px;max-width:200px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;}
-.sec-hdr-input:focus{border-bottom-color:rgba(20,160,140,0.35);color:rgba(160,220,210,0.85);}
-.sec-hdr-input::placeholder{color:rgba(160,220,210,0.2);}
-
-/* Section header */
+/* Editable section header — clearly editable */
 .sec-hdr{display:flex;align-items:center;gap:8px;margin:18px 0 11px;}
 .sec-hdr-line{flex:1;height:1px;background:rgba(160,220,210,0.07);}
 .sec-hdr-txt{font-size:0.9rem;flex-shrink:0;}
+.sec-hdr-editable{display:flex;align-items:center;gap:5px;background:rgba(20,160,140,0.07);border:1px solid rgba(20,160,140,0.18);border-radius:20px;padding:4px 10px 4px 8px;cursor:text;}
+.sec-hdr-editable:focus-within{border-color:rgba(20,160,140,0.4);background:rgba(20,160,140,0.1);}
+.sec-hdr-pencil{font-size:0.6rem;opacity:0.5;flex-shrink:0;}
+.sec-hdr-input{background:transparent;border:none;outline:none;font-size:0.78rem;font-weight:600;color:rgba(160,220,210,0.8);width:auto;min-width:60px;max-width:180px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;letter-spacing:0.04em;}
+.sec-hdr-input::placeholder{color:rgba(160,220,210,0.3);}
 
 /* Inputs */
 .field-label{display:block;font-size:0.58rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.27);margin-bottom:8px;}
@@ -116,10 +116,10 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .letter-area{width:100%;border:1px solid rgba(160,220,210,0.08);border-radius:12px;padding:14px;font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:2;background:rgba(255,255,255,0.022);outline:none;resize:none;min-height:120px;color:rgba(224,240,238,0.8);transition:border-color 0.3s;caret-color:#f0c040;}
 .letter-area:focus{border-color:rgba(20,160,140,0.25);}
 .letter-area::placeholder{color:rgba(160,220,210,0.13);font-style:italic;}
-.sign-row{display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:rgba(255,255,255,0.025);border:1px solid rgba(160,220,210,0.08);border-radius:11px;}
-.sign-lbl{font-size:0.57rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.4);white-space:nowrap;font-weight:600;}
-.sign-input{flex:1;border:none;background:transparent;padding:4px 0;font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(224,240,238,0.82);outline:none;caret-color:#f0c040;}
-.sign-input::placeholder{color:rgba(160,220,210,0.25);font-style:italic;}
+.sign-row{display:flex;align-items:center;gap:12px;margin-top:14px;padding:12px 16px;background:rgba(20,160,140,0.06);border:1px solid rgba(20,160,140,0.18);border-radius:12px;}
+.sign-lbl{font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.55);white-space:nowrap;font-weight:700;flex-shrink:0;}
+.sign-input{flex:1;border:none;background:transparent;padding:0;font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:rgba(224,240,238,0.9);outline:none;caret-color:#f0c040;}
+.sign-input::placeholder{color:rgba(160,220,210,0.3);font-weight:400;font-style:italic;}
 
 /* Primary btn */
 .btn-primary{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:transform 0.15s;background:linear-gradient(135deg,rgba(20,160,140,0.88),rgba(16,130,115,0.88));color:rgba(224,240,238,0.95);box-shadow:0 8px 28px rgba(20,160,140,0.2);letter-spacing:0.04em;position:relative;overflow:hidden;}
@@ -145,14 +145,15 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 
 /* ── Card styles — vertical list ── */
 .styles-list-v{display:flex;flex-direction:column;gap:10px;}
-.style-tile-v{border-radius:16px;overflow:hidden;cursor:pointer;touch-action:manipulation;border:1px solid rgba(160,220,210,0.08);transition:transform 0.18s,box-shadow 0.18s;display:flex;align-items:stretch;background:rgba(255,255,255,0.026);}
+.style-tile-v{border-radius:16px;overflow:hidden;cursor:pointer;touch-action:manipulation;border:1px solid rgba(160,220,210,0.08);transition:transform 0.18s,box-shadow 0.18s;background:rgba(255,255,255,0.026);}
 .style-tile-v:active{transform:scale(0.98);}
 .style-tile-v:hover{border-color:rgba(20,160,140,0.22);box-shadow:0 6px 24px rgba(0,0,0,0.25);}
-.style-tile-v-preview{width:80px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;}
-.style-tile-v-body{flex:1;padding:14px 14px 14px 4px;display:flex;flex-direction:column;justify-content:center;}
+.style-tile-v-preview{width:100%;height:100px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden;}
+.style-tile-v-preview::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.35));}
+.style-tile-v-body{padding:12px 16px 14px;}
 .style-tile-v-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:rgba(224,240,238,0.88);margin-bottom:3px;}
-.style-tile-v-desc{font-size:0.6rem;color:rgba(160,220,210,0.32);line-height:1.5;}
-.style-tile-v-tap{margin-top:6px;font-size:0.62rem;font-weight:600;color:rgba(240,192,64,0.55);letter-spacing:0.05em;}
+.style-tile-v-desc{font-size:0.62rem;color:rgba(160,220,210,0.38);line-height:1.5;}
+.style-tile-v-tap{margin-top:8px;font-size:0.65rem;font-weight:600;color:rgba(240,192,64,0.65);letter-spacing:0.05em;}
 
 /* Save overlay */
 .save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
@@ -208,24 +209,30 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <input class="big-input" id="cName" placeholder="e.g. Priya" maxlength="30" autocomplete="off">
       <div style="height:18px;"></div>
       <label class="field-label">From — Your name</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;">
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;" oninput="updateSignOff()">
 
-      <!-- FIX 5: Photos heading default = "Memories" -->
+      <!-- Photos -->
       <div class="sec-hdr">
         <span class="sec-hdr-line"></span>
         <span class="sec-hdr-txt">📸</span>
-        <input class="sec-hdr-input" id="photosHeading" value="Memories" maxlength="30" placeholder="Section title..." autocomplete="off">
+        <div class="sec-hdr-editable">
+          <span class="sec-hdr-pencil">✏️</span>
+          <input class="sec-hdr-input" id="photosHeading" value="Memories" maxlength="30" placeholder="Section title..." autocomplete="off">
+        </div>
         <span class="sec-hdr-line"></span>
       </div>
       <div class="photos-grid" id="photosGrid"></div>
       <div class="photo-hint">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
       <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
 
-      <!-- FIX 5: Song heading default = "Song for you" -->
+      <!-- Song -->
       <div class="sec-hdr">
         <span class="sec-hdr-line"></span>
         <span class="sec-hdr-txt">🎵</span>
-        <input class="sec-hdr-input" id="songScreenTitle" value="Song for you 🎵" maxlength="35" placeholder="Song screen title..." autocomplete="off">
+        <div class="sec-hdr-editable">
+          <span class="sec-hdr-pencil">✏️</span>
+          <input class="sec-hdr-input" id="songScreenTitle" value="Song for you 🎵" maxlength="35" placeholder="Song screen title..." autocomplete="off">
+        </div>
         <span class="sec-hdr-line"></span>
       </div>
       <div class="song-selected-box" id="songSelectedBox">
@@ -253,7 +260,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words..." rows="5"></textarea>
       <div class="sign-row">
         <span class="sign-lbl">Sign off</span>
-        <input class="sign-input" id="cSign" placeholder="With love, Aryan 💕" maxlength="60" oninput="signManuallyEdited=true">
+        <input class="sign-input" id="cSign" placeholder="With love 💕" maxlength="60" oninput="signManuallyEdited=true">
       </div>
       <div class="rule"></div>
     </div>
@@ -452,6 +459,14 @@ function goTo(id) {
   setTimeout(() => { const sc = next.querySelector('.step-content'); if (sc) sc.scrollTo(0, 0); }, 50);
 }
 
+// ── SIGN-OFF — updates live as sender types ──
+function updateSignOff() {
+  if (signManuallyEdited) return; // user typed their own — don't override
+  const sender = document.getElementById('cSender').value.trim();
+  const signInp = document.getElementById('cSign');
+  signInp.value = sender ? `With love, ${sender} 💕` : '';
+}
+
 function goToPage2() {
   const name = document.getElementById('cName').value.trim();
   if (!name) {
@@ -461,10 +476,10 @@ function goToPage2() {
     setTimeout(() => inp.style.borderBottomColor = '', 1800);
     return;
   }
-  // Auto-set sign-off with sender name (only if user hasn't manually edited it)
-  const sender = document.getElementById('cSender').value.trim();
-  const signInp = document.getElementById('cSign');
+  // Final sign-off update before leaving
   if (!signManuallyEdited) {
+    const sender = document.getElementById('cSender').value.trim();
+    const signInp = document.getElementById('cSign');
     signInp.value = sender ? `With love, ${sender} 💕` : 'With love 💕';
   }
   goTo('p-occasion');
