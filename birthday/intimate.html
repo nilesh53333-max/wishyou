@@ -162,41 +162,19 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .rv-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(233,30,99,0.1);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:#8d3a5a;z-index:10;touch-action:manipulation;transition:background 0.2s;}
 .rv-back:active{background:rgba(233,30,99,0.2);}
 
-/* PHOTOS — Grid layout so all are visible */
+/* PHOTOS */
 #rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;padding:0;}
-.rv-sec-hdr{padding:52px 24px 10px;text-align:center;flex-shrink:0;}
+.rv-sec-hdr{padding:52px 24px 14px;text-align:center;flex-shrink:0;}
 .rv-sec-tag{display:none;}
 .rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;}
-
-/* Photo grid — shows all photos at once */
-.pol-grid{flex:1;padding:12px 16px 8px;display:grid;grid-template-columns:1fr 1fr;gap:10px;overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;align-content:start;}
-.pol-grid::-webkit-scrollbar{display:none;}
-
-/* Single photo gets full width */
-.pol-grid.single-photo{grid-template-columns:1fr;}
-.pol-grid.single-photo .pol{max-width:280px;margin:0 auto;}
-
-/* 3 photos: first takes full row */
-.pol-grid.three-photos .pol:first-child{grid-column:1/-1;}
-
-/* 5 photos: last takes full row */
-.pol-grid.five-photos .pol:last-child{grid-column:1/-1;}
-
-.pol{background:white;padding:6px 6px 22px;box-shadow:0 8px 28px rgba(74,14,42,0.14),0 2px 6px rgba(74,14,42,0.06);border-radius:2px;cursor:pointer;touch-action:manipulation;animation:polReveal 0.55s cubic-bezier(0.22,1,0.36,1) both;position:relative;}
-.pol:nth-child(1){animation-delay:0.06s;}
-.pol:nth-child(2){animation-delay:0.14s;}
-.pol:nth-child(3){animation-delay:0.22s;}
-.pol:nth-child(4){animation-delay:0.30s;}
-.pol:nth-child(5){animation-delay:0.38s;}
-@keyframes polReveal{
-  0%{opacity:0;transform:translateY(20px) scale(0.9);}
-  60%{opacity:1;}
-  100%{opacity:1;transform:translateY(0) scale(1);}
-}
-.pol:active{transform:scale(0.96);}
-.pol img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;display:block;}
-.pol-tap-hint{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:0.52rem;color:#8d3a5a;opacity:0.35;letter-spacing:0.06em;}
-.pol-lbl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.65rem;color:#8d3a5a;text-align:center;margin-top:4px;opacity:0.45;}
+.pol-strip{flex:1;padding:8px 16px 8px;display:flex;gap:12px;overflow-x:auto;align-items:center;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
+.pol-strip::-webkit-scrollbar{display:none;}
+.pol{flex-shrink:0;scroll-snap-align:center;background:white;padding:8px 8px 28px;box-shadow:0 8px 24px rgba(74,14,42,0.12);border-radius:2px;}
+.pol:nth-child(odd){transform:rotate(-2.5deg);}
+.pol:nth-child(even){transform:rotate(2deg);}
+.pol-strip:has(.pol:only-child) .pol{transform:rotate(0deg) !important;}
+.pol img{width:180px;height:200px;object-fit:cover;display:block;}
+.pol-lbl{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.72rem;color:#8d3a5a;text-align:center;margin-top:6px;opacity:0.55;}
 .no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
 .rv-nav-row{display:flex;gap:8px;padding:10px 16px max(16px,env(safe-area-inset-bottom));flex-shrink:0;}
 .rv-next-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
@@ -434,7 +412,7 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
     <span class="rv-sec-tag">Your Memories 📸</span>
     <div class="rv-sec-title" id="rvPhotoTitle">Moments just for you</div>
   </div>
-  <div class="pol-grid" id="polStrip"></div>
+  <div class="pol-strip" id="polStrip"></div>
   <div class="rv-nav-row">
     <button class="rv-next-btn" onclick="goTo(&#39;rv-song&#39;)">Next → Your Song 🎵</button>
   </div>
@@ -611,8 +589,6 @@ window.addEventListener('DOMContentLoaded',function(){
     },{passive:true});
     document.getElementById('mainApp').addEventListener('touchend',function(e){
       if(curScreen==='rv-welcome'||curScreen==='rv-loading'||curScreen==='rv-error') return;
-      // Don't swipe-navigate on photos screen — let user scroll polaroids freely
-      if(curScreen==='rv-photos') return;
       const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
       if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
       const idx=RV_ORDER.indexOf(curScreen);if(idx===-1) return;
@@ -975,19 +951,14 @@ function renderCard(d){
   document.getElementById('rvPhotoTitle').textContent=heading;
   const sst=document.getElementById('rvSongScreenTitle');
   if(sst)sst.textContent=d.songScreenTitle||'Song that reminds me of you 🎵';
-  // Photos - grid layout, all visible, tap opens lightbox
+  // Photos - no pol-lbl, tap opens lightbox
   const strip=document.getElementById('polStrip');strip.innerHTML='';
-  // Remove all layout classes first
-  strip.className='pol-grid';
   if(d.photos&&d.photos.length>0){
-    const count=d.photos.length;
-    if(count===1)strip.classList.add('single-photo');
-    if(count===3)strip.classList.add('three-photos');
-    if(count===5)strip.classList.add('five-photos');
     lbPhotos=d.photos;
     d.photos.forEach((url,i)=>{
       const pol=document.createElement('div');pol.className='pol';
-      pol.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="pol-tap-hint">tap to expand</div>`;
+      pol.style.cursor='pointer';
+      pol.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'">`;
       pol.onclick=()=>openLightbox(i);
       strip.appendChild(pol);
     });
