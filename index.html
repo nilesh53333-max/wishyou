@@ -116,10 +116,10 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .letter-area{width:100%;border:1px solid rgba(160,220,210,0.08);border-radius:12px;padding:14px;font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:2;background:rgba(255,255,255,0.022);outline:none;resize:none;min-height:120px;color:rgba(224,240,238,0.8);transition:border-color 0.3s;caret-color:#f0c040;}
 .letter-area:focus{border-color:rgba(20,160,140,0.25);}
 .letter-area::placeholder{color:rgba(160,220,210,0.13);font-style:italic;}
-.sign-row{display:flex;align-items:center;gap:10px;margin-top:10px;}
-.sign-lbl{font-size:0.57rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(160,220,210,0.22);white-space:nowrap;}
-.sign-input{flex:1;border:none;border-bottom:1px solid rgba(160,220,210,0.08);background:transparent;padding:7px 0;font-family:'Cormorant Garamond',serif;font-size:0.96rem;color:rgba(224,240,238,0.62);outline:none;caret-color:#f0c040;}
-.sign-input::placeholder{color:rgba(160,220,210,0.13);font-style:italic;}
+.sign-row{display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:rgba(255,255,255,0.025);border:1px solid rgba(160,220,210,0.08);border-radius:11px;}
+.sign-lbl{font-size:0.57rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.4);white-space:nowrap;font-weight:600;}
+.sign-input{flex:1;border:none;background:transparent;padding:4px 0;font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(224,240,238,0.82);outline:none;caret-color:#f0c040;}
+.sign-input::placeholder{color:rgba(160,220,210,0.25);font-style:italic;}
 
 /* Primary btn */
 .btn-primary{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:transform 0.15s;background:linear-gradient(135deg,rgba(20,160,140,0.88),rgba(16,130,115,0.88));color:rgba(224,240,238,0.95);box-shadow:0 8px 28px rgba(20,160,140,0.2);letter-spacing:0.04em;position:relative;overflow:hidden;}
@@ -143,24 +143,16 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .occ-arrow{font-size:0.88rem;color:rgba(240,192,64,0.35);flex-shrink:0;}
 .soon-badge{font-size:0.5rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(160,220,210,0.25);border:1px solid rgba(160,220,210,0.08);border-radius:50px;padding:3px 9px;flex-shrink:0;}
 
-/* ── FIX 3: Card style — horizontal scrolling cards ── */
-.styles-scroll-wrap{overflow-x:auto;margin:0 -22px;padding:0 22px 12px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
-.styles-scroll-wrap::-webkit-scrollbar{display:none;}
-.styles-scroll{display:flex;gap:12px;width:max-content;}
-.style-card-big{width:200px;flex-shrink:0;scroll-snap-align:start;border-radius:18px;overflow:hidden;cursor:pointer;touch-action:manipulation;border:1px solid rgba(160,220,210,0.08);transition:transform 0.2s,box-shadow 0.2s;position:relative;}
-.style-card-big:active{transform:scale(0.96);}
-.style-card-big:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,0,0,0.3);}
-.style-card-preview{height:140px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;position:relative;overflow:hidden;}
-.style-card-preview::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.4));}
-.style-card-body{padding:12px 14px 14px;background:rgba(255,255,255,0.03);}
-.style-card-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600;color:rgba(224,240,238,0.88);margin-bottom:3px;}
-.style-card-desc{font-size:0.6rem;color:rgba(160,220,210,0.35);line-height:1.5;}
-.style-card-tap{display:inline-block;margin-top:8px;font-size:0.62rem;font-weight:600;color:rgba(240,192,64,0.6);letter-spacing:0.06em;}
-
-/* Scroll hint */
-.scroll-hint{font-size:0.62rem;color:rgba(160,220,210,0.22);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.scroll-hint::after{content:'→';animation:scrollPulse 1.5s ease-in-out infinite;}
-@keyframes scrollPulse{0%,100%{transform:translateX(0);opacity:0.4;}50%{transform:translateX(4px);opacity:0.8;}}
+/* ── Card styles — vertical list ── */
+.styles-list-v{display:flex;flex-direction:column;gap:10px;}
+.style-tile-v{border-radius:16px;overflow:hidden;cursor:pointer;touch-action:manipulation;border:1px solid rgba(160,220,210,0.08);transition:transform 0.18s,box-shadow 0.18s;display:flex;align-items:stretch;background:rgba(255,255,255,0.026);}
+.style-tile-v:active{transform:scale(0.98);}
+.style-tile-v:hover{border-color:rgba(20,160,140,0.22);box-shadow:0 6px 24px rgba(0,0,0,0.25);}
+.style-tile-v-preview{width:80px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;}
+.style-tile-v-body{flex:1;padding:14px 14px 14px 4px;display:flex;flex-direction:column;justify-content:center;}
+.style-tile-v-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:rgba(224,240,238,0.88);margin-bottom:3px;}
+.style-tile-v-desc{font-size:0.6rem;color:rgba(160,220,210,0.32);line-height:1.5;}
+.style-tile-v-tap{margin-top:6px;font-size:0.62rem;font-weight:600;color:rgba(240,192,64,0.55);letter-spacing:0.05em;}
 
 /* Save overlay */
 .save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
@@ -259,10 +251,9 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
         </div>
       </div>
       <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words..." rows="5"></textarea>
-      <!-- FIX 6: sign-input default = "With love, [sender name]" — set dynamically -->
       <div class="sign-row">
         <span class="sign-lbl">Sign off</span>
-        <input class="sign-input" id="cSign" placeholder="With love, Aryan 💕" maxlength="60">
+        <input class="sign-input" id="cSign" placeholder="With love, Aryan 💕" maxlength="60" oninput="signManuallyEdited=true">
       </div>
       <div class="rule"></div>
     </div>
@@ -339,12 +330,8 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
     <div class="step-content">
       <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">Card Style</span><span class="eyebrow-line"></span></div>
       <div class="page-title">Pick your<br><em>style.</em></div>
-      <div class="page-sub" id="styleSubLine" style="margin-bottom:10px;">Swipe to explore · tap to create</div>
-      <div class="scroll-hint">Scroll to see all styles</div>
-      <!-- FIX 7: Horizontal scrolling card previews -->
-      <div class="styles-scroll-wrap">
-        <div class="styles-scroll" id="stylesList"></div>
-      </div>
+      <div class="page-sub" id="styleSubLine" style="margin-bottom:20px;">Same love, different feeling.</div>
+      <div class="styles-list-v" id="stylesList"></div>
       <div class="rule"></div>
     </div>
   </div>
@@ -393,6 +380,7 @@ let selectedVideoId = '';
 let shareLink = '';
 let shareLinkShort = ''; // FIX 8: short link for display
 let aiLetterCount = 0;
+let signManuallyEdited = false;
 
 // ── OCCASIONS CONFIG ──
 const OCCASIONS = {
@@ -473,10 +461,10 @@ function goToPage2() {
     setTimeout(() => inp.style.borderBottomColor = '', 1800);
     return;
   }
-  // FIX 6: Auto-set sign-off with sender name
+  // Auto-set sign-off with sender name (only if user hasn't manually edited it)
   const sender = document.getElementById('cSender').value.trim();
   const signInp = document.getElementById('cSign');
-  if (!signInp.value || signInp.value === 'With love 💕') {
+  if (!signManuallyEdited) {
     signInp.value = sender ? `With love, ${sender} 💕` : 'With love 💕';
   }
   goTo('p-occasion');
@@ -488,24 +476,21 @@ function selectOccasion(occ) {
   goTo('p-style');
 }
 
-// FIX 3: Horizontal card scroll with rich previews
 function buildStylesList(occ) {
   const config = OCCASIONS[occ]; if (!config) return;
-  document.getElementById('styleSubLine').textContent = `${config.label} · swipe & pick the vibe`;
+  document.getElementById('styleSubLine').textContent = `${config.label} · pick the vibe that feels right`;
   const list = document.getElementById('stylesList'); list.innerHTML = '';
   config.styles.forEach(style => {
-    const card = document.createElement('div'); card.className = 'style-card-big';
-    card.innerHTML = `
-      <div class="style-card-preview" style="background:${style.preview};">
-        <span style="position:relative;z-index:1;">${style.previewEmoji}</span>
-      </div>
-      <div class="style-card-body">
-        <div class="style-card-name">${style.name}</div>
-        <div class="style-card-desc">${style.desc}</div>
-        <span class="style-card-tap">Tap to create →</span>
+    const tile = document.createElement('div'); tile.className = 'style-tile-v';
+    tile.innerHTML = `
+      <div class="style-tile-v-preview" style="background:${style.preview};">${style.previewEmoji}</div>
+      <div class="style-tile-v-body">
+        <div class="style-tile-v-name">${style.name}</div>
+        <div class="style-tile-v-desc">${style.desc}</div>
+        <div class="style-tile-v-tap">Tap to create →</div>
       </div>`;
-    card.onclick = () => createCard(occ, style);
-    list.appendChild(card);
+    tile.onclick = () => createCard(occ, style);
+    list.appendChild(tile);
   });
 }
 
