@@ -127,7 +127,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .btn-primary:active{transform:scale(0.97);}
 .rule{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(20,160,140,0.12),rgba(240,192,64,0.07),transparent);margin:18px 0 0;}
 
-/* ── Occasions — all equal boxes ── */
+/* ── Occasions — all equal visible boxes ── */
 .occasions-list{display:flex;flex-direction:column;gap:10px;}
 .occasion-tile{border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:14px;transition:all 0.2s ease;border:1px solid rgba(160,220,210,0.18);background:rgba(255,255,255,0.07);box-shadow:0 2px 14px rgba(0,0,0,0.2);}
 .occasion-tile.live{cursor:pointer;touch-action:manipulation;}
@@ -146,25 +146,21 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .style-card-wrap{border-radius:20px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;}
 .style-card-wrap:active{transform:scale(0.97);}
 
-/* Slideshow viewport — taller to fit info inside */
-.sv{width:100%;height:240px;position:relative;overflow:hidden;}
-.sv-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 12px 80px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
+/* Slideshow viewport */
+.sv{width:100%;height:248px;position:relative;overflow:hidden;}
+.sv-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 12px 88px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
 .sv-slide.sv-active{opacity:1;}
 .sv-lbl{font-size:0.5rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
-
-/* Info overlaid at bottom of card with gradient */
-.sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:8px 14px 12px;z-index:5;}
-.sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(253,232,240,1) 0%,rgba(253,232,240,0.95) 60%,transparent);}
-.sv-retro .sv-overlay-info{background:linear-gradient(to top,rgba(255,225,53,1) 0%,rgba(255,225,53,0.95) 60%,transparent);}
-.sv-cinematic .sv-overlay-info{background:linear-gradient(to top,rgba(10,10,10,1) 0%,rgba(10,10,10,0.95) 60%,transparent);}
-.sv-jar .sv-overlay-info{background:linear-gradient(to top,rgba(254,243,226,1) 0%,rgba(254,243,226,0.95) 60%,transparent);}
-.sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,1) 0%,rgba(22,21,46,0.95) 60%,transparent);}
-
-/* Dots inside card at bottom */
+/* Info overlaid at bottom */
+.sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:8px 14px 13px;z-index:5;}
+.sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(253,232,240,1) 0%,rgba(253,232,240,0.96) 65%,transparent);}
+.sv-retro .sv-overlay-info{background:linear-gradient(to top,rgba(255,225,53,1) 0%,rgba(255,225,53,0.96) 65%,transparent);}
+.sv-cinematic .sv-overlay-info{background:linear-gradient(to top,rgba(10,10,10,1) 0%,rgba(10,10,10,0.96) 65%,transparent);}
+.sv-jar .sv-overlay-info{background:linear-gradient(to top,rgba(254,243,226,1) 0%,rgba(254,243,226,0.96) 65%,transparent);}
+.sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,1) 0%,rgba(22,21,46,0.96) 65%,transparent);}
 .sv-dots{display:flex;gap:5px;justify-content:center;margin-bottom:5px;}
 .sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.3;}
 .sv-dot.sv-dot-active{width:14px;border-radius:3px;opacity:0.9;}
-
 .sv-name{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-weight:700;margin-bottom:1px;line-height:1.2;}
 .sv-desc{font-size:0.56rem;opacity:0.6;line-height:1.4;}
 .sv-cta{margin-top:4px;font-size:0.58rem;font-weight:700;letter-spacing:0.05em;opacity:0.75;}
@@ -745,9 +741,9 @@ function saveDraft() {
     const draft = {
       cName: document.getElementById('cName')?.value || '',
       cSender: document.getElementById('cSender')?.value || '',
-      photosHeading: document.getElementById('photosHeading')?.value || 'Memories',
-      songScreenTitle: document.getElementById('songScreenTitle')?.value || 'Song for you 🎵',
-      letterToneHeader: document.getElementById('letterToneHeader')?.value || 'emotional and caring',
+      photosHeading: document.getElementById('photosHeading')?.value || '',
+      songScreenTitle: document.getElementById('songScreenTitle')?.value || '',
+      letterToneHeader: document.getElementById('letterToneHeader')?.value || '',
       cMsg: document.getElementById('cMsg')?.value || '',
       cSign: document.getElementById('cSign')?.value || '',
       songSelectedName: document.getElementById('songSelectedName')?.textContent || '—',
@@ -762,9 +758,9 @@ function saveDraft() {
 function restoreDraft() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return false;
+    if (!raw) return;
     const d = JSON.parse(raw);
-    if (!d.cName && !d.cSender) return false; // nothing worth restoring
+    if (!d.cName && !d.cSender) return;
     if (d.cName) document.getElementById('cName').value = d.cName;
     if (d.cSender) document.getElementById('cSender').value = d.cSender;
     if (d.photosHeading) document.getElementById('photosHeading').value = d.photosHeading;
@@ -777,10 +773,9 @@ function restoreDraft() {
       document.getElementById('songSelectedBox').style.display = 'block';
     }
     if (d.selectedVideoId) selectedVideoId = d.selectedVideoId;
-    if (d.signManuallyEdited) signManuallyEdited = d.signManuallyEdited;
+    if (d.signManuallyEdited) signManuallyEdited = true;
     if (d.uploadedUrls) uploadedUrls = d.uploadedUrls;
-    return true;
-  } catch(e) { return false; }
+  } catch(e) {}
 }
 
 function clearDraft() {
@@ -791,7 +786,6 @@ function clearDraft() {
 window.addEventListener('DOMContentLoaded', () => {
   buildPhotoSlots();
   restoreDraft();
-  // Auto-save on any input change
   document.addEventListener('input', saveDraft);
 });
 
@@ -979,7 +973,7 @@ async function createCard(occ, style) {
 
     fetch(FIREBASE_URL + '/' + cardId + '/views.json', { method:'PUT', headers:{'Content-Type':'application/json'}, body:'0' }).catch(() => {});
     setP(100, 'Card created! 🎉');
-    clearDraft(); // clear saved draft after successful creation
+    clearDraft();
     setTimeout(() => {
       overlay.classList.remove('show');
       document.getElementById('shareEmoji').textContent = style.previewEmoji;
