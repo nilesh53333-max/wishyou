@@ -307,6 +307,18 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-sunshine .sv-desc{color:#3a6a1a;}
 .sv-sunshine .sv-cta{color:#5a8a3a;}
 
+/* Saree (Mother's Day) theme */
+.sv-saree{background:linear-gradient(135deg,#0d4a5a,#1a6a7a);}
+.sv-saree .sv-overlay-info{background:linear-gradient(to top,rgba(13,74,90,1) 0%,rgba(13,74,90,0.96) 65%,transparent);}
+.sv-saree .sv-dot{background:rgba(212,168,83,0.4);}
+.sv-saree .sv-dot.sv-dot-active{background:#d4a853;}
+.sv-saree .sv-name{color:#f0e0c0;font-family:'Cormorant Garamond',serif;}
+.sv-saree .sv-desc{color:rgba(212,168,83,0.55);}
+.sv-saree .sv-cta{color:#d4a853;}
+.sv-saree .sv-lbl{color:rgba(212,168,83,0.6);}
+.sv-saree .sv-title{color:#f0e0c0;}
+.sv-saree .sv-sub{color:rgba(192,168,128,0.65);}
+
 /* Save overlay */
 .save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
 .save-overlay.show{display:flex;}
@@ -646,6 +658,16 @@ const OCCASIONS = {
         defaultMemoriesHeading:'Memories on the Fence',
         receiverUrl: id => `https://wishyou.ai/mothersday/sunshine.html?card=${id}`,
         shareMsg: (n,s,l) => `🌻 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' planted a garden for you 🌿\n\n':'Someone planted a garden for you 🌿\n\n'}👆 Walk into it:\n${l}`
+      },
+      {
+        id:'saree', name:'🪡 The Saree',
+        desc:'Deeply Indian · Unfold a saree · Embroidery hoop photos · Gold pallu letter',
+        preview:'linear-gradient(160deg,#0d4a5a,#1a6a7a)', previewEmoji:'🪡',
+        cardType:'mothersday-saree',
+        defaultSongTitle:'A song for you 🎵',
+        defaultMemoriesHeading:'Embroidered Memories',
+        receiverUrl: id => `https://wishyou.ai/mothersday/saree.html?card=${id}`,
+        shareMsg: (n,s,l) => `🪡 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' folded a saree for you 🌟\n\n':'Someone folded a saree for you 🌟\n\n'}Unfold it:\n${l}`
       }
     ]
   }
@@ -788,6 +810,16 @@ function buildStylesList(occ) {
         `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">Leaf Letter</div><div style="background:linear-gradient(135deg,#5aaa2a,#3a8a10);border-radius:40% 4px 40% 4px / 4px 40% 4px 40%;padding:10px 12px;width:80%;margin:4px auto;box-shadow:0 4px 12px rgba(0,0,0,0.15);"><div style="font-family:'Cormorant Garamond',serif;font-size:0.62rem;color:rgba(255,255,255,0.88);line-height:1.7;font-style:italic;">Dear Maa,<br>You are my sunshine...</div><div style="font-size:0.58rem;color:rgba(255,240,160,0.85);margin-top:4px;">Forever yours 🌻</div></div>`,
         `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">Full Garden</div><span class="sv-emoji" style="font-size:2.8rem;">🌻</span><div class="sv-sub" style="color:#3a6a1a;font-style:italic;margin-top:6px;">"She planted love in me."</div>`
       ]
+    },
+    saree: {
+      theme: 'sv-saree',
+      slides: [
+        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">The Folded Saree</div><span class="sv-emoji">🪡</span><div class="sv-title" style="color:#f0e0c0;font-family:'Cormorant Garamond',serif;font-weight:300;">She kept this folded<br><em style="color:#d4a853;">for you</em></div>`,
+        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">Embroidery Hoops</div><div style="display:flex;gap:8px;justify-content:center;margin:4px 0;"><div style="width:44px;height:44px;border-radius:50%;border:6px solid #b8903a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:rgba(212,168,83,0.08);">📸</div><div style="width:44px;height:44px;border-radius:50%;border:6px solid #b8903a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:rgba(212,168,83,0.08);">💕</div></div><div class="sv-sub" style="color:rgba(212,168,83,0.55);">Photos in golden embroidery hoops</div>`,
+        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">Zari Border + Song</div><div style="height:10px;background:linear-gradient(180deg,#d4a853,#b8903a);border-radius:2px;margin:4px 0;width:90%;"></div><span class="sv-emoji" style="font-size:1.8rem;">🎵</span><div style="height:10px;background:linear-gradient(180deg,#b8903a,#d4a853);border-radius:2px;width:90%;margin-top:4px;"></div><div class="sv-sub" style="color:rgba(212,168,83,0.55);margin-top:6px;">Song from a tanpura on the zari border</div>`,
+        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">The Pallu</div><div style="background:linear-gradient(135deg,#0d4a5a,#1a6a7a);border-radius:4px;padding:10px 12px 10px 14px;width:85%;margin:4px auto;border-right:4px solid #d4a853;"><div style="font-family:'Cormorant Garamond',serif;font-size:0.62rem;color:rgba(240,224,192,0.88);line-height:1.8;font-style:italic;">Dear Maa,<br>You never told me how many sarees you owned...</div><div style="font-size:0.58rem;color:#d4a853;margin-top:4px;font-style:italic;">Yours, always 🪡</div></div>`,
+        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">Written in Gold</div><span class="sv-emoji">🪡</span><div class="sv-sub" style="color:rgba(212,168,83,0.45);font-style:italic;margin-top:4px;">"Draped in her love, always."</div>`
+      ]
     }
   };
 
@@ -854,32 +886,37 @@ function restoreDraft() {
     const raw = localStorage.getItem(DRAFT_KEY);
     if (!raw) return;
     const d = JSON.parse(raw);
-    if (!d.cName && !d.cSender) return; // nothing to restore
+    if (!d.screen) { clearDraft(); return; } // stale draft from old version
+    if (!d.cName && !d.cSender) return;
 
-    // Restore all inputs
-    if (d.cName) document.getElementById('cName').value = d.cName;
-    if (d.cSender) document.getElementById('cSender').value = d.cSender;
-    if (d.photosHeading) document.getElementById('photosHeading').value = d.photosHeading;
-    if (d.songScreenTitle) document.getElementById('songScreenTitle').value = d.songScreenTitle;
-    if (d.letterToneHeader) document.getElementById('letterToneHeader').value = d.letterToneHeader;
-    if (d.cMsg) document.getElementById('cMsg').value = d.cMsg;
-    if (d.cSign) document.getElementById('cSign').value = d.cSign;
+    // Safe helper — only sets value if element exists
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+    const setText = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+
+    set('cName', d.cName);
+    set('cSender', d.cSender);
+    set('photosHeading', d.photosHeading);
+    set('songScreenTitle', d.songScreenTitle);
+    set('letterToneHeader', d.letterToneHeader);
+    set('cMsg', d.cMsg);
+    set('cSign', d.cSign);
+
     if (d.songSelectedName && d.songSelectedName !== '—') {
-      document.getElementById('songSelectedName').textContent = d.songSelectedName;
-      document.getElementById('songSelectedBox').style.display = 'block';
+      setText('songSelectedName', d.songSelectedName);
+      const sb = document.getElementById('songSelectedBox');
+      if (sb) sb.style.display = 'block';
     }
     if (d.selectedVideoId) selectedVideoId = d.selectedVideoId;
     if (d.signManuallyEdited) signManuallyEdited = true;
     if (d.uploadedUrls) uploadedUrls = d.uploadedUrls;
     if (d.selectedOccasion) selectedOccasion = d.selectedOccasion;
 
-    // Restore screen — navigate directly back to where user was
+    // Restore screen
     const screen = d.screen;
     if (screen && screen !== 'p-info') {
       if (screen === 'p-style' && d.selectedOccasion) {
         buildStylesList(d.selectedOccasion);
       }
-      // Jump directly to saved screen
       const el = document.getElementById(screen);
       if (el) {
         document.getElementById('p-info').classList.remove('active');
@@ -887,7 +924,7 @@ function restoreDraft() {
         curScreen = screen;
       }
     }
-  } catch(e) {}
+  } catch(e) { console.warn('restoreDraft error:', e); }
 }
 
 function clearDraft() {
