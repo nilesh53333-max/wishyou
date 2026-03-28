@@ -287,6 +287,17 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-typing-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.6);}
 .sv-reveal{background:linear-gradient(135deg,#e91e63,#f06292);color:white;padding:8px 16px;border-radius:50px;font-size:0.68rem;font-weight:700;margin-top:6px;}
 
+/* Blossom (Mother's Day) theme */
+.sv-blossom{background:linear-gradient(160deg,#fdf6f0,#faeae4);}
+.sv-blossom .sv-overlay-info{background:linear-gradient(to top,rgba(253,246,240,1) 0%,rgba(253,246,240,0.96) 65%,transparent);}
+.sv-blossom .sv-dot{background:#c47a5a;}
+.sv-blossom .sv-dot.sv-dot-active{background:#c47a5a;}
+.sv-blossom .sv-name{color:#5a3020;font-family:'Cormorant Garamond',serif;}
+.sv-blossom .sv-desc{color:#8a5a40;}
+.sv-blossom .sv-cta{color:#c47a5a;}
+@keyframes musicSpin2{from{transform:translateX(-50%) rotate(0deg);}to{transform:translateX(-50%) rotate(360deg);}}
+@keyframes bloomSway2{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-10px) rotate(4deg);}}
+
 /* Save overlay */
 .save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
 .save-overlay.show{display:flex;}
@@ -431,10 +442,10 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
           <div class="occ-info"><div class="occ-name">Birthday</div></div>
           <span class="occ-badge live-badge">LIVE</span>
         </div>
-        <div class="occasion-tile soon">
+        <div class="occasion-tile live" onclick="selectOccasion('mothersday')">
           <div class="occ-icon-wrap">🌸</div>
           <div class="occ-info"><div class="occ-name">Mother's Day</div></div>
-          <span class="occ-badge soon-badge">SOON</span>
+          <span class="occ-badge live-badge">LIVE</span>
         </div>
         <div class="occasion-tile soon">
           <div class="occ-icon-wrap">❤️</div>
@@ -603,8 +614,22 @@ const OCCASIONS = {
         shareMsg: (n,s,l) => `💬 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' sent you a surprise 💌\n\n':'Someone sent you a surprise 💌\n\n'}👆 Open:\n${l}`
       }
     ]
+  },
+  mothersday: {
+    label: "Mother's Day", emoji: '🌸',
+    styles: [
+      {
+        id:'blossom', name:'🌸 Blossom',
+        desc:'Warm & elegant · Arch photo gallery · Music box · Bloom letter reveal',
+        preview:'linear-gradient(160deg,#fdf6f0,#faeae4)', previewEmoji:'🌸',
+        cardType:'mothersday-blossom',
+        defaultSongTitle:'A song for you 🎵',
+        defaultMemoriesHeading:'Our Memories',
+        receiverUrl: id => `https://wishyou.ai/mothersday/blossom.html?card=${id}`,
+        shareMsg: (n,s,l) => `🌸 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' made you a Blossom card 🌺\n\n':'Someone made you a special card 🌺\n\n'}👆 Open:\n${l}`
+      }
+    ]
   }
-};
 
 // ── NAVIGATION ──
 function goTo(id) {
@@ -722,6 +747,16 @@ function buildStylesList(occ) {
         `<div class="sv-lbl">Still Typing...</div><div class="sv-bubbles"><div class="sv-typing"><div class="sv-typing-dot"></div><div class="sv-typing-dot"></div><div class="sv-typing-dot"></div></div></div><div class="sv-sub" style="margin-top:8px;">Building suspense...</div>`,
         `<div class="sv-lbl">Song Drops</div><span class="sv-emoji">🎵</span><div class="sv-sub">Your song plays in the chat</div>`,
         `<div class="sv-lbl">The Reveal</div><div class="sv-reveal">💝 Open the surprise!</div><div class="sv-sub" style="margin-top:6px;">The full letter appears</div>`
+      ]
+    },
+    blossom: {
+      theme: 'sv-blossom',
+      slides: [
+        `<div class="sv-lbl" style="color:rgba(196,122,90,0.6);">Welcome</div><span class="sv-emoji">🌺</span><div class="sv-title" style="color:#5a3020;font-family:'Cormorant Garamond',serif;">Happy Mother's Day!</div><div class="sv-sub" style="color:#8a5a40;">Made with love, just for you 🌸</div>`,
+        `<div class="sv-lbl" style="color:rgba(196,122,90,0.6);">Photo Gallery</div><div style="display:flex;gap:4px;justify-content:center;margin:4px 0;"><div style="width:36px;height:52px;border-radius:10px 10px 18px 18px;background:rgba(196,122,90,0.15);border:1px solid rgba(196,122,90,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;">📸</div><div style="width:36px;height:52px;border-radius:10px 10px 18px 18px;background:rgba(212,168,83,0.15);border:1px solid rgba(212,168,83,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;">🌸</div><div style="width:36px;height:52px;border-radius:10px 10px 18px 18px;background:rgba(143,175,143,0.15);border:1px solid rgba(143,175,143,0.2);display:flex;align-items:center;justify-content:center;font-size:1rem;">💕</div></div><div class="sv-sub" style="color:#8a5a40;">Arch-framed photos to swipe through</div>`,
+        `<div class="sv-lbl" style="color:rgba(196,122,90,0.6);">Music Box</div><div style="width:44px;height:34px;background:linear-gradient(145deg,#d4a853,#c47a5a);border-radius:4px 4px 2px 2px;margin:0 auto 4px;position:relative;"><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:1.2rem;animation:musicSpin2 3s linear infinite;">🌸</div></div><div class="sv-sub" style="color:#8a5a40;margin-top:10px;">A song plays from a golden music box</div>`,
+        `<div class="sv-lbl" style="color:rgba(196,122,90,0.6);">Bloom Reveal</div><span style="font-size:2.8rem;display:block;animation:bloomSway2 2s ease-in-out infinite;">🌸</span><div class="sv-sub" style="color:#8a5a40;margin-top:6px;">Tap the flower to open the letter</div>`,
+        `<div class="sv-lbl" style="color:rgba(143,175,143,0.7);">Botanical Letter</div><div style="background:white;border-radius:4px;padding:8px 8px 8px 12px;width:90%;margin:4px auto;border-left:3px solid #8faf8f;"><div style="font-family:'Cormorant Garamond',serif;font-size:0.65rem;color:#5a3020;line-height:1.7;font-style:italic;">Dear Maa,<br>You are the reason I know what love is...</div><div style="font-family:'Cormorant Garamond',serif;font-size:0.6rem;color:#c47a5a;margin-top:4px;font-style:italic;">With all my love 🌸</div></div>`
       ]
     }
   };
