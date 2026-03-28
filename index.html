@@ -84,8 +84,10 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .up-dot.uploading{display:block;background:rgba(240,192,64,0.8);animation:dotPulse 0.8s ease-in-out infinite;}
 .up-dot.done{display:block;background:rgba(20,160,140,0.9);}
 @keyframes dotPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
-.photo-hint{font-size:0.62rem;color:rgba(160,220,210,0.2);margin-bottom:12px;}
+.photo-hint{font-size:0.62rem;color:rgba(160,220,210,0.2);margin-bottom:4px;}
 .photo-hint .hl{color:rgba(20,160,140,0.55);font-weight:600;}
+.slot-plus{font-size:1.1rem;color:rgba(160,220,210,0.2);}
+.photo-caption-row div{transition:color 0.3s,font-weight 0.3s;}
 
 /* Song */
 .song-search-row{display:flex;gap:7px;margin-bottom:8px;}
@@ -307,18 +309,6 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-sunshine .sv-desc{color:#3a6a1a;}
 .sv-sunshine .sv-cta{color:#5a8a3a;}
 
-/* Saree (Mother's Day) theme */
-.sv-saree{background:linear-gradient(135deg,#0d4a5a,#1a6a7a);}
-.sv-saree .sv-overlay-info{background:linear-gradient(to top,rgba(13,74,90,1) 0%,rgba(13,74,90,0.96) 65%,transparent);}
-.sv-saree .sv-dot{background:rgba(212,168,83,0.4);}
-.sv-saree .sv-dot.sv-dot-active{background:#d4a853;}
-.sv-saree .sv-name{color:#f0e0c0;font-family:'Cormorant Garamond',serif;}
-.sv-saree .sv-desc{color:rgba(212,168,83,0.55);}
-.sv-saree .sv-cta{color:#d4a853;}
-.sv-saree .sv-lbl{color:rgba(212,168,83,0.6);}
-.sv-saree .sv-title{color:#f0e0c0;}
-.sv-saree .sv-sub{color:rgba(192,168,128,0.65);}
-
 /* Save overlay */
 .save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
 .save-overlay.show{display:flex;}
@@ -350,10 +340,9 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 <div class="bg-glow"></div>
 
 <!-- ════════════════════════════════
-     PAGE 1 — ALL INPUTS
+     PAGE 1 — OCCASION
 ════════════════════════════════ -->
-<div class="screen active" id="p-info">
-  <!-- FIX 4: Step dots instead of progress bar -->
+<div class="screen active" id="p-occasion">
   <div class="step-dots">
     <div class="step-dot active" id="dot-1"></div>
     <div class="step-dot" id="dot-2"></div>
@@ -366,95 +355,6 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
   <div class="step-wrap">
     <div class="step-content">
       <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">Let's begin</span><span class="eyebrow-line"></span></div>
-      <div class="page-title">Create a card<br><em>they'll never forget.</em></div>
-      <div class="page-sub">Fill in the details — takes about 2 minutes.</div>
-
-      <label class="field-label">To — Their name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Priya" maxlength="30" autocomplete="off">
-      <div style="height:18px;"></div>
-      <label class="field-label">From — Your name</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;" oninput="if(!signManuallyEdited){const v=this.value.trim();document.getElementById('cSign').value=v?'With love, '+v+' 💕':'';}">
-      <!-- Photos -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">📸</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="photosHeading" value="Memories" maxlength="30" autocomplete="off">
-        </div>
-        <span class="sec-hdr-line"></span>
-      </div>
-      <div class="photos-grid" id="photosGrid"></div>
-      <div class="photo-hint">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
-      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
-
-      <!-- Song -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">🎵</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="songScreenTitle" value="Song for you 🎵" maxlength="35" autocomplete="off">
-        </div>
-        <span class="sec-hdr-line"></span>
-      </div>
-      <div class="song-selected-box" id="songSelectedBox">
-        <div class="song-sel-lbl">Selected song</div>
-        <div class="song-sel-name" id="songSelectedName">—</div>
-      </div>
-      <div class="song-search-row">
-        <input class="regular-input" id="ytSearchInput" placeholder="Search a song..." maxlength="100" onkeydown="if(event.key==='Enter')searchSong()">
-        <button class="search-btn" onclick="searchSong()">🔍</button>
-      </div>
-      <div id="songResults"></div>
-
-      <!-- Letter -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">💌</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="letterToneHeader" value="emotional and caring" maxlength="50" autocomplete="off" placeholder="e.g. romantic, Hindi, funny...">
-        </div>
-        <span class="sec-hdr-line"></span>
-      </div>
-      <div class="ai-box">
-        <div class="ai-box-lbl">✨ Write with AI using the tone above</div>
-        <button class="ai-go-btn" id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;">Write Letter ✨</button>
-        <div class="ai-loading" id="letterAiLoading">
-          <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
-          <span>Writing your letter...</span>
-        </div>
-      </div>
-      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words..." rows="5"></textarea>
-      <div class="sign-row">
-        <span class="sign-lbl">Sign off</span>
-        <input class="sign-input" id="cSign" placeholder="With love 💕" maxlength="60" oninput="signManuallyEdited=true">
-      </div>
-      <div class="rule"></div>
-    </div>
-    <div class="step-actions">
-      <button class="btn-primary" onclick="goToPage2()">Continue → Pick Occasion 🎉</button>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════
-     PAGE 2 — OCCASION
-════════════════════════════════ -->
-<div class="screen" id="p-occasion">
-  <div class="step-dots">
-    <div class="step-dot done" id="dot2-1"></div>
-    <div class="step-dot active" id="dot2-2"></div>
-    <div class="step-dot" id="dot2-3"></div>
-  </div>
-  <div class="top-nav">
-    <button class="back-btn" onclick="goTo('p-info')">←</button>
-    <span class="step-pill">Step 2 of 3</span>
-  </div>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">Occasion</span><span class="eyebrow-line"></span></div>
       <div class="page-title">What's the<br><em>occasion?</em></div>
       <div class="page-sub" style="margin-bottom:20px;">Pick what you're celebrating</div>
       <div class="occasions-list">
@@ -510,7 +410,99 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 </div>
 
 <!-- ════════════════════════════════
-     PAGE 3 — CARD STYLE (horizontal scroll cards)
+     PAGE 2 — ALL INPUTS (occasion-aware)
+════════════════════════════════ -->
+<div class="screen" id="p-info">
+  <div class="step-dots">
+    <div class="step-dot done" id="dot2-1"></div>
+    <div class="step-dot active" id="dot2-2"></div>
+    <div class="step-dot" id="dot2-3"></div>
+  </div>
+  <div class="top-nav">
+    <button class="back-btn" onclick="goTo('p-occasion')">←</button>
+    <span class="step-pill" id="infoStepPill">Step 2 of 3</span>
+  </div>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt" id="infoEyebrow">Birthday Card</span><span class="eyebrow-line"></span></div>
+      <div class="page-title" id="infoTitle">Make it<br><em>unforgettable.</em></div>
+      <div class="page-sub" id="infoSub">Fill in the details — takes about 2 minutes.</div>
+
+      <label class="field-label" id="nameLabel">To — Their name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Priya" maxlength="30" autocomplete="off">
+      <div style="height:18px;"></div>
+      <label class="field-label">From — Your name</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;" oninput="if(!signManuallyEdited){const v=this.value.trim();document.getElementById('cSign').value=v?getSignOff(v):'';}">
+
+      <!-- Photos -->
+      <div class="sec-hdr">
+        <span class="sec-hdr-line"></span>
+        <span class="sec-hdr-txt">📸</span>
+        <div class="sec-hdr-pill">
+          <span class="sec-hdr-pencil">✏️</span>
+          <input class="sec-hdr-input" id="photosHeading" value="Memories" maxlength="30" autocomplete="off">
+        </div>
+        <span class="sec-hdr-line"></span>
+      </div>
+      <div class="photos-grid" id="photosGrid"></div>
+      <div class="photo-hint">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
+      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+
+      <!-- Song -->
+      <div class="sec-hdr">
+        <span class="sec-hdr-line"></span>
+        <span class="sec-hdr-txt">🎵</span>
+        <div class="sec-hdr-pill">
+          <span class="sec-hdr-pencil">✏️</span>
+          <input class="sec-hdr-input" id="songScreenTitle" value="Song for you 🎵" maxlength="35" autocomplete="off">
+        </div>
+        <span class="sec-hdr-line"></span>
+      </div>
+      <div class="song-selected-box" id="songSelectedBox">
+        <div class="song-sel-lbl">Selected song</div>
+        <div class="song-sel-name" id="songSelectedName">—</div>
+      </div>
+      <div class="song-search-row">
+        <input class="regular-input" id="ytSearchInput" placeholder="Search a song..." maxlength="100" onkeydown="if(event.key==='Enter')searchSong()">
+        <button class="search-btn" onclick="searchSong()">🔍</button>
+      </div>
+      <!-- AI Song suggestions -->
+      <div class="ai-song-wrap" id="aiSongWrap" style="margin-bottom:8px;"></div>
+      <div id="songResults"></div>
+
+      <!-- Letter -->
+      <div class="sec-hdr">
+        <span class="sec-hdr-line"></span>
+        <span class="sec-hdr-txt">💌</span>
+        <div class="sec-hdr-pill">
+          <span class="sec-hdr-pencil">✏️</span>
+          <input class="sec-hdr-input" id="letterToneHeader" value="emotional and caring" maxlength="50" autocomplete="off" placeholder="e.g. romantic, Hindi, funny...">
+        </div>
+        <span class="sec-hdr-line"></span>
+      </div>
+      <div class="ai-box">
+        <div class="ai-box-lbl" id="aiBoxLbl">✨ Write with AI using the tone above</div>
+        <button class="ai-go-btn" id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;">Write Letter ✨</button>
+        <div class="ai-loading" id="letterAiLoading">
+          <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
+          <span>Writing your letter...</span>
+        </div>
+      </div>
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words..." rows="5"></textarea>
+      <div class="sign-row">
+        <span class="sign-lbl">Sign off</span>
+        <input class="sign-input" id="cSign" placeholder="With love 💕" maxlength="60" oninput="signManuallyEdited=true">
+      </div>
+      <div class="rule"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-primary" onclick="goToStylePage()">Continue → Pick Card Style ✨</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     PAGE 3 — CARD STYLE
 ════════════════════════════════ -->
 <div class="screen" id="p-style">
   <div class="step-dots">
@@ -519,7 +511,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
     <div class="step-dot active" id="dot3-3"></div>
   </div>
   <div class="top-nav">
-    <button class="back-btn" onclick="goTo('p-occasion')">←</button>
+    <button class="back-btn" onclick="goTo('p-info')">←</button>
     <span class="step-pill">Step 3 of 3</span>
   </div>
   <div class="step-wrap">
@@ -568,16 +560,68 @@ const CLOUDINARY_PRESET = 'wishyou-uploads';
 const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
 
 // ── STATE ──
-let curScreen = 'p-info';
+let curScreen = 'p-occasion';
 let photos = [];
 let uploadedUrls = {};
 let currentSlotIdx = 0;
 let selectedOccasion = '';
 let selectedVideoId = '';
 let shareLink = '';
-let shareLinkShort = ''; // FIX 8: short link for display
+let shareLinkShort = '';
 let aiLetterCount = 0;
 let signManuallyEdited = false;
+
+// ── OCCASION CONTENT CONFIG ──
+const OCCASION_CONTENT = {
+  birthday: {
+    eyebrow: '🎂 Birthday Card',
+    title: 'Make it<br><em>unforgettable.</em>',
+    sub: 'Fill in the details — takes about 2 minutes.',
+    nameLabel: 'To — Their name',
+    namePlaceholder: 'e.g. Priya',
+    photosHeading: 'Moments with you',
+    photoCaptions: [
+      'The memory I keep coming back to 💫',
+      'You, in your element ✨',
+      'This one always makes me smile 😊',
+      'Look how far you\'ve come 🌟',
+      'My favourite version of you 💕'
+    ],
+    songHeading: 'A song that\'s so you 🎵',
+    songPlaceholder: 'Search birthday song...',
+    letterTone: 'emotional and heartfelt',
+    letterTonePlaceholder: 'e.g. funny, emotional, Hindi...',
+    letterPlaceholder: 'Dear Priya,\n\nAnother year around the sun...',
+    signOff: (name) => `With love, ${name} 🎂`,
+    aiLetterPrompt: (name, sender, tone) => `Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone||'warm and heartfelt'}. Return ONLY the letter body — no greeting, no sign off.`,
+    aiSongSuggestions: (name) => `Suggest 4 real popular songs perfect for a birthday card${name?' for '+name:''}. Mix emotional and fun. Return ONLY JSON: [{"name":"Song","artist":"Artist"}]`,
+    continueBtn: 'Continue → Pick Card Style 🎂'
+  },
+  mothersday: {
+    eyebrow: '🌸 Mother\'s Day Card',
+    title: 'For the one who<br><em>gave you everything.</em>',
+    sub: 'Take your time — she deserves every word.',
+    nameLabel: 'To — Her name',
+    namePlaceholder: 'e.g. Maa, Aai, Amma...',
+    photosHeading: 'Our memories together',
+    photoCaptions: [
+      'You gave me everything 🌸',
+      'My first home was you 🏠',
+      'I learned love from watching you 💕',
+      'Always my safe place 🌺',
+      'Everything good in me — that\'s you ✨'
+    ],
+    songHeading: 'A song for the woman who raised me 🎵',
+    songPlaceholder: 'Search song for Maa...',
+    letterTone: 'emotional and grateful',
+    letterTonePlaceholder: 'e.g. emotional, grateful, Marathi...',
+    letterPlaceholder: 'Dear Maa,\n\nThere are no words for what you mean to me...',
+    signOff: (name) => `With all my love, ${name} 🌸`,
+    aiLetterPrompt: (name, sender, tone) => `Write a heartfelt Mother's Day letter from ${sender} to their mother${name?' named '+name:''}. Tone: ${tone||'warm, emotional and grateful'}. 3-4 sentences. Return ONLY the letter body.`,
+    aiSongSuggestions: (name) => `Suggest 4 real popular songs perfect for a Mother's Day card. Emotional, touching, about mothers or unconditional love. Return ONLY JSON: [{"name":"Song","artist":"Artist"}]`,
+    continueBtn: 'Continue → Pick Card Style 🌸'
+  }
+};
 
 // ── OCCASIONS CONFIG ──
 const OCCASIONS = {
@@ -590,7 +634,7 @@ const OCCASIONS = {
         preview:'linear-gradient(160deg,#fde8f0,#fce4ec)', previewEmoji:'💌',
         cardType:'birthday-intimate',
         defaultSongTitle:'Song for you 🎵',
-        defaultMemoriesHeading:'Memories',
+        defaultMemoriesHeading:'Moments with you',
         receiverUrl: id => `https://wishyou.ai/birthday/intimate.html?card=${id}`,
         shareMsg: (n,s,l) => `💝 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a card 💌\n\n':'Someone made you a card 💌\n\n'}👆 Open:\n${l}`
       },
@@ -600,7 +644,7 @@ const OCCASIONS = {
         preview:'linear-gradient(160deg,#FFE135,#ffd000)', previewEmoji:'🎊',
         cardType:'birthday-retro',
         defaultSongTitle:'Party Anthem 🎵',
-        defaultMemoriesHeading:'Memories',
+        defaultMemoriesHeading:'Moments with you',
         receiverUrl: id => `https://wishyou.ai/birthday/retro.html?card=${id}`,
         shareMsg: (n,s,l) => `🎊 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a card 🎉\n\n':'Someone made you a card 🎉\n\n'}👆 Open:\n${l}`
       },
@@ -620,7 +664,7 @@ const OCCASIONS = {
         preview:'linear-gradient(160deg,#fef3e2,#fde8c8)', previewEmoji:'🫙',
         cardType:'birthday-memoryjar',
         defaultSongTitle:'Song for you 🎵',
-        defaultMemoriesHeading:'Memories',
+        defaultMemoriesHeading:'Moments with you',
         receiverUrl: id => `https://wishyou.ai/birthday/memoryjar.html?card=${id}`,
         shareMsg: (n,s,l) => `🫙 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a memory jar 💛\n\n':'Someone made you a jar 💛\n\n'}👆 Open:\n${l}`
       },
@@ -630,7 +674,7 @@ const OCCASIONS = {
         preview:'linear-gradient(160deg,#1a1a2e,#16213e)', previewEmoji:'💬',
         cardType:'birthday-fakechat',
         defaultSongTitle:'Song for you 🎵',
-        defaultMemoriesHeading:'Memories',
+        defaultMemoriesHeading:'Moments with you',
         receiverUrl: id => `https://wishyou.ai/birthday/fakechat.html?card=${id}`,
         shareMsg: (n,s,l) => `💬 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' sent you a surprise 💌\n\n':'Someone sent you a surprise 💌\n\n'}👆 Open:\n${l}`
       }
@@ -645,7 +689,7 @@ const OCCASIONS = {
         preview:'linear-gradient(160deg,#fdf6f0,#faeae4)', previewEmoji:'🌸',
         cardType:'mothersday-blossom',
         defaultSongTitle:'A song for you 🎵',
-        defaultMemoriesHeading:'Our Memories',
+        defaultMemoriesHeading:'Our memories together',
         receiverUrl: id => `https://wishyou.ai/mothersday/blossom.html?card=${id}`,
         shareMsg: (n,s,l) => `🌸 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' made you a Blossom card 🌺\n\n':'Someone made you a special card 🌺\n\n'}👆 Open:\n${l}`
       },
@@ -655,23 +699,55 @@ const OCCASIONS = {
         preview:'linear-gradient(160deg,#87CEEB,#90d060)', previewEmoji:'🌻',
         cardType:'mothersday-sunshine',
         defaultSongTitle:'A song for you 🎵',
-        defaultMemoriesHeading:'Memories on the Fence',
+        defaultMemoriesHeading:'Our memories together',
         receiverUrl: id => `https://wishyou.ai/mothersday/sunshine.html?card=${id}`,
         shareMsg: (n,s,l) => `🌻 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' planted a garden for you 🌿\n\n':'Someone planted a garden for you 🌿\n\n'}👆 Walk into it:\n${l}`
-      },
-      {
-        id:'saree', name:'🪡 The Saree',
-        desc:'Deeply Indian · Unfold a saree · Embroidery hoop photos · Gold pallu letter',
-        preview:'linear-gradient(160deg,#0d4a5a,#1a6a7a)', previewEmoji:'🪡',
-        cardType:'mothersday-saree',
-        defaultSongTitle:'A song for you 🎵',
-        defaultMemoriesHeading:'Embroidered Memories',
-        receiverUrl: id => `https://wishyou.ai/mothersday/saree.html?card=${id}`,
-        shareMsg: (n,s,l) => `🪡 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' folded a saree for you 🌟\n\n':'Someone folded a saree for you 🌟\n\n'}Unfold it:\n${l}`
       }
     ]
   }
 };
+
+// ── APPLY OCCASION to inputs page ──
+function applyOccasion(occ) {
+  const c = OCCASION_CONTENT[occ]; if (!c) return;
+
+  // Page headings
+  const el = (id) => document.getElementById(id);
+  el('infoEyebrow').textContent = c.eyebrow;
+  el('infoTitle').innerHTML = c.title;
+  el('infoSub').textContent = c.sub;
+  el('nameLabel').textContent = c.nameLabel;
+  el('cName').placeholder = c.namePlaceholder;
+  el('photosHeading').value = c.photosHeading;
+  el('songScreenTitle').value = c.songHeading;
+  el('ytSearchInput').placeholder = c.songPlaceholder;
+  el('letterToneHeader').value = c.letterTone;
+  el('letterToneHeader').placeholder = c.letterTonePlaceholder;
+  el('cMsg').placeholder = c.letterPlaceholder;
+
+  // Rebuild photo slots with captions
+  buildPhotoSlots(c.photoCaptions);
+
+  // AI song suggestions chip
+  const sw = el('aiSongWrap');
+  sw.innerHTML = `<button class="ai-go-btn" onclick="suggestSongs()" style="padding:9px 14px;font-size:0.8rem;">✨ AI Song Suggestions</button>
+  <div class="ai-loading" id="songAiLoading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span>Finding songs...</span></div>
+  <div id="songAiResults"></div>`;
+
+  // Reset sign off if not manually edited
+  if (!signManuallyEdited) {
+    const sender = el('cSender')?.value.trim() || '';
+    el('cSign').value = sender ? c.signOff(sender) : '';
+  }
+
+  // Continue button text
+  document.querySelector('#p-info .btn-primary').textContent = c.continueBtn;
+}
+
+function getSignOff(senderName) {
+  const c = OCCASION_CONTENT[selectedOccasion];
+  return c ? c.signOff(senderName) : `With love, ${senderName} 💕`;
+}
 
 // ── NAVIGATION ──
 function goTo(id) {
@@ -679,15 +755,20 @@ function goTo(id) {
   const next = document.getElementById(id);
   if (!next || curScreen === id) return;
   if (prev) { prev.classList.remove('active'); prev.classList.add('slide-out'); setTimeout(() => prev.classList.remove('slide-out'), 500); }
-  // Stop slideshows if leaving style page
   if (curScreen === 'p-style' && id !== 'p-style') stopAllSlideshows();
   next.classList.add('active');
   curScreen = id;
   setTimeout(() => { const sc = next.querySelector('.step-content'); if (sc) sc.scrollTo(0, 0); }, 50);
-  saveDraft(); // persist current screen so refresh returns here
+  saveDraft();
 }
 
-function goToPage2() {
+function selectOccasion(occ) {
+  selectedOccasion = occ;
+  applyOccasion(occ);
+  goTo('p-info');
+}
+
+function goToStylePage() {
   const name = document.getElementById('cName').value.trim();
   if (!name) {
     const inp = document.getElementById('cName');
@@ -696,18 +777,7 @@ function goToPage2() {
     setTimeout(() => inp.style.borderBottomColor = '', 1800);
     return;
   }
-  // Auto-set sign-off with sender name (only if user hasn't manually edited it)
-  const sender = document.getElementById('cSender').value.trim();
-  const signInp = document.getElementById('cSign');
-  if (!signManuallyEdited) {
-    signInp.value = sender ? `With love, ${sender} 💕` : 'With love 💕';
-  }
-  goTo('p-occasion');
-}
-
-function selectOccasion(occ) {
-  selectedOccasion = occ;
-  buildStylesList(occ);
+  buildStylesList(selectedOccasion);
   goTo('p-style');
 }
 
@@ -810,16 +880,6 @@ function buildStylesList(occ) {
         `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">Leaf Letter</div><div style="background:linear-gradient(135deg,#5aaa2a,#3a8a10);border-radius:40% 4px 40% 4px / 4px 40% 4px 40%;padding:10px 12px;width:80%;margin:4px auto;box-shadow:0 4px 12px rgba(0,0,0,0.15);"><div style="font-family:'Cormorant Garamond',serif;font-size:0.62rem;color:rgba(255,255,255,0.88);line-height:1.7;font-style:italic;">Dear Maa,<br>You are my sunshine...</div><div style="font-size:0.58rem;color:rgba(255,240,160,0.85);margin-top:4px;">Forever yours 🌻</div></div>`,
         `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">Full Garden</div><span class="sv-emoji" style="font-size:2.8rem;">🌻</span><div class="sv-sub" style="color:#3a6a1a;font-style:italic;margin-top:6px;">"She planted love in me."</div>`
       ]
-    },
-    saree: {
-      theme: 'sv-saree',
-      slides: [
-        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">The Folded Saree</div><span class="sv-emoji">🪡</span><div class="sv-title" style="color:#f0e0c0;font-family:'Cormorant Garamond',serif;font-weight:300;">She kept this folded<br><em style="color:#d4a853;">for you</em></div>`,
-        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">Embroidery Hoops</div><div style="display:flex;gap:8px;justify-content:center;margin:4px 0;"><div style="width:44px;height:44px;border-radius:50%;border:6px solid #b8903a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:rgba(212,168,83,0.08);">📸</div><div style="width:44px;height:44px;border-radius:50%;border:6px solid #b8903a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:rgba(212,168,83,0.08);">💕</div></div><div class="sv-sub" style="color:rgba(212,168,83,0.55);">Photos in golden embroidery hoops</div>`,
-        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">Zari Border + Song</div><div style="height:10px;background:linear-gradient(180deg,#d4a853,#b8903a);border-radius:2px;margin:4px 0;width:90%;"></div><span class="sv-emoji" style="font-size:1.8rem;">🎵</span><div style="height:10px;background:linear-gradient(180deg,#b8903a,#d4a853);border-radius:2px;width:90%;margin-top:4px;"></div><div class="sv-sub" style="color:rgba(212,168,83,0.55);margin-top:6px;">Song from a tanpura on the zari border</div>`,
-        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">The Pallu</div><div style="background:linear-gradient(135deg,#0d4a5a,#1a6a7a);border-radius:4px;padding:10px 12px 10px 14px;width:85%;margin:4px auto;border-right:4px solid #d4a853;"><div style="font-family:'Cormorant Garamond',serif;font-size:0.62rem;color:rgba(240,224,192,0.88);line-height:1.8;font-style:italic;">Dear Maa,<br>You never told me how many sarees you owned...</div><div style="font-size:0.58rem;color:#d4a853;margin-top:4px;font-style:italic;">Yours, always 🪡</div></div>`,
-        `<div class="sv-lbl" style="color:rgba(212,168,83,0.7);">Written in Gold</div><span class="sv-emoji">🪡</span><div class="sv-sub" style="color:rgba(212,168,83,0.45);font-style:italic;margin-top:4px;">"Draped in her love, always."</div>`
-      ]
     }
   };
 
@@ -886,10 +946,16 @@ function restoreDraft() {
     const raw = localStorage.getItem(DRAFT_KEY);
     if (!raw) return;
     const d = JSON.parse(raw);
-    if (!d.screen) { clearDraft(); return; } // stale draft from old version
-    if (!d.cName && !d.cSender) return;
+    if (!d.screen) { clearDraft(); return; } // stale old draft
+    if (!d.cName && !d.cSender && !d.selectedOccasion) return;
 
-    // Safe helper — only sets value if element exists
+    // Restore occasion first so inputs page renders correctly
+    if (d.selectedOccasion) {
+      selectedOccasion = d.selectedOccasion;
+      applyOccasion(d.selectedOccasion);
+    }
+
+    // Safe set — only if element exists
     const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
     const setText = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
 
@@ -909,17 +975,14 @@ function restoreDraft() {
     if (d.selectedVideoId) selectedVideoId = d.selectedVideoId;
     if (d.signManuallyEdited) signManuallyEdited = true;
     if (d.uploadedUrls) uploadedUrls = d.uploadedUrls;
-    if (d.selectedOccasion) selectedOccasion = d.selectedOccasion;
 
     // Restore screen
     const screen = d.screen;
-    if (screen && screen !== 'p-info') {
-      if (screen === 'p-style' && d.selectedOccasion) {
-        buildStylesList(d.selectedOccasion);
-      }
+    if (screen && screen !== 'p-occasion') {
+      if (screen === 'p-style' && d.selectedOccasion) buildStylesList(d.selectedOccasion);
       const el = document.getElementById(screen);
       if (el) {
-        document.getElementById('p-info').classList.remove('active');
+        document.getElementById('p-occasion').classList.remove('active');
         el.classList.add('active');
         curScreen = screen;
       }
@@ -933,24 +996,57 @@ function clearDraft() {
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
-  buildPhotoSlots();
+  buildPhotoSlots(); // empty slots — occasion not chosen yet
   restoreDraft();
-  // Save on every input change
   document.addEventListener('input', saveDraft);
 });
 
 // ── PHOTO SLOTS ──
-function buildPhotoSlots() {
+function buildPhotoSlots(captions) {
   const grid = document.getElementById('photosGrid');
   grid.innerHTML = ''; photos = []; uploadedUrls = {};
   for (let i = 0; i < 5; i++) {
     const slot = document.createElement('div');
     slot.className = 'photo-slot'; slot.id = 'slot' + i;
-    slot.textContent = '+';
+    // Caption tag below slot
+    if (captions && captions[i]) {
+      slot.innerHTML = `<span class="slot-plus">+</span>`;
+      // Caption shown below grid — stored as data attr
+      slot.dataset.caption = captions[i];
+    } else {
+      slot.innerHTML = `<span class="slot-plus">+</span>`;
+    }
     slot.onclick = () => triggerUpload(i);
     grid.appendChild(slot);
   }
+  // Render captions below grid
+  renderPhotoCaptions(captions);
   updateUploadCount();
+}
+
+function renderPhotoCaptions(captions) {
+  // Remove old captions
+  document.querySelectorAll('.photo-caption-row').forEach(el => el.remove());
+  if (!captions) return;
+  const grid = document.getElementById('photosGrid');
+  // Build 5-column caption row matching grid
+  const row = document.createElement('div');
+  row.className = 'photo-caption-row';
+  row.style.cssText = 'display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:14px;';
+  captions.forEach((cap, i) => {
+    const cell = document.createElement('div');
+    cell.style.cssText = 'font-size:0.48rem;color:rgba(160,220,210,0.28);text-align:center;line-height:1.4;padding-top:4px;';
+    cell.textContent = cap;
+    cell.id = 'cap' + i;
+    row.appendChild(cell);
+  });
+  grid.parentNode.insertBefore(row, grid.nextSibling.nextSibling); // after photo-hint
+}
+
+function updateCaptionHighlight(idx) {
+  // Highlight caption of filled slot
+  const cap = document.getElementById('cap' + idx);
+  if (cap) { cap.style.color = 'rgba(20,160,140,0.55)'; cap.style.fontWeight = '600'; }
 }
 
 function triggerUpload(idx) { currentSlotIdx = idx; document.getElementById('photoFileInput').click(); }
@@ -967,7 +1063,8 @@ function handlePhotoUpload(inp) {
       slot.innerHTML = `<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${ti})">✕</button><div class="up-dot uploading" id="updot${ti}"></div><div class="upind"><div class="upbar" id="upbar${ti}"></div></div>`;
     }
     updateUploadCount();
-    uploadPhotoInBackground(file, ti); // FIX: upload immediately
+    updateCaptionHighlight(ti);
+    uploadPhotoInBackground(file, ti);
   });
   inp.value = '';
 }
@@ -1001,7 +1098,9 @@ async function uploadPhotoInBackground(file, idx) {
 function removePhoto(e, idx) {
   e.stopPropagation(); photos[idx] = null; delete uploadedUrls[idx];
   const slot = document.getElementById('slot' + idx);
-  slot.textContent = '+'; slot.onclick = () => triggerUpload(idx);
+  slot.innerHTML = '<span class="slot-plus">+</span>'; slot.onclick = () => triggerUpload(idx);
+  const cap = document.getElementById('cap' + idx);
+  if (cap) { cap.style.color = 'rgba(160,220,210,0.28)'; cap.style.fontWeight = '400'; }
   updateUploadCount();
 }
 
@@ -1043,7 +1142,7 @@ function selectSong(videoId, title, artist) {
 async function runAILetter() {
   const name = document.getElementById('cName').value.trim() || 'them';
   const sender = document.getElementById('cSender').value.trim() || 'someone';
-  const toneInput = (document.getElementById('letterToneHeader') || document.getElementById('letterTone'))?.value.trim() || 'emotional and caring';
+  const toneInput = document.getElementById('letterToneHeader')?.value.trim() || 'emotional and caring';
   const btn = document.getElementById('aiLetterBtn');
   const loading = document.getElementById('letterAiLoading');
   aiLetterCount++;
@@ -1053,11 +1152,36 @@ async function runAILetter() {
   const detectedLang = langs.find(l => toneInput.toLowerCase().includes(l));
   let langNote = '';
   if (detectedLang) { const ln = detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1); langNote = ` CRITICAL: Write ENTIRE letter in ${ln} script only. Natural everyday ${ln}, not formal.`; }
-  const prompt = `Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${toneInput||'warm and heartfelt'}.${langNote}${variationHint} Return ONLY the letter body — no greeting line, no sign off.`;
+  // Use occasion-specific prompt
+  const c = OCCASION_CONTENT[selectedOccasion];
+  const prompt = c ? c.aiLetterPrompt(name, sender, toneInput) + langNote + variationHint
+    : `Write a heartfelt letter from ${sender} to ${name} (3-4 sentences). Tone: ${toneInput}.${langNote}${variationHint} Return ONLY the letter body.`;
   const text = await callClaude(prompt);
   if (text) { const el = document.getElementById('cMsg'); if (el) el.value = stripMarkdown(text); }
   btn.disabled = false; loading.classList.remove('show');
   btn.textContent = 'Again ✨';
+}
+
+async function suggestSongs() {
+  const name = document.getElementById('cName').value.trim() || '';
+  const c = OCCASION_CONTENT[selectedOccasion];
+  const prompt = c ? c.aiSongSuggestions(name) : `Suggest 4 popular songs for a greeting card. Return ONLY JSON: [{"name":"Song","artist":"Artist"}]`;
+  const resultsEl = document.getElementById('songAiResults');
+  const loading = document.getElementById('songAiLoading');
+  if (!resultsEl || !loading) return;
+  resultsEl.innerHTML = ''; loading.classList.add('show');
+  const text = await callClaude(prompt);
+  loading.classList.remove('show');
+  try {
+    const songs = JSON.parse(text.replace(/```json|```/g,'').trim());
+    songs.forEach(s => {
+      const el = document.createElement('div');
+      el.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.025);border:1px solid rgba(160,220,210,0.06);margin-bottom:5px;cursor:pointer;';
+      el.innerHTML = `<span style="font-size:1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.78rem;font-weight:500;color:rgba(224,240,238,0.78);">${s.name}</div><div style="font-size:0.64rem;color:rgba(160,220,210,0.27);">${s.artist}</div></div><span style="font-size:0.66rem;font-weight:600;color:rgba(20,160,140,0.6);">Search →</span>`;
+      el.onclick = () => { document.getElementById('ytSearchInput').value = s.name + ' ' + s.artist; searchSong(); };
+      resultsEl.appendChild(el);
+    });
+  } catch(e) { resultsEl.innerHTML = '<div style="font-size:0.74rem;opacity:0.32;padding:6px 0;">Could not fetch. Try again.</div>'; }
 }
 
 async function callClaude(prompt) {
