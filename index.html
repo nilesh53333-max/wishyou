@@ -53,15 +53,15 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .page-title em{font-style:italic;color:#f0c040;}
 .page-sub{font-size:0.78rem;color:rgba(160,220,210,0.3);line-height:1.7;margin-bottom:20px;text-align:left;}
 
-/* Editable section label input */
-.sec-hdr-input{background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.1);outline:none;font-size:0.78rem;font-weight:500;color:rgba(160,220,210,0.55);padding:2px 4px;width:auto;min-width:80px;max-width:200px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;}
-.sec-hdr-input:focus{border-bottom-color:rgba(20,160,140,0.35);color:rgba(160,220,210,0.85);}
-.sec-hdr-input::placeholder{color:rgba(160,220,210,0.2);}
-
-/* Section header */
+/* Editable section header pill — clearly looks editable */
 .sec-hdr{display:flex;align-items:center;gap:8px;margin:18px 0 11px;}
 .sec-hdr-line{flex:1;height:1px;background:rgba(160,220,210,0.07);}
 .sec-hdr-txt{font-size:0.9rem;flex-shrink:0;}
+.sec-hdr-pill{display:flex;align-items:center;gap:4px;background:rgba(20,160,140,0.08);border:1px solid rgba(20,160,140,0.22);border-radius:20px;padding:5px 10px;cursor:text;}
+.sec-hdr-pill:focus-within{border-color:rgba(20,160,140,0.5);background:rgba(20,160,140,0.12);}
+.sec-hdr-pencil{font-size:0.65rem;opacity:0.6;flex-shrink:0;pointer-events:none;}
+.sec-hdr-input{background:transparent;border:none;outline:none;font-size:0.76rem;font-weight:600;color:rgba(160,220,210,0.85);min-width:60px;max-width:170px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;}
+.sec-hdr-input::placeholder{color:rgba(160,220,210,0.3);font-weight:400;}
 
 /* Inputs */
 .field-label{display:block;font-size:0.58rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.27);margin-bottom:8px;}
@@ -146,24 +146,28 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .style-card-wrap{border-radius:20px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;}
 .style-card-wrap:active{transform:scale(0.97);}
 
-/* Slideshow viewport */
-.sv{width:100%;height:160px;position:relative;overflow:hidden;}
-.sv-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
+/* Slideshow viewport — taller to fit info inside */
+.sv{width:100%;height:220px;position:relative;overflow:hidden;}
+.sv-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 12px 60px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
 .sv-slide.sv-active{opacity:1;}
 .sv-lbl{font-size:0.5rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
 
-/* Dots */
-.sv-dots{display:flex;gap:5px;justify-content:center;padding:6px 0 4px;}
-.sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.25;}
-.sv-dot.sv-dot-active{width:16px;border-radius:3px;opacity:1;}
-/* Thin rule between slideshow and info */
-.sv-rule{height:1px;margin:0 16px;opacity:0.15;background:currentColor;}
+/* Info overlaid at bottom of card with gradient */
+.sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:10px 14px 12px;z-index:5;}
+.sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(253,232,240,0.97) 0%,rgba(253,232,240,0.7) 70%,transparent);}
+.sv-retro .sv-overlay-info{background:linear-gradient(to top,rgba(255,225,53,0.97) 0%,rgba(255,225,53,0.7) 70%,transparent);}
+.sv-cinematic .sv-overlay-info{background:linear-gradient(to top,rgba(10,10,10,0.97) 0%,rgba(10,10,10,0.7) 70%,transparent);}
+.sv-jar .sv-overlay-info{background:linear-gradient(to top,rgba(254,243,226,0.97) 0%,rgba(254,243,226,0.7) 70%,transparent);}
+.sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,0.97) 0%,rgba(22,21,46,0.7) 70%,transparent);}
 
-/* Card info row — same bg as preview, no border */
-.sv-info{padding:10px 16px 16px;}
-.sv-name{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:700;margin-bottom:2px;}
-.sv-desc{font-size:0.6rem;opacity:0.55;line-height:1.5;}
-.sv-cta{margin-top:8px;font-size:0.64rem;font-weight:700;letter-spacing:0.06em;opacity:0.75;}
+/* Dots inside card at bottom */
+.sv-dots{display:flex;gap:5px;justify-content:center;margin-bottom:6px;}
+.sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.3;}
+.sv-dot.sv-dot-active{width:14px;border-radius:3px;opacity:0.9;}
+
+.sv-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;margin-bottom:1px;}
+.sv-desc{font-size:0.58rem;opacity:0.6;line-height:1.4;}
+.sv-cta{margin-top:5px;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;opacity:0.75;}
 
 /* Shared slide elements */
 .sv-emoji{font-size:2.2rem;margin-bottom:6px;display:block;}
@@ -335,24 +339,29 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <input class="big-input" id="cName" placeholder="e.g. Priya" maxlength="30" autocomplete="off">
       <div style="height:18px;"></div>
       <label class="field-label">From — Your name</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;">
-
-      <!-- FIX 5: Photos heading default = "Memories" -->
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;" oninput="if(!signManuallyEdited){const v=this.value.trim();document.getElementById('cSign').value=v?'With love, '+v+' 💕':'';}">
+      <!-- Photos -->
       <div class="sec-hdr">
         <span class="sec-hdr-line"></span>
         <span class="sec-hdr-txt">📸</span>
-        <input class="sec-hdr-input" id="photosHeading" value="Memories" maxlength="30" placeholder="Section title..." autocomplete="off">
+        <div class="sec-hdr-pill">
+          <span class="sec-hdr-pencil">✏️</span>
+          <input class="sec-hdr-input" id="photosHeading" value="Memories" maxlength="30" autocomplete="off">
+        </div>
         <span class="sec-hdr-line"></span>
       </div>
       <div class="photos-grid" id="photosGrid"></div>
       <div class="photo-hint">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
       <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
 
-      <!-- FIX 5: Song heading default = "Song for you" -->
+      <!-- Song -->
       <div class="sec-hdr">
         <span class="sec-hdr-line"></span>
         <span class="sec-hdr-txt">🎵</span>
-        <input class="sec-hdr-input" id="songScreenTitle" value="Song for you 🎵" maxlength="35" placeholder="Song screen title..." autocomplete="off">
+        <div class="sec-hdr-pill">
+          <span class="sec-hdr-pencil">✏️</span>
+          <input class="sec-hdr-input" id="songScreenTitle" value="Song for you 🎵" maxlength="35" autocomplete="off">
+        </div>
         <span class="sec-hdr-line"></span>
       </div>
       <div class="song-selected-box" id="songSelectedBox">
@@ -365,13 +374,19 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       </div>
       <div id="songResults"></div>
 
-      <div class="sec-hdr"><span class="sec-hdr-line"></span><span class="sec-hdr-txt">💌</span><span style="font-size:0.72rem;color:rgba(160,220,210,0.35);letter-spacing:0.1em;">Letter</span><span class="sec-hdr-line"></span></div>
-      <div class="ai-box">
-        <div class="ai-box-lbl">✨ Write with AI</div>
-        <div class="ai-row">
-          <input class="regular-input" id="letterTone" placeholder="e.g. emotional, funny, Hindi..." maxlength="80">
-          <button class="ai-go-btn" id="aiLetterBtn" onclick="runAILetter()">Write ✨</button>
+      <!-- Letter -->
+      <div class="sec-hdr">
+        <span class="sec-hdr-line"></span>
+        <span class="sec-hdr-txt">💌</span>
+        <div class="sec-hdr-pill">
+          <span class="sec-hdr-pencil">✏️</span>
+          <input class="sec-hdr-input" id="letterToneHeader" value="emotional and caring" maxlength="50" autocomplete="off" placeholder="e.g. romantic, Hindi, funny...">
         </div>
+        <span class="sec-hdr-line"></span>
+      </div>
+      <div class="ai-box">
+        <div class="ai-box-lbl">✨ Write with AI using the tone above</div>
+        <button class="ai-go-btn" id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;">Write Letter ✨</button>
         <div class="ai-loading" id="letterAiLoading">
           <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
           <span>Writing your letter...</span>
@@ -380,7 +395,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words..." rows="5"></textarea>
       <div class="sign-row">
         <span class="sign-lbl">Sign off</span>
-        <input class="sign-input" id="cSign" placeholder="With love, Aryan 💕" maxlength="60" oninput="signManuallyEdited=true">
+        <input class="sign-input" id="cSign" placeholder="With love 💕" maxlength="60" oninput="signManuallyEdited=true">
       </div>
       <div class="rule"></div>
     </div>
@@ -706,13 +721,12 @@ function buildStylesList(occ) {
     card.innerHTML = `
       <div class="sv ${sw.theme}">
         ${slidesHtml}
-      </div>
-      <div class="sv-dots">${dotsHtml}</div>
-      <div class="sv-rule"></div>
-      <div class="sv-info ${sw.theme}">
-        <div class="sv-name">${style.name}</div>
-        <div class="sv-desc">${style.desc}</div>
-        <div class="sv-cta">Tap to create this card →</div>
+        <div class="sv-overlay-info">
+          <div class="sv-dots">${dotsHtml}</div>
+          <div class="sv-name">${style.name}</div>
+          <div class="sv-desc">${style.desc}</div>
+          <div class="sv-cta">Tap to create →</div>
+        </div>
       </div>`;
 
     card.onclick = () => createCard(occ, style);
@@ -830,7 +844,7 @@ function selectSong(videoId, title, artist) {
 async function runAILetter() {
   const name = document.getElementById('cName').value.trim() || 'them';
   const sender = document.getElementById('cSender').value.trim() || 'someone';
-  const toneInput = document.getElementById('letterTone').value.trim();
+  const toneInput = (document.getElementById('letterToneHeader') || document.getElementById('letterTone'))?.value.trim() || 'emotional and caring';
   const btn = document.getElementById('aiLetterBtn');
   const loading = document.getElementById('letterAiLoading');
   aiLetterCount++;
