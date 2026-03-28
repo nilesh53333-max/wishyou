@@ -26,10 +26,10 @@ body{font-family:'DM Sans',sans-serif;background:#1a0f0a;}
   }
 }
 
-/* ── SCREEN SYSTEM ── */
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.5s ease;overflow:hidden;}
-.screen.active{opacity:1;pointer-events:all;}
-.screen.slide-out{opacity:0;}
+/* ── SCREEN SYSTEM — same as intimate ── */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);transform:translateX(60px);overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.screen.slide-out{opacity:0;transform:translateX(-60px);}
 
 /* ── CREATOR — reuse intimate pattern ── */
 .creator-screen{align-items:stretch;justify-content:flex-start;}
@@ -123,42 +123,53 @@ body{font-family:'DM Sans',sans-serif;background:#1a0f0a;}
 .jar-header-sub{font-size:0.7rem;color:rgba(255,220,150,0.35);margin-top:2px;letter-spacing:0.08em;}
 .notes-counter{font-size:0.65rem;color:rgba(255,220,150,0.4);letter-spacing:0.1em;margin-top:4px;}
 
-/* The Jar SVG area */
-.jar-scene{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
-.jar-container{position:relative;width:220px;height:280px;}
+/* The Jar SVG area — responsive, fits screen */
+.jar-scene{position:absolute;top:80px;bottom:80px;left:0;right:0;display:flex;align-items:center;justify-content:center;}
+.jar-container{position:relative;width:min(220px,55vw);height:min(280px,60vw);}
 
 /* Floating notes inside jar */
-.note{position:absolute;cursor:pointer;touch-action:manipulation;transition:transform 0.2s ease;z-index:5;}
-.note:active{transform:scale(0.92)!important;}
-.note-paper{width:52px;height:44px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:2px 3px 8px rgba(0,0,0,0.3);position:relative;overflow:hidden;}
-.note-paper::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 11px,rgba(0,0,0,0.06) 11px,rgba(0,0,0,0.06) 12px);}
+.note{position:absolute;cursor:pointer;touch-action:manipulation;z-index:5;animation-fill-mode:both;}
+.note-inner{transition:transform 0.2s ease;}
+.note:active .note-inner{transform:scale(0.88);}
+.note-paper{width:min(52px,12vw);height:min(44px,10vw);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:min(1.3rem,3.5vw);box-shadow:2px 3px 10px rgba(0,0,0,0.4);position:relative;overflow:hidden;}
+.note-paper::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 11px,rgba(0,0,0,0.05) 11px,rgba(0,0,0,0.05) 12px);}
 .note-fold{position:absolute;top:0;right:0;width:10px;height:10px;background:rgba(0,0,0,0.12);clip-path:polygon(100% 0,0 0,100% 100%);}
-.note-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-family:'Caveat',cursive;font-size:0.65rem;color:rgba(255,220,150,0.5);white-space:nowrap;}
+.note-label{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-family:'Caveat',cursive;font-size:0.62rem;color:rgba(255,220,150,0.45);white-space:nowrap;}
+.note-glow{position:absolute;inset:-4px;border-radius:5px;opacity:0;transition:opacity 0.3s;background:radial-gradient(circle,rgba(255,220,100,0.4),transparent);}
+.note:hover .note-glow{opacity:1;}
 
-/* Note animations — floating */
-@keyframes float1{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-8px) rotate(-4deg);}}
-@keyframes float2{0%,100%{transform:translateY(0) rotate(5deg);}50%{transform:translateY(-10px) rotate(8deg);}}
-@keyframes float3{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-6px) rotate(-6deg);}}
-@keyframes float4{0%,100%{transform:translateY(0) rotate(8deg);}50%{transform:translateY(-12px) rotate(5deg);}}
-@keyframes float5{0%,100%{transform:translateY(0) rotate(-10deg);}50%{transform:translateY(-7px) rotate(-7deg);}}
+/* Note entrance animation */
+@keyframes noteEntrance{0%{opacity:0;transform:translateY(-30px) scale(0.5);}60%{opacity:1;transform:translateY(4px) scale(1.05);}100%{opacity:1;transform:translateY(0) scale(1);}}
 
-/* Note opened/removed state */
-.note.opened{opacity:0.25;pointer-events:none;transform:scale(0.8)!important;}
+/* Note float animations */
+@keyframes float1{0%,100%{transform:translateY(0) rotate(-6deg);}50%{transform:translateY(-9px) rotate(-3deg);}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(5deg);}50%{transform:translateY(-11px) rotate(8deg);}}
+@keyframes float3{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-7px) rotate(-6deg);}}
+@keyframes float4{0%,100%{transform:translateY(0) rotate(8deg);}50%{transform:translateY(-13px) rotate(5deg);}}
+@keyframes float5{0%,100%{transform:translateY(0) rotate(-10deg);}50%{transform:translateY(-8px) rotate(-7deg);}}
+
+/* Note opened state */
+.note.opened{opacity:0.2;pointer-events:none;}
+.note.opened .note-paper{filter:grayscale(1);}
 
 /* Jar SVG */
 .jar-svg{position:absolute;inset:0;width:100%;height:100%;}
 
+/* Jar glow */
+.jar-glow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:140px;height:60px;background:radial-gradient(ellipse,rgba(196,92,26,0.25),transparent);pointer-events:none;animation:glowPulse 3s ease-in-out infinite;}
+@keyframes glowPulse{0%,100%{opacity:0.6;}50%{opacity:1;}}
+
 /* Bottom hint */
 .jar-hint{position:absolute;bottom:max(24px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;}
 .jar-hint-text{font-family:'Caveat',cursive;font-size:0.95rem;color:rgba(255,220,150,0.45);animation:hintPulse 2.5s ease-in-out infinite;}
-@keyframes hintPulse{0%,100%{opacity:0.4;}50%{opacity:0.8;}}
+@keyframes hintPulse{0%,100%{opacity:0.4;}50%{opacity:0.85;}}
 
 /* ── OVERLAY — when a note is tapped ── */
-.note-overlay{position:absolute;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;pointer-events:none;opacity:0;transition:opacity 0.4s ease;}
+.note-overlay{position:absolute;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;pointer-events:none;opacity:0;transition:opacity 0.35s ease;}
 .note-overlay.show{opacity:1;pointer-events:all;}
-.note-overlay-bg{position:absolute;inset:0;background:rgba(0,0,0,0.82);}
-.note-card{position:relative;z-index:1;width:100%;max-width:340px;border-radius:20px;padding:0;overflow:hidden;transform:scale(0.85);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
-.note-overlay.show .note-card{transform:scale(1);}
+.note-overlay-bg{position:absolute;inset:0;background:rgba(0,0,0,0.85);}
+.note-card{position:relative;z-index:1;width:100%;max-width:340px;border-radius:20px;padding:0;overflow:hidden;transform:scale(0.88) translateY(20px);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.note-overlay.show .note-card{transform:scale(1) translateY(0);}
 
 /* Photo note card */
 .photo-card{background:#fff;}
@@ -345,35 +356,35 @@ body{font-family:'DM Sans',sans-serif;background:#1a0f0a;}
     <div class="jar-container" id="jarContainer">
       <!-- Jar SVG drawn in JS -->
       <svg class="jar-svg" viewBox="0 0 220 280" id="jarSvg">
-        <!-- Jar body -->
         <defs>
           <linearGradient id="jarGrad" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" style="stop-color:rgba(255,220,150,0.08)"/>
-            <stop offset="30%" style="stop-color:rgba(255,220,150,0.18)"/>
-            <stop offset="70%" style="stop-color:rgba(255,220,150,0.22)"/>
+            <stop offset="30%" style="stop-color:rgba(255,220,150,0.2)"/>
+            <stop offset="70%" style="stop-color:rgba(255,220,150,0.24)"/>
             <stop offset="100%" style="stop-color:rgba(255,220,150,0.06)"/>
           </linearGradient>
           <linearGradient id="lidGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:rgba(196,92,26,0.9)"/>
-            <stop offset="100%" style="stop-color:rgba(139,58,10,0.9)"/>
+            <stop offset="0%" style="stop-color:rgba(196,92,26,0.95)"/>
+            <stop offset="100%" style="stop-color:rgba(139,58,10,0.95)"/>
           </linearGradient>
         </defs>
         <!-- Jar lid -->
-        <rect x="52" y="28" width="116" height="22" rx="6" fill="url(#lidGrad)" stroke="rgba(255,220,150,0.3)" stroke-width="1"/>
-        <rect x="60" y="32" width="100" height="4" rx="2" fill="rgba(255,255,255,0.15)"/>
+        <rect x="52" y="28" width="116" height="22" rx="6" fill="url(#lidGrad)" stroke="rgba(255,220,150,0.4)" stroke-width="1"/>
+        <rect x="60" y="32" width="100" height="4" rx="2" fill="rgba(255,255,255,0.18)"/>
         <!-- Jar neck -->
         <rect x="62" y="48" width="96" height="14" rx="2" fill="url(#jarGrad)" stroke="rgba(255,220,150,0.2)" stroke-width="1"/>
         <!-- Jar body -->
-        <path d="M48,62 Q44,70 42,90 L38,220 Q38,240 50,248 L170,248 Q182,248 182,220 L178,90 Q176,70 172,62 Z" fill="url(#jarGrad)" stroke="rgba(255,220,150,0.25)" stroke-width="1.5"/>
+        <path d="M48,62 Q44,70 42,90 L38,220 Q38,240 50,248 L170,248 Q182,248 182,220 L178,90 Q176,70 172,62 Z" fill="url(#jarGrad)" stroke="rgba(255,220,150,0.3)" stroke-width="1.5"/>
         <!-- Jar shine left -->
-        <path d="M58,70 Q55,100 54,150" stroke="rgba(255,255,255,0.12)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M58,70 Q55,100 54,150" stroke="rgba(255,255,255,0.14)" stroke-width="5" fill="none" stroke-linecap="round"/>
         <!-- Jar shine right -->
-        <path d="M160,72 Q163,110 163,160" stroke="rgba(255,255,255,0.06)" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <path d="M160,72 Q163,110 163,160" stroke="rgba(255,255,255,0.07)" stroke-width="3" fill="none" stroke-linecap="round"/>
         <!-- Bottom glow -->
-        <ellipse cx="110" cy="248" rx="62" ry="6" fill="rgba(196,92,26,0.15)"/>
+        <ellipse cx="110" cy="248" rx="62" ry="6" fill="rgba(196,92,26,0.2)"/>
       </svg>
-      <!-- Notes will be injected here by JS -->
+      <!-- Notes injected by JS -->
     </div>
+    <div class="jar-glow"></div>
   </div>
 
   <!-- Hint -->
@@ -499,6 +510,17 @@ window.addEventListener('DOMContentLoaded',function(){
   if(IS_RECEIVER){
     goTo('rv-loading');
     loadCard();
+    // Swipe between receiver screens (left/right)
+    let _rx=0,_ry=0,_rt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){
+      _rx=e.changedTouches[0].clientX;_ry=e.changedTouches[0].clientY;_rt=Date.now();
+    },{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
+      if(curScreen==='rv-loading'||curScreen==='rv-error'||curScreen==='rv-jar') return;
+      const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
+      if(dx>0&&curScreen==='rv-done') goTo('rv-jar');
+    },{passive:true});
   } else {
     document.getElementById('nameInputWrap').innerHTML=`
       <label class="field-label">Their Name</label>
@@ -511,6 +533,18 @@ window.addEventListener('DOMContentLoaded',function(){
       <input class="regular-input" id="cSign" value="${CFG.defaultSign}" maxlength="60">`;
     buildPhotoSlots();
     goTo('s-name');
+    // Swipe for creator screens
+    let _tx=0,_ty=0,_tt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){
+      _tx=e.changedTouches[0].clientX;_ty=e.changedTouches[0].clientY;_tt=Date.now();
+    },{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
+      const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty,dt=Date.now()-_tt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3)return;
+      const idx=CREATOR_ORDER.indexOf(curScreen);if(idx===-1)return;
+      if(dx<0&&idx<CREATOR_ORDER.length-1)goTo(CREATOR_ORDER[idx+1]);
+      else if(dx>0&&idx>0)goTo(CREATOR_ORDER[idx-1]);
+    },{passive:true});
   }
 });
 
@@ -806,45 +840,41 @@ const NOTE_EMOJIS={photo:'📸',song:'🎵',letter:'💌'};
 
 function placeNotes(notes){
   const container=document.getElementById('jarContainer');
-  // Remove old notes
   container.querySelectorAll('.note').forEach(n=>n.remove());
 
-  // Jar inner area: roughly x:55-165, y:65-235
-  const positions=generatePositions(notes.length);
   const floatAnims=['float1','float2','float3','float4','float5'];
+  // Positions as % of container (220x280 viewbox)
+  // Jar inner area: roughly x:50-160, y:65-235
+  const slots=[
+    {xp:34,yp:32},{xp:58,yp:30},{xp:46,yp:48},
+    {xp:30,yp:60},{xp:64,yp:56},{xp:46,yp:70}
+  ];
 
   notes.forEach((note,i)=>{
     const el=document.createElement('div');
     el.className='note';
     el.id='note-'+i;
-    const pos=positions[i];
+    const slot=i<slots.length?slots[i]:{xp:32+Math.random()*36,yp:30+Math.random()*42};
     const color=NOTE_COLORS[i%NOTE_COLORS.length];
     const anim=floatAnims[i%floatAnims.length];
-    const delay=(i*0.4).toFixed(1);
-    el.style.cssText=`left:${pos.x}px;top:${pos.y}px;animation:${anim} ${2.5+i*0.3}s ease-in-out ${delay}s infinite;`;
+    const entranceDelay=(i*0.18).toFixed(2);
+    const floatDelay=(i*0.4).toFixed(1);
+
+    // Position using % of container
+    el.style.cssText=`left:${slot.xp}%;top:${slot.yp}%;animation:${anim} ${2.5+i*0.3}s ease-in-out ${floatDelay}s infinite;`;
+
     el.innerHTML=`
-      <div class="note-paper" style="background:${color};">
-        <span style="font-size:1.4rem;position:relative;z-index:1;">${NOTE_EMOJIS[note.type]}</span>
-        <div class="note-fold"></div>
-      </div>
-      <div class="note-label">${note.type==='photo'?'photo':'note'}</div>`;
+      <div class="note-inner" style="animation:noteEntrance 0.6s cubic-bezier(0.34,1.56,0.64,1) ${entranceDelay}s both;">
+        <div class="note-glow"></div>
+        <div class="note-paper" style="background:${color};">
+          <span style="font-size:min(1.4rem,3.8vw);position:relative;z-index:1;">${NOTE_EMOJIS[note.type]}</span>
+          <div class="note-fold"></div>
+        </div>
+        <div class="note-label">${note.type==='photo'?'photo':'note'}</div>
+      </div>`;
     el.onclick=()=>openNote(note,i);
     container.appendChild(el);
   });
-}
-
-function generatePositions(count){
-  // Place notes nicely inside the jar
-  const slots=[
-    {x:72,y:90},{x:128,y:82},{x:100,y:130},
-    {x:68,y:160},{x:140,y:148},{x:98,y:185}
-  ];
-  const pos=[];
-  for(let i=0;i<count;i++){
-    if(i<slots.length){pos.push(slots[i]);}
-    else{pos.push({x:70+Math.random()*80,y:80+Math.random()*120});}
-  }
-  return pos;
 }
 
 function openNote(note,idx){
