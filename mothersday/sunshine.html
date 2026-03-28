@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Sunshine · Mother's Day</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌻</text></svg>">
+<meta property="og:title" content="Your garden is growing 🌻">
+<meta property="og:description" content="Someone planted something beautiful for you. Come see.">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;overflow:hidden;height:100%;}
+body{font-family:'DM Sans',sans-serif;background:#1a2e1a;}
+.app{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;background:#1a2e1a;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);width:430px;height:90vh;max-height:900px;border-radius:40px;box-shadow:0 40px 120px rgba(0,0,0,0.8);overflow:hidden;}
+}
+
+/* ── SCREEN SYSTEM — from intimate ── */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);transform:translateX(60px);overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
+.screen.slide-out{opacity:0;transform:translateX(-60px);}
+
+/* ── CREATOR — warm earth tones ── */
+.creator-screen{padding:0;align-items:stretch;justify-content:flex-start;background:linear-gradient(160deg,#fef9f0,#fdf3e0,#fef6e8);}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
+.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
+.step-content::-webkit-scrollbar{display:none;}
+.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom)+16px);}
+.step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(0,0,0,0.07);}
+.step-progress-fill{height:100%;transition:width 0.5s ease;background:linear-gradient(90deg,#5a8a3a,#d4a020);}
+.step-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;touch-action:manipulation;z-index:5;background:rgba(90,138,58,0.12);color:#3a5a1a;}
+.step-counter{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0.4;color:#3a5a1a;}
+.step-emoji{font-size:2.4rem;margin-bottom:10px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
+@keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,5vw,1.9rem);font-weight:700;line-height:1.2;margin-bottom:6px;color:#2a4a1a;}
+.step-sub{font-size:0.82rem;line-height:1.6;margin-bottom:20px;opacity:0.55;color:#4a6a2a;}
+.field-label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;opacity:0.45;color:#4a6a2a;}
+.big-input{width:100%;border:none;border-bottom:2px solid rgba(90,138,58,0.3);background:transparent;padding:10px 0;font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;outline:none;transition:border-color 0.3s;text-align:center;color:#2a4a1a;}
+.big-input::placeholder{opacity:0.22;font-style:italic;color:#4a6a2a;}
+.big-input:focus{border-color:rgba(90,138,58,0.6);}
+.regular-input{width:100%;border:1.5px solid rgba(90,138,58,0.18);border-radius:14px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:rgba(255,255,255,0.7);outline:none;transition:border-color 0.3s;margin-bottom:12px;color:#2a4a1a;backdrop-filter:blur(10px);}
+.regular-input::placeholder{opacity:0.35;font-style:italic;color:#4a6a2a;}
+.regular-input:focus{border-color:rgba(90,138,58,0.5);background:rgba(255,255,255,0.92);}
+.letter-area{width:100%;border:1.5px solid rgba(90,138,58,0.18);border-radius:16px;padding:16px;font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;line-height:2;background:rgba(255,255,255,0.7);outline:none;resize:none;min-height:160px;transition:border-color 0.3s;color:#2a4a1a;}
+.letter-area:focus{border-color:rgba(90,138,58,0.5);}
+.letter-area::placeholder{opacity:0.35;font-style:italic;}
+.btn-next{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;touch-action:manipulation;margin-top:8px;transition:transform 0.15s,box-shadow 0.15s;}
+.btn-next:active{transform:scale(0.97);}
+.btn-sun{background:linear-gradient(135deg,#5a8a3a,#8aaa3a);color:white;box-shadow:0 8px 24px rgba(90,138,58,0.35);}
+.btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.4;font-family:'DM Sans',sans-serif;color:#4a6a2a;}
+.btn-wa{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(37,211,102,0.3);margin-top:8px;touch-action:manipulation;}
+.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;margin:6px 0;color:#4a6a2a;}
+.ai-loading.show{display:flex;}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:#5a8a3a;animation:aiPulse 1s ease-in-out infinite;}
+@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;font-size:1.3rem;background:rgba(90,138,58,0.07);border:1.5px dashed rgba(90,138,58,0.25);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#5a8a3a;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
+.song-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;background:rgba(255,255,255,0.7);border:1.5px solid rgba(90,138,58,0.12);}
+.song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.song-use-btn{padding:6px 12px;border:none;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;flex-shrink:0;background:linear-gradient(135deg,#5a8a3a,#8aaa3a);color:white;}
+.song-selected-box{border-radius:14px;padding:12px 14px;margin-bottom:10px;display:none;background:linear-gradient(135deg,#1a3a0a,#2a5a1a);}
+
+/* SAVE OVERLAY */
+.save-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay.show{display:flex;}
+.save-box{border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;background:white;box-shadow:0 20px 60px rgba(90,138,58,0.2);}
+.save-spinner{position:relative;width:64px;height:64px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
+.save-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(90,138,58,0.15);border-top-color:#5a8a3a;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.save-emoji{font-size:1.8rem;position:relative;z-index:1;}
+.save-label{font-size:1rem;font-weight:600;margin-bottom:14px;color:#2a4a1a;}
+.save-bar-wrap{height:8px;border-radius:50px;overflow:hidden;width:100%;margin-bottom:8px;background:rgba(90,138,58,0.12);}
+.save-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s ease;background:linear-gradient(90deg,#5a8a3a,#d4a020);}
+
+/* SHARE MODAL */
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;background:white;}
+.share-link-row{border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;background:rgba(90,138,58,0.06);border:1px solid rgba(90,138,58,0.2);}
+.share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;color:#4a6a2a;}
+.copy-btn{padding:6px 12px;border:none;border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;background:#5a8a3a;color:white;}
+.modal-close{width:100%;padding:12px;background:none;border:1.5px solid rgba(90,138,58,0.25);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:6px;color:#4a6a2a;}
+
+/* ═══════════════════════════════════════
+   RECEIVER SCREENS
+═══════════════════════════════════════ */
+#rv-loading,#rv-error,#rv-welcome,#rv-garden,#rv-fence,#rv-chime,#rv-leaf{
+  position:absolute;inset:0;
+}
+
+/* LOADING — dark soil with sprouting seed */
+#rv-loading{background:linear-gradient(180deg,#1a3a0a 0%,#0f2208 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.loading-seed{font-size:2.8rem;animation:seedGrow 2s ease-in-out infinite;}
+@keyframes seedGrow{0%,100%{transform:scale(1) rotate(-5deg);}50%{transform:scale(1.2) rotate(5deg);}}
+.loading-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(180,230,120,0.55);margin-top:16px;letter-spacing:0.06em;}
+
+/* ERROR */
+#rv-error{background:linear-gradient(160deg,#1a3a0a,#0f2208);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
+
+/* ── WELCOME — The Growing Garden ── */
+#rv-welcome{background:linear-gradient(180deg,#87CEEB 0%,#b0e0ff 30%,#90d060 60%,#5a8a30 80%,#3a6020 100%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;overflow:hidden;}
+
+/* Sun */
+.sun{position:absolute;top:10%;left:50%;transform:translateX(-50%);width:80px;height:80px;border-radius:50%;background:radial-gradient(circle,#fff8c0,#ffd700);box-shadow:0 0 0 12px rgba(255,215,0,0.15),0 0 0 24px rgba(255,215,0,0.08),0 0 60px rgba(255,215,0,0.4);animation:sunPulse 4s ease-in-out infinite;}
+@keyframes sunPulse{0%,100%{box-shadow:0 0 0 12px rgba(255,215,0,0.15),0 0 0 24px rgba(255,215,0,0.08),0 0 60px rgba(255,215,0,0.4);}50%{box-shadow:0 0 0 16px rgba(255,215,0,0.2),0 0 0 32px rgba(255,215,0,0.1),0 0 80px rgba(255,215,0,0.5);}}
+/* Sun rays */
+.sun-rays{position:absolute;top:10%;left:50%;transform:translateX(-50%);width:80px;height:80px;animation:sunRotate 20s linear infinite;}
+@keyframes sunRotate{from{transform:translateX(-50%) rotate(0deg);}to{transform:translateX(-50%) rotate(360deg);}}
+.ray{position:absolute;top:50%;left:50%;width:40px;height:2px;background:linear-gradient(to right,rgba(255,215,0,0.6),transparent);transform-origin:left center;}
+
+/* Clouds */
+.cloud{position:absolute;background:rgba(255,255,255,0.85);border-radius:50px;animation:cloudDrift linear infinite;}
+@keyframes cloudDrift{from{transform:translateX(-120%);}to{transform:translateX(120vw);}}
+.cloud::before,.cloud::after{content:'';position:absolute;background:rgba(255,255,255,0.85);border-radius:50%;}
+
+/* The growing plant — SVG animation */
+.garden-scene{position:absolute;bottom:0;left:0;right:0;height:65%;display:flex;align-items:flex-end;justify-content:center;}
+.plant-svg{width:200px;height:100%;}
+
+/* Ground */
+.ground{position:absolute;bottom:0;left:0;right:0;height:30%;background:linear-gradient(180deg,#6aaa3a 0%,#4a8a1a 20%,#3a6a10 50%,#2a5010 100%);}
+.ground-texture{position:absolute;top:0;left:0;right:0;height:18px;background:linear-gradient(180deg,#5a9a2a,#4a8a1a);border-radius:50% 50% 0 0 / 10px 10px 0 0;}
+
+/* Name revealed in petals */
+.welcome-content{position:relative;z-index:10;text-align:center;padding:0 28px 32px;width:100%;}
+.welcome-tag{font-size:0.58rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.7);margin-bottom:8px;display:block;}
+.welcome-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,6vw,2.4rem);font-weight:700;color:white;text-shadow:0 2px 12px rgba(0,0,0,0.3);line-height:1.1;margin-bottom:6px;animation:nameBloom 1s cubic-bezier(0.34,1.56,0.64,1) 2s both;}
+@keyframes nameBloom{from{opacity:0;transform:scale(0.7);}to{opacity:1;transform:scale(1);}}
+.welcome-sub{font-size:0.82rem;color:rgba(255,255,255,0.75);line-height:1.5;margin-bottom:20px;text-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.welcome-btn{background:rgba(255,255,255,0.95);color:#2a5a1a;border:none;border-radius:50px;padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 8px 32px rgba(0,0,0,0.2);touch-action:manipulation;animation:btnGarden 3s ease-in-out infinite;}
+@keyframes btnGarden{0%,100%{box-shadow:0 8px 32px rgba(0,0,0,0.2);}50%{box-shadow:0 12px 40px rgba(0,0,0,0.3);}}
+.welcome-btn:active{transform:scale(0.97);}
+.welcome-create{display:block;margin-top:12px;background:none;border:none;color:rgba(255,255,255,0.5);font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;}
+
+/* Back button */
+.rv-back{position:absolute;top:max(14px,env(safe-area-inset-top));left:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;z-index:20;touch-action:manipulation;transition:background 0.2s;}
+.rv-back:active{background:rgba(255,255,255,0.25);}
+
+/* ── FENCE SCREEN — Photos on garden fence ── */
+#rv-fence{background:linear-gradient(180deg,#c8e8f0 0%,#a0d8a0 40%,#6aaa4a 70%,#4a8a2a 100%);display:flex;flex-direction:column;overflow:hidden;}
+.fence-header{flex-shrink:0;padding:max(48px,env(safe-area-inset-top)+34px) 20px 10px;text-align:center;}
+.fence-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700;color:#1a3a0a;text-shadow:0 1px 4px rgba(255,255,255,0.5);}
+/* The wooden fence and photos area */
+.fence-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0 0;min-height:0;}
+.fence-area::-webkit-scrollbar{display:none;}
+/* Fence rail */
+.fence-rail{height:18px;background:linear-gradient(180deg,#8B6914,#6B4F10);margin:0 0 0 0;position:relative;box-shadow:0 3px 8px rgba(0,0,0,0.3);}
+.fence-rail::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(180deg,rgba(255,255,255,0.15),transparent);}
+/* Fence posts */
+.fence-posts{display:flex;justify-content:space-around;padding:0 8px;margin-top:-4px;}
+.fence-post{width:18px;height:32px;background:linear-gradient(180deg,#7a5c10,#5a4010);border-radius:2px;flex-shrink:0;box-shadow:2px 0 4px rgba(0,0,0,0.2);}
+/* Photos hanging on fence */
+.fence-photos{padding:12px 16px 16px;display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.fence-photo-wrap{position:relative;cursor:pointer;touch-action:pan-y;animation:photoHang 0.6s cubic-bezier(0.34,1.56,0.64,1) both;}
+.fence-photo-wrap:nth-child(1){animation-delay:0.1s;}
+.fence-photo-wrap:nth-child(2){animation-delay:0.2s;}
+.fence-photo-wrap:nth-child(3){animation-delay:0.3s;}
+.fence-photo-wrap:nth-child(4){animation-delay:0.4s;}
+.fence-photo-wrap:nth-child(5){animation-delay:0.5s;}
+@keyframes photoHang{0%{opacity:0;transform:translateY(-20px) rotate(0deg);}60%{opacity:1;}100%{opacity:1;transform:translateY(0);}}
+/* Clothespin */
+.clothespin{position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:20px;height:14px;background:linear-gradient(180deg,#c8a060,#a07840);border-radius:3px 3px 1px 1px;z-index:2;box-shadow:0 2px 4px rgba(0,0,0,0.2);}
+.clothespin::before{content:'';position:absolute;bottom:-3px;left:2px;right:2px;height:4px;background:#8a6030;border-radius:0 0 2px 2px;}
+/* String from fence to photo */
+.photo-string{position:absolute;top:-28px;left:50%;width:1px;height:16px;background:rgba(80,50,10,0.5);transform:translateX(-50%);}
+/* The photo itself — polaroid style but with wind sway */
+.fence-pol{background:white;padding:5px 5px 20px;box-shadow:0 8px 24px rgba(0,0,0,0.2),0 2px 6px rgba(0,0,0,0.1);animation:sway 3s ease-in-out infinite;}
+.fence-pol:nth-child(odd){animation-direction:alternate;}
+@keyframes sway{0%,100%{transform:rotate(-1.5deg);}50%{transform:rotate(1.5deg);}}
+.fence-pol img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.fence-pol-tap{text-align:center;font-size:0.5rem;color:#8a6030;opacity:0.45;margin-top:5px;letter-spacing:0.05em;}
+/* Single photo full width */
+.fence-photos.count-1{grid-template-columns:1fr;max-width:200px;margin:0 auto;}
+.fence-photos.count-3 .fence-photo-wrap:first-child{grid-column:1/-1;}
+.fence-photos.count-5 .fence-photo-wrap:last-child{grid-column:1/-1;}
+.no-fence-photo{text-align:center;padding:40px 20px;color:rgba(42,90,26,0.45);font-style:italic;font-family:'Cormorant Garamond',serif;font-size:1rem;}
+.fence-nav{padding:10px 16px max(16px,env(safe-area-inset-bottom));flex-shrink:0;}
+.fence-next-btn{width:100%;background:linear-gradient(135deg,#5a8a3a,#8aaa3a);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(90,138,58,0.35);transition:transform 0.2s;}
+.fence-next-btn:active{transform:scale(0.97);}
+
+/* ── LIGHTBOX ── */
+.photo-lightbox{position:absolute;inset:0;z-index:200;background:rgba(0,0,0,0.93);display:none;flex-direction:column;align-items:center;justify-content:center;}
+.photo-lightbox.show{display:flex;}
+.lb-close{position:absolute;top:max(16px,env(safe-area-inset-top));right:16px;background:rgba(255,255,255,0.12);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;}
+.lb-img{max-width:90%;max-height:80vh;border-radius:4px;object-fit:contain;}
+.lb-counter{color:rgba(255,255,255,0.4);font-size:0.75rem;margin-top:12px;}
+.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.12);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;}
+.lb-prev{left:12px;}
+.lb-next{right:12px;}
+
+/* ── WIND CHIME SCREEN ── */
+#rv-chime{background:linear-gradient(160deg,#e8f4e8 0%,#c8e8c8 40%,#a8d8a8 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 20px;overflow:hidden;}
+/* Tree branch */
+.branch-wrap{position:relative;width:100%;display:flex;justify-content:center;margin-bottom:8px;}
+.branch{width:220px;height:16px;background:linear-gradient(180deg,#6B4F10,#4a3a08);border-radius:50px;position:relative;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+.branch::before{content:'';position:absolute;top:2px;left:8px;right:8px;height:4px;background:rgba(255,255,255,0.12);border-radius:50px;}
+/* Leaves on branch */
+.branch-leaf{position:absolute;top:-14px;font-size:1.2rem;animation:leafWave 2.5s ease-in-out infinite;}
+.branch-leaf:nth-child(1){left:10px;animation-delay:0s;}
+.branch-leaf:nth-child(2){left:30px;animation-delay:0.3s;}
+.branch-leaf:nth-child(3){right:30px;animation-delay:0.6s;}
+.branch-leaf:nth-child(4){right:10px;animation-delay:0.9s;}
+@keyframes leafWave{0%,100%{transform:rotate(-10deg);}50%{transform:rotate(8deg);}}
+/* Chime strings */
+.chimes{display:flex;gap:16px;justify-content:center;align-items:flex-start;margin-bottom:20px;}
+.chime{display:flex;flex-direction:column;align-items:center;animation:chimeSwing ease-in-out infinite;}
+.chime:nth-child(1){animation-duration:2.2s;animation-delay:0s;}
+.chime:nth-child(2){animation-duration:2.8s;animation-delay:0.3s;}
+.chime:nth-child(3){animation-duration:2.0s;animation-delay:0.6s;}
+.chime:nth-child(4){animation-duration:2.5s;animation-delay:0.2s;}
+.chime:nth-child(5){animation-duration:2.3s;animation-delay:0.8s;}
+@keyframes chimeSwing{0%,100%{transform:rotate(-12deg);}50%{transform:rotate(12deg);}}
+.chime-string{width:1px;height:60px;background:linear-gradient(180deg,rgba(90,70,10,0.6),rgba(90,70,10,0.2));}
+.chime-string:nth-child(2){height:70px;}
+.chime-string:nth-child(3){height:50px;}
+.chime-bar{width:10px;height:32px;border-radius:5px;background:linear-gradient(180deg,#c0a060,#a08040);box-shadow:2px 2px 6px rgba(0,0,0,0.15),inset 0 1px 0 rgba(255,255,255,0.3);}
+.chime-bar.tall{height:44px;}
+.chime-bar.short{height:22px;}
+.chime-name{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:#1a3a0a;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.chime-sub{font-size:0.75rem;color:#3a6a2a;opacity:0.65;text-align:center;margin-bottom:18px;font-style:italic;}
+.yt-wrap{width:100%;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(90,138,58,0.15);margin-bottom:14px;display:none;}
+.yt-wrap iframe{width:100%;height:180px;border:none;display:block;}
+.yt-wrap.show{display:block;}
+.chime-nav{display:flex;gap:8px;width:100%;margin-top:4px;}
+
+/* ── LEAF LETTER SCREEN ── */
+#rv-leaf{background:linear-gradient(160deg,#e8f4e0,#d0ead0);display:flex;flex-direction:column;overflow:hidden;}
+/* Top edge — grass blades */
+.grass-bar{height:36px;background:linear-gradient(180deg,#5a9a2a,#4a8a1a);flex-shrink:0;display:flex;align-items:flex-end;padding:0 8px;gap:4px;overflow:hidden;}
+.grass-blade{width:6px;border-radius:3px 3px 0 0;background:linear-gradient(180deg,#8aca4a,#5a9a2a);animation:grassSway 2s ease-in-out infinite;}
+.grass-blade:nth-child(even){animation-direction:alternate;}
+@keyframes grassSway{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}
+
+.leaf-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 100px;}
+.leaf-scroll::-webkit-scrollbar{display:none;}
+
+/* The leaf — big, beautiful, letter written across it */
+.leaf-paper{position:relative;border-radius:50% 4px 50% 4px / 4px 50% 4px 50%;background:linear-gradient(135deg,#5aaa2a 0%,#4a9a1a 30%,#5aaa2a 60%,#3a8a10 100%);padding:32px 28px 36px;box-shadow:0 8px 32px rgba(42,90,26,0.3),inset 0 1px 0 rgba(255,255,255,0.15);}
+/* Leaf vein - center */
+.leaf-vein-main{position:absolute;top:20px;bottom:20px;left:50%;width:1.5px;background:rgba(255,255,255,0.2);transform:translateX(-50%);}
+/* Side veins */
+.leaf-vein{position:absolute;height:1px;background:rgba(255,255,255,0.12);transform-origin:left center;}
+.leaf-content{position:relative;z-index:1;}
+.leaf-top-tag{font-size:0.56rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:16px;display:block;text-align:center;}
+.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:rgba(255,255,255,0.95);margin-bottom:16px;}
+.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1rem;color:rgba(255,255,255,0.88);line-height:2;white-space:pre-wrap;}
+.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(255,240,160,0.9);margin-top:22px;display:block;}
+.l-stamp{display:block;font-size:1.8rem;margin-top:12px;text-align:right;opacity:0.7;}
+
+/* Letter footer */
+.leaf-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(232,244,224,1) 60%,rgba(232,244,224,0));}
+.leaf-foot-row{display:flex;gap:8px;}
+.replay-btn{flex:1;background:linear-gradient(135deg,#5a8a3a,#8aaa3a);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(90,138,58,0.3);}
+.create-again-btn{background:none;border:1.5px solid rgba(90,138,58,0.3);color:#3a6a1a;border-radius:50px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;}
+
+.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(255,255,255,0.1);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- ══════════ CREATOR SCREENS ══════════ -->
+<div class="screen creator-screen" id="s-name">
+  <div class="step-progress"><div class="step-progress-fill" style="width:25%"></div></div>
+  <button class="step-back" onclick="window.location.href='/'">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 1 of 4</div>
+      <span class="step-emoji">🌻</span>
+      <div class="step-title" id="title-name">Who is this garden for?</div>
+      <div class="step-sub">Her name will bloom at the heart of the garden</div>
+      <div id="nameInputWrap"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-sun" id="btn-name" onclick="goTo('s-photos')">Continue → Add Photos 📸</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen" id="s-photos">
+  <div class="step-progress"><div class="step-progress-fill" style="width:50%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 2 of 4</div>
+      <span class="step-emoji">📸</span>
+      <div class="step-title" id="title-photos">Hang your memories</div>
+      <div class="step-sub">Photos appear clipped on a garden fence, swaying in the breeze</div>
+      <div class="photos-grid" id="photosGrid"></div>
+      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-sun" id="btn-photos" onclick="goTo('s-song')">Continue → Add Song 🎵</button>
+      <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen" id="s-song">
+  <div class="step-progress"><div class="step-progress-fill" style="width:75%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 3 of 4</div>
+      <span class="step-emoji">🎵</span>
+      <div class="step-title" id="title-song">A song in the breeze</div>
+      <div class="step-sub">Plays from wind chimes hanging on a garden tree</div>
+      <div class="song-selected-box" id="songSelectedBox">
+        <div style="font-size:0.7rem;color:rgba(180,230,120,0.6);margin-bottom:3px;">Selected:</div>
+        <div style="font-size:0.88rem;font-weight:600;color:white;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
+        <button onclick="searchSong()" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;color:white;background:linear-gradient(135deg,#5a8a3a,#8aaa3a);">🔍</button>
+      </div>
+      <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
+      <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(90,138,58,0.15);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#3a6a1a;margin-bottom:8px;">✨ AI Song Suggestions</div>
+        <input id="aiSongContext" class="regular-input" placeholder="e.g. peaceful Hindi, 90s, classical..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
+        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#5a8a3a,#8aaa3a);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Suggest Songs</button>
+        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Finding songs...</span></div>
+        <div id="songAiResults" style="margin-top:6px;"></div>
+      </div>
+      <input type="hidden" id="cSpotify">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-sun" id="btn-song" onclick="goTo('s-letter')">Continue → Write Letter 💌</button>
+      <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen" id="s-letter">
+  <div class="step-progress"><div class="step-progress-fill" style="width:100%"></div></div>
+  <button class="step-back" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter">Step 4 of 4</div>
+      <span class="step-emoji">🍃</span>
+      <div class="step-title" id="title-letter">Write on a leaf</div>
+      <div class="step-sub">Your letter appears on a glowing green leaf — written by nature</div>
+      <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(90,138,58,0.15);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#3a6a1a;margin-bottom:8px;">✨ Write with AI</div>
+        <input id="letterTone" class="regular-input" placeholder="e.g. warm, emotional, Marathi, grateful..." style="margin-bottom:8px;" maxlength="60">
+        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#5a8a3a,#8aaa3a);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✨ Write with AI</button>
+        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Writing your letter...</span></div>
+        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#3a6a1a;margin-top:6px;">↑ Tap again for a different letter</div>
+      </div>
+      <div id="letterInputWrap"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-sun" onclick="saveAndShare()">🌻 Plant &amp; Share Card</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ RECEIVER SCREENS ══════════ -->
+
+<!-- LOADING -->
+<div class="screen" id="rv-loading">
+  <div class="loading-seed">🌱</div>
+  <div class="loading-text">Your garden is growing...</div>
+</div>
+
+<!-- ERROR -->
+<div class="screen" id="rv-error">
+  <div style="text-align:center;padding:40px;">
+    <span style="font-size:3rem;display:block;margin-bottom:16px;">🥀</span>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(180,230,120,0.6);line-height:1.7;">This garden has wilted<br>or couldn't be found.</div>
+    <button onclick="window.location.href='/'" style="margin-top:28px;background:linear-gradient(135deg,#5a8a3a,#8aaa3a);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;">🌱 Plant your own garden</button>
+  </div>
+</div>
+
+<!-- WELCOME — The Garden -->
+<div class="screen" id="rv-welcome">
+  <button class="rv-back" onclick="window.location.href='/'" style="color:white;">←</button>
+  <!-- Sky + Sun -->
+  <div class="sun"></div>
+  <div class="sun-rays" id="sunRays"></div>
+  <div class="cloud" id="cloud1" style="top:18%;width:70px;height:22px;animation-duration:22s;animation-delay:-5s;"><div style="position:absolute;top:-12px;left:10px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,0.85);"></div><div style="position:absolute;top:-8px;left:28px;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,0.85);"></div></div>
+  <div class="cloud" id="cloud2" style="top:12%;width:50px;height:16px;animation-duration:30s;animation-delay:-12s;"></div>
+  <!-- Growing plant SVG — animates on load -->
+  <div class="garden-scene">
+    <svg class="plant-svg" viewBox="0 0 200 300" id="plantSvg">
+      <!-- Soil -->
+      <rect x="0" y="260" width="200" height="40" fill="#3a6020" rx="0"/>
+      <!-- Stem — grows up -->
+      <line x1="100" y1="260" x2="100" y2="80" stroke="#4a8a1a" stroke-width="6" stroke-linecap="round" id="stem" style="stroke-dasharray:200;stroke-dashoffset:200;animation:stemGrow 1.5s ease-out 0.3s forwards;"/>
+      <!-- Left leaf 1 -->
+      <ellipse cx="72" cy="180" rx="28" ry="14" fill="#5aaa2a" transform="rotate(-30 72 180)" opacity="0" id="leaf1" style="animation:leafAppear 0.5s ease-out 1.0s forwards;"/>
+      <!-- Right leaf 1 -->
+      <ellipse cx="128" cy="160" rx="28" ry="14" fill="#4a9a1a" transform="rotate(30 128 160)" opacity="0" id="leaf2" style="animation:leafAppear 0.5s ease-out 1.3s forwards;"/>
+      <!-- Left leaf 2 -->
+      <ellipse cx="68" cy="130" rx="22" ry="11" fill="#6aba3a" transform="rotate(-25 68 130)" opacity="0" id="leaf3" style="animation:leafAppear 0.5s ease-out 1.6s forwards;"/>
+      <!-- The flower — sunflower -->
+      <g id="flower" opacity="0" style="animation:leafAppear 0.6s cubic-bezier(0.34,1.56,0.64,1) 1.9s forwards;">
+        <!-- Petals -->
+        <ellipse cx="100" cy="80" rx="10" ry="22" fill="#ffd700" transform="rotate(0 100 80)"/>
+        <ellipse cx="100" cy="80" rx="10" ry="22" fill="#ffd700" transform="rotate(45 100 80)"/>
+        <ellipse cx="100" cy="80" rx="10" ry="22" fill="#ffd700" transform="rotate(90 100 80)"/>
+        <ellipse cx="100" cy="80" rx="10" ry="22" fill="#ffd700" transform="rotate(135 100 80)"/>
+        <ellipse cx="100" cy="80" rx="10" ry="22" fill="#ffc800" transform="rotate(22.5 100 80)"/>
+        <ellipse cx="100" cy="80" rx="10" ry="22" fill="#ffc800" transform="rotate(67.5 100 80)"/>
+        <ellipse cx="100" cy="80" rx="10" ry="22" fill="#ffc800" transform="rotate(112.5 100 80)"/>
+        <ellipse cx="100" cy="80" rx="10" ry="22" fill="#ffc800" transform="rotate(157.5 100 80)"/>
+        <!-- Center -->
+        <circle cx="100" cy="80" r="18" fill="#8B4513"/>
+        <circle cx="100" cy="80" r="14" fill="#6B3410"/>
+        <!-- Seeds pattern -->
+        <circle cx="96" cy="76" r="2" fill="#8B4513" opacity="0.5"/>
+        <circle cx="104" cy="76" r="2" fill="#8B4513" opacity="0.5"/>
+        <circle cx="100" cy="84" r="2" fill="#8B4513" opacity="0.5"/>
+      </g>
+    </svg>
+  </div>
+  <style>
+    @keyframes stemGrow{to{stroke-dashoffset:0;}}
+    @keyframes leafAppear{to{opacity:1;}}
+  </style>
+  <div class="ground">
+    <div class="ground-texture"></div>
+  </div>
+  <!-- Content over ground -->
+  <div class="welcome-content">
+    <span class="welcome-tag">🌻 Mother's Day</span>
+    <div class="welcome-name" id="rvName">Happy Mother's Day!</div>
+    <div class="welcome-sub" id="rvSub">Someone planted this garden just for you</div>
+    <button class="welcome-btn" onclick="goTo('rv-fence')">Walk into the garden →</button>
+    <button class="welcome-create" onclick="window.location.href='/'">Create your own garden</button>
+  </div>
+</div>
+
+<!-- FENCE — Photos on garden fence -->
+<div class="screen" id="rv-fence">
+  <button class="rv-back" onclick="goTo('rv-welcome')" style="color:#1a3a0a;background:rgba(255,255,255,0.3);">←</button>
+  <div class="fence-header">
+    <div class="fence-title" id="rvFenceTitle">📸 Memories on the Fence</div>
+  </div>
+  <!-- Top fence rail -->
+  <div class="fence-rail"></div>
+  <div class="fence-posts" id="fencePosts"></div>
+  <div class="fence-area">
+    <div class="fence-photos" id="fencePhotos"></div>
+  </div>
+  <div class="fence-nav">
+    <button class="fence-next-btn" onclick="goTo('rv-chime')">Next → Wind Chimes 🎵</button>
+  </div>
+  <!-- Lightbox -->
+  <div class="photo-lightbox" id="photoLightbox">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <button class="lb-prev" id="lbPrev" onclick="lbNav(-1)">‹</button>
+    <img class="lb-img" id="lightboxImg" src="" alt="">
+    <div class="lb-counter" id="lbCounter"></div>
+    <button class="lb-next" id="lbNext" onclick="lbNav(1)">›</button>
+  </div>
+</div>
+
+<!-- WIND CHIME — Song screen -->
+<div class="screen" id="rv-chime">
+  <button class="rv-back" onclick="goTo('rv-fence')" style="color:#1a3a0a;background:rgba(255,255,255,0.3);">←</button>
+  <div class="branch-wrap">
+    <div class="branch">
+      <span class="branch-leaf">🍃</span>
+      <span class="branch-leaf">🌿</span>
+      <span class="branch-leaf">🍃</span>
+      <span class="branch-leaf">🌿</span>
+    </div>
+  </div>
+  <div class="chimes">
+    <div class="chime"><div class="chime-string"></div><div class="chime-bar tall"></div></div>
+    <div class="chime"><div class="chime-string"></div><div class="chime-bar"></div></div>
+    <div class="chime"><div class="chime-string"></div><div class="chime-bar short"></div></div>
+    <div class="chime"><div class="chime-string"></div><div class="chime-bar tall"></div></div>
+    <div class="chime"><div class="chime-string"></div><div class="chime-bar"></div></div>
+  </div>
+  <div class="chime-name" id="rvSongT">A song for you 🎵</div>
+  <div class="chime-sub" id="rvSongA">Carried on the breeze, just for you</div>
+  <div class="yt-wrap" id="rvYtWrap"><div id="rvYtEmbed"></div></div>
+  <div class="chime-nav">
+    <button class="btn-next btn-sun" onclick="goTo('rv-leaf')" style="margin-top:0;">Next → Read your Letter 🍃</button>
+  </div>
+</div>
+
+<!-- LEAF LETTER -->
+<div class="screen" id="rv-leaf">
+  <div class="grass-bar" id="grassBar"></div>
+  <button class="rv-back" onclick="goTo('rv-chime')" style="top:46px;background:rgba(90,138,58,0.3);color:white;">←</button>
+  <div class="leaf-scroll">
+    <div class="leaf-paper">
+      <!-- Veins -->
+      <div class="leaf-vein-main"></div>
+      <div class="leaf-vein" style="top:35%;left:30%;width:28%;transform:rotate(-20deg);"></div>
+      <div class="leaf-vein" style="top:50%;left:28%;width:26%;transform:rotate(-15deg);"></div>
+      <div class="leaf-vein" style="top:65%;left:30%;width:24%;transform:rotate(-18deg);"></div>
+      <div class="leaf-vein" style="top:35%;right:10%;width:28%;transform:rotate(20deg);"></div>
+      <div class="leaf-vein" style="top:50%;right:10%;width:26%;transform:rotate(15deg);"></div>
+      <div class="leaf-vein" style="top:65%;right:10%;width:24%;transform:rotate(18deg);"></div>
+      <div class="leaf-content">
+        <span class="leaf-top-tag">— grown with love —</span>
+        <div class="l-greet" id="rvLGreet">Dear Maa,</div>
+        <div class="l-body" id="rvLBody"></div>
+        <span class="l-sign" id="rvLSign"></span>
+        <span class="l-stamp">🌻</span>
+      </div>
+    </div>
+  </div>
+  <div class="leaf-foot">
+    <div class="leaf-foot-row">
+      <button class="replay-btn" onclick="goTo('rv-welcome')">🌻 Walk again</button>
+      <button class="create-again-btn" onclick="window.location.href='/'">✨ Plant your own</button>
+    </div>
+  </div>
+</div>
+
+<!-- Save overlay -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-box">
+    <div class="save-spinner"><div class="save-ring"></div><span class="save-emoji">🌱</span></div>
+    <div class="save-label" id="saveLabel">Planting your garden...</div>
+    <div class="save-bar-wrap"><div class="save-bar" id="saveBar"></div></div>
+  </div>
+</div>
+
+<!-- Share modal -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:2rem;margin-bottom:8px;">🌻</div>
+    <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;color:#2a4a1a;font-family:'Cormorant Garamond',serif;">Garden is ready! 🌿</div>
+    <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;color:#4a6a2a;">Send this garden to her</div>
+    <div style="font-size:0.72rem;opacity:0.5;padding:7px 12px;margin-bottom:12px;color:#4a6a2a;" id="expiryNote">⏳ Garden blooms for 3 days</div>
+    <div class="share-link-row">
+      <span class="share-link-txt" id="shareLinkTxt"></span>
+      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+    </div>
+    <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
+    <button class="modal-close" onclick="closeShare()">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div>
+
+<script>
+// ── CONFIG ──
+const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const CLOUDINARY_CLOUD='dkvbjazfe';
+const CLOUDINARY_PRESET='wishyou-uploads';
+const WORKER_URL='https://wild-fog-b15e.nilesh53333.workers.dev/';
+const CFG={
+  cardType:'mothersday-sunshine',
+  emoji:'🌻',
+  defaultMsg:"You are my sunshine — even on the days I forgot to say it.\n\nEvery good thing in me started with you. The way you love without condition, give without keeping score, and stay without being asked — I carry all of it with me.\n\nThank you for being my roots. Happy Mother's Day.",
+  defaultSign:'Forever yours 🌻',
+  shareMsg:(name,sender,link)=>`🌻 *Happy Mother's Day${name?' '+name:''}!*\n\n${sender?sender+' planted a garden just for you 🌿\n\n':'Someone planted a garden for you 🌿\n\n'}👆 Walk into it here:\n${link}`,
+  shareUrl:(id)=>`https://wishyou.ai/mothersday/sunshine.html?card=${id}`
+};
+
+// ── STATE ──
+let curScreen='',photos=[],uploadedUrls={},currentSlotIdx=0,shareLink='',aiLetterCount=0;
+let lbPhotos=[],lbIdx=0;
+const IS_RECEIVER=new URLSearchParams(window.location.search).has('card');
+const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter'];
+const RV_ORDER=['rv-welcome','rv-fence','rv-chime','rv-leaf'];
+
+// ── NAVIGATION ──
+function goTo(id){
+  const prev=document.getElementById(curScreen),next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
+  next.classList.add('active');curScreen=id;
+  if(id==='rv-leaf') revealLetter();
+  setTimeout(()=>{const el=document.getElementById(id);if(el){const sc=el.querySelector('.step-content,.leaf-scroll,.fence-area');if(sc)sc.scrollTo(0,0);}},50);
+}
+function goBackCreator(){
+  const idx=CREATOR_ORDER.indexOf(curScreen);
+  if(idx>0)goTo(CREATOR_ORDER[idx-1]);else window.location.href='/';
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',function(){
+  buildSunRays();
+  buildGrassBlades();
+  if(IS_RECEIVER){
+    goTo('rv-loading');
+    loadCard();
+    // Swipe receiver screens
+    let _rx=0,_ry=0,_rt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){_rx=e.changedTouches[0].clientX;_ry=e.changedTouches[0].clientY;_rt=Date.now();},{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
+      if(curScreen==='rv-welcome'||curScreen==='rv-loading'||curScreen==='rv-error'||curScreen==='rv-fence')return;
+      const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3)return;
+      const idx=RV_ORDER.indexOf(curScreen);if(idx===-1)return;
+      if(dx<0&&idx<RV_ORDER.length-1)goTo(RV_ORDER[idx+1]);
+      else if(dx>0&&idx>0)goTo(RV_ORDER[idx-1]);
+    },{passive:true});
+  } else {
+    document.getElementById('nameInputWrap').innerHTML=`
+      <label class="field-label">Her Name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Maa, Aai, Mom..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Priya" maxlength="30">`;
+    document.getElementById('letterInputWrap').innerHTML=`
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Maa,&#10;&#10;You are my sunshine...">${CFG.defaultMsg}</textarea>
+      <label class="field-label" style="margin-top:12px;">Sign Off</label>
+      <input class="regular-input" id="cSign" value="${CFG.defaultSign}" maxlength="60">`;
+    buildPhotoSlots();
+    goTo('s-name');
+    // Swipe creator
+    let _tx=0,_ty=0,_tt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){_tx=e.changedTouches[0].clientX;_ty=e.changedTouches[0].clientY;_tt=Date.now();},{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
+      const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty,dt=Date.now()-_tt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3)return;
+      const idx=CREATOR_ORDER.indexOf(curScreen);if(idx===-1)return;
+      if(dx<0&&idx<CREATOR_ORDER.length-1)goTo(CREATOR_ORDER[idx+1]);
+      else if(dx>0&&idx>0)goTo(CREATOR_ORDER[idx-1]);
+    },{passive:true});
+  }
+});
+
+// ── DECORATIVE ──
+function buildSunRays(){
+  const wrap=document.getElementById('sunRays');if(!wrap)return;
+  for(let i=0;i<8;i++){
+    const r=document.createElement('div');r.className='ray';
+    r.style.transform=`rotate(${i*45}deg) translateX(40px)`;
+    wrap.appendChild(r);
+  }
+}
+function buildGrassBlades(){
+  const bar=document.getElementById('grassBar');if(!bar)return;
+  const heights=[24,18,28,16,22,30,20,26,18,24,28,16,22,20,26,18,24,30,16,22,28];
+  heights.forEach((h,i)=>{
+    const b=document.createElement('div');b.className='grass-blade';
+    b.style.height=h+'px';b.style.animationDelay=(i*0.1)+'s';
+    bar.appendChild(b);
+  });
+}
+function buildFencePosts(count){
+  const wrap=document.getElementById('fencePosts');if(!wrap)return;
+  wrap.innerHTML='';
+  const n=Math.max(6,count*2+2);
+  for(let i=0;i<n;i++){const p=document.createElement('div');p.className='fence-post';wrap.appendChild(p);}
+}
+
+// ── PHOTO SLOTS ──
+function buildPhotoSlots(){
+  const grid=document.getElementById('photosGrid');grid.innerHTML='';photos=[];
+  for(let i=0;i<5;i++){
+    const slot=document.createElement('div');slot.className='photo-slot';slot.id='slot'+i;
+    slot.innerHTML='<span style="opacity:0.4;color:#5a8a3a;">+</span>';
+    slot.onclick=()=>triggerUpload(i);grid.appendChild(slot);
+  }
+}
+function triggerUpload(idx){currentSlotIdx=idx;document.getElementById('photoFileInput').click();}
+function handlePhotoUpload(inp){
+  const files=Array.from(inp.files);if(!files.length)return;
+  files.forEach((file,offset)=>{
+    let ti=-1;
+    for(let i=0;i<5;i++){if(offset===0&&i===0){ti=currentSlotIdx;break;}if(!photos[(currentSlotIdx+offset)%5]||offset>0){ti=(currentSlotIdx+offset)%5;break;}}
+    if(ti<0||ti>4)return;
+    const url=URL.createObjectURL(file);photos[ti]=url;delete uploadedUrls[ti];
+    const slot=document.getElementById('slot'+ti);
+    if(slot){
+      slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${ti})">✕</button>`;
+      const ind=document.createElement('div');ind.id='upind'+ti;
+      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(90,138,58,0.2);border-radius:2px;overflow:hidden;';
+      ind.innerHTML=`<div style="height:100%;background:#5a8a3a;width:0%;transition:width 0.3s;" id="upbar${ti}"></div>`;
+      slot.appendChild(ind);
+    }
+    uploadPhotoInBackground(file,ti);
+  });
+  inp.value='';
+}
+async function uploadPhotoInBackground(file,idx){
+  try{
+    const bar=document.getElementById('upbar'+idx);if(bar)bar.style.width='40%';
+    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+    if(bar)bar.style.width='70%';
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+    const d=await res.json();
+    if(d.secure_url){uploadedUrls[idx]=d.secure_url;if(bar){bar.style.width='100%';setTimeout(()=>{const ind=document.getElementById('upind'+idx);if(ind)ind.remove();},600);}}
+  }catch(e){console.error(e);}
+}
+function removePhoto(e,idx){
+  e.stopPropagation();photos[idx]=null;delete uploadedUrls[idx];
+  const slot=document.getElementById('slot'+idx);
+  slot.innerHTML='<span style="opacity:0.4;color:#5a8a3a;">+</span>';
+  slot.onclick=()=>triggerUpload(idx);
+}
+
+// ── SONG ──
+async function searchSong(){
+  const q=document.getElementById('ytSearchInput').value.trim();if(!q)return;
+  const rd=document.getElementById('songResults');
+  rd.innerHTML='<div style="text-align:center;padding:12px;font-size:0.85rem;color:#5a8a3a;">🔍 Searching...</div>';
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query:q})});
+    const data=await res.json();if(!data.items||!data.items.length){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>';return;}
+    rd.innerHTML='';
+    data.items.slice(0,4).forEach(item=>{
+      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
+      const card=document.createElement('div');card.className='song-result';
+      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#2a4a1a;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;color:#4a6a2a;">${channelTitle}</div></div><button class="song-use-btn">✓ Use</button>`;
+      card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
+      rd.appendChild(card);
+    });
+  }catch(e){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>';}
+}
+function selectSong(videoId,title,artist){
+  document.getElementById('cSpotify').value='https://www.youtube.com/watch?v='+videoId;
+  document.getElementById('songSelectedName').textContent=title+' — '+artist;
+  document.getElementById('songSelectedBox').style.display='block';
+  document.getElementById('songResults').innerHTML=`<div style="font-size:0.8rem;font-weight:600;padding:6px 0;color:#5a8a3a;">✅ ${title} added!</div>`;
+}
+async function suggestSongs(){
+  const loading=document.getElementById('songAiLoading'),results=document.getElementById('songAiResults'),btn=document.getElementById('aiSongBtn');
+  loading.classList.add('show');results.innerHTML='';btn.disabled=true;
+  const context=document.getElementById('aiSongContext')?.value.trim()||'';
+  const name=document.getElementById('cName')?.value.trim()||'';
+  let prompt=`Suggest 4 real popular songs perfect for a Mother's Day card${name?' for '+name:''}. ${context?'Mood: "'+context+'"':'Peaceful, emotional, touching, about mothers or unconditional love'}. Return ONLY JSON: [{"name":"Song","artist":"Artist"}]`;
+  const text=await callClaude(prompt);
+  try{
+    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    songs.forEach(s=>{
+      const el=document.createElement('div');el.className='song-result';
+      el.innerHTML=`<span style="font-size:1.1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:600;color:#2a4a1a;">${s.name}</div><div style="font-size:0.72rem;color:#4a6a2a;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#5a8a3a;">Search ›</span>`;
+      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
+      results.appendChild(el);
+    });
+  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Could not fetch. Try again.</div>';}
+  loading.classList.remove('show');btn.disabled=false;
+}
+
+// ── AI LETTER ──
+async function runAILetter(){
+  const name=document.getElementById('cName')?.value.trim()||'her';
+  const sender=document.getElementById('cSender')?.value.trim()||'someone';
+  const toneInput=document.getElementById('letterTone')?.value.trim()||'';
+  const btn=document.getElementById('aiLetterBtn'),loading=document.getElementById('letterAiLoading');
+  aiLetterCount++;btn.disabled=true;loading.classList.add('show');
+  const langs=['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
+  const det=langs.find(l=>toneInput.toLowerCase().includes(l));
+  let langNote=det?` CRITICAL: Write ENTIRE letter in ${det.charAt(0).toUpperCase()+det.slice(1)} script only.`:'';
+  const vari=aiLetterCount>1?` Attempt #${aiLetterCount} — COMPLETELY DIFFERENT.`:'';
+  const prompt=`Write a heartfelt Mother's Day letter from ${sender} to their mother${name&&name!=='her'?' named '+name:''}. Tone: ${toneInput||'warm, grateful, emotional'}. 3-4 sentences.${langNote}${vari} Return ONLY the letter body — no greeting, no sign off.`;
+  const text=await callClaude(prompt);
+  if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
+  btn.disabled=false;loading.classList.remove('show');
+  const h=document.getElementById('letterAiResult');if(h)h.style.display='block';
+  btn.textContent='✨ Write Another';
+}
+async function callClaude(prompt){
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();if(data.error)return'';
+    return data.content&&data.content[0]?data.content[0].text:'';
+  }catch(e){return'';}
+}
+function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
+
+// ── SAVE ──
+async function saveAndShare(){
+  const overlay=document.getElementById('saveOverlay'),bar=document.getElementById('saveBar'),label=document.getElementById('saveLabel');
+  function setP(pct,lbl){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;}
+  overlay.classList.add('show');setP(10,'Planting your garden... 🌱');
+  let photoUrls=[];
+  const slots=photos.map((p,i)=>({blob:p,idx:i})).filter(s=>s.blob);
+  let uploaded=0;
+  for(const s of slots){
+    if(uploadedUrls[s.idx]){photoUrls.push(uploadedUrls[s.idx]);uploaded++;setP(10+(uploaded/Math.max(slots.length,1)*55),'Watering photos... 🌿');}
+    else{
+      setP(10+(uploaded/Math.max(slots.length,1)*55),'Uploading photo '+(uploaded+1)+'...');
+      try{
+        const fd=new FormData();const blob=await fetch(s.blob).then(r=>r.blob());
+        fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+        const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+        const d=await res.json();if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
+      }catch(e){console.error(e);}
+      uploaded++;
+    }
+  }
+  setP(70,'Growing your card...');
+  const now=Date.now();
+  const cardData={
+    type:CFG.cardType,
+    name:document.getElementById('cName')?.value.trim()||'',
+    sender:document.getElementById('cSender')?.value.trim()||'',
+    msg:document.getElementById('cMsg')?.value.trim()||'',
+    sign:document.getElementById('cSign')?.value.trim()||CFG.defaultSign,
+    spotify:document.getElementById('cSpotify')?.value.trim()||'',
+    songName:document.getElementById('songSelectedName')?.textContent||'',
+    memoriesHeading:'Memories on the Fence',
+    photos:photoUrls,created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
+  };
+  try{
+    setP(85,'Almost blooming...');
+    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
+    const data=await res.json();const cardId=data.name;
+    shareLink=CFG.shareUrl(cardId);
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
+    setP(100,'Garden is ready! 🌻');
+    setTimeout(()=>{overlay.classList.remove('show');document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');document.getElementById('shareModal').classList.add('show');},700);
+  }catch(e){overlay.classList.remove('show');alert('Could not save. Please try again.');}
+}
+function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
+function openWhatsApp(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=CFG.shareMsg(name,sender,shareLink);
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&isMobile){navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));}
+  else{window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');}
+}
+function closeShare(){document.getElementById('shareModal').classList.remove('show');}
+
+// ── LOAD CARD ──
+async function loadCard(){
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  try{
+    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
+    const d=await res.json();
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderCard(d);
+  }catch(e){goTo('rv-error');}
+}
+
+function renderCard(d){
+  const name=d.name||'',sender=d.sender||'';
+  // Welcome
+  document.getElementById('rvName').textContent=name?`Happy Mother's Day, ${name}! 🌻`:`Happy Mother's Day! 🌻`;
+  document.getElementById('rvSub').textContent=sender?`${sender} planted this garden just for you 🌿`:'Someone planted this garden just for you 🌿';
+  // Song
+  const sn=d.songName||'';
+  if(sn&&sn!=='—'){
+    const st=document.getElementById('rvSongT');if(st)st.textContent=sn;
+    const sp=d.spotify||'';
+    if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
+  }
+  // Letter — store for reveal
+  document.getElementById('rvLGreet').textContent=name?`Dear ${name},`:'Dear Maa,';
+  window._letterText=d.msg||'';
+  window._letterSign=d.sign||(sender?`Forever yours, ${sender} 🌻`:'Forever yours 🌻');
+  // Build fence photos
+  buildFencePhotos(d.photos||[],name);
+  goTo('rv-welcome');
+}
+
+// ── FENCE PHOTOS ──
+const FENCE_CAPTIONS=['My favourite memory 🌿','Forever in my heart 🌸','A moment with you 🌻','Us, always 🍃','You make everything brighter ☀️'];
+function buildFencePhotos(photoUrls,name){
+  const wrap=document.getElementById('fencePhotos');wrap.innerHTML='';
+  const ft=document.getElementById('rvFenceTitle');
+  if(ft)ft.textContent=name?`📸 ${name}'s Memories`:'📸 Memories on the Fence';
+  buildFencePosts(photoUrls.length||3);
+  if(!photoUrls||!photoUrls.length){
+    wrap.innerHTML='<div class="no-fence-photo">A garden grown with love 🌿</div>';return;
+  }
+  lbPhotos=photoUrls;
+  wrap.className='fence-photos count-'+photoUrls.length;
+  photoUrls.forEach((url,i)=>{
+    const w=document.createElement('div');w.className='fence-photo-wrap';
+    w.innerHTML=`
+      <div class="photo-string"></div>
+      <div class="clothespin"></div>
+      <div class="fence-pol">
+        <img src="${url}" alt="Memory" onerror="this.parentNode.parentNode.style.display='none'">
+        <div class="fence-pol-tap">${FENCE_CAPTIONS[i%FENCE_CAPTIONS.length]}</div>
+      </div>`;
+    w.onclick=()=>openLightbox(i);
+    wrap.appendChild(w);
+  });
+}
+
+// ── LIGHTBOX ──
+function openLightbox(idx){
+  lbIdx=idx;
+  const lb=document.getElementById('photoLightbox');
+  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
+  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
+  document.getElementById('lbPrev').style.display=lbPhotos.length>1?'block':'none';
+  document.getElementById('lbNext').style.display=lbPhotos.length>1?'block':'none';
+  lb.classList.add('show');
+  let _lx=0;
+  lb.ontouchstart=e=>{_lx=e.changedTouches[0].clientX;e.stopPropagation();};
+  lb.ontouchend=e=>{e.stopPropagation();const dx=e.changedTouches[0].clientX-_lx;if(Math.abs(dx)>40)lbNav(dx<0?1:-1);};
+}
+function lbNav(dir){
+  if(lbPhotos.length<=1)return;
+  const img=document.getElementById('lightboxImg');
+  img.style.opacity='0';
+  setTimeout(()=>{lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;img.src=lbPhotos[lbIdx];img.style.opacity='1';document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;},180);
+}
+function closeLightbox(){document.getElementById('photoLightbox').classList.remove('show');}
+
+// ── LEAF LETTER REVEAL ──
+function revealLetter(){
+  const el=document.getElementById('rvLBody'),signEl=document.getElementById('rvLSign');
+  if(!el)return;
+  el.textContent='';
+  if(signEl){signEl.textContent='';signEl.style.opacity='0';}
+  const chars=(window._letterText||'').split('');let i=0;
+  function next(){
+    if(i<chars.length){el.textContent+=chars[i];i++;setTimeout(next,14);}
+    else{setTimeout(()=>{if(signEl){signEl.textContent=window._letterSign||'';signEl.style.transition='opacity 0.8s ease';signEl.style.opacity='1';}},400);}
+  }
+  setTimeout(next,300);
+}
+</script>
+</body>
+</html>
