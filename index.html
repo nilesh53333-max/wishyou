@@ -298,6 +298,15 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 @keyframes musicSpin2{from{transform:translateX(-50%) rotate(0deg);}to{transform:translateX(-50%) rotate(360deg);}}
 @keyframes bloomSway2{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-10px) rotate(4deg);}}
 
+/* Sunshine (Mother's Day) theme */
+.sv-sunshine{background:linear-gradient(160deg,#c8f0a0,#e8f8d0);}
+.sv-sunshine .sv-overlay-info{background:linear-gradient(to top,rgba(200,240,160,1) 0%,rgba(200,240,160,0.96) 65%,transparent);}
+.sv-sunshine .sv-dot{background:#5a8a3a;}
+.sv-sunshine .sv-dot.sv-dot-active{background:#5a8a3a;}
+.sv-sunshine .sv-name{color:#1a3a0a;font-family:'Cormorant Garamond',serif;}
+.sv-sunshine .sv-desc{color:#3a6a1a;}
+.sv-sunshine .sv-cta{color:#5a8a3a;}
+
 /* Save overlay */
 .save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
 .save-overlay.show{display:flex;}
@@ -627,9 +636,20 @@ const OCCASIONS = {
         defaultMemoriesHeading:'Our Memories',
         receiverUrl: id => `https://wishyou.ai/mothersday/blossom.html?card=${id}`,
         shareMsg: (n,s,l) => `🌸 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' made you a Blossom card 🌺\n\n':'Someone made you a special card 🌺\n\n'}👆 Open:\n${l}`
+      },
+      {
+        id:'sunshine', name:'🌻 Sunshine',
+        desc:'Living garden · Sunflower grows · Fence photos · Wind chimes · Leaf letter',
+        preview:'linear-gradient(160deg,#87CEEB,#90d060)', previewEmoji:'🌻',
+        cardType:'mothersday-sunshine',
+        defaultSongTitle:'A song for you 🎵',
+        defaultMemoriesHeading:'Memories on the Fence',
+        receiverUrl: id => `https://wishyou.ai/mothersday/sunshine.html?card=${id}`,
+        shareMsg: (n,s,l) => `🌻 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' planted a garden for you 🌿\n\n':'Someone planted a garden for you 🌿\n\n'}👆 Walk into it:\n${l}`
       }
     ]
   }
+};
 
 // ── NAVIGATION ──
 function goTo(id) {
@@ -757,6 +777,16 @@ function buildStylesList(occ) {
         `<div class="sv-lbl" style="color:rgba(196,122,90,0.6);">Music Box</div><div style="width:44px;height:34px;background:linear-gradient(145deg,#d4a853,#c47a5a);border-radius:4px 4px 2px 2px;margin:0 auto 4px;position:relative;"><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:1.2rem;animation:musicSpin2 3s linear infinite;">🌸</div></div><div class="sv-sub" style="color:#8a5a40;margin-top:10px;">A song plays from a golden music box</div>`,
         `<div class="sv-lbl" style="color:rgba(196,122,90,0.6);">Bloom Reveal</div><span style="font-size:2.8rem;display:block;animation:bloomSway2 2s ease-in-out infinite;">🌸</span><div class="sv-sub" style="color:#8a5a40;margin-top:6px;">Tap the flower to open the letter</div>`,
         `<div class="sv-lbl" style="color:rgba(143,175,143,0.7);">Botanical Letter</div><div style="background:white;border-radius:4px;padding:8px 8px 8px 12px;width:90%;margin:4px auto;border-left:3px solid #8faf8f;"><div style="font-family:'Cormorant Garamond',serif;font-size:0.65rem;color:#5a3020;line-height:1.7;font-style:italic;">Dear Maa,<br>You are the reason I know what love is...</div><div style="font-family:'Cormorant Garamond',serif;font-size:0.6rem;color:#c47a5a;margin-top:4px;font-style:italic;">With all my love 🌸</div></div>`
+      ]
+    },
+    sunshine: {
+      theme: 'sv-sunshine',
+      slides: [
+        `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">The Garden</div><span class="sv-emoji">🌻</span><div class="sv-title" style="color:#1a3a0a;font-family:'Cormorant Garamond',serif;">Happy Mother's Day!</div><div class="sv-sub" style="color:#3a6a1a;">A sunflower grows just for her 🌱</div>`,
+        `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">Fence Photos</div><div style="display:flex;gap:8px;justify-content:center;margin:4px 0;"><div style="background:white;padding:3px 3px 12px;box-shadow:0 3px 8px rgba(0,0,0,0.2);transform:rotate(-2deg);"><div style="width:32px;height:32px;background:#d4e8d0;display:flex;align-items:center;justify-content:center;font-size:1rem;">📸</div></div><div style="background:white;padding:3px 3px 12px;box-shadow:0 3px 8px rgba(0,0,0,0.2);transform:rotate(2deg);"><div style="width:32px;height:32px;background:#f0e8d0;display:flex;align-items:center;justify-content:center;font-size:1rem;">💕</div></div></div><div class="sv-sub" style="color:#3a6a1a;">Photos on a fence, swaying in the breeze</div>`,
+        `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">Wind Chimes</div><div style="display:flex;gap:10px;justify-content:center;align-items:flex-start;margin:4px 0;"><div style="display:flex;flex-direction:column;align-items:center;"><div style="width:1px;height:22px;background:rgba(90,70,10,0.4);"></div><div style="width:8px;height:28px;background:linear-gradient(180deg,#c0a060,#a08040);border-radius:4px;"></div></div><div style="display:flex;flex-direction:column;align-items:center;margin-top:8px;"><div style="width:1px;height:16px;background:rgba(90,70,10,0.4);"></div><div style="width:8px;height:18px;background:linear-gradient(180deg,#c0a060,#a08040);border-radius:4px;"></div></div><div style="display:flex;flex-direction:column;align-items:center;"><div style="width:1px;height:22px;background:rgba(90,70,10,0.4);"></div><div style="width:8px;height:36px;background:linear-gradient(180deg,#c0a060,#a08040);border-radius:4px;"></div></div></div><div class="sv-sub" style="color:#3a6a1a;">Song carried on the garden breeze 🎵</div>`,
+        `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">Leaf Letter</div><div style="background:linear-gradient(135deg,#5aaa2a,#3a8a10);border-radius:40% 4px 40% 4px / 4px 40% 4px 40%;padding:10px 12px;width:80%;margin:4px auto;box-shadow:0 4px 12px rgba(0,0,0,0.15);"><div style="font-family:'Cormorant Garamond',serif;font-size:0.62rem;color:rgba(255,255,255,0.88);line-height:1.7;font-style:italic;">Dear Maa,<br>You are my sunshine...</div><div style="font-size:0.58rem;color:rgba(255,240,160,0.85);margin-top:4px;">Forever yours 🌻</div></div>`,
+        `<div class="sv-lbl" style="color:rgba(90,138,58,0.7);">Full Garden</div><span class="sv-emoji" style="font-size:2.8rem;">🌻</span><div class="sv-sub" style="color:#3a6a1a;font-style:italic;margin-top:6px;">"She planted love in me."</div>`
       ]
     }
   };
