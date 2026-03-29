@@ -350,9 +350,14 @@ function renderChat(d){
     seq.push({type:'yesno',yesText:'Yes! 😍',noText:'No 😢',myReply:'Yes!! Send it 😍',delay:6200,
       onYes:()=>{
         const photoSeq=[];
+        const captions=d.photoCaptions||[];
         photoSeq.push({type:'typing',delay:400});
         d.photos.forEach((url,i)=>{
-          photoSeq.push({type:'photo',url,delay:1000+(i*900)});
+          photoSeq.push({type:'photo',url,delay:1000+(i*1400)});
+          // Caption after each photo if it exists
+          if(captions[i]&&captions[i].trim()){
+            photoSeq.push({type:'text',text:captions[i].trim(),delay:1000+(i*1400)+600});
+          }
         });
         // After photos, queue song or message
         const afterPhotos=buildAfterPhotos(d,chatBg);
@@ -377,7 +382,7 @@ function buildAfterPhotos(d,chatBg){
   const hasPhotos=d.photos&&d.photos.length>0;
 
   if(d.songName&&d.songName!=='—'){
-    d2+=hasPhotos?d.photos.length*900+600:0;
+    d2+=hasPhotos?d.photos.length*1400+600:0;
     seq.push({type:'typing',delay:d2+300});
     seq.push({type:'text',text:'I found a song that made me think of you 🎵',delay:d2+1100});
     seq.push({type:'yesno',yesText:'Yes 🎵',noText:'Skip',myReply:'Yes, play it! 🎵',delay:d2+1600,
@@ -385,9 +390,19 @@ function buildAfterPhotos(d,chatBg){
         const songSeq=[];
         songSeq.push({type:'typing',delay:400});
         songSeq.push({type:'song',songName:d.songName,spotify:d.spotify||'',delay:1100});
-        // After song, queue message
-        const afterSong=buildMessage(d);
-        afterSong.forEach(item=>{item.delay+=1400;songSeq.push(item);});
+        // Ask if they liked the song
+        songSeq.push({type:'typing',delay:1800});
+        songSeq.push({type:'text',text:'Did you like the song? 😊',delay:2500});
+        songSeq.push({type:'yesno',yesText:'Loved it ❤️',noText:'It\'s okay 😅',myReply:'Loved it ❤️',delay:3000,
+          onYes:()=>{
+            const afterSong=[];
+            afterSong.push({type:'typing',delay:400});
+            afterSong.push({type:'text',text:'I knew you would 😊',delay:1000});
+            const letter=buildMessage(d);
+            letter.forEach(item=>{item.delay+=1200;afterSong.push(item);});
+            playSequence(afterSong,chatBg);
+          }
+        });
         playSequence(songSeq,chatBg);
       }
     });
@@ -403,19 +418,19 @@ function buildAfterPhotos(d,chatBg){
 function buildMessage(d){
   const seq=[];
   if(!d.msg)return seq;
-  // Ask if they want to receive the letter
   seq.push({type:'typing',delay:300});
-  seq.push({type:'text',text:'Can I send you a letter I wrote for you? 💌',delay:1000});
-  seq.push({type:'yesno',yesText:'Yes, send it 💌',noText:'Maybe later',myReply:'Yes! I want to read it 💌',delay:1500,
+  seq.push({type:'text',text:'I also wrote something for you 💌',delay:1000});
+  seq.push({type:'yesno',yesText:'Read it 💌',noText:'Maybe later',myReply:'Yes! I want to read it 💌',delay:1500,
     onYes:()=>{
       const chatBg=document.getElementById('chatBg');
       const letterSeq=[];
-      letterSeq.push({type:'typing',delay:500});
-      letterSeq.push({type:'letter',msg:d.msg,sign:d.sign||'',delay:1400});
-      // After letter — celebration
-      letterSeq.push({type:'typing',delay:4000});
-      letterSeq.push({type:'text',text:'Happy Birthday!! 🎂✨',delay:4800});
-      letterSeq.push({type:'celebrate',delay:5400});
+      letterSeq.push({type:'typing',delay:400});
+      letterSeq.push({type:'text',text:'This is a letter I made just for you 🌸',delay:1000});
+      letterSeq.push({type:'typing',delay:1600});
+      letterSeq.push({type:'letter',msg:d.msg,sign:d.sign||'',delay:2400});
+      letterSeq.push({type:'typing',delay:5000});
+      letterSeq.push({type:'text',text:'Happy Birthday!! 🎂✨',delay:5800});
+      letterSeq.push({type:'celebrate',delay:6200});
       playSequence(letterSeq,chatBg);
     }
   });
