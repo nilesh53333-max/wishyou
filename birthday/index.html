@@ -76,7 +76,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .regular-input:focus{border-color:rgba(20,160,140,0.3);background:rgba(255,255,255,0.05);}
 
 /* Photos */
-.photos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:6px;}
+.photos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:4px;}
 .photo-slot{aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;background:rgba(20,160,140,0.04);border:1.5px dashed rgba(20,160,140,0.15);color:rgba(160,220,210,0.2);font-size:1.1rem;}
 .photo-slot:active{background:rgba(20,160,140,0.09);}
 .photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
@@ -91,10 +91,10 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .photo-hint .hl{color:rgba(20,160,140,0.55);font-weight:600;}
 .slot-plus{font-size:1.1rem;color:rgba(160,220,210,0.2);}
 /* Editable caption below each slot */
-.cap-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.08);outline:none;font-size:0.6rem;font-style:italic;color:rgba(160,220,210,0.45);text-align:center;padding:3px 2px 4px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;}
+.cap-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.12);outline:none;font-size:0.72rem;font-style:italic;color:rgba(160,220,210,0.65);text-align:left;padding:4px 2px 5px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;}
 .cap-input::placeholder{color:rgba(160,220,210,0.18);}
 .cap-input:focus{border-bottom-color:rgba(20,160,140,0.35);color:rgba(160,220,210,0.75);}
-.photo-caption-row{margin-bottom:8px;}
+.photo-caption-row{margin-bottom:6px;width:100%;}
 
 /* Song */
 .song-search-row{display:flex;gap:7px;margin-bottom:8px;}
@@ -862,8 +862,8 @@ function buildPhotoSlots(captions) {
   const grid = document.getElementById('photosGrid');
   grid.innerHTML = '';
   photos = photos.length === 5 ? photos : new Array(5).fill(null);
+  // Photo slots in grid
   captions.forEach((cap, i) => {
-    // Slot
     const slot = document.createElement('div');
     slot.className = 'photo-slot';
     slot.id = 'slot' + i;
@@ -874,13 +874,19 @@ function buildPhotoSlots(captions) {
       slot.onclick = () => triggerUpload(i);
     }
     grid.appendChild(slot);
+  });
 
-    // Editable caption below slot
+  // Captions as full-width rows below the photo grid
+  const capList = document.createElement('div');
+  capList.style.cssText = 'width:100%;margin-top:8px;display:flex;flex-direction:column;gap:4px;';
+  captions.forEach((cap, i) => {
     const capRow = document.createElement('div');
     capRow.className = 'photo-caption-row';
-    capRow.innerHTML = `<input class="cap-input" id="cap${i}" value="${cap.replace(/"/g,'&quot;')}" maxlength="60" placeholder="Caption..." oninput="photoCaptions[${i}]=this.value">`;
-    grid.appendChild(capRow);
+    capRow.style.cssText = 'display:flex;align-items:center;gap:6px;';
+    capRow.innerHTML = `<span style="font-size:0.58rem;color:rgba(160,220,210,0.3);font-family:'DM Sans',sans-serif;min-width:12px;text-align:right;">${i+1}</span><input class="cap-input" id="cap${i}" value="${cap.replace(/"/g,'&quot;')}" maxlength="80" placeholder="Caption for photo ${i+1}..." oninput="photoCaptions[${i}]=this.value" style="flex:1;">`;
+    capList.appendChild(capRow);
   });
+  grid.parentNode.insertBefore(capList, grid.nextSibling);
   updateUploadCount();
 }
 
