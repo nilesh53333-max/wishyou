@@ -1188,6 +1188,8 @@ async function callClaude(prompt) {
 
 function stripMarkdown(t) { return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim(); }
 
+function clearDraft(){try{localStorage.removeItem(DRAFT_KEY);}catch(e){}}
+
 // ── CREATE CARD ──
 async function createCard(style) {
   const overlay = document.getElementById('saveOverlay');
