@@ -96,7 +96,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .photo-hint .hl{color:rgba(20,160,140,0.55);font-weight:600;}
 .slot-plus{font-size:1.1rem;color:rgba(160,220,210,0.2);}
 .photo-col{display:flex;flex-direction:column;gap:4px;}
-.cap-input{width:100%;background:transparent;border:none;outline:none;font-size:0.62rem;font-style:italic;font-family:'DM Sans',sans-serif;color:rgba(160,220,210,0.5);padding:3px 2px;caret-color:#f0c040;text-align:center;line-height:1.4;resize:none;display:block;}
+.cap-input{width:100%;background:transparent;border:none;outline:none;font-size:0.62rem;font-style:italic;font-family:'DM Sans',sans-serif;color:rgba(160,220,210,0.5);padding:3px 2px;caret-color:#f0c040;text-align:center;line-height:1.4;resize:none;display:block;overflow:hidden;height:auto;}
 .cap-input::placeholder{color:rgba(160,220,210,0.15);font-style:italic;}
 .cap-input:focus{color:rgba(160,220,210,0.8);}
 
@@ -898,20 +898,25 @@ function buildPhotoSlots(captions) {
     ta.value = photoCaptions[i] || '';
     ta.placeholder = 'Caption...';
     ta.maxLength = 100;
-    ta.rows = 2;
+    ta.rows = 1;
     ta.addEventListener('input', () => { photoCaptions[i] = ta.value; autoResize(ta); });
-    ta.addEventListener('focus', () => { autoResize(ta); });
+    // Auto-resize on build
+    requestAnimationFrame(() => autoResize(ta));
 
     col.appendChild(slot);
     col.appendChild(ta);
     grid.appendChild(col);
   });
   updateUploadCount();
+  requestAnimationFrame(autoResizeAll);
 }
 
 function autoResize(el) {
-  el.style.height = 'auto';
+  el.style.height = '0px';
   el.style.height = el.scrollHeight + 'px';
+}
+function autoResizeAll() {
+  document.querySelectorAll('.cap-input').forEach(autoResize);
 }
 
 // ── Drag to rearrange ──
