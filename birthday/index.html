@@ -649,7 +649,7 @@ function buildStylesList() {
 
 // ── PHOTOS ──
 const DEFAULT_CAPTIONS = ['The memory I keep coming back to 💫','You, in your element ✨','This one always makes me smile 😊','Look how far you\'ve come 🌟','My favourite version of you 💕'];
-let photoCaptions = [...DEFAULT_CAPTIONS];
+let photoCaptions = ['','','','',''];
 
 // Relation-aware content — updates all fields at once
 function getRelationContent(rel) {
@@ -1152,10 +1152,10 @@ async function createCard(style) {
   }
 
   setP(70,'Saving your card...');
-  // Read caption textareas fresh — ensures manually cleared captions are saved as empty
+  // Read caption textareas fresh — only save captions for slots that have a photo
   for (let i = 0; i < 5; i++) {
     const el = document.getElementById('cap' + i);
-    if (el) photoCaptions[i] = el.value;
+    if (el) photoCaptions[i] = photos[i] ? el.value.trim() : '';
   }
   const now = Date.now();
   const cardData = {
