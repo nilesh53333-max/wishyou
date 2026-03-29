@@ -151,15 +151,24 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .rv-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(255,215,0,0.08);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:rgba(255,215,0,0.6);z-index:10;touch-action:manipulation;}
 
 /* PHOTOS — full screen cinematic with letterbox */
-#rv-photos{background:#000;display:flex;flex-direction:column;padding:0;position:relative;}
-.cinema-bar{height:56px;background:#000;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
-.cinema-bar-title{font-family:'Playfair Display',serif;font-size:0.75rem;color:rgba(255,215,0,0.5);letter-spacing:0.2em;text-transform:uppercase;font-style:italic;}
-.cinema-strip{flex:1;overflow-x:auto;display:flex;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0;}
-.cinema-strip::-webkit-scrollbar{display:none;}
-.cinema-frame{flex-shrink:0;width:100%;height:100%;scroll-snap-align:center;position:relative;overflow:hidden;}
-.cinema-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
-.cinema-caption{position:absolute;bottom:0;left:0;right:0;padding:12px 20px;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);text-align:center;}
-.cinema-caption-text{font-family:'Playfair Display',serif;font-size:0.78rem;color:rgba(255,215,0,0.7);font-style:italic;letter-spacing:0.12em;}
+#rv-photos{background:#000;display:flex;flex-direction:column;padding:0;position:relative;overflow:hidden;}
+.cinema-bar{height:44px;background:#000;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.cinema-bar-title{font-family:'Playfair Display',serif;font-size:0.72rem;color:rgba(255,215,0,0.45);letter-spacing:0.22em;text-transform:uppercase;font-style:italic;}
+/* ── Ken Burns full-screen scene ── */
+.cin-stage{flex:1;position:relative;overflow:hidden;cursor:pointer;}
+.cin-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;transform-origin:center center;animation:kenBurns 7s ease-in-out infinite alternate;}
+@keyframes kenBurns{0%{transform:scale(1.06) translate(1%,0%);}100%{transform:scale(1.16) translate(-2%,-1.5%);}}
+.cin-grain{position:absolute;inset:0;pointer-events:none;z-index:2;opacity:0.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+.cin-sprockets{position:absolute;top:0;left:0;right:0;height:16px;background:#000;z-index:3;display:flex;align-items:center;padding:0 4px;gap:5px;}
+.cin-sprocket{width:9px;height:7px;border-radius:1px;background:rgba(255,255,255,0.07);flex-shrink:0;}
+.cin-bottom{position:absolute;bottom:0;left:0;right:0;z-index:4;padding:30px 20px 12px;background:linear-gradient(to top,rgba(0,0,0,0.95) 0%,rgba(0,0,0,0.4) 65%,transparent 100%);}
+.cin-chapter{font-size:0.5rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(255,215,0,0.4);margin-bottom:5px;}
+.cin-caption-text{font-family:'Playfair Display',serif;font-size:1rem;color:rgba(255,255,255,0.88);font-style:italic;letter-spacing:0.03em;line-height:1.45;text-shadow:0 2px 14px rgba(0,0,0,0.9);opacity:0;transition:opacity 0.8s ease 0.2s;}
+.cin-caption-text.visible{opacity:1;}
+.cin-tap{font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,215,0,0.3);margin-top:8px;}
+.cin-counter{position:absolute;top:22px;right:14px;z-index:5;font-size:0.58rem;letter-spacing:0.14em;color:rgba(255,215,0,0.35);}
+.cin-fade{position:absolute;inset:0;background:#000;z-index:10;opacity:0;pointer-events:none;transition:opacity 0.35s ease;}
+.cin-fade.active{opacity:1;}
 .no-photo{flex:1;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-style:italic;font-family:'Playfair Display',serif;}
 .rv-nav-row{display:flex;gap:8px;padding:10px 16px max(16px,env(safe-area-inset-bottom));flex-shrink:0;background:#000;}
 .rv-next-btn{flex:1;background:transparent;color:#FFD700;border:1px solid rgba(255,215,0,0.3);border-radius:2px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;letter-spacing:0.08em;text-transform:uppercase;}
@@ -356,20 +365,23 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
   <div class="cinema-bar">
     <span class="cinema-bar-title" id="rvPhotoTitle">The Story So Far</span>
   </div>
-  <div class="cinema-strip" id="polStrip"></div>
+  <div class="cin-stage" id="cinStage" onclick="cinNextScene()">
+    <img class="cin-photo" id="cinPhoto" src="" alt="">
+    <div class="cin-grain"></div>
+    <div class="cin-sprockets" id="cinSprockets"></div>
+    <div class="cin-bottom">
+      <div class="cin-chapter" id="cinChapter">CHAPTER I</div>
+      <div class="cin-caption-text" id="cinCaption"></div>
+      <div class="cin-tap">tap to next scene →</div>
+    </div>
+    <div class="cin-counter" id="cinCounter"></div>
+    <div class="cin-fade" id="cinFade"></div>
+  </div>
   <div class="rv-nav-row">
-    <button class="rv-next-btn" onclick="goTo('rv-song')" id="rvSongScreenTitle">Next → The Score 🎵</button>
+    <button class="rv-next-btn" onclick="goTo('rv-song')" id="rvSongBtn">Next → The Score 🎵</button>
   </div>
 </div>
 
-<!-- Lightbox -->
-<div id="photoLightbox" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.97);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
-  <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.08);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
-  <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.08);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
-  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:2px;object-fit:contain;display:block;transition:opacity 0.18s ease;" src="" alt="">
-  <div id="lbCounter" style="color:rgba(255,255,255,0.3);font-size:0.72rem;margin-top:14px;letter-spacing:0.15em;"></div>
-  <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.08);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
-</div>
 
 <div class="screen" id="rv-song">
   <button class="rv-back" onclick="goTo('rv-photos')">←</button>
@@ -866,21 +878,82 @@ function renderCard(d){
   document.getElementById('rvFrom').textContent='';
   const heading=d.memoriesHeading||'The Story So Far';
   document.getElementById('rvPhotoTitle').textContent=heading;
-  const sst=document.getElementById('rvSongScreenTitle');
-  if(sst)sst.textContent=(d.songScreenTitle||'The Background Score 🎵')+' →';
-  // Photos — cinematic full-width frames
-  const strip=document.getElementById('polStrip');strip.innerHTML='';
-  const captions=['Chapter I','Chapter II','Chapter III','Chapter IV','Chapter V'];
+  const sst=document.getElementById('rvSongBtn');
+  if(sst)sst.textContent=(d.songScreenTitle||'The Score 🎵')+' →';
+  // Photos — cinematic Ken Burns scenes, tap to advance
+  const cinPhoto=document.getElementById('cinPhoto');
+  const cinCaption=document.getElementById('cinCaption');
+  const cinChapter=document.getElementById('cinChapter');
+  const cinCounter=document.getElementById('cinCounter');
+  const cinFade=document.getElementById('cinFade');
+  const cinStage=document.getElementById('cinStage');
+
+  // Build sprocket holes
+  const sprockets=document.getElementById('cinSprockets');
+  for(let i=0;i<18;i++){const s=document.createElement('div');s.className='cin-sprocket';sprockets.appendChild(s);}
+
+  const romanNums=['I','II','III','IV','V'];
+  const cinematicCaptions=[
+    'Every frame of this — I\'d watch on repeat.',
+    'The scene I keep coming back to.',
+    'This is where our story gets good.',
+    'A still I\'d freeze forever.',
+    'The closing shot. Worth every second.'
+  ];
+
   if(d.photos&&d.photos.length>0){
-    lbPhotos=d.photos;
-    d.photos.forEach((url,i)=>{
-      const frame=document.createElement('div');frame.className='cinema-frame';
-      frame.style.cursor='pointer';
-      frame.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="cinema-caption"><span class="cinema-caption-text">${captions[i]||'Chapter '+(i+1)}</span></div>`;
-      frame.onclick=()=>openLightbox(i);
-      strip.appendChild(frame);
-    });
-  }else{strip.innerHTML='<div class="no-photo">🎬 A story made with love</div>';}
+    const photos=d.photos;
+    const customCaptions=d.photoCaptions||[];
+    const captions=photos.map((_,i)=>customCaptions[i]||cinematicCaptions[i]||`Chapter ${romanNums[i]||i+1}`);
+    const n=photos.length;
+    let sceneIdx=0, isTransitioning=false;
+
+    // Preload all
+    photos.forEach(url=>{const img=new Image();img.src=url;});
+
+    function showScene(i, animate){
+      cinChapter.textContent=`CHAPTER ${romanNums[i]||i+1}`;
+      cinCounter.textContent=`${i+1} / ${n}`;
+      cinCaption.classList.remove('visible');
+      if(animate){
+        cinFade.classList.add('active');
+        setTimeout(()=>{
+          cinPhoto.style.opacity='0';
+          cinPhoto.src=photos[i];
+          cinPhoto.onload=()=>{
+            cinPhoto.style.opacity='1';
+            // Restart Ken Burns by cloning
+            cinPhoto.style.animation='none';
+            requestAnimationFrame(()=>requestAnimationFrame(()=>{
+              cinPhoto.style.animation='';
+            }));
+          };
+          cinCaption.textContent=captions[i];
+          cinFade.classList.remove('active');
+          setTimeout(()=>{cinCaption.classList.add('visible');},400);
+          isTransitioning=false;
+        },360);
+      } else {
+        cinPhoto.src=photos[i];
+        cinPhoto.style.opacity='0';
+        cinPhoto.style.transition='opacity 0.5s ease';
+        cinPhoto.onload=()=>{cinPhoto.style.opacity='1';};
+        cinCaption.textContent=captions[i];
+        setTimeout(()=>{cinCaption.classList.add('visible');},300);
+      }
+    }
+
+    window.cinNextScene=function(){
+      if(isTransitioning||n<2)return;
+      isTransitioning=true;
+      sceneIdx=(sceneIdx+1)%n;
+      showScene(sceneIdx, true);
+    };
+
+    showScene(0, false);
+  } else {
+    cinStage.innerHTML='<div class="no-photo">🎬 A story made with love</div>';
+  }
   // Song
   const sn=d.songName||'';
   if(sn&&sn!=='—'){
@@ -896,44 +969,6 @@ function renderCard(d){
   document.getElementById('rvLBody').textContent=rvLetterText;
   document.getElementById('rvLSign').textContent=rvLetterSign;
   goTo('rv-welcome');
-}
-
-// ── LIGHTBOX with left/right navigation ──
-let lbPhotos=[];
-let lbIdx=0;
-
-function openLightbox(idx){
-  lbIdx=idx;
-  const lb=document.getElementById('photoLightbox');
-  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
-  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
-  document.getElementById('lbPrev').style.display=lbPhotos.length>1?'block':'none';
-  document.getElementById('lbNext').style.display=lbPhotos.length>1?'block':'none';
-  lb.style.display='flex';
-  // swipe inside lightbox
-  let _lx=0;
-  lb.ontouchstart=e=>{_lx=e.changedTouches[0].clientX;e.stopPropagation();};
-  lb.ontouchend=e=>{
-    e.stopPropagation();
-    const dx=e.changedTouches[0].clientX-_lx;
-    if(Math.abs(dx)>40) lbNav(dx<0?1:-1);
-  };
-}
-
-function lbNav(dir){
-  if(lbPhotos.length<=1) return;
-  const img=document.getElementById('lightboxImg');
-  img.style.opacity='0';
-  setTimeout(()=>{
-    lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
-    img.src=lbPhotos[lbIdx];
-    img.style.opacity='1';
-    document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
-  },180);
-}
-
-function closeLightbox(){
-  document.getElementById('photoLightbox').style.display='none';
 }
 
 let rvLetterText='';
