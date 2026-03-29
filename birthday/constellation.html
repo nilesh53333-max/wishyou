@@ -194,7 +194,7 @@ function goTo(id){
   if(prev)prev.classList.remove('active');
   next.classList.add('active');
   curScreen=id;
-  if(id==='rv-sky'&&cardData)setTimeout(()=>initSky(cardData),300);
+  if(id==='rv-sky'&&cardData)setTimeout(()=>initSky(cardData),80);
   if(id!=='rv-song'){const ifr=document.querySelector('#rvYtWrap iframe');if(ifr)ifr.src=ifr.src;}
 }
 
@@ -281,7 +281,7 @@ let totalStars=0;
 let activeStarIdx=-1;
 
 function initSky(d){
-  const photos=d.photos||[];
+  const photos=(d.photos||[]).filter(u=>u&&u.trim&&u.trim());
   const captions=d.photoCaptions||[];
   totalStars=photos.length;
   starsOpened=0;
@@ -319,9 +319,9 @@ function initSky(d){
 }
 
 function generateStarPositions(n){
-  const sky=document.getElementById('rv-sky');
-  const W=sky.offsetWidth||390;
-  const H=sky.offsetHeight||844;
+  const app=document.querySelector('.app');
+  const W=app.offsetWidth||window.innerWidth||390;
+  const H=app.offsetHeight||window.innerHeight||844;
   const padX=0.12, padY=0.12;
   const positions=[];
   const minDist=Math.min(W,H)*0.22;
@@ -358,9 +358,9 @@ function drawConstellationLines(positions){
 
 function drawNebula(){
   const canvas=document.getElementById('skyCanvas');
-  const sky=document.getElementById('rv-sky');
-  canvas.width=sky.offsetWidth||390;
-  canvas.height=sky.offsetHeight||844;
+  const app=document.querySelector('.app');
+  canvas.width=app.offsetWidth||window.innerWidth||390;
+  canvas.height=app.offsetHeight||window.innerHeight||844;
   const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,canvas.width,canvas.height);
   // Subtle nebula blobs
