@@ -165,15 +165,15 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 /* PHOTOS — 2-column grid, all visible at once */
 #rv-photos{background:linear-gradient(160deg,#fde8f0,#fce4ec,#fdf0f5);display:flex;flex-direction:column;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 #rv-photos::-webkit-scrollbar{display:none;}
-.rv-sec-hdr{padding:36px 24px 6px;text-align:center;flex-shrink:0;}
+.rv-sec-hdr{padding:44px 24px 4px;text-align:center;flex-shrink:0;}
 .rv-sec-tag{display:none;}
 .rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;}
 
 /* ── Stacked photo card animation ── */
-.pol-stack-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:4px 8px 0;}
-.pol-stack{position:relative;width:calc(100vw - 48px);max-width:340px;height:calc((100vw - 48px) * 0.95);max-height:340px;cursor:pointer;touch-action:manipulation;margin-bottom:6px;}
-.pol-card{position:absolute;width:calc(100vw - 48px);max-width:340px;background:#fff;padding:5px 5px 38px;border-radius:4px;box-shadow:0 10px 36px rgba(74,14,42,0.28);transition:transform 0.5s cubic-bezier(.4,0,.2,1),opacity 0.4s ease,box-shadow 0.4s ease;transform-origin:bottom center;will-change:transform,opacity;left:50%;}
-.pol-card img{width:100%;height:calc((100vw - 58px) * 0.9);max-height:290px;object-fit:contain;background:#f9f0f3;display:block;border-radius:2px;}
+.pol-stack-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:0 8px;}
+.pol-stack{position:relative;width:calc(100vw - 40px);max-width:360px;height:calc((100vw - 40px) * 1.1);max-height:400px;cursor:pointer;touch-action:manipulation;margin-bottom:8px;}
+.pol-card{position:absolute;width:calc(100vw - 40px);max-width:360px;background:#fff;padding:5px 5px 44px;border-radius:4px;box-shadow:0 10px 36px rgba(74,14,42,0.28);transition:transform 0.75s cubic-bezier(.4,0,.2,1),opacity 0.6s ease,box-shadow 0.5s ease;transform-origin:bottom center;will-change:transform,opacity;left:50%;}
+.pol-card img{width:100%;height:calc((100vw - 50px) * 1.0);max-height:340px;object-fit:cover;object-position:top center;display:block;border-radius:2px;}
 .pol-caption{text-align:center;font-size:0.68rem;color:#8d3a5a;margin-top:6px;font-style:italic;line-height:1.4;min-height:1em;}
 .pol-tap-hint{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:0.58rem;font-weight:700;color:#e91e63;letter-spacing:0.05em;pointer-events:none;}
 .pol-counter{font-size:0.65rem;color:rgba(74,14,42,0.35);letter-spacing:0.1em;text-align:center;margin-bottom:6px;}
@@ -182,7 +182,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
   38% {transform:translateX(22%)  translateY(-12px) rotate(14deg) scale(0.96); opacity:0.85;}
   100%{transform:translateX(-51%) translateY(29px)  rotate(-1deg) scale(0.88); opacity:0.45;}
 }
-.pol-card.arc-back{animation:arcToBack 0.5s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none;z-index:0 !important;}
+.pol-card.arc-back{animation:arcToBack 0.75s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none;z-index:0 !important;}
 .no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
 .rv-nav-row{display:flex;gap:8px;padding:16px 16px max(20px,env(safe-area-inset-bottom));margin-top:4px;}
 .rv-next-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
@@ -1011,7 +1011,7 @@ function renderCard(d){
           applyPositions();
           isAnimating=false;
         }));
-      },480);
+      },700);
     };
     applyPositions();
   }else{stack.innerHTML='<div class="no-photo">💕 A card made with love</div>';}
