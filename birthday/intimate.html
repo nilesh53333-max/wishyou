@@ -246,9 +246,9 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .letter-bar{height:3px;background:linear-gradient(90deg,#e91e63,#f48fb1);flex-shrink:0;}
 .letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:48px 16px 100px;}
 .letter-paper{background:white;border-radius:16px;padding:22px 20px;box-shadow:0 4px 20px rgba(74,14,42,0.08);border-top:3px solid #e91e63;}
-.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}
+.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#4a0e2a;margin-bottom:18px;}.l-greet:empty{display:none;}
 .l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;color:#3d1c2e;line-height:2.1;white-space:pre-wrap;}
-.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#e91e63;margin-top:22px;display:block;}
+.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#e91e63;margin-top:22px;display:block;}.l-sign:empty{display:none;}
 .letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(253,232,240,1) 70%,rgba(253,232,240,0));}
 .letter-foot-row{display:flex;gap:8px;}
 .replay-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);}
@@ -1037,11 +1037,11 @@ function renderCard(d){
     if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
   }
   // Letter — stored for typewriter reveal
-  document.getElementById('rvLGreet').textContent=name?`Dear ${name},`:'Dear you,';
+  document.getElementById('rvLGreet').textContent='';
   rvLetterText = d.msg||'';
   rvLetterSign = d.sign||(sender?`With love, ${sender} 💕`:'With love 💕');
   document.getElementById('rvLBody').textContent=rvLetterText;
-  document.getElementById('rvLSign').textContent=rvLetterSign;
+  document.getElementById('rvLSign').textContent='';
   goTo('rv-welcome');
 }
 
