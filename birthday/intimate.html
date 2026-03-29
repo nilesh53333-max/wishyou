@@ -176,7 +176,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .pol-card img{width:100%;height:calc((100vw - 56px) * 1.1);max-height:370px;object-fit:contain;object-position:center center;background:#fef0f4;display:block;border-radius:1px;}
 .pol-caption-wrap{position:absolute;bottom:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:center;background:#fff;}
 .pol-caption{text-align:center;font-size:1rem;color:#c2185b;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;padding:0 16px;line-height:1.3;}
-.pol-tap-hint{position:absolute;right:10px;bottom:10px;font-size:0.5rem;color:#e91e63;opacity:0.55;letter-spacing:0.04em;pointer-events:none;}
+.pol-tap-hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:0.58rem;color:#c2185b;opacity:0.7;letter-spacing:0.04em;pointer-events:none;font-family:'DM Sans',sans-serif;}
 .pol-counter{font-size:0.62rem;color:rgba(74,14,42,0.35);letter-spacing:0.1em;text-align:center;margin-top:6px;flex-shrink:0;}
 @keyframes arcSide{
   0%  {transform:translateX(-50%) translateY(0px)   rotate(0deg)  scale(1);    opacity:1;}
@@ -426,11 +426,22 @@ function goTo(id){
 window.addEventListener('DOMContentLoaded',function(){
   const cardId=new URLSearchParams(window.location.search).get('card');
   if(cardId){goTo('rv-loading');loadCard();}else{goTo('rv-error');}
-  let _sx=0;
-  document.addEventListener('touchstart',e=>{_sx=e.changedTouches[0].clientX;},{passive:true});
+  let _sx=0, _sy=0;
+  document.addEventListener('touchstart',e=>{
+    _sx=e.changedTouches[0].clientX;
+    _sy=e.changedTouches[0].clientY;
+  },{passive:true});
   document.addEventListener('touchend',e=>{
     const dx=e.changedTouches[0].clientX-_sx;
-    if(Math.abs(dx)<50)return;
+    const dy=e.changedTouches[0].clientY-_sy;
+    // Ignore if more vertical than horizontal
+    if(Math.abs(dx)<50||Math.abs(dy)>Math.abs(dx))return;
+    // On rv-photos screen — swipe navigates photos, not pages
+    if(curScreen==='rv-photos'){
+      if(dx<0&&typeof advanceStack==='function') advanceStack();
+      // swipe right does nothing (stack only goes forward)
+      return;
+    }
     const RV=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
     const idx=RV.indexOf(curScreen);if(idx===-1)return;
     if(dx<0&&idx<RV.length-1)goTo(RV[idx+1]);
@@ -583,7 +594,7 @@ function renderCard(d){
       const c=document.createElement('div');
       c.className='pol-card';
       const cap=captions[i]||'';
-      c.innerHTML=`<img src="${url}" alt="" style="opacity:0;transition:opacity 0.4s ease;" onload="this.style.opacity='1'" onerror="this.parentNode.style.display='none'"><div class="pol-caption-wrap"><div class="pol-caption">${cap}</div>${i===0?'<div class="pol-tap-hint">tap to shuffle ✨</div>':''}</div>`;
+      c.innerHTML=`<img src="${url}" alt="" style="opacity:0;transition:opacity 0.4s ease;" onload="this.style.opacity='1'" onerror="this.parentNode.style.display='none'"><div class="pol-caption-wrap"><div class="pol-caption">${cap}</div>${i===0?'<div class="pol-tap-hint">swipe or tap to shuffle ✨</div>':''}</div>`;
       stack.appendChild(c);
       return c;
     });
