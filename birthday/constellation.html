@@ -194,7 +194,16 @@ function goTo(id){
   if(prev)prev.classList.remove('active');
   next.classList.add('active');
   curScreen=id;
-  if(id==='rv-sky'&&cardData)setTimeout(()=>initSky(cardData),80);
+  if(id==='rv-sky'){
+    if(cardData){
+      setTimeout(()=>initSky(cardData),80);
+    } else {
+      // cardData not ready — poll until it is
+      const wait=setInterval(()=>{
+        if(cardData){clearInterval(wait);initSky(cardData);}
+      },100);
+    }
+  }
   if(id!=='rv-song'){const ifr=document.querySelector('#rvYtWrap iframe');if(ifr)ifr.src=ifr.src;}
 }
 
@@ -285,12 +294,7 @@ function initSky(d){
   const captions=d.photoCaptions||[];
   totalStars=photos.length;
 
-  // DEBUG — show on screen
-  const dbg=document.createElement('div');
-  dbg.style.cssText='position:absolute;top:60px;left:10px;right:10px;background:rgba(0,0,0,0.8);color:#0f0;font-size:0.55rem;padding:8px;border-radius:8px;z-index:999;word-break:break-all;';
-  dbg.innerHTML=`photos key: ${JSON.stringify(Object.keys(d))}<br>d.photos type: ${typeof d.photos}<br>d.photos: ${JSON.stringify(d.photos)}<br>filtered count: ${photos.length}`;
-  document.getElementById('rv-sky').appendChild(dbg);
-  setTimeout(()=>dbg.remove(),10000);
+
   starsOpened=0;
   activeStarIdx=-1;
 
