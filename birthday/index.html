@@ -76,7 +76,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .regular-input:focus{border-color:rgba(20,160,140,0.3);background:rgba(255,255,255,0.05);}
 
 /* Photos */
-.photos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:0;}
+.photos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:0;align-items:start;}
 .photo-slot{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:none;user-select:none;background:rgba(20,160,140,0.04);border:1.5px dashed rgba(20,160,140,0.15);color:rgba(160,220,210,0.2);font-size:1.1rem;transition:border-color 0.18s,box-shadow 0.18s;}
 .photo-slot.has-photo{border-style:solid;border-color:rgba(20,160,140,0.2);}
 .photo-slot.active{border-color:rgba(20,160,140,0.6);box-shadow:0 0 0 2px rgba(20,160,140,0.18);}
@@ -95,14 +95,10 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .photo-hint{font-size:0.62rem;color:rgba(160,220,210,0.2);margin-bottom:4px;}
 .photo-hint .hl{color:rgba(20,160,140,0.55);font-weight:600;}
 .slot-plus{font-size:1.1rem;color:rgba(160,220,210,0.2);}
-.caption-panel{margin-top:10px;background:rgba(20,160,140,0.05);border:1px solid rgba(20,160,140,0.2);border-radius:12px;padding:12px 14px;display:none;}
-.caption-panel.visible{display:block;}
-.caption-panel-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
-.caption-badge{width:20px;height:20px;border-radius:50%;background:rgba(20,160,140,0.15);border:1px solid rgba(20,160,140,0.3);font-size:0.55rem;font-weight:700;color:#14a08c;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.caption-lbl{font-size:0.52rem;text-transform:uppercase;letter-spacing:0.14em;color:rgba(160,220,210,0.25);}
-.cap-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.12);outline:none;font-size:0.9rem;font-style:italic;font-family:'Cormorant Garamond',serif;color:rgba(160,220,210,0.85);padding:4px 0 8px;caret-color:#f0c040;}
-.cap-input::placeholder{color:rgba(160,220,210,0.2);font-style:italic;}
-.cap-input:focus{border-bottom-color:rgba(20,160,140,0.4);}
+.photo-col{display:flex;flex-direction:column;gap:4px;}
+.cap-input{width:100%;background:transparent;border:none;outline:none;font-size:0.62rem;font-style:italic;font-family:'DM Sans',sans-serif;color:rgba(160,220,210,0.5);padding:3px 2px;caret-color:#f0c040;text-align:center;line-height:1.4;resize:none;display:block;}
+.cap-input::placeholder{color:rgba(160,220,210,0.15);font-style:italic;}
+.cap-input:focus{color:rgba(160,220,210,0.8);}
 
 /* Song */
 .song-search-row{display:flex;gap:7px;margin-bottom:8px;}
@@ -338,11 +334,8 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
         <span class="sec-hdr-line"></span>
       </div>
       <div class="photos-grid" id="photosGrid"></div>
-      <div class="caption-panel" id="captionPanel">
-        <div class="caption-panel-hdr"><div class="caption-badge" id="captionBadge">1</div><div class="caption-lbl">Caption for photo <span id="captionPhotoNum">1</span></div></div>
-        <input class="cap-input" id="captionInput" maxlength="80" placeholder="Add a caption for this photo...">
-      </div>
-      <div class="photo-hint" style="margin-top:8px;">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
+      <div class="photo-hint" style="margin-top:6px;margin-bottom:2px;">Hold & drag any photo to shuffle order · Captions stay fixed</div>
+      <div class="photo-hint" style="margin-top:4px;">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
       <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
 
       <!-- Song -->
@@ -868,35 +861,6 @@ function onRelationChange(val) {
 }
 
 
-// ── Caption panel state ──
-let activeSlotIdx = -1;
-
-function openCaptionPanel(i) {
-  if (activeSlotIdx !== -1) saveCaptionPanel();
-  activeSlotIdx = i;
-  document.querySelectorAll('.photo-slot').forEach((s,si) => s.classList.toggle('active', si===i));
-  document.getElementById('captionBadge').textContent = i+1;
-  document.getElementById('captionPhotoNum').textContent = i+1;
-  const inp = document.getElementById('captionInput');
-  inp.value = photoCaptions[i] || '';
-  inp.oninput = () => { photoCaptions[i] = inp.value; };
-  document.getElementById('captionPanel').classList.add('visible');
-  setTimeout(() => inp.focus(), 50);
-}
-
-function closeCaptionPanel() {
-  saveCaptionPanel();
-  activeSlotIdx = -1;
-  document.querySelectorAll('.photo-slot').forEach(s => s.classList.remove('active'));
-  document.getElementById('captionPanel').classList.remove('visible');
-}
-
-function saveCaptionPanel() {
-  if (activeSlotIdx !== -1) {
-    photoCaptions[activeSlotIdx] = document.getElementById('captionInput').value;
-  }
-}
-
 function buildPhotoSlots(captions) {
   captions = captions || photoCaptions;
   photoCaptions = [...captions];
@@ -904,6 +868,10 @@ function buildPhotoSlots(captions) {
   grid.innerHTML = '';
   photos = photos.length === 5 ? photos : new Array(5).fill(null);
   captions.forEach((cap, i) => {
+    // Wrapper column: photo slot + caption below
+    const col = document.createElement('div');
+    col.className = 'photo-col';
+
     const slot = document.createElement('div');
     slot.className = 'photo-slot';
     slot.id = 'slot' + i;
@@ -912,20 +880,38 @@ function buildPhotoSlots(captions) {
       slot.classList.add('has-photo');
       slot.draggable = true;
       slot.innerHTML = `<span class="slot-num">${i+1}</span><img src="${photos[i]}"><div class="up-dot ${uploadedUrls[i]?'done':'uploading'}" id="upd${i}"></div><button class="photo-del" onclick="removePhoto(event,${i})">✕</button>`;
-      slot.onclick = () => { if(activeSlotIdx===i) closeCaptionPanel(); else openCaptionPanel(i); };
+      slot.onclick = null;
     } else {
       slot.innerHTML = `<span class="slot-num">${i+1}</span><span class="slot-plus">+</span>`;
       slot.onclick = () => { currentSlotIdx=i; document.getElementById('photoFileInput').click(); };
     }
-    // Drag events
     slot.addEventListener('dragstart', _onDragStart);
     slot.addEventListener('dragover', _onDragOver);
     slot.addEventListener('drop', _onDrop);
     slot.addEventListener('dragend', _onDragEnd);
     slot.addEventListener('touchstart', _onTouchStart, {passive:false});
-    grid.appendChild(slot);
+
+    // Caption textarea directly below slot
+    const ta = document.createElement('textarea');
+    ta.className = 'cap-input';
+    ta.id = 'cap' + i;
+    ta.value = photoCaptions[i] || '';
+    ta.placeholder = 'Caption...';
+    ta.maxLength = 100;
+    ta.rows = 2;
+    ta.addEventListener('input', () => { photoCaptions[i] = ta.value; autoResize(ta); });
+    ta.addEventListener('focus', () => { autoResize(ta); });
+
+    col.appendChild(slot);
+    col.appendChild(ta);
+    grid.appendChild(col);
   });
   updateUploadCount();
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = el.scrollHeight + 'px';
 }
 
 // ── Drag to rearrange ──
@@ -1000,7 +986,6 @@ function _onTouchStart(e) {
 }
 
 function _swapPhotos(a, b) {
-  closeCaptionPanel();
   [photos[a], photos[b]] = [photos[b], photos[a]];
   [uploadedUrls[a], uploadedUrls[b]] = [uploadedUrls[b], uploadedUrls[a]];
   buildPhotoSlots();
@@ -1023,9 +1008,8 @@ async function handlePhotoUpload(input) {
     const slot = document.getElementById('slot' + idx);
     slot.innerHTML = `<img src="${localUrl}"><div class="up-dot uploading" id="upd${idx}"></div><div class="upind"><div class="upbar" id="upb${idx}"></div></div><button class="photo-del" onclick="removePhoto(event,${idx})">✕</button>`;
     slot.classList.add('has-photo');
-    slot.onclick = () => { if(activeSlotIdx===idx) closeCaptionPanel(); else openCaptionPanel(idx); };
+    slot.onclick = null;
     updateUploadCount();
-    openCaptionPanel(idx);
     uploadPhotoInBackground(file, idx);
   }
   input.value = '';
@@ -1050,7 +1034,6 @@ async function uploadPhotoInBackground(file, idx) {
 
 function removePhoto(e, idx) {
   e.stopPropagation();
-  if (activeSlotIdx === idx) closeCaptionPanel();
   photos[idx] = null;
   delete uploadedUrls[idx];
   const slot = document.getElementById('slot'+idx);
