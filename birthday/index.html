@@ -310,7 +310,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <!-- Relation row -->
       <div class="relation-wrap">
         <div class="relation-lbl">Who is this for?</div>
-        <input class="regular-input" id="relationInput" placeholder="e.g. wife, son, friend, sister, parents, girlfriend, colleague..." maxlength="40" autocomplete="off">
+        <input class="regular-input" id="relationInput" placeholder="e.g. wife, son, friend, sister, parents, girlfriend, colleague..." maxlength="40" autocomplete="off" oninput="onRelationChange(this.value)">
       </div>
 
       <label class="field-label" id="nameLabel">To — Their name</label>
@@ -645,6 +645,137 @@ function buildStylesList() {
 // ── PHOTOS ──
 const DEFAULT_CAPTIONS = ['The memory I keep coming back to 💫','You, in your element ✨','This one always makes me smile 😊','Look how far you\'ve come 🌟','My favourite version of you 💕'];
 let photoCaptions = [...DEFAULT_CAPTIONS];
+
+// Relation-aware content — updates all fields at once
+function getRelationContent(rel) {
+  const r = (rel||'').toLowerCase().trim();
+  const sender = document.getElementById('cSender')?.value.trim() || '';
+  const sign = n => n ? `With love, ${n} 💕` : 'With love 💕';
+
+  if (/wife|girlfriend|partner|love/.test(r)) return {
+    photosHeading: 'Our Memories Together 💕',
+    songTitle: 'A song that\'s so us 🎵',
+    tone: 'deeply romantic and emotional',
+    signOff: sign(sender),
+    captions: ['My favourite person in the world 💕','You make everything better ✨','A moment I never want to forget 🌸','This smile gets me every time 💫','Always and forever mine 💝']
+  };
+  if (/husband|boyfriend/.test(r)) return {
+    photosHeading: 'Our Story So Far 💕',
+    songTitle: 'A song just for us 🎵',
+    tone: 'romantic and heartfelt',
+    signOff: sign(sender),
+    captions: ['My person, always 💕','You and me — always ✨','A memory I\'ll keep forever 🌟','That smile never gets old 😊','My favourite human 💫']
+  };
+  if (/mom|mother|mum|mama|aai/.test(r)) return {
+    photosHeading: 'Moments with My Mom 🌸',
+    songTitle: 'A song for you, Mom 🎵',
+    tone: 'warm, emotional and grateful',
+    signOff: sender ? `Your loving child, ${sender} 🌸` : 'Your loving child 🌸',
+    captions: ['My first home 🌸','Everything good in me is you ✨','A memory I\'ll treasure forever 💕','You make every moment special 🌺','My safe place, always 💫']
+  };
+  if (/dad|father|papa|baba/.test(r)) return {
+    photosHeading: 'Moments with My Dad 💪',
+    songTitle: 'A song for you, Dad 🎵',
+    tone: 'heartfelt, proud and emotional',
+    signOff: sender ? `Your child, ${sender} 💪` : 'Your child 💪',
+    captions: ['My hero, always 💪','You taught me everything 🌟','A memory worth keeping forever ✨','Stronger than I\'ll ever be 🫶','My favourite role model 💫']
+  };
+  if (/son|beta/.test(r)) return {
+    photosHeading: 'Memories with My Son 🌟',
+    songTitle: 'A song for my son 🎵',
+    tone: 'proud, loving and emotional',
+    signOff: sender ? `With all my love, ${sender} 🌟` : 'With all my love 🌟',
+    captions: ['My greatest adventure 🌟','Watching you grow is everything ✨','A moment to keep forever 💕','You make me so proud 🫶','My whole heart 💫']
+  };
+  if (/daughter|beti/.test(r)) return {
+    photosHeading: 'Memories with My Daughter 🌸',
+    songTitle: 'A song for my daughter 🎵',
+    tone: 'proud, warm and emotional',
+    signOff: sender ? `With all my love, ${sender} 🌸` : 'With all my love 🌸',
+    captions: ['My sunshine 🌸','You light up every room ✨','A memory I\'ll treasure always 💕','My proudest joy 🌺','My whole heart 💫']
+  };
+  if (/sister|sis|didi/.test(r)) return {
+    photosHeading: 'My Sister, My Person 💕',
+    songTitle: 'Our kind of song 🎵',
+    tone: 'fun, emotional and sisterly',
+    signOff: sender ? `Your sister, ${sender} 💕` : 'Your sister 💕',
+    captions: ['My built-in best friend 💕','No one gets me like you ✨','A memory just for us 🌸','My partner in everything 😊','Forever my favourite 💫']
+  };
+  if (/brother|bro|bhai/.test(r)) return {
+    photosHeading: 'My Brother, Always 🤜',
+    songTitle: 'Our kind of song 🎵',
+    tone: 'fun, warm and brotherly',
+    signOff: sender ? `Your sibling, ${sender} 🤜` : 'Your sibling 🤜',
+    captions: ['My first friend 🤜','Always got my back ✨','A memory worth everything 🌟','The best kind of chaos 😄','My favourite brother 💫']
+  };
+  if (/friend|buddy/.test(r)) return {
+    photosHeading: 'Best Memories with You 😊',
+    songTitle: 'Our kind of song 🎵',
+    tone: 'fun, warm and friendly',
+    signOff: sender ? `Your friend, ${sender} 😊` : 'Your friend 😊',
+    captions: ['The one who just gets it 💕','Best memories are with you ✨','A moment I never want to forget 😊','Ride or die, always 🌟','My kind of people 💫']
+  };
+  if (/grandma|grandmother|nani|dadi|aaji/.test(r)) return {
+    photosHeading: 'Moments with My Nani 🌸',
+    songTitle: 'A song for you 🎵',
+    tone: 'warm, loving and grateful',
+    signOff: sender ? `Your grandchild, ${sender} 🌸` : 'Your grandchild 🌸',
+    captions: ['Love without limits 🌸','The warmest arms in the world ✨','A memory filled with love 💕','Your blessings mean everything 🌺','My forever comfort 💫']
+  };
+  if (/grandpa|grandfather|nana|dada|ajoba/.test(r)) return {
+    photosHeading: 'Moments with My Nana 🌟',
+    songTitle: 'A song for you 🎵',
+    tone: 'warm, respectful and grateful',
+    signOff: sender ? `Your grandchild, ${sender} 🌟` : 'Your grandchild 🌟',
+    captions: ['Wisdom and love in one 🌟','The strongest person I know ✨','A memory I treasure forever 💕','Your stories are my favourite 🫶','My greatest inspiration 💫']
+  };
+  if (/colleague|coworker|boss|work/.test(r)) return {
+    photosHeading: 'Great Memories Together 🌟',
+    songTitle: 'A song for the occasion 🎵',
+    tone: 'warm, professional and cheerful',
+    signOff: sender ? `Warm regards, ${sender} 🎉` : 'Warm regards 🎉',
+    captions: ['The best team I\'ve been on 🌟','Making work feel easy ✨','A memory from our journey 😊','Great things happen with great people 💫','Here\'s to more wins together 🎉']
+  };
+  if (/parents|family/.test(r)) return {
+    photosHeading: 'Moments with My Family 🌸',
+    songTitle: 'A song for our family 🎵',
+    tone: 'warm, loving and grateful',
+    signOff: sender ? `With love, ${sender} 🌸` : 'With love 🌸',
+    captions: ['My whole world 🌸','Everything I am is because of you ✨','A memory to treasure forever 💕','You make every day special 🌺','My safe place, always 💫']
+  };
+  // Generic fallback
+  return {
+    photosHeading: `Memories with My ${rel} 📸`,
+    songTitle: `A song for my ${rel} 🎵`,
+    tone: 'warm and heartfelt',
+    signOff: sign(sender),
+    captions: [
+      `The best ${rel} I could ask for 💕`,
+      'A memory worth keeping forever ✨',
+      'This one always makes me smile 😊',
+      'So grateful for moments like this 🌟',
+      `Lucky to have you as my ${rel} 💫`
+    ]
+  };
+}
+
+function onRelationChange(val) {
+  if (!val.trim()) return;
+  const content = getRelationContent(val);
+  // Update all fields
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  set('photosHeading', content.photosHeading);
+  set('songScreenTitle', content.songTitle);
+  set('letterToneHeader', content.tone);
+  if (!signManuallyEdited) set('cSign', content.signOff);
+  // Update captions
+  photoCaptions = [...content.captions];
+  content.captions.forEach((cap, i) => {
+    const el = document.getElementById('cap' + i);
+    if (el) el.value = cap;
+  });
+}
+
 
 function buildPhotoSlots(captions) {
   captions = captions || photoCaptions;
