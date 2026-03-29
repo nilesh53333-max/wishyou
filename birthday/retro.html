@@ -165,24 +165,21 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .rv-sec-hdr{padding:52px 24px 10px;text-align:center;flex-shrink:0;}
 .rv-sec-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#111;}
 
-.pol-grid{padding:10px 14px 8px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start;}
-.pol-grid.count-1{grid-template-columns:1fr;}
-.pol-grid.count-1 .pol{max-width:260px;margin:0 auto;width:100%;}
-.pol-grid.count-3 .pol:first-child{grid-column:1/-1;}
-.pol-grid.count-5 .pol:last-child{grid-column:1/-1;}
-
-/* Retro comic-style polaroids */
-.pol{background:white;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:6px 6px 0;cursor:pointer;touch-action:pan-y;position:relative;animation:polReveal 0.55s cubic-bezier(0.22,1,0.36,1) both;}
-.pol:nth-child(1){animation-delay:0.06s;}
-.pol:nth-child(2){animation-delay:0.14s;}
-.pol:nth-child(3){animation-delay:0.22s;}
-.pol:nth-child(4){animation-delay:0.30s;}
-.pol:nth-child(5){animation-delay:0.38s;}
-@keyframes polReveal{0%{opacity:0;transform:translateY(20px) scale(0.9);}60%{opacity:1;}100%{opacity:1;transform:translateY(0) scale(1);}}
-.pol:active{transform:scale(0.96);}
-.pol img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;display:block;}
-.pol-cap{background:#d90429;color:white;font-family:'Fredoka One',cursive;font-size:0.72rem;text-align:center;padding:4px 6px;border-top:2px solid #111;margin-top:0;}
-.pol-tap{display:none;}
+/* ── Retro stacked photo cards ── */
+.pol-stack-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:0 8px;}
+.pol-stack{position:relative;width:calc(100vw - 40px);max-width:360px;height:calc((100vw - 40px) * 1.05);max-height:390px;cursor:pointer;touch-action:manipulation;margin-bottom:8px;}
+.pol-card{position:absolute;width:calc(100vw - 40px);max-width:360px;background:white;border:3px solid #111;box-shadow:5px 5px 0 #111;padding:5px 5px 0;transition:transform 0.75s cubic-bezier(.4,0,.2,1),opacity 0.6s ease;transform-origin:bottom center;will-change:transform,opacity;left:50%;}
+.pol-card img{width:100%;height:calc((100vw - 50px) * 0.88);max-height:310px;object-fit:cover;object-position:top center;display:block;}
+.pol-caption-wrap{height:42px;display:flex;align-items:center;justify-content:center;position:relative;background:#d90429;border-top:2px solid #111;}
+.pol-caption{font-family:'Fredoka One',cursive;font-size:0.85rem;color:white;text-align:center;letter-spacing:0.04em;padding:0 10px;}
+.pol-tap-hint{position:absolute;right:8px;font-size:0.5rem;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.04em;pointer-events:none;}
+.pol-counter{font-family:'Fredoka One',cursive;font-size:0.72rem;color:#111;letter-spacing:0.1em;text-align:center;margin-bottom:4px;}
+@keyframes arcToBack{
+  0%  {transform:translateX(-50%) translateY(0px)   rotate(0deg)  scale(1);    opacity:1;}
+  38% {transform:translateX(22%)  translateY(-12px) rotate(14deg) scale(0.96); opacity:0.85;}
+  100%{transform:translateX(-51%) translateY(29px)  rotate(-1deg) scale(0.88); opacity:0.45;}
+}
+.pol-card.arc-back{animation:arcToBack 0.75s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none;z-index:0 !important;}
 .no-photo{text-align:center;padding:40px 20px;font-family:'Fredoka One',cursive;color:rgba(0,0,0,0.35);}
 .rv-nav-row{display:flex;gap:8px;padding:16px 16px max(20px,env(safe-area-inset-bottom));margin-top:4px;}
 .rv-next-btn{flex:1;background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:14px;font-family:'Fredoka One',cursive;font-size:0.9rem;cursor:pointer;touch-action:manipulation;box-shadow:4px 4px 0 #111;transition:transform 0.2s;}
@@ -409,20 +406,16 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
   <div class="rv-sec-hdr">
     <div class="rv-sec-title" id="rvPhotoTitle">📸 Your Memories!</div>
   </div>
-  <div class="pol-grid" id="polStrip"></div>
+  <div class="pol-stack-scene">
+    <div class="pol-stack" id="polStack" onclick="advanceStack()"></div>
+    <div class="pol-counter" id="polCounter"></div>
+  </div>
   <div class="rv-nav-row">
     <button class="rv-next-btn" onclick="goTo('rv-song')">Next → Party Anthem 🎵</button>
   </div>
 </div>
 
-<!-- Lightbox -->
-<div id="photoLightbox" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
-  <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
-  <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
-  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;transition:opacity 0.18s ease;" src="" alt="">
-  <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
-  <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
-</div>
+<!-- Lightbox removed — replaced by stack -->
 
 <div class="screen" id="rv-song">
   <button class="rv-back light" onclick="goTo('rv-photos')">←</button>
@@ -984,22 +977,70 @@ function renderCard(d){
   document.getElementById('rvPhotoTitle').textContent=heading;
   const sst=document.getElementById('rvSongScreenTitle');
   if(sst)sst.textContent=d.songScreenTitle||'Party Anthem 🎵';
-  // Photos — 2-column grid, all visible, tap opens lightbox
-  const strip=document.getElementById('polStrip');
-  strip.innerHTML='';
-  strip.className='pol-grid';
-  const caps=['POW! 💥','WOW! ⭐','YAY! 🎉','ZAP! ✨','BOOM! 🎊'];
+  // Photos — stacked card animation (retro style)
+  const stack=document.getElementById('polStack');
+  stack.innerHTML='';
   if(d.photos&&d.photos.length>0){
-    const cnt=d.photos.length;
-    strip.classList.add('count-'+cnt);
-    lbPhotos=d.photos;
-    d.photos.forEach((url,i)=>{
-      const p=document.createElement('div');p.className='pol';
-      p.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="pol-cap">${caps[i%caps.length]}</div>`;
-      p.onclick=()=>openLightbox(i);
-      strip.appendChild(p);
+    const photos=d.photos;
+    const customCaptions=d.photoCaptions||[];
+    const retroCaps=['POW! That\'s a vibe 💥','WOW, look at you! ⭐','YAY for this memory! 🎉','ZAP! Pure gold ✨','BOOM! Best one yet 🎊'];
+    const captions=photos.map((_,i)=>customCaptions[i]||retroCaps[i%retroCaps.length]);
+    const n=photos.length;
+    const POSITIONS=[
+      ['-50%','0px','0deg',1,1],
+      ['-48%','10px','3deg',0.97,0.88],
+      ['-52%','18px','-2.5deg',0.94,0.76],
+      ['-49%','24px','1.5deg',0.91,0.62],
+      ['-51%','29px','-1deg',0.88,0.48],
+    ];
+    let frontIdx=0,isAnimating=false;
+    // Preload all images
+    photos.forEach(url=>{const img=new Image();img.src=url;});
+    const cards=photos.map((url,i)=>{
+      const card=document.createElement('div');
+      card.className='pol-card';
+      const imgStyle=i===0?'style="opacity:0;transition:opacity 0.4s ease;"':'';
+      card.innerHTML=`<img src="${url}" alt="" ${imgStyle} onload="if(this.style.opacity==='0'){this.style.opacity='1';}" onerror="this.parentNode.style.display='none'"><div class="pol-caption-wrap"><div class="pol-caption">${captions[i]}</div>${i===0?'<div class="pol-tap-hint">TAP TO SHUFFLE ✨</div>':''}</div>`;
+      stack.appendChild(card);
+      return card;
     });
-  }else{strip.innerHTML='<div class="no-photo">🎊 A card made with love!</div>';}
+    function applyPositions(){
+      cards.forEach((card,i)=>{
+        const dist=(i-frontIdx+n)%n;
+        const[tx,ty,rot,sc,op]=POSITIONS[Math.min(dist,POSITIONS.length-1)];
+        card.style.transform=`translateX(${tx}) translateY(${ty}) rotate(${rot}) scale(${sc})`;
+        card.style.opacity=op;
+        card.style.zIndex=n-dist;
+        card.style.boxShadow=dist===0?'6px 6px 0 #111':'3px 3px 0 #111';
+        const hint=card.querySelector('.pol-tap-hint');
+        if(hint)hint.style.display=dist===0?'block':'none';
+      });
+      document.getElementById('polCounter').textContent=`${(frontIdx%n)+1} / ${n}`;
+    }
+    window.advanceStack=function(){
+      if(isAnimating||n<2)return;
+      isAnimating=true;
+      const frontCard=cards[frontIdx];
+      frontCard.style.zIndex=-1;
+      frontCard.classList.add('arc-back');
+      frontIdx=(frontIdx+1)%n;
+      setTimeout(()=>applyPositions(),60);
+      setTimeout(()=>{
+        frontCard.classList.remove('arc-back');
+        frontCard.style.transition='none';
+        const[tx,ty,rot,sc,op]=POSITIONS[n-1];
+        frontCard.style.transform=`translateX(${tx}) translateY(${ty}) rotate(${rot}) scale(${sc})`;
+        frontCard.style.opacity=op;
+        frontCard.style.zIndex=1;
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          frontCard.style.transition='';
+          applyPositions();
+          isAnimating=false;
+        }));
+      },700);
+    };
+    applyPositions();
+  }else{stack.innerHTML='<div class="no-photo">🎊 A card made with love!</div>';}
   // Song — cassette label
   const sn=d.songName||'';
   if(sn&&sn!=='—'){
@@ -1024,44 +1065,6 @@ function renderCard(d){
   document.getElementById('rvLBody').textContent=rvLetterText;
   document.getElementById('rvLSign').textContent=rvLetterSign;
   goTo('rv-welcome');
-}
-
-// ── LIGHTBOX with left/right navigation ──
-let lbPhotos=[];
-let lbIdx=0;
-
-function openLightbox(idx){
-  lbIdx=idx;
-  const lb=document.getElementById('photoLightbox');
-  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
-  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
-  document.getElementById('lbPrev').style.display=lbPhotos.length>1?'block':'none';
-  document.getElementById('lbNext').style.display=lbPhotos.length>1?'block':'none';
-  lb.style.display='flex';
-  // swipe inside lightbox
-  let _lx=0;
-  lb.ontouchstart=e=>{_lx=e.changedTouches[0].clientX;e.stopPropagation();};
-  lb.ontouchend=e=>{
-    e.stopPropagation();
-    const dx=e.changedTouches[0].clientX-_lx;
-    if(Math.abs(dx)>40) lbNav(dx<0?1:-1);
-  };
-}
-
-function lbNav(dir){
-  if(lbPhotos.length<=1) return;
-  const img=document.getElementById('lightboxImg');
-  img.style.opacity='0';
-  setTimeout(()=>{
-    lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
-    img.src=lbPhotos[lbIdx];
-    img.style.opacity='1';
-    document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
-  },180);
-}
-
-function closeLightbox(){
-  document.getElementById('photoLightbox').style.display='none';
 }
 
 function openLetter(){
