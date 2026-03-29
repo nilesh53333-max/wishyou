@@ -353,10 +353,14 @@ function renderChat(d){
         const captions=d.photoCaptions||[];
         photoSeq.push({type:'typing',delay:400});
         d.photos.forEach((url,i)=>{
-          photoSeq.push({type:'photo',url,delay:1000+(i*1400)});
-          // Caption after each photo if it exists
+          const base=1000+(i*3000);
+          // Caption first
           if(captions[i]&&captions[i].trim()){
-            photoSeq.push({type:'text',text:captions[i].trim(),delay:1000+(i*1400)+600});
+            photoSeq.push({type:'text',text:captions[i].trim(),delay:base});
+            photoSeq.push({type:'typing',delay:base+700});
+            photoSeq.push({type:'photo',url,delay:base+1500});
+          } else {
+            photoSeq.push({type:'photo',url,delay:base});
           }
         });
         // After photos, queue song or message
