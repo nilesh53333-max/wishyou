@@ -205,7 +205,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-panel:nth-child(3){background:#fce4ec;}
 .sv-balloon{font-size:2.4rem;animation:ballFloat 1.5s ease-in-out infinite;}
 @keyframes ballFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.sv-newspaper{background:#fdf8e7;border:2px solid #111;border-radius:3px;padding:5px 7px;width:90%;margin:0 auto;}
+
 .sv-news-head{font-size:0.46rem;font-weight:700;color:#111;border-bottom:1.5px double #111;margin-bottom:3px;padding-bottom:2px;}
 .sv-news-hl{background:#d90429;color:white;font-size:0.42rem;font-weight:700;padding:1px 4px;border-radius:1px;margin-bottom:3px;}
 .sv-news-lines{display:flex;flex-direction:column;gap:2px;}
@@ -697,6 +697,7 @@ function buildStylesList() {
 
   BIRTHDAY_STYLES.forEach((style, i) => {
     const sw = slideshows[style.id];
+    if (!sw) { console.warn('Missing slideshow for style:', style.id); return; }
     const cardId = `sv-card-${style.id}`;
     const card = document.createElement('div');
     card.className = 'style-card-wrap';
@@ -1203,6 +1204,10 @@ async function createCard(style) {
     if (uploadedUrls[s.idx]) {
       photoUrls.push(uploadedUrls[s.idx]); uploaded++;
       setP(10+(uploaded/Math.max(slots.length,1)*50),'Photos ready ✓');
+    } else if (typeof s.blob==='string'&&s.blob.startsWith('https://')) {
+      // Already a remote URL (e.g. restored from draft) — use directly
+      photoUrls.push(s.blob); uploadedUrls[s.idx]=s.blob; uploaded++;
+      setP(10+(uploaded/Math.max(slots.length,1)*50),'Photos ready ✓');
     } else {
       setP(10+(uploaded/Math.max(slots.length,1)*50),`Uploading photo ${uploaded+1}...`);
       try {
@@ -1210,7 +1215,7 @@ async function createCard(style) {
         const fd = new FormData(); fd.append('file',blob); fd.append('upload_preset',CLOUDINARY_PRESET); fd.append('folder','wishyou');
         const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
         const d = await res.json(); if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
-      } catch(e){console.error(e);}
+      } catch(e){console.error('Upload error:',e);}
       uploaded++;
     }
   }
@@ -1252,7 +1257,7 @@ async function createCard(style) {
       document.getElementById('shareLinkTxt').textContent = shareLinkShort;
       document.getElementById('shareModal').classList.add('show');
     }, 700);
-  } catch(e) { overlay.classList.remove('show'); alert('Could not save card. Please try again.'); }
+  } catch(e) { console.error('Save error:',e); overlay.classList.remove('show'); alert('Could not save card. Please try again. Error: '+e.message); }
 }
 
 // ── SHARE ──
