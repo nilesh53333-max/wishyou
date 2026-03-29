@@ -38,10 +38,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 /* Relation chips */
 .relation-wrap{margin-bottom:20px;}
 .relation-lbl{font-size:0.56rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,192,64,0.45);margin-bottom:10px;}
-.relation-chips{display:flex;flex-wrap:wrap;gap:7px;}
-.relation-chip{padding:7px 14px;border-radius:50px;border:1px solid rgba(160,220,210,0.14);background:rgba(255,255,255,0.04);font-size:0.78rem;color:rgba(160,220,210,0.55);cursor:pointer;touch-action:manipulation;transition:all 0.2s ease;white-space:nowrap;}
-.relation-chip:active{transform:scale(0.95);}
-.relation-chip.selected{background:rgba(20,160,140,0.18);border-color:rgba(20,160,140,0.5);color:rgba(160,220,210,0.95);font-weight:600;}
+
 
 /* Step wrap */
 .step-wrap{flex:1;display:flex;flex-direction:column;padding:76px 22px 0;overflow:hidden;min-height:0;}
@@ -313,17 +310,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       <!-- Relation row -->
       <div class="relation-wrap">
         <div class="relation-lbl">Who is this for?</div>
-        <div class="relation-chips" id="relationChips">
-          <div class="relation-chip" data-rel="dad" onclick="selectRelation('dad')">👨 Dad</div>
-          <div class="relation-chip" data-rel="mom" onclick="selectRelation('mom')">👩 Mom</div>
-          <div class="relation-chip" data-rel="son" onclick="selectRelation('son')">👦 Son</div>
-          <div class="relation-chip" data-rel="daughter" onclick="selectRelation('daughter')">👧 Daughter</div>
-          <div class="relation-chip" data-rel="bff" onclick="selectRelation('bff')">🤝 Best Friend</div>
-          <div class="relation-chip" data-rel="partner" onclick="selectRelation('partner')">💕 Partner</div>
-          <div class="relation-chip" data-rel="sister" onclick="selectRelation('sister')">👯 Sister</div>
-          <div class="relation-chip" data-rel="brother" onclick="selectRelation('brother')">🤜 Brother</div>
-          <div class="relation-chip" data-rel="friend" onclick="selectRelation('friend')">😊 Friend</div>
-        </div>
+        <input class="regular-input" id="relationInput" placeholder="e.g. wife, ajoba, best friend, jaan..." maxlength="40" autocomplete="off">
       </div>
 
       <label class="field-label" id="nameLabel">To — Their name</label>
@@ -463,7 +450,6 @@ let shareLink = '';
 let shareLinkShort = '';
 let aiLetterCount = 0;
 let signManuallyEdited = false;
-let selectedRelation = '';
 
 // ── BIRTHDAY CARD STYLES ──
 const BIRTHDAY_STYLES = [
@@ -520,90 +506,6 @@ const BIRTHDAY_STYLES = [
 ];
 
 // ── RELATION CONTENT ──
-const RELATION_CONTENT = {
-  dad: {
-    photosHeading:'Dad, this one\'s for you',
-    photoCaptions:['The man who taught me everything 🙏','My hero, always 💪','Look at us 😄','This memory — forever 🌟','My favourite human 🎂'],
-    songHeading:'A song for my dad 🎵',songPlaceholder:'Search a song for Dad...',
-    letterTone:'grateful and emotional',
-    letterPlaceholder:'Dear Dad,\n\nThank you for everything you\'ve given me...',
-    signOff: n=>`Your kid, always 🎂${n?'\n— '+n:''}`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a heartfelt Birthday letter from ${sender||'your child'} to their father${name?' named '+name:''}. Tone: ${tone||'grateful, warm and emotional'}. 3-4 sentences. Return ONLY the letter body.`
-  },
-  mom: {
-    photosHeading:'For the woman who raised me',
-    photoCaptions:['You gave me everything 🌸','My first home was you 🏠','I learned love from watching you 💕','Always my safe place 🌺','Everything good in me — that\'s you ✨'],
-    songHeading:'A song for Maa 🎵',songPlaceholder:'Search a song for Mom...',
-    letterTone:'warm and grateful',
-    letterPlaceholder:'Dear Mom,\n\nThere are no words for what you mean to me...',
-    signOff: n=>`Your child, forever 🌸${n?'\n— '+n:''}`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a heartfelt Birthday letter from ${sender||'your child'} to their mother${name?' named '+name:''}. Tone: ${tone||'warm, emotional and grateful'}. 3-4 sentences. Return ONLY the letter body.`
-  },
-  son: {
-    photosHeading:'My little champion',
-    photoCaptions:['Where did time go 🥹','Growing up so fast 🌟','This face, always ❤️','My proudest moment 💪','Forever my baby 🎂'],
-    songHeading:'A song for my son 🎵',songPlaceholder:'Search a song for him...',
-    letterTone:'proud and loving',
-    letterPlaceholder:'My dear son,\n\nWatching you grow has been my greatest joy...',
-    signOff: n=>`With all my love, ${n||'your parent'} 🎂`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a heartfelt Birthday letter from parent ${sender||'mom/dad'} to their son${name?' named '+name:''}. Tone: ${tone||'proud, warm and deeply loving'}. 3-4 sentences. Return ONLY the letter body.`
-  },
-  daughter: {
-    photosHeading:'My heart, always',
-    photoCaptions:['My sunshine, every single day ☀️','You make everything brighter 🌸','Look at you now 🥹','My proudest achievement 💕','Forever my little girl 🎀'],
-    songHeading:'A song for my daughter 🎵',songPlaceholder:'Search a song for her...',
-    letterTone:'proud and deeply loving',
-    letterPlaceholder:'My dearest,\n\nYou have no idea how much light you bring...',
-    signOff: n=>`With all my love, ${n||'your parent'} 🌸`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a heartfelt Birthday letter from parent ${sender||'mom/dad'} to their daughter${name?' named '+name:''}. Tone: ${tone||'proud, warm and deeply loving'}. 3-4 sentences. Return ONLY the letter body.`
-  },
-  bff: {
-    photosHeading:'Us being us',
-    photoCaptions:['No explanation needed 😂','Remember this? 🤣','My person 💛','We\'ve been through it all ✨','Forever chaotic, forever us 💫'],
-    songHeading:'Our song 🎵',songPlaceholder:'Search a song for your bestie...',
-    letterTone:'funny and nostalgic',
-    letterPlaceholder:'Hey you,\n\nAnother year of surviving each other...',
-    signOff: n=>`Your person always 💛${n?'\n— '+n:''}`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a fun birthday letter from best friend ${sender||'me'} to best friend${name?' '+name:''}. Tone: ${tone||'funny, nostalgic and chaotic'}. 3-4 sentences. Return ONLY the letter body.`
-  },
-  partner: {
-    photosHeading:'Every moment with you',
-    photoCaptions:['Still my favourite person 💕','This one always makes me smile 🌙','Us, always 🌟','My whole world 💫','I\'d choose you every time ❤️'],
-    songHeading:'Our song 🎵',songPlaceholder:'Search a romantic song...',
-    letterTone:'romantic and deep',
-    letterPlaceholder:'My love,\n\nEvery year with you feels like a gift...',
-    signOff: n=>`Yours completely 💕${n?'\n— '+n:''}`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a romantic Birthday letter from ${sender||'your partner'} to their love${name?' named '+name:''}. Tone: ${tone||'romantic, deep and heartfelt'}. 3-4 sentences. Return ONLY the letter body.`
-  },
-  sister: {
-    photosHeading:'My first best friend',
-    photoCaptions:['Growing up with you 💛','My partner in crime 😜','This face 🥰','Remember when? 😂','Always there for me 🌸'],
-    songHeading:'A song for my sis 🎵',songPlaceholder:'Search a song for sister...',
-    letterTone:'teasing and loving',
-    letterPlaceholder:'Hey didi/babu,\n\nOkay fine, I love you...',
-    signOff: n=>`Your annoying sibling 😜${n?'\n— '+n:''}`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a birthday letter from ${sender||'sibling'} to their sister${name?' named '+name:''}. Tone: ${tone||'teasing, loving and fun'}. 3-4 sentences. Return ONLY the letter body.`
-  },
-  brother: {
-    photosHeading:'My bro, always',
-    photoCaptions:['The memories we\'ve made 💪','My ride or die 🔥','This one gets me every time 😄','Look how far we\'ve come 🌟','Brothers forever 🤝'],
-    songHeading:'A song for my bro 🎵',songPlaceholder:'Search a song for brother...',
-    letterTone:'cool and heartfelt',
-    letterPlaceholder:'Bro,\n\nNot gonna get sappy but...',
-    signOff: n=>`Your bro, always 🤝${n?'\n— '+n:''}`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a birthday letter from ${sender||'sibling'} to their brother${name?' named '+name:''}. Tone: ${tone||'cool, brotherly and heartfelt'}. 3-4 sentences. Return ONLY the letter body.`
-  },
-  friend: {
-    photosHeading:'Good times together',
-    photoCaptions:['One of the best memories 😄','That time we... 😂','You always make it fun ✨','Glad I have you 💙','More memories to come 🥂'],
-    songHeading:'A fun song for you 🎵',songPlaceholder:'Search a song...',
-    letterTone:'warm and cheerful',
-    letterPlaceholder:'Hey!\n\nHappy birthday to one of my favourite people...',
-    signOff: n=>`Cheers! ${n||''}🥂`,
-    aiLetterPrompt:(name,sender,tone)=>`Write a warm birthday letter from ${sender||'a friend'} to their friend${name?' named '+name:''}. Tone: ${tone||'warm, cheerful and genuine'}. 3-4 sentences. Return ONLY the letter body.`
-  }
-};
-
 const DEFAULT_CONTENT = {
   photosHeading:'Moments with you',
   photoCaptions:['The memory I keep coming back to 💫','You, in your element ✨','This one always makes me smile 😊','Look how far you\'ve come 🌟','My favourite version of you 💕'],
@@ -614,26 +516,9 @@ const DEFAULT_CONTENT = {
   aiLetterPrompt:(name,sender,tone)=>`Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone||'warm and heartfelt'}. Return ONLY the letter body — no greeting, no sign off.`
 };
 
-function selectRelation(rel) {
-  selectedRelation = rel;
-  document.querySelectorAll('.relation-chip').forEach(c => c.classList.toggle('selected', c.dataset.rel === rel));
-  const c = RELATION_CONTENT[rel]; if (!c) return;
-  document.getElementById('photosHeading').value = c.photosHeading;
-  document.getElementById('songScreenTitle').value = c.songHeading;
-  document.getElementById('ytSearchInput').placeholder = c.songPlaceholder;
-  document.getElementById('letterToneHeader').value = c.letterTone;
-  document.getElementById('cMsg').placeholder = c.letterPlaceholder;
-  if (!signManuallyEdited) {
-    const sender = document.getElementById('cSender')?.value.trim()||'';
-    document.getElementById('cSign').value = sender ? c.signOff(sender) : '';
-  }
-  photoCaptions = [...c.photoCaptions];
-  buildPhotoSlots(c.photoCaptions);
-  saveDraft();
-}
 
 function getSignOff(senderName) {
-  const c = selectedRelation ? RELATION_CONTENT[selectedRelation] : DEFAULT_CONTENT;
+  const c = DEFAULT_CONTENT;
   return c ? c.signOff(senderName) : `With love, ${senderName} 🎂`;
 }
 
@@ -888,35 +773,16 @@ async function runAILetter() {
   const detectedLang = langs.find(l => toneInput.toLowerCase().includes(l));
   let langNote = '';
   if (detectedLang) { const ln = detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1); langNote = ` CRITICAL: Write ENTIRE letter in ${ln} script only.`; }
-  const c = selectedRelation ? RELATION_CONTENT[selectedRelation] : DEFAULT_CONTENT;
-  const prompt = c.aiLetterPrompt(name, sender, toneInput) + langNote + variationHint;
+  const c = DEFAULT_CONTENT;
+  const relation = (document.getElementById('relationInput')?.value||'').trim();
+  const relationHint = relation ? ` The recipient is the sender's ${relation}.` : '';
+  const prompt = c.aiLetterPrompt(name, sender, toneInput) + relationHint + langNote + variationHint;
   const text = await callClaude(prompt);
   if (text) { const el = document.getElementById('cMsg'); if (el) el.value = stripMarkdown(text); }
   btn.disabled = false; loading.classList.remove('show');
   btn.textContent = 'Again ✨';
 }
 
-async function suggestSongs() {
-  const name = document.getElementById('cName').value.trim() || '';
-  const c = selectedRelation ? RELATION_CONTENT[selectedRelation] : DEFAULT_CONTENT;
-  const prompt = c.aiSongSuggestions(name);
-  const resultsEl = document.getElementById('songAiResults');
-  const loading = document.getElementById('songAiLoading');
-  if (!resultsEl || !loading) return;
-  resultsEl.innerHTML = ''; loading.classList.add('show');
-  const text = await callClaude(prompt);
-  loading.classList.remove('show');
-  try {
-    const songs = JSON.parse(text.replace(/```json|```/g,'').trim());
-    songs.forEach(s => {
-      const el = document.createElement('div');
-      el.style.cssText = 'display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.025);border:1px solid rgba(160,220,210,0.06);margin-bottom:5px;cursor:pointer;';
-      el.innerHTML = `<span style="font-size:1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.78rem;font-weight:500;color:rgba(224,240,238,0.78);">${s.name}</div><div style="font-size:0.64rem;color:rgba(160,220,210,0.27);">${s.artist}</div></div><span style="font-size:0.66rem;font-weight:600;color:rgba(20,160,140,0.6);">Search →</span>`;
-      el.onclick = () => { document.getElementById('ytSearchInput').value = s.name + ' ' + s.artist; searchSong(); };
-      resultsEl.appendChild(el);
-    });
-  } catch(e) { resultsEl.innerHTML = '<div style="font-size:0.74rem;opacity:0.32;padding:6px 0;">Could not fetch. Try again.</div>'; }
-}
 
 async function callClaude(prompt) {
   try {
@@ -1019,7 +885,7 @@ function saveDraft() {
       cMsg:document.getElementById('cMsg')?.value||'',
       cSign:document.getElementById('cSign')?.value||'',
       songSelectedName:document.getElementById('songSelectedName')?.textContent||'—',
-      selectedVideoId, selectedRelation, signManuallyEdited, uploadedUrls
+      selectedVideoId,
     }));
   } catch(e){}
 }
@@ -1030,9 +896,6 @@ function restoreDraft() {
     if (!d.cName && !d.cSender) return;
     const set = (id,val)=>{const el=document.getElementById(id);if(el&&val)el.value=val;};
     const setText = (id,val)=>{const el=document.getElementById(id);if(el&&val)el.textContent=val;};
-    if (d.selectedRelation) {
-      selectRelation(d.selectedRelation);
-    }
     set('cName',d.cName); set('cSender',d.cSender);
     set('photosHeading',d.photosHeading); set('songScreenTitle',d.songScreenTitle);
     set('letterToneHeader',d.letterToneHeader); set('cMsg',d.cMsg); set('cSign',d.cSign);
