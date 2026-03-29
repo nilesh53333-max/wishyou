@@ -915,31 +915,39 @@ function renderCard(d){
       cinChapter.textContent=`CHAPTER ${romanNums[i]||i+1}`;
       cinCounter.textContent=`${i+1} / ${n}`;
       cinCaption.classList.remove('visible');
+      cinPhoto.style.transition='opacity 0.5s ease';
+
+      function displayPhoto(){
+        cinPhoto.style.opacity='1';
+        // Restart Ken Burns
+        cinPhoto.style.animation='none';
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{cinPhoto.style.animation='';}));
+        cinCaption.textContent=captions[i];
+        setTimeout(()=>cinCaption.classList.add('visible'), animate?400:300);
+        isTransitioning=false;
+      }
+
+      function loadAndShow(){
+        cinPhoto.style.opacity='0';
+        // Set src
+        cinPhoto.src=photos[i];
+        // Handle both cached (complete) and uncached images
+        if(cinPhoto.complete && cinPhoto.naturalWidth>0){
+          setTimeout(displayPhoto, 50);
+        } else {
+          cinPhoto.onload=displayPhoto;
+          cinPhoto.onerror=displayPhoto; // show even if error
+        }
+      }
+
       if(animate){
         cinFade.classList.add('active');
         setTimeout(()=>{
-          cinPhoto.style.opacity='0';
-          cinPhoto.src=photos[i];
-          cinPhoto.onload=()=>{
-            cinPhoto.style.opacity='1';
-            // Restart Ken Burns by cloning
-            cinPhoto.style.animation='none';
-            requestAnimationFrame(()=>requestAnimationFrame(()=>{
-              cinPhoto.style.animation='';
-            }));
-          };
-          cinCaption.textContent=captions[i];
           cinFade.classList.remove('active');
-          setTimeout(()=>{cinCaption.classList.add('visible');},400);
-          isTransitioning=false;
+          loadAndShow();
         },360);
       } else {
-        cinPhoto.src=photos[i];
-        cinPhoto.style.opacity='0';
-        cinPhoto.style.transition='opacity 0.5s ease';
-        cinPhoto.onload=()=>{cinPhoto.style.opacity='1';};
-        cinCaption.textContent=captions[i];
-        setTimeout(()=>{cinCaption.classList.add('visible');},300);
+        loadAndShow();
       }
     }
 
