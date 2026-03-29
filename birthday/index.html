@@ -247,6 +247,19 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 
 /* Fake Chat theme */
 .sv-chat{background:linear-gradient(160deg,#1a1a2e,#16213e);}
+/* Constellation theme */
+.sv-constellation{background:#020818;position:relative;overflow:hidden;}
+.sv-constellation .sv-lbl{color:rgba(200,210,255,0.35);}
+.sv-constellation .sv-title{color:rgba(220,230,255,0.85);}
+.sv-constellation .sv-sub{color:rgba(200,210,255,0.4);}
+.sv-constellation .sv-dot{background:rgba(200,210,255,0.2);}
+.sv-constellation .sv-dot.sv-dot-active{background:rgba(200,210,255,0.8);}
+.sv-constellation .sv-name{color:rgba(220,230,255,0.9);}
+.sv-constellation .sv-desc{color:rgba(200,210,255,0.4);}
+.sv-constellation .sv-cta{color:rgba(200,210,255,0.6);}
+.sv-constellation .sv-overlay-info{background:linear-gradient(to top,rgba(2,8,24,0.97) 0%,rgba(2,8,24,0.7) 70%,transparent);}
+.sv-star-field{position:absolute;inset:0;pointer-events:none;}
+.sv-star{position:absolute;border-radius:50%;background:white;}
 .sv-chat .sv-lbl{color:rgba(37,211,102,0.5);}
 .sv-chat .sv-title{color:rgba(255,255,255,0.85);}
 .sv-chat .sv-sub{color:rgba(255,255,255,0.35);}
@@ -507,6 +520,16 @@ const BIRTHDAY_STYLES = [
     defaultMemoriesHeading:'Moments with you',
     receiverUrl: id => `https://wishyou.ai/birthday/fakechat.html?card=${id}`,
     shareMsg: (n,s,l) => `💬 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' sent you a surprise 💌\n\n':'Someone sent you a surprise 💌\n\n'}👆 Open:\n${l}`
+  },
+  {
+    id:'constellation', name:'⭐ Constellation',
+    desc:'Magical & unique · Tap stars to reveal memories · Shooting star reveal',
+    previewEmoji:'⭐',
+    cardType:'birthday-constellation',
+    defaultSongTitle:'A song from the stars 🎵',
+    defaultMemoriesHeading:'Your Constellation',
+    receiverUrl: id => `https://wishyou.ai/birthday/constellation.html?card=${id}`,
+    shareMsg: (n,s,l) => `⭐ *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a constellation ✦\n\n':'Someone made you a constellation ✦\n\n'}Tap each star to reveal your memories 🌟\n\n👆 Open:\n${l}`
   }
 ];
 
@@ -618,6 +641,15 @@ function buildStylesList() {
         `<div class="sv-lbl">Song Note</div><span class="sv-emoji">🎵</span><div class="sv-sub">A golden note with your song inside</div>`,
         `<div class="sv-lbl">Letter Note</div><span class="sv-emoji">💌</span><div class="sv-sub">Fold out the handwritten letter</div>`,
         `<div class="sv-lbl">All Opened</div><span class="sv-emoji">🫙</span><div class="sv-sub" style="font-style:italic;">"That's everything I wanted to say."</div>`
+      ]
+    },
+    constellation: {
+      theme:'sv-constellation',
+      slides:[
+        `<div class="sv-star-field" id="sv-stars-1"></div><div class="sv-lbl">Dark Sky Opens</div><span class="sv-emoji">✦</span><div class="sv-sub">Each photo becomes a star</div>`,
+        `<div class="sv-star-field"></div><div class="sv-lbl">Tap a Star</div><span class="sv-emoji" style="animation:none;font-size:1.4rem;">⭐</span><div class="sv-sub" style="margin-top:6px;">It glows & reveals a memory</div>`,
+        `<div class="sv-lbl">All Stars Explored</div><span class="sv-emoji">🌟</span><div class="sv-sub">A shooting star crosses the sky</div>`,
+        `<div class="sv-lbl">Song & Letter</div><span class="sv-emoji">✦</span><div class="sv-sub">Written in light, just for you</div>`
       ]
     },
     fakechat: {
