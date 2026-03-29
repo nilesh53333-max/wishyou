@@ -165,21 +165,23 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .rv-sec-hdr{padding:52px 24px 10px;text-align:center;flex-shrink:0;}
 .rv-sec-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#111;}
 
-/* ── Retro stacked photo cards ── */
+/* ── Retro COMIC FLIP animation ── */
 .pol-stack-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:0 8px;}
-.pol-stack{position:relative;width:calc(100vw - 40px);max-width:360px;height:calc((100vw - 40px) * 1.05);max-height:390px;cursor:pointer;touch-action:manipulation;margin-bottom:8px;}
-.pol-card{position:absolute;width:calc(100vw - 40px);max-width:360px;background:white;border:3px solid #111;box-shadow:5px 5px 0 #111;padding:5px 5px 0;transition:transform 0.75s cubic-bezier(.4,0,.2,1),opacity 0.6s ease;transform-origin:bottom center;will-change:transform,opacity;left:50%;}
-.pol-card img{width:100%;height:calc((100vw - 50px) * 0.88);max-height:310px;object-fit:cover;object-position:top center;display:block;}
-.pol-caption-wrap{height:42px;display:flex;align-items:center;justify-content:center;position:relative;background:#d90429;border-top:2px solid #111;}
-.pol-caption{font-family:'Fredoka One',cursive;font-size:0.85rem;color:white;text-align:center;letter-spacing:0.04em;padding:0 10px;}
-.pol-tap-hint{position:absolute;right:8px;font-size:0.5rem;font-weight:700;color:rgba(255,255,255,0.6);letter-spacing:0.04em;pointer-events:none;}
+.pol-flip-stage{width:calc(100vw - 40px);max-width:360px;perspective:1000px;margin-bottom:10px;}
+.pol-flip-card{width:100%;position:relative;transform-style:preserve-3d;transition:transform 0.65s cubic-bezier(.4,0,.2,1);cursor:pointer;}
+.pol-flip-card.flipping{transform:rotateY(90deg);}
+.pol-flip-card.flip-in{transform:rotateY(0deg);}
+.pol-face{width:100%;background:white;border:3px solid #111;box-shadow:5px 5px 0 #111;padding:5px 5px 0;backface-visibility:hidden;}
+.pol-face img{width:100%;height:calc((100vw - 50px) * 0.88);max-height:310px;object-fit:cover;object-position:top center;display:block;}
+.pol-caption-wrap{height:44px;display:flex;align-items:center;justify-content:center;position:relative;background:#d90429;border-top:2px solid #111;}
+.pol-caption{font-family:'Fredoka One',cursive;font-size:0.88rem;color:white;text-align:center;letter-spacing:0.04em;padding:0 10px;}
+.pol-tap-hint{position:absolute;right:8px;font-size:0.5rem;font-weight:700;color:rgba(255,255,255,0.65);letter-spacing:0.04em;pointer-events:none;}
+/* Comic panel number badge */
+.pol-panel-num{position:absolute;top:-2px;left:-2px;width:28px;height:28px;background:#FFE135;border:2px solid #111;font-family:'Fredoka One',cursive;font-size:0.75rem;color:#111;display:flex;align-items:center;justify-content:center;z-index:10;}
 .pol-counter{font-family:'Fredoka One',cursive;font-size:0.72rem;color:#111;letter-spacing:0.1em;text-align:center;margin-bottom:4px;}
-@keyframes arcToBack{
-  0%  {transform:translateX(-50%) translateY(0px)   rotate(0deg)  scale(1);    opacity:1;}
-  38% {transform:translateX(22%)  translateY(-12px) rotate(14deg) scale(0.96); opacity:0.85;}
-  100%{transform:translateX(-51%) translateY(29px)  rotate(-1deg) scale(0.88); opacity:0.45;}
-}
-.pol-card.arc-back{animation:arcToBack 0.75s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none;z-index:0 !important;}
+/* FLASH effect on flip */
+.flip-flash{position:fixed;inset:0;background:white;pointer-events:none;opacity:0;z-index:999;transition:opacity 0.08s ease;}
+.flip-flash.flash{opacity:0.6;}
 .no-photo{text-align:center;padding:40px 20px;font-family:'Fredoka One',cursive;color:rgba(0,0,0,0.35);}
 .rv-nav-row{display:flex;gap:8px;padding:16px 16px max(20px,env(safe-area-inset-bottom));margin-top:4px;}
 .rv-next-btn{flex:1;background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:14px;font-family:'Fredoka One',cursive;font-size:0.9rem;cursor:pointer;touch-action:manipulation;box-shadow:4px 4px 0 #111;transition:transform 0.2s;}
@@ -407,15 +409,25 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
     <div class="rv-sec-title" id="rvPhotoTitle">📸 Your Memories!</div>
   </div>
   <div class="pol-stack-scene">
-    <div class="pol-stack" id="polStack" onclick="advanceStack()"></div>
+    <div class="pol-flip-stage">
+      <div class="pol-flip-card" id="polFlipCard" onclick="flipToNext()">
+        <div class="pol-face" id="polFace">
+          <div class="pol-panel-num" id="polPanelNum">1</div>
+          <img id="polImg" src="" alt="" style="opacity:0;transition:opacity 0.3s ease;">
+          <div class="pol-caption-wrap">
+            <div class="pol-caption" id="polCaption"></div>
+            <div class="pol-tap-hint">TAP TO FLIP ✨</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="pol-counter" id="polCounter"></div>
   </div>
+  <div class="flip-flash" id="flipFlash"></div>
   <div class="rv-nav-row">
     <button class="rv-next-btn" onclick="goTo('rv-song')">Next → Party Anthem 🎵</button>
   </div>
 </div>
-
-<!-- Lightbox removed — replaced by stack -->
 
 <div class="screen" id="rv-song">
   <button class="rv-back light" onclick="goTo('rv-photos')">←</button>
@@ -977,70 +989,66 @@ function renderCard(d){
   document.getElementById('rvPhotoTitle').textContent=heading;
   const sst=document.getElementById('rvSongScreenTitle');
   if(sst)sst.textContent=d.songScreenTitle||'Party Anthem 🎵';
-  // Photos — stacked card animation (retro style)
-  const stack=document.getElementById('polStack');
-  stack.innerHTML='';
+  // Photos — comic panel FLIP animation
   if(d.photos&&d.photos.length>0){
     const photos=d.photos;
     const customCaptions=d.photoCaptions||[];
     const retroCaps=['POW! That\'s a vibe 💥','WOW, look at you! ⭐','YAY for this memory! 🎉','ZAP! Pure gold ✨','BOOM! Best one yet 🎊'];
     const captions=photos.map((_,i)=>customCaptions[i]||retroCaps[i%retroCaps.length]);
     const n=photos.length;
-    const POSITIONS=[
-      ['-50%','0px','0deg',1,1],
-      ['-48%','10px','3deg',0.97,0.88],
-      ['-52%','18px','-2.5deg',0.94,0.76],
-      ['-49%','24px','1.5deg',0.91,0.62],
-      ['-51%','29px','-1deg',0.88,0.48],
-    ];
-    let frontIdx=0,isAnimating=false;
+    let idx=0, isFlipping=false;
+
     // Preload all images
     photos.forEach(url=>{const img=new Image();img.src=url;});
-    const cards=photos.map((url,i)=>{
-      const card=document.createElement('div');
-      card.className='pol-card';
-      const imgStyle=i===0?'style="opacity:0;transition:opacity 0.4s ease;"':'';
-      card.innerHTML=`<img src="${url}" alt="" ${imgStyle} onload="if(this.style.opacity==='0'){this.style.opacity='1';}" onerror="this.parentNode.style.display='none'"><div class="pol-caption-wrap"><div class="pol-caption">${captions[i]}</div>${i===0?'<div class="pol-tap-hint">TAP TO SHUFFLE ✨</div>':''}</div>`;
-      stack.appendChild(card);
-      return card;
-    });
-    function applyPositions(){
-      cards.forEach((card,i)=>{
-        const dist=(i-frontIdx+n)%n;
-        const[tx,ty,rot,sc,op]=POSITIONS[Math.min(dist,POSITIONS.length-1)];
-        card.style.transform=`translateX(${tx}) translateY(${ty}) rotate(${rot}) scale(${sc})`;
-        card.style.opacity=op;
-        card.style.zIndex=n-dist;
-        card.style.boxShadow=dist===0?'6px 6px 0 #111':'3px 3px 0 #111';
-        const hint=card.querySelector('.pol-tap-hint');
-        if(hint)hint.style.display=dist===0?'block':'none';
-      });
-      document.getElementById('polCounter').textContent=`${(frontIdx%n)+1} / ${n}`;
+
+    const flipCard=document.getElementById('polFlipCard');
+    const polImg=document.getElementById('polImg');
+    const polCaption=document.getElementById('polCaption');
+    const polCounter=document.getElementById('polCounter');
+    const polPanelNum=document.getElementById('polPanelNum');
+    const flash=document.getElementById('flipFlash');
+
+    function showPhoto(i, animate){
+      polPanelNum.textContent=i+1;
+      polCounter.textContent=`${i+1} / ${n}`;
+      polCaption.textContent=captions[i];
+      if(animate){
+        // Phase 1: flip out
+        flipCard.classList.add('flipping');
+        flash.classList.add('flash');
+        setTimeout(()=>{
+          // Swap image at midpoint
+          polImg.style.opacity='0';
+          polImg.src=photos[i];
+          polImg.onload=()=>{polImg.style.opacity='1';};
+          flash.classList.remove('flash');
+          // Phase 2: flip in
+          flipCard.classList.remove('flipping');
+          flipCard.classList.add('flip-in');
+          setTimeout(()=>{
+            flipCard.classList.remove('flip-in');
+            isFlipping=false;
+          },350);
+        },340);
+      } else {
+        polImg.src=photos[i];
+        polImg.onload=()=>{polImg.style.opacity='1';};
+      }
     }
-    window.advanceStack=function(){
-      if(isAnimating||n<2)return;
-      isAnimating=true;
-      const frontCard=cards[frontIdx];
-      frontCard.style.zIndex=-1;
-      frontCard.classList.add('arc-back');
-      frontIdx=(frontIdx+1)%n;
-      setTimeout(()=>applyPositions(),60);
-      setTimeout(()=>{
-        frontCard.classList.remove('arc-back');
-        frontCard.style.transition='none';
-        const[tx,ty,rot,sc,op]=POSITIONS[n-1];
-        frontCard.style.transform=`translateX(${tx}) translateY(${ty}) rotate(${rot}) scale(${sc})`;
-        frontCard.style.opacity=op;
-        frontCard.style.zIndex=1;
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          frontCard.style.transition='';
-          applyPositions();
-          isAnimating=false;
-        }));
-      },700);
+
+    window.flipToNext=function(){
+      if(isFlipping||n<2)return;
+      isFlipping=true;
+      idx=(idx+1)%n;
+      showPhoto(idx, true);
     };
-    applyPositions();
-  }else{stack.innerHTML='<div class="no-photo">🎊 A card made with love!</div>';}
+
+    // Init — show first photo
+    showPhoto(0, false);
+
+  }else{
+    document.getElementById('polFlipCard').innerHTML='<div class="pol-face no-photo">🎊 A card made with love!</div>';
+  }
   // Song — cassette label
   const sn=d.songName||'';
   if(sn&&sn!=='—'){
