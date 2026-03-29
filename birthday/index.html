@@ -78,40 +78,26 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .regular-input::placeholder{color:rgba(160,220,210,0.18);font-style:italic;}
 .regular-input:focus{border-color:rgba(20,160,140,0.3);background:rgba(255,255,255,0.05);}
 
-/* Photos — stacked card animation */
-.photo-stack-wrap{position:relative;width:100%;margin-bottom:14px;}
-.photo-stack{position:relative;width:100%;height:220px;margin-bottom:12px;}
-.photo-card{position:absolute;inset:0;border-radius:16px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.45s cubic-bezier(.4,0,.2,1),opacity 0.45s ease,box-shadow 0.45s ease;will-change:transform;}
-.photo-card.pc-front{transform:translateY(0) scale(1) rotate(0deg);z-index:5;box-shadow:0 12px 40px rgba(0,0,0,0.45);opacity:1;}
-.photo-card.pc-back1{transform:translateY(8px) scale(0.96) rotate(1.5deg);z-index:4;box-shadow:0 6px 20px rgba(0,0,0,0.3);opacity:0.85;}
-.photo-card.pc-back2{transform:translateY(14px) scale(0.93) rotate(-1deg);z-index:3;box-shadow:0 4px 14px rgba(0,0,0,0.22);opacity:0.7;}
-.photo-card.pc-back3{transform:translateY(19px) scale(0.90) rotate(0.5deg);z-index:2;opacity:0.55;}
-.photo-card.pc-back4{transform:translateY(23px) scale(0.87) rotate(-0.5deg);z-index:1;opacity:0.4;}
-.photo-card.pc-exit{transform:translateX(-110%) rotate(-12deg) scale(0.9);opacity:0;z-index:6;}
-.photo-card img{width:100%;height:100%;object-fit:cover;display:block;}
-.photo-card-empty{background:rgba(20,160,140,0.04);border:1.5px dashed rgba(20,160,140,0.15);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:rgba(160,220,210,0.25);}
-.photo-card-empty span{font-size:1.6rem;}
-.photo-card-empty small{font-size:0.62rem;letter-spacing:0.05em;}
-.photo-card-del{position:absolute;top:10px;right:10px;width:26px;height:26px;background:rgba(240,192,64,0.9);color:#061818;border-radius:50%;border:none;font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;font-weight:800;}
-.photo-card-counter{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);border-radius:20px;padding:3px 10px;font-size:0.6rem;color:rgba(255,255,255,0.7);z-index:10;font-weight:600;letter-spacing:0.05em;}
-.up-dot{position:absolute;top:10px;left:10px;width:9px;height:9px;border-radius:50%;display:none;z-index:10;}
-.up-dot.uploading{display:block;background:rgba(240,192,64,0.9);animation:dotPulse 0.8s ease-in-out infinite;}
+/* Photos */
+.photos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:6px;}
+.photo-slot{aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;background:rgba(20,160,140,0.04);border:1.5px dashed rgba(20,160,140,0.15);color:rgba(160,220,210,0.2);font-size:1.1rem;}
+.photo-slot:active{background:rgba(20,160,140,0.09);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.photo-del{position:absolute;top:2px;right:2px;width:17px;height:17px;background:rgba(240,192,64,0.9);color:#061818;border-radius:50%;border:none;font-size:0.52rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;font-weight:800;}
+.upind{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(20,160,140,0.15);overflow:hidden;}
+.upbar{height:100%;background:rgba(20,160,140,0.75);width:0%;transition:width 0.3s;}
+.up-dot{position:absolute;top:3px;left:3px;width:7px;height:7px;border-radius:50%;display:none;}
+.up-dot.uploading{display:block;background:rgba(240,192,64,0.8);animation:dotPulse 0.8s ease-in-out infinite;}
 .up-dot.done{display:block;background:rgba(20,160,140,0.9);}
 @keyframes dotPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
-/* Caption below stack */
-.stack-caption{font-size:0.72rem;font-style:italic;color:rgba(160,220,210,0.5);text-align:center;margin-bottom:4px;min-height:1.2em;transition:opacity 0.3s;}
-.stack-caption input{background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.12);outline:none;font-size:0.72rem;font-style:italic;color:rgba(160,220,210,0.6);text-align:center;width:100%;caret-color:#f0c040;font-family:'DM Sans',sans-serif;padding:2px 4px;}
-.stack-caption input::placeholder{color:rgba(160,220,210,0.2);}
-.stack-caption input:focus{border-bottom-color:rgba(20,160,140,0.4);}
-/* Swipe hint */
-.stack-hint{font-size:0.6rem;color:rgba(160,220,210,0.2);text-align:center;margin-bottom:8px;}
-/* Mini thumbnails row */
-.photo-thumbs{display:flex;gap:6px;margin-bottom:6px;}
-.photo-thumb{width:44px;height:44px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color 0.2s,transform 0.15s;flex-shrink:0;background:rgba(20,160,140,0.04);border:1.5px dashed rgba(20,160,140,0.15);display:flex;align-items:center;justify-content:center;color:rgba(160,220,210,0.2);font-size:0.9rem;position:relative;}
-.photo-thumb.active-thumb{border-color:rgba(20,160,140,0.6);}
-.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
 .photo-hint{font-size:0.62rem;color:rgba(160,220,210,0.2);margin-bottom:4px;}
 .photo-hint .hl{color:rgba(20,160,140,0.55);font-weight:600;}
+.slot-plus{font-size:1.1rem;color:rgba(160,220,210,0.2);}
+/* Editable caption below each slot */
+.cap-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(160,220,210,0.08);outline:none;font-size:0.6rem;font-style:italic;color:rgba(160,220,210,0.45);text-align:center;padding:3px 2px 4px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;}
+.cap-input::placeholder{color:rgba(160,220,210,0.18);}
+.cap-input:focus{border-bottom-color:rgba(20,160,140,0.35);color:rgba(160,220,210,0.75);}
+.photo-caption-row{margin-bottom:8px;}
 
 /* Song */
 .song-search-row{display:flex;gap:7px;margin-bottom:8px;}
@@ -356,12 +342,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
         </div>
         <span class="sec-hdr-line"></span>
       </div>
-      <div class="photo-stack-wrap">
-        <div class="photo-stack" id="photoStack"></div>
-        <div class="stack-caption"><input id="stackCaption" maxlength="60" placeholder="Add a caption..."></div>
-        <div class="stack-hint">👆 Tap photo to go to next · tap thumbnail to jump</div>
-        <div class="photo-thumbs" id="photoThumbs"></div>
-      </div>
+      <div class="photos-grid" id="photosGrid"></div>
       <div class="photo-hint">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
       <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
 
@@ -647,7 +628,7 @@ function selectRelation(rel) {
     document.getElementById('cSign').value = sender ? c.signOff(sender) : '';
   }
   photoCaptions = [...c.photoCaptions];
-  buildPhotoStack();
+  buildPhotoSlots(c.photoCaptions);
   saveDraft();
 }
 
@@ -776,111 +757,36 @@ function buildStylesList() {
   });
 }
 
-// ── PHOTOS — STACKED CARD SYSTEM ──
+// ── PHOTOS ──
 const DEFAULT_CAPTIONS = ['The memory I keep coming back to 💫','You, in your element ✨','This one always makes me smile 😊','Look how far you\'ve come 🌟','My favourite version of you 💕'];
 let photoCaptions = [...DEFAULT_CAPTIONS];
-let stackFrontIdx = 0; // which photo is currently on top
 
-function buildPhotoStack() {
-  const stack = document.getElementById('photoStack');
-  const thumbs = document.getElementById('photoThumbs');
-  if (!stack || !thumbs) return;
+function buildPhotoSlots(captions) {
+  captions = captions || photoCaptions;
+  photoCaptions = [...captions];
+  const grid = document.getElementById('photosGrid');
+  grid.innerHTML = '';
   photos = photos.length === 5 ? photos : new Array(5).fill(null);
-  stack.innerHTML = '';
-  thumbs.innerHTML = '';
-
-  // Build 5 card layers — front to back
-  for (let i = 4; i >= 0; i--) {
-    const card = document.createElement('div');
-    card.className = 'photo-card photo-card-empty';
-    card.id = 'pcard' + i;
+  captions.forEach((cap, i) => {
+    // Slot
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot';
+    slot.id = 'slot' + i;
     if (photos[i]) {
-      card.classList.remove('photo-card-empty');
-      card.innerHTML = `<img src="${photos[i]}"><div class="up-dot ${uploadedUrls[i]?'done':'uploading'}" id="upd${i}"></div><button class="photo-card-del" onclick="removeStackPhoto(event,${i})">✕</button>`;
+      slot.innerHTML = `<img src="${photos[i]}"><div class="up-dot ${uploadedUrls[i]?'done':'uploading'}" id="upd${i}"></div><button class="photo-del" onclick="removePhoto(event,${i})">✕</button>`;
     } else {
-      card.innerHTML = `<span>📷</span><small>Tap to add</small>`;
-      card.onclick = () => triggerUpload(i);
+      slot.innerHTML = '<span class="slot-plus">+</span>';
+      slot.onclick = () => triggerUpload(i);
     }
-    stack.appendChild(card);
-  }
+    grid.appendChild(slot);
 
-  // Build thumbnails
-  for (let i = 0; i < 5; i++) {
-    const th = document.createElement('div');
-    th.className = 'photo-thumb' + (i === stackFrontIdx ? ' active-thumb' : '');
-    th.id = 'pthumb' + i;
-    if (photos[i]) {
-      th.innerHTML = `<img src="${photos[i]}">`;
-    } else {
-      th.textContent = '+';
-      th.onclick = () => triggerUpload(i);
-    }
-    th.onclick = () => jumpToCard(i);
-    thumbs.appendChild(th);
-  }
-
-  // Counter in front card
-  const frontCard = document.getElementById('pcard' + stackFrontIdx);
-  if (frontCard && photos[stackFrontIdx]) {
-    const counter = document.createElement('div');
-    counter.className = 'photo-card-counter';
-    counter.id = 'stackCounter';
-    counter.textContent = `${stackFrontIdx + 1} / 5`;
-    frontCard.appendChild(counter);
-    // Tap front card to advance
-    frontCard.onclick = () => advanceStack();
-  } else if (frontCard && !photos[stackFrontIdx]) {
-    frontCard.onclick = () => triggerUpload(stackFrontIdx);
-  }
-
-  applyStackPositions();
-  updateStackCaption();
+    // Editable caption below slot
+    const capRow = document.createElement('div');
+    capRow.className = 'photo-caption-row';
+    capRow.innerHTML = `<input class="cap-input" id="cap${i}" value="${cap.replace(/"/g,'&quot;')}" maxlength="60" placeholder="Caption..." oninput="photoCaptions[${i}]=this.value">`;
+    grid.appendChild(capRow);
+  });
   updateUploadCount();
-}
-
-function applyStackPositions() {
-  const classes = ['pc-front','pc-back1','pc-back2','pc-back3','pc-back4'];
-  for (let i = 0; i < 5; i++) {
-    const card = document.getElementById('pcard' + i);
-    if (!card) continue;
-    card.classList.remove('pc-front','pc-back1','pc-back2','pc-back3','pc-back4','pc-exit');
-    // Distance from front
-    let dist = (i - stackFrontIdx + 5) % 5;
-    card.classList.add(classes[dist]);
-  }
-  // Update thumbnails
-  for (let i = 0; i < 5; i++) {
-    const th = document.getElementById('pthumb' + i);
-    if (th) th.classList.toggle('active-thumb', i === stackFrontIdx);
-  }
-  // Update counter
-  const counter = document.getElementById('stackCounter');
-  if (counter) counter.textContent = `${stackFrontIdx + 1} / 5`;
-}
-
-function advanceStack() {
-  const frontCard = document.getElementById('pcard' + stackFrontIdx);
-  if (frontCard) {
-    frontCard.classList.add('pc-exit');
-    setTimeout(() => { frontCard.classList.remove('pc-exit'); applyStackPositions(); }, 420);
-  }
-  stackFrontIdx = (stackFrontIdx + 1) % 5;
-  setTimeout(() => { applyStackPositions(); updateStackCaption(); }, 50);
-}
-
-function jumpToCard(idx) {
-  stackFrontIdx = idx;
-  applyStackPositions();
-  updateStackCaption();
-}
-
-function updateStackCaption() {
-  const input = document.getElementById('stackCaption');
-  if (!input) return;
-  input.value = photoCaptions[stackFrontIdx] || '';
-  input.placeholder = 'Add a caption...';
-  input.onchange = () => { photoCaptions[stackFrontIdx] = input.value; };
-  input.oninput = () => { photoCaptions[stackFrontIdx] = input.value; };
 }
 
 function triggerUpload(idx) {
@@ -897,9 +803,10 @@ async function handlePhotoUpload(input) {
     const file = files[f];
     const localUrl = URL.createObjectURL(file);
     photos[idx] = localUrl;
-    // Jump stack to this photo
-    stackFrontIdx = idx;
-    buildPhotoStack();
+    const slot = document.getElementById('slot' + idx);
+    slot.innerHTML = `<img src="${localUrl}"><div class="up-dot uploading" id="upd${idx}"></div><div class="upind"><div class="upbar" id="upb${idx}"></div></div><button class="photo-del" onclick="removePhoto(event,${idx})">✕</button>`;
+    slot.onclick = null;
+    updateUploadCount();
     uploadPhotoInBackground(file, idx);
   }
   input.value = '';
@@ -915,17 +822,21 @@ async function uploadPhotoInBackground(file, idx) {
       uploadedUrls[idx] = d.secure_url;
       const dot = document.getElementById('upd'+idx);
       if (dot) { dot.classList.remove('uploading'); dot.classList.add('done'); }
+      const bar = document.getElementById('upb'+idx);
+      if (bar) bar.style.width = '100%';
       updateUploadCount();
     }
   } catch(e) { console.error('Upload failed',e); }
 }
 
-function removeStackPhoto(e, idx) {
+function removePhoto(e, idx) {
   e.stopPropagation();
   photos[idx] = null;
   delete uploadedUrls[idx];
-  photoCaptions[idx] = DEFAULT_CAPTIONS[idx];
-  buildPhotoStack();
+  const slot = document.getElementById('slot'+idx);
+  slot.innerHTML = '<span class="slot-plus">+</span>';
+  slot.onclick = () => triggerUpload(idx);
+  updateUploadCount();
 }
 
 function updateUploadCount() {
@@ -1144,7 +1055,7 @@ function clearDraft() { try{localStorage.removeItem(DRAFT_KEY);}catch(e){} }
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
   photos = new Array(5).fill(null);
-  buildPhotoStack();
+  buildPhotoSlots();
   restoreDraft();
 });
 </script>
