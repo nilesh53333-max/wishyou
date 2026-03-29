@@ -1041,6 +1041,10 @@ function removePhoto(e, idx) {
   e.stopPropagation();
   photos[idx] = null;
   delete uploadedUrls[idx];
+  // Clear caption for this slot too
+  photoCaptions[idx] = '';
+  const capEl = document.getElementById('cap' + idx);
+  if (capEl) { capEl.value = ''; autoResize(capEl); }
   const slot = document.getElementById('slot'+idx);
   slot.className = 'photo-slot';
   slot.draggable = false;
@@ -1148,6 +1152,11 @@ async function createCard(style) {
   }
 
   setP(70,'Saving your card...');
+  // Read caption textareas fresh — ensures manually cleared captions are saved as empty
+  for (let i = 0; i < 5; i++) {
+    const el = document.getElementById('cap' + i);
+    if (el) photoCaptions[i] = el.value;
+  }
   const now = Date.now();
   const cardData = {
     type: style.cardType,
