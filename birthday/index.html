@@ -331,7 +331,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
       </div>
 
       <label class="field-label" id="nameLabel">To — Their name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Priya" maxlength="30" autocomplete="off">
+      <input class="big-input" id="cName" placeholder="e.g. Priya" maxlength="30" autocomplete="off" oninput="saveDraft()">
       <div style="height:18px;"></div>
       <label class="field-label">From — Your name</label>
       <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;" oninput="if(!signManuallyEdited){const v=this.value.trim();document.getElementById('cSign').value=v?getSignOff(v):'';}">
@@ -389,7 +389,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
           <span>Writing your letter...</span>
         </div>
       </div>
-      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;Another year around the sun..." rows="5"></textarea>
+      <textarea class="letter-area" id="cMsg" oninput="saveDraft()" placeholder="Dear Priya,&#10;&#10;Another year around the sun..." rows="5"></textarea>
       <div class="sign-row">
         <span class="sign-lbl">Sign off</span>
         <input class="sign-input" id="cSign" placeholder="With love 🎂" maxlength="60" oninput="signManuallyEdited=true">
@@ -876,6 +876,7 @@ function getRelationContent(rel) {
 
 
 function onRelationChange(val) {
+  saveDraft();
   if (!val.trim()) return;
   const content = getRelationContent(val);
   // Update all fields
@@ -1242,44 +1243,85 @@ function closeShare() { document.getElementById('shareModal').classList.remove('
 const DRAFT_KEY = 'wishyou_birthday_draft';
 function saveDraft() {
   try {
+    // Read captions fresh from DOM
+    for (let i = 0; i < 5; i++) {
+      const el = document.getElementById('cap' + i);
+      if (el) photoCaptions[i] = el.value;
+    }
     localStorage.setItem(DRAFT_KEY, JSON.stringify({
-      screen:curScreen, cName:document.getElementById('cName')?.value||'',
-      cSender:document.getElementById('cSender')?.value||'',
-      photosHeading:document.getElementById('photosHeading')?.value||'',
-      songScreenTitle:document.getElementById('songScreenTitle')?.value||'',
-      letterToneHeader:document.getElementById('letterToneHeader')?.value||'',
-      cMsg:document.getElementById('cMsg')?.value||'',
-      cSign:document.getElementById('cSign')?.value||'',
-      songSelectedName:document.getElementById('songSelectedName')?.textContent||'—',
+      screen: curScreen,
+      cName: document.getElementById('cName')?.value||'',
+      cSender: document.getElementById('cSender')?.value||'',
+      relationInput: document.getElementById('relationInput')?.value||'',
+      photosHeading: document.getElementById('photosHeading')?.value||'',
+      songScreenTitle: document.getElementById('songScreenTitle')?.value||'',
+      letterToneHeader: document.getElementById('letterToneHeader')?.value||'',
+      cMsg: document.getElementById('cMsg')?.value||'',
+      cSign: document.getElementById('cSign')?.value||'',
+      signManuallyEdited,
+      songSelectedName: document.getElementById('songSelectedName')?.textContent||'—',
       selectedVideoId,
+      photoCaptions,
+      uploadedUrls,
     }));
   } catch(e){}
 }
+
 function restoreDraft() {
   try {
-    const raw = localStorage.getItem(DRAFT_KEY); if (!raw) return;
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return;
     const d = JSON.parse(raw);
     if (!d.cName && !d.cSender) return;
-    const set = (id,val)=>{const el=document.getElementById(id);if(el&&val)el.value=val;};
-    const setText = (id,val)=>{const el=document.getElementById(id);if(el&&val)el.textContent=val;};
-    set('cName',d.cName); set('cSender',d.cSender);
-    set('photosHeading',d.photosHeading); set('songScreenTitle',d.songScreenTitle);
-    set('letterToneHeader',d.letterToneHeader); set('cMsg',d.cMsg); set('cSign',d.cSign);
-    if (d.songSelectedName && d.songSelectedName!=='—') {
-      setText('songSelectedName',d.songSelectedName);
-      document.getElementById('songSelectedBox').style.display='block';
+
+    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined && val !== '') el.value = val; };
+    const setText = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+
+    set('cName', d.cName);
+    set('cSender', d.cSender);
+    set('relationInput', d.relationInput);
+    set('photosHeading', d.photosHeading);
+    set('songScreenTitle', d.songScreenTitle);
+    set('letterToneHeader', d.letterToneHeader);
+    set('cMsg', d.cMsg);
+    set('cSign', d.cSign);
+
+    if (d.signManuallyEdited) signManuallyEdited = true;
+    if (d.selectedVideoId) selectedVideoId = d.selectedVideoId;
+
+    if (d.songSelectedName && d.songSelectedName !== '—') {
+      setText('songSelectedName', d.songSelectedName);
+      const box = document.getElementById('songSelectedBox');
+      if (box) box.style.display = 'block';
     }
-    if (d.selectedVideoId) selectedVideoId=d.selectedVideoId;
-    if (d.signManuallyEdited) signManuallyEdited=true;
-    if (d.uploadedUrls) uploadedUrls=d.uploadedUrls;
-    if (d.screen && d.screen!=='p-info') {
-      if (d.screen==='p-style') buildStylesList();
-      const el=document.getElementById(d.screen);
-      if (el) { document.getElementById('p-info').classList.remove('active'); el.classList.add('active'); curScreen=d.screen; }
+
+    // Restore captions
+    if (d.photoCaptions) {
+      photoCaptions = d.photoCaptions;
     }
-  } catch(e){ console.warn('restoreDraft:',e); }
+
+    // Restore uploaded photo URLs — rebuild slots with Cloudinary URLs as previews
+    if (d.uploadedUrls && Object.keys(d.uploadedUrls).length > 0) {
+      uploadedUrls = d.uploadedUrls;
+      Object.entries(uploadedUrls).forEach(([idx, url]) => {
+        const i = parseInt(idx);
+        photos[i] = url; // use cloudinary URL as preview
+      });
+      buildPhotoSlots(photoCaptions);
+    }
+
+    // Restore screen
+    if (d.screen && d.screen !== 'p-info') {
+      if (d.screen === 'p-style') buildStylesList();
+      const el = document.getElementById(d.screen);
+      if (el) {
+        document.getElementById('p-info').classList.remove('active');
+        el.classList.add('active');
+        curScreen = d.screen;
+      }
+    }
+  } catch(e) { console.warn('restoreDraft:', e); }
 }
-function clearDraft() { try{localStorage.removeItem(DRAFT_KEY);}catch(e){} }
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', () => {
