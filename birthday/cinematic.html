@@ -345,6 +345,8 @@ const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
 
 let curScreen = '';
 
+let _showFirstScene = null; // set by renderCard, called by goTo when rv-photos opens
+
 function goTo(id, fromPreview=false){
   const prev=document.getElementById(curScreen);
   const next=document.getElementById(id);
@@ -352,7 +354,9 @@ function goTo(id, fromPreview=false){
   if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
   next.classList.add('active');
   curScreen=id;
-  if(fromPreview){
+  // Trigger first photo only when rv-photos is actually visible
+  if(id==='rv-photos' && _showFirstScene){
+    setTimeout(()=>{_showFirstScene();_showFirstScene=null;}, 100);
   }
   // Stop YouTube when leaving song screen
   if(id!=='rv-song'){
@@ -487,7 +491,8 @@ function renderCard(d){
       showScene(sceneIdx, true);
     };
 
-    showScene(0, false);
+    // Don't show now — screen is hidden. Store and trigger when rv-photos opens.
+    _showFirstScene = () => showScene(0, false);
   } else {
     cinStage.innerHTML='<div class="no-photo">🎬 A story made with love</div>';
   }
