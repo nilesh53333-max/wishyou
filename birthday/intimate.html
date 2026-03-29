@@ -582,7 +582,7 @@ function renderCard(d){
     const cards=photos.map((url,i)=>{
       const c=document.createElement('div');
       c.className='pol-card';
-      const cap=captions[i]||defCaps[i%defCaps.length];
+      const cap=captions[i]||'';
       c.innerHTML=`<img src="${url}" alt="" style="opacity:0;transition:opacity 0.4s ease;" onload="this.style.opacity='1'" onerror="this.parentNode.style.display='none'"><div class="pol-caption-wrap"><div class="pol-caption">${cap}</div>${i===0?'<div class="pol-tap-hint">tap to shuffle ✨</div>':''}</div>`;
       stack.appendChild(c);
       return c;
