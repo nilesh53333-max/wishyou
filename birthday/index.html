@@ -247,6 +247,18 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 
 /* Fake Chat theme */
 .sv-chat{background:linear-gradient(160deg,#1a1a2e,#16213e);}
+/* Newspaper theme */
+.sv-newspaper{background:#f5f0e8;position:relative;}
+.sv-newspaper .sv-lbl{color:#cc0000;font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;}
+.sv-newspaper .sv-title{font-family:'Playfair Display',Georgia,serif;font-size:0.85rem;font-weight:900;color:#1a1a1a;line-height:1.2;}
+.sv-newspaper .sv-sub{color:#555;font-size:0.6rem;font-style:italic;}
+.sv-newspaper .sv-dot{background:rgba(26,26,26,0.2);}
+.sv-newspaper .sv-dot.sv-dot-active{background:#cc0000;}
+.sv-newspaper .sv-name{color:#1a1a1a;}
+.sv-newspaper .sv-desc{color:#555;}
+.sv-newspaper .sv-cta{color:#cc0000;}
+.sv-newspaper .sv-overlay-info{background:linear-gradient(to top,rgba(245,240,232,0.97) 0%,rgba(245,240,232,0.7) 70%,transparent);}
+.sv-news-rule{width:100%;height:2px;background:#1a1a1a;margin:4px 0;}
 /* Constellation theme */
 .sv-constellation{background:#020818;position:relative;overflow:hidden;}
 .sv-constellation .sv-lbl{color:rgba(200,210,255,0.35);}
@@ -530,6 +542,16 @@ const BIRTHDAY_STYLES = [
     defaultMemoriesHeading:'Your Constellation',
     receiverUrl: id => `https://wishyou.ai/birthday/constellation.html?card=${id}`,
     shareMsg: (n,s,l) => `⭐ *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a constellation ✦\n\n':'Someone made you a constellation ✦\n\n'}Tap each star to reveal your memories 🌟\n\n👆 Open:\n${l}`
+  },
+  {
+    id:'newspaper', name:'📰 Breaking News',
+    desc:'Hilarious & unique · Fake newspaper front page · Indian English headlines',
+    previewEmoji:'📰',
+    cardType:'birthday-newspaper',
+    defaultSongTitle:'Now Playing on WishYou FM 🎵',
+    defaultMemoriesHeading:'Photo Archives',
+    receiverUrl: id => `https://wishyou.ai/birthday/newspaper.html?card=${id}`,
+    shareMsg: (n,s,l) => `📰 *BREAKING NEWS!*\n\n${n?'*'+n+'* ka birthday aaya hai!\n\n':'Birthday special edition!\n\n'}${s?s+' ne ek khaas edition publish ki hai — ':''}Abhi padhein:\n\n👆 Open:\n${l}`
   }
 ];
 
@@ -650,6 +672,15 @@ function buildStylesList() {
         `<div class="sv-star-field"></div><div class="sv-lbl">Tap a Star</div><span class="sv-emoji" style="animation:none;font-size:1.4rem;">⭐</span><div class="sv-sub" style="margin-top:6px;">It glows & reveals a memory</div>`,
         `<div class="sv-lbl">All Stars Explored</div><span class="sv-emoji">🌟</span><div class="sv-sub">A shooting star crosses the sky</div>`,
         `<div class="sv-lbl">Song & Letter</div><span class="sv-emoji">✦</span><div class="sv-sub">Written in light, just for you</div>`
+      ]
+    },
+    newspaper: {
+      theme:'sv-newspaper',
+      slides:[
+        `<div class="sv-news-rule"></div><div class="sv-lbl">📰 Front Page</div><div class="sv-title">BREAKING: Birthday Person Completes Another Year of Excellence</div><div class="sv-news-rule"></div>`,
+        `<div class="sv-lbl">Photo Archives</div><span class="sv-emoji">📸</span><div class="sv-sub" style="font-style:italic;">"Our correspondent files exclusive photos"</div>`,
+        `<div class="sv-lbl">📻 WishYou FM</div><span class="sv-emoji">🎵</span><div class="sv-sub">Special song broadcast, selected by our music desk</div>`,
+        `<div class="sv-lbl">Editor's Column</div><span class="sv-emoji">✍️</span><div class="sv-sub">A personal note from the editor — straight from the heart</div>`
       ]
     },
     fakechat: {
