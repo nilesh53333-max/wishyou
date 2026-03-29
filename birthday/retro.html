@@ -34,6 +34,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .screen.slide-out{opacity:0;transform:translateX(-60px);}
 
 /* ── CREATOR SCREENS ── */
+.creator-screen{padding:0;align-items:stretch;justify-content:flex-start;}
 .theme-retro{background:#FFE135;}
 
 .step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
@@ -84,6 +85,10 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .yellow-dot{background:#d90429;}
 
 /* PHOTOS */
+.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;transition:background 0.2s;font-size:1.3rem;}
+.photo-slot.retro-slot{background:white;border:3px solid #111;box-shadow:2px 2px 0 #111;}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
 .photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#d90429;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 
 /* SONG */
@@ -157,28 +162,25 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 /* PHOTOS — 2-column grid, full screen scroll, same pattern as intimate */
 #rv-photos{background:#FFE135;display:flex;flex-direction:column;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 #rv-photos::-webkit-scrollbar{display:none;}
-.rv-sec-hdr{padding:52px 24px 10px;text-align:center;flex-shrink:0;}
+.rv-sec-hdr{padding:36px 24px 6px;text-align:center;flex-shrink:0;}
 .rv-sec-title{font-family:'Fredoka One',cursive;font-size:1.5rem;color:#111;}
 
-/* ── Retro COMIC FLIP animation ── */
-.pol-stack-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:0 8px;}
-.pol-flip-stage{width:calc(100vw - 40px);max-width:360px;perspective:1000px;margin-bottom:10px;}
+/* ── Retro comic FLIP animation ── */
+.pol-stack-scene{display:flex;flex-direction:column;align-items:center;flex:1;padding:0 8px;}
+.pol-flip-stage{width:calc(100vw - 40px);max-width:360px;perspective:1000px;margin-bottom:8px;}
 .pol-flip-card{width:100%;position:relative;transform-style:preserve-3d;transition:transform 0.65s cubic-bezier(.4,0,.2,1);cursor:pointer;}
 .pol-flip-card.flipping{transform:rotateY(90deg);}
-.pol-flip-card.flip-in{transform:rotateY(0deg);}
-.pol-face{width:100%;background:white;border:3px solid #111;box-shadow:5px 5px 0 #111;padding:5px 5px 0;backface-visibility:hidden;}
-.pol-face img{width:100%;height:calc((100vw - 50px) * 0.88);max-height:310px;object-fit:cover;object-position:top center;display:block;}
+.pol-face{width:100%;background:white;border:3px solid #111;box-shadow:5px 5px 0 #111;padding:5px 5px 0;}
+.pol-face img{width:100%;height:calc((100vw - 50px) * 0.9);max-height:320px;object-fit:contain;object-position:center center;background:#fffde7;display:block;}
 .pol-caption-wrap{height:44px;display:flex;align-items:center;justify-content:center;position:relative;background:#d90429;border-top:2px solid #111;}
-.pol-caption{font-family:'Fredoka One',cursive;font-size:0.88rem;color:white;text-align:center;letter-spacing:0.04em;padding:0 10px;}
+.pol-caption{font-family:'Fredoka One',cursive;font-size:0.85rem;color:white;text-align:center;letter-spacing:0.04em;padding:0 10px;}
 .pol-tap-hint{position:absolute;right:8px;font-size:0.5rem;font-weight:700;color:rgba(255,255,255,0.65);letter-spacing:0.04em;pointer-events:none;}
-/* Comic panel number badge */
 .pol-panel-num{position:absolute;top:-2px;left:-2px;width:28px;height:28px;background:#FFE135;border:2px solid #111;font-family:'Fredoka One',cursive;font-size:0.75rem;color:#111;display:flex;align-items:center;justify-content:center;z-index:10;}
 .pol-counter{font-family:'Fredoka One',cursive;font-size:0.72rem;color:#111;letter-spacing:0.1em;text-align:center;margin-bottom:4px;}
-/* FLASH effect on flip */
 .flip-flash{position:fixed;inset:0;background:white;pointer-events:none;opacity:0;z-index:999;transition:opacity 0.08s ease;}
-.flip-flash.flash{opacity:0.6;}
+.flip-flash.flash{opacity:0.55;}
 .no-photo{text-align:center;padding:40px 20px;font-family:'Fredoka One',cursive;color:rgba(0,0,0,0.35);}
-.rv-nav-row{display:flex;gap:8px;padding:16px 16px max(20px,env(safe-area-inset-bottom));margin-top:4px;}
+.rv-nav-row{display:flex;gap:8px;padding:12px 16px max(20px,env(safe-area-inset-bottom));flex-shrink:0;}
 .rv-next-btn{flex:1;background:#d90429;color:white;border:3px solid #111;border-radius:8px;padding:14px;font-family:'Fredoka One',cursive;font-size:0.9rem;cursor:pointer;touch-action:manipulation;box-shadow:4px 4px 0 #111;transition:transform 0.2s;}
 .rv-next-btn:active{transform:scale(0.97);}
 
@@ -248,6 +250,130 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 <body>
 <div class="app" id="mainApp">
 
+<div class="screen creator-screen theme-retro" id="s-name">
+  <div class="step-progress"><div class="step-progress-fill retro-progress" id="prog-name" style="width:20%"></div></div>
+  <button class="step-back dark" onclick="window.location.href='/'">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter dark">Step 1 of 4</div>
+      <span class="step-emoji" id="emoji-name">🎊</span>
+      <div class="step-title" id="title-name">Who is this card for?</div>
+      <div class="step-sub" id="sub-name">They'll see their name on the card</div>
+      <div class="input-wrap" id="nameInputWrap">
+      <label class="field-label">Their Name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Their Age (optional)</label>
+      <input class="regular-input" id="cAge" placeholder="e.g. 25" maxlength="4" type="number">
+      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-retro" id="btn-name" onclick="goTo('s-photos')">Continue → Photos 📸</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen theme-retro" id="s-photos">
+  <div class="step-progress"><div class="step-progress-fill retro-progress" id="prog-photos" style="width:40%"></div></div>
+  <button class="step-back dark" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter dark">Step 2 of 4</div>
+      <span class="step-emoji">📸</span>
+      <div class="step-title" id="title-photos">Add your photos</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+        <div style="font-size:0.75rem;color:#555;opacity:0.8;">Section title on card:</div>
+        <input id="photosHeading" class="regular-input" value="Our Memories" maxlength="30" style="flex:1;font-size:0.85rem;padding:8px 12px;">
+      </div>
+      <div class="photos-grid" id="photosGrid"></div>
+      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-retro" id="btn-photos" onclick="goTo('s-song')">Continue → Song 🎵</button>
+      <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen theme-retro" id="s-song">
+  <div class="step-progress"><div class="step-progress-fill retro-progress" id="prog-song" style="width:60%"></div></div>
+  <button class="step-back dark" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter dark">Step 3 of 4</div>
+      <span class="step-emoji">🎵</span>
+      <div class="step-title" id="title-song">A song that reminds you of them</div>
+      <div class="step-sub">Search by name or describe what you want</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:18px;">
+        <div style="font-size:0.75rem;color:#111;opacity:0.6;">Song screen title:</div>
+        <input id="songScreenTitle" class="regular-input" value="Party Anthem 🎵" maxlength="30" style="flex:1;font-size:0.85rem;padding:8px 12px;">
+      </div>
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Selected:</div>
+        <div style="font-size:0.88rem;font-weight:600;color:#FFE135;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
+        <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:3px solid #111;border-radius:8px;font-size:0.9rem;cursor:pointer;touch-action:manipulation;color:white;background:#d90429;box-shadow:2px 2px 0 #111;">🔍</button>
+      </div>
+      <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
+      <div style="background:rgba(255,255,255,0.5);border:2px solid #111;border-radius:8px;padding:12px 14px;margin-bottom:8px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#111;margin-bottom:8px;font-family:'Fredoka One',cursive;">✨ AI Song Suggestions</div>
+        <input id="aiSongContext" class="regular-input" placeholder="Describe: e.g. fun party song, 90s nostalgic, romantic Hindi..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
+        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:#d90429;color:white;border:3px solid #111;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;">Suggest Songs 🎵</button>
+        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot yellow-dot"></div><div class="ai-dot yellow-dot"></div><div class="ai-dot yellow-dot"></div><span style="font-size:0.78rem;color:#111;">Finding songs...</span></div>
+        <div id="songAiResults" style="margin-top:6px;"></div>
+      </div>
+      <input type="hidden" id="cSpotify">
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-retro" id="btn-song" onclick="goTo('s-letter')">Continue → Letter 💌</button>
+      <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen theme-retro" id="s-letter">
+  <div class="step-progress"><div class="step-progress-fill retro-progress" id="prog-letter" style="width:80%"></div></div>
+  <button class="step-back dark" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-counter dark">Step 4 of 4</div>
+      <span class="step-emoji">🗞️</span>
+      <div class="step-title" id="title-letter">Write the party letter!</div>
+      <div class="step-sub">Type in any language — or let AI write it for you</div>
+      <div style="background:rgba(255,255,255,0.5);border:2px solid #111;border-radius:8px;padding:12px 14px;margin-bottom:12px;">
+        <div style="font-size:0.72rem;font-weight:600;color:#111;margin-bottom:8px;font-family:'Fredoka One',cursive;">✨ Write Letter with AI</div>
+        <input id="letterTone" class="regular-input" placeholder="e.g. funny, emotional, simple Hindi, Marathi..." style="margin-bottom:8px;" maxlength="60">
+        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:#d90429;color:white;border:3px solid #111;border-radius:8px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;">✨ Write Letter with AI</button>
+        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot yellow-dot"></div><div class="ai-dot yellow-dot"></div><div class="ai-dot yellow-dot"></div><span style="font-size:0.78rem;color:#111;">Writing your letter...</span></div>
+        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#555;margin-top:6px;">↑ Tap again for a different letter</div>
+      </div>
+      <div id="letterInputWrap">
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;Today the whole world celebrates you..."></textarea>
+      <label class="field-label" style="margin-top:12px;">Sign Off</label>
+      <input class="regular-input" id="cSign" value="From your biggest fan 🎊" maxlength="60"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-retro" id="btn-letter" onclick="goTo('s-preview')">Preview My Card →</button>
+    </div>
+  </div>
+</div>
+
+<div class="screen creator-screen theme-retro" id="s-preview">
+  <div class="step-progress"><div class="step-progress-fill retro-progress" id="prog-preview" style="width:100%"></div></div>
+  <button class="step-back dark" onclick="goBackCreator()">←</button>
+  <div class="step-wrap">
+    <div class="step-content">
+      <div class="step-title" style="margin-bottom:4px;padding-top:4px;">Almost there! 🎉</div>
+      <div class="step-sub" style="margin-bottom:16px;">Review each page — tap Edit to change anything</div>
+      <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+    <div class="step-actions">
+      <button class="btn-next btn-retro" id="btn-share" onclick="saveAndShare()">🎊 Create &amp; Share Card</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══ RECEIVER SCREENS ══ -->
 <div class="screen" id="rv-loading">
   <span class="rv-loading-heart">🎂</span>
@@ -284,7 +410,7 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
       <div class="pol-flip-card" id="polFlipCard" onclick="flipToNext()">
         <div class="pol-face" id="polFace">
           <div class="pol-panel-num" id="polPanelNum">1</div>
-          <img id="polImg" src="" alt="" style="width:100%;height:calc((100vw - 50px) * 0.88);max-height:310px;object-fit:cover;object-position:center center;display:block;opacity:0;transition:opacity 0.3s ease;">
+          <img id="polImg" src="" alt="" style="opacity:0;transition:opacity 0.35s ease;">
           <div class="pol-caption-wrap">
             <div class="pol-caption" id="polCaption"></div>
             <div class="pol-tap-hint">TAP TO FLIP ✨</div>
@@ -406,15 +532,35 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 <script>
 // ── CONFIG ──
 const FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const CLOUDINARY_CLOUD = 'dkvbjazfe';
+const CLOUDINARY_PRESET = 'wishyou-uploads';
+const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
 
+const CFG = {
+  cardType:'birthday-retro',
+  emoji:'🎊', stepEmoji:'🎊',
+  photosTitle:'Add your photos',
+  songTitle:'A song that reminds you of them',
+  letterTitle:'Write the party letter!',
+  defaultMsg:"Today the whole world stops to celebrate YOU! Every laugh, every memory, every crazy moment — it all led to this day. Here's to you, superstar!",
+  defaultSign:'From your biggest fan 🎊',
+  shareMsg:(name,sender,link)=>`🎊 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a Retro Party card 🎉\n\n':'Someone made you a special card 🎉\n\n'}👆 Open here:\n${link}`,
+  shareUrl:(id)=>`https://wishyou.ai/birthday/retro.html?card=${id}`
+};
 
 // ── STATE ──
+let curScreen = '';
+let photos = [];
+let uploadedUrls = {}; // slot index -> cloudinary URL (pre-uploaded)
+let currentSlotIdx = 0;
+let shareLink = '';
+let returnToPreview = false;
+let aiLetterCount = 0;
 
+const IS_RECEIVER = new URLSearchParams(window.location.search).has('card');
 
 // ── NAVIGATION ──
 const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
-
-let curScreen = '';
 
 function goTo(id, fromPreview=false){
   const prev=document.getElementById(curScreen);
@@ -423,7 +569,18 @@ function goTo(id, fromPreview=false){
   if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
   next.classList.add('active');
   curScreen=id;
+  returnToPreview=fromPreview;
+  if(id==='s-letter'){aiLetterCount=0;const btn=document.getElementById('aiLetterBtn');if(btn)btn.textContent='✨ Write Letter with AI';const h=document.getElementById('letterAiResult');if(h)h.style.display='none';}
+  if(id==='s-preview') buildPreview();
+  if(!fromPreview&&id!=='s-preview'){
+    const normalFlow={'s-name':{btn:'btn-name',label:'Continue → Photos',dest:'s-photos'},'s-photos':{btn:'btn-photos',label:'Continue → Song',dest:'s-song'},'s-song':{btn:'btn-song',label:'Continue → Letter',dest:'s-letter'},'s-letter':{btn:'btn-letter',label:'Preview My Card →',dest:'s-preview'}};
+    const flow=normalFlow[id];
+    if(flow){const b=document.getElementById(flow.btn);if(b){b.textContent=flow.label;b.onclick=()=>goTo(flow.dest);}}
+  }
   if(fromPreview){
+    const btnMap={'s-name':'btn-name','s-photos':'btn-photos','s-song':'btn-song','s-letter':'btn-letter'};
+    const btnId=btnMap[id];
+    if(btnId){const b=document.getElementById(btnId);if(b){b.textContent='Done → Back to Preview ✓';b.onclick=()=>goTo('s-preview');}}
   }
   // FIX: cassette reels only spin on song screen
   const r1=document.getElementById('reel1');
@@ -440,28 +597,368 @@ function goTo(id, fromPreview=false){
   setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
 }
 
+const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter','s-preview'];
+function goBackCreator(){
+  if(returnToPreview){goTo('s-preview');return;}
+  const idx=CREATOR_ORDER.indexOf(curScreen);
+  if(idx>0) goTo(CREATOR_ORDER[idx-1]);
+  else window.location.href='/';
+}
 
-window.addEventListener('DOMContentLoaded', function(){
-  const cardId = new URLSearchParams(window.location.search).get('card');
-  if(cardId){
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',function(){
+  if(IS_RECEIVER){
     goTo('rv-loading');
+    initConfetti();
     loadCard();
+    // FIX: swipe left/right between receiver screens
+    let _rx=0,_ry=0,_rt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){
+      _rx=e.changedTouches[0].clientX;_ry=e.changedTouches[0].clientY;_rt=Date.now();
+    },{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
+      if(curScreen==='rv-welcome'||curScreen==='rv-loading'||curScreen==='rv-error') return;
+      const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
+      const idx=RV_ORDER.indexOf(curScreen);if(idx===-1) return;
+      if(dx<0&&idx<RV_ORDER.length-1) goTo(RV_ORDER[idx+1]);
+      else if(dx>0&&idx>0) goTo(RV_ORDER[idx-1]);
+    },{passive:true});
   } else {
-    goTo('rv-error');
+    // Build name inputs
+    document.getElementById('nameInputWrap').innerHTML=`
+      <label class="field-label">Their Name</label>
+      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
+      <label class="field-label" style="margin-top:20px;">Their Age (optional)</label>
+      <input class="regular-input" id="cAge" placeholder="e.g. 25" maxlength="4" type="number">
+      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
+      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">`;
+    // Build letter inputs
+    document.getElementById('letterInputWrap').innerHTML=`
+      <textarea class="letter-area" id="cMsg" placeholder="Dear Priya,&#10;&#10;There are no words...">${CFG.defaultMsg}</textarea>
+      <label class="field-label" style="margin-top:12px;">Sign Off</label>
+      <input class="regular-input" id="cSign" value="${CFG.defaultSign}" maxlength="60">`;
+    // Build photo slots
+    buildPhotoSlots();
+    // Update titles
+    document.getElementById('emoji-name').textContent=CFG.stepEmoji;
+    document.getElementById('title-photos').textContent=CFG.photosTitle;
+    document.getElementById('title-song').textContent=CFG.songTitle;
+    document.getElementById('title-letter').textContent=CFG.letterTitle;
+    goTo('s-name');
+    // Swipe for creator screens
+    let _tx=0,_ty=0,_tt=0;
+    document.getElementById('mainApp').addEventListener('touchstart',function(e){
+      _tx=e.changedTouches[0].clientX;_ty=e.changedTouches[0].clientY;_tt=Date.now();
+    },{passive:true});
+    document.getElementById('mainApp').addEventListener('touchend',function(e){
+      const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty,dt=Date.now()-_tt;
+      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
+      const idx=CREATOR_ORDER.indexOf(curScreen);if(idx===-1)return;
+      if(dx<0&&idx<CREATOR_ORDER.length-1)goTo(CREATOR_ORDER[idx+1]);
+      else if(dx>0&&idx>0)goTo(CREATOR_ORDER[idx-1]);
+    },{passive:true});
   }
-  // Swipe between receiver screens
-  let _sx=0;
-  document.addEventListener('touchstart',e=>{_sx=e.changedTouches[0].clientX;},{passive:true});
-  document.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].clientX-_sx;
-    if(Math.abs(dx)<50)return;
-    const RV=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
-    const idx=RV.indexOf(curScreen);if(idx===-1)return;
-    if(dx<0&&idx<RV.length-1) goTo(RV[idx+1]);
-    else if(dx>0&&idx>0) goTo(RV[idx-1]);
-  },{passive:true});
 });
 
+// ════ CREATOR FUNCTIONS (exact from index.html) ════
+
+function buildPhotoSlots(){
+  const grid=document.getElementById('photosGrid');
+  grid.innerHTML='';photos=[];
+  for(let i=0;i<5;i++){
+    const slot=document.createElement('div');
+    slot.className='photo-slot retro-slot';slot.id='slot'+i;
+    slot.innerHTML='<span style="opacity:0.4;">+</span>';
+    slot.onclick=()=>triggerUpload(i);
+    grid.appendChild(slot);
+  }
+}
+
+function triggerUpload(idx){currentSlotIdx=idx;document.getElementById('photoFileInput').click();}
+
+function handlePhotoUpload(inp){
+  const files=Array.from(inp.files);if(!files.length)return;
+  files.forEach((file,offset)=>{
+    let targetIdx=-1;
+    for(let i=0;i<5;i++){
+      if(offset===0&&i===0){targetIdx=currentSlotIdx;break;}
+      if(!photos[(currentSlotIdx+offset)%5]||offset>0){targetIdx=(currentSlotIdx+offset)%5;break;}
+    }
+    if(targetIdx<0||targetIdx>4)return;
+    const url=URL.createObjectURL(file);
+    photos[targetIdx]=url;
+    delete uploadedUrls[targetIdx]; // clear any old upload for this slot
+    const slot=document.getElementById('slot'+targetIdx);
+    if(slot){
+      slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${targetIdx})">✕</button>`;
+      // show upload indicator
+      const ind=document.createElement('div');
+      ind.id='upind'+targetIdx;
+      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(233,30,99,0.3);border-radius:2px;overflow:hidden;';
+      ind.innerHTML='<div style="height:100%;background:#e91e63;width:0%;transition:width 0.3s;" id="upbar'+targetIdx+'"></div>';
+      slot.appendChild(ind);
+    }
+    // Upload in background immediately
+    uploadPhotoInBackground(file, targetIdx);
+  });
+  inp.value='';
+}
+
+async function uploadPhotoInBackground(file, idx){
+  try{
+    const bar=document.getElementById('upbar'+idx);
+    if(bar)bar.style.width='40%';
+    const fd=new FormData();
+    fd.append('file',file); // pass file directly — no blob URL fetch needed
+    fd.append('upload_preset',CLOUDINARY_PRESET);
+    fd.append('folder','wishyou');
+    if(bar)bar.style.width='70%';
+    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+    const d=await res.json();
+    if(d.secure_url){
+      uploadedUrls[idx]=d.secure_url;
+      if(bar){bar.style.width='100%';setTimeout(()=>{const ind=document.getElementById('upind'+idx);if(ind)ind.remove();},600);}
+    }
+  }catch(e){console.error('Background upload failed for slot',idx,e);}
+}
+
+function removePhoto(e,idx){
+  e.stopPropagation();photos[idx]=null;delete uploadedUrls[idx];
+  const slot=document.getElementById('slot'+idx);
+  slot.innerHTML='<span style="opacity:0.4;">+</span>';
+  slot.onclick=()=>triggerUpload(idx);
+}
+
+async function searchSong(){
+  const q=document.getElementById('ytSearchInput').value.trim();
+  if(!q){alert('Please type a song name.');return;}
+  const rd=document.getElementById('songResults');
+  rd.innerHTML=`<div style="text-align:center;padding:12px;font-size:0.85rem;color:#e91e63;">🔍 Searching...</div>`;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query:q})});
+    const data=await res.json();
+    if(!data.items||!data.items.length){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>';return;}
+    rd.innerHTML='';
+    data.items.slice(0,4).forEach(item=>{
+      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
+      const card=document.createElement('div');
+      card.className='song-result retro-result';
+      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;">${channelTitle}</div></div><button class="song-use-btn retro-use">✓ Use</button>`;
+      card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
+      rd.appendChild(card);
+    });
+  }catch(e){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>';}
+}
+
+function selectSong(videoId,title,artist){
+  const ytUrl='https://www.youtube.com/watch?v='+videoId;
+  document.getElementById('cSpotify').value=ytUrl;
+  spotifySrc='https://www.youtube.com/embed/'+videoId+'?autoplay=0&rel=0';
+  document.getElementById('songSelectedName').textContent=title+' — '+artist;
+  document.getElementById('songSelectedBox').style.display='block';
+  document.getElementById('songResults').innerHTML=`<div style="font-size:0.8rem;font-weight:600;padding:6px 0;color:#e91e63;">✅ ${title} added!</div>`;
+}
+
+async function suggestSongs(){
+  const loading=document.getElementById('songAiLoading');
+  const results=document.getElementById('songAiResults');
+  const btn=document.getElementById('aiSongBtn');
+  loading.classList.add('show');results.innerHTML='';btn.disabled=true;
+  const context=document.getElementById('aiSongContext')?.value.trim()||'';
+  const name=document.getElementById('cName')?.value.trim()||'';
+  let prompt=`Suggest 4 real popular songs for a Birthday card`;
+  if(name) prompt+=` for someone named ${name}`;
+  if(context){prompt+=`. User specifically wants: "${context}". Follow this exactly — if they say Marathi, give ONLY Marathi songs. If they say romantic Hindi, give romantic Hindi songs only.`;}
+  else{prompt+=`. Mix languages, include emotional and upbeat options`;}
+  prompt+=`. Return ONLY a JSON array, no markdown: [{"name":"Song Name","artist":"Artist Name"}]`;
+  const text=await callClaude(prompt);
+  try{
+    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    if(!songs.length){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Try being more specific.</div>';return;}
+    songs.forEach(s=>{
+      const el=document.createElement('div');
+      el.style.cssText='display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.7);border:1px solid rgba(233,30,99,0.1);touch-action:manipulation;';
+      el.innerHTML=`<span style="font-size:1.1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:600;color:#4a0e2a;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;">${s.name}</div><div style="font-size:0.72rem;color:#8d3a5a;opacity:0.7;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#e91e63;white-space:nowrap;">Search ›</span>`;
+      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
+      results.appendChild(el);
+    });
+  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Could not fetch. Try again.</div>';}
+  loading.classList.remove('show');btn.disabled=false;
+}
+
+async function runAILetter(){
+  const name=document.getElementById('cName')?.value.trim()||'them';
+  const sender=document.getElementById('cSender')?.value.trim()||'someone';
+  const toneInput=document.getElementById('letterTone')?.value.trim()||'';
+  const btn=document.getElementById('aiLetterBtn');
+  const loading=document.getElementById('letterAiLoading');
+  const resultHint=document.getElementById('letterAiResult');
+  aiLetterCount++;
+  btn.disabled=true;loading.classList.add('show');
+  const variationHint=aiLetterCount>1?` Attempt #${aiLetterCount} — write a COMPLETELY DIFFERENT letter with different words and ideas.`:'';
+  const langs=['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
+  const detectedLang=langs.find(l=>toneInput.toLowerCase().includes(l));
+  let langNote='';
+  if(detectedLang){
+    const langName=detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1);
+    langNote=` CRITICAL: Write the ENTIRE letter in ${langName} script only. Use simple natural everyday ${langName} — exactly how real people speak to loved ones. NOT formal or poetic. NOT translated English.`;
+  }
+  const toneDesc=toneInput||'warm and heartfelt';
+  const prompt=`Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone/style: ${toneDesc}.${langNote}${variationHint} Return ONLY the letter body — no greeting line, no sign off.`;
+  const text=await callClaude(prompt);
+  if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
+  btn.disabled=false;loading.classList.remove('show');
+  if(resultHint)resultHint.style.display='block';
+  btn.textContent='✨ Write Another Letter';
+}
+
+async function callClaude(prompt){
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();if(data.error)return'';
+    return data.content&&data.content[0]?data.content[0].text:'';
+  }catch(e){return'';}
+}
+function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
+
+function buildPreview(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=document.getElementById('cMsg')?.value.trim()||'';
+  const sign=document.getElementById('cSign')?.value.trim()||CFG.defaultSign;
+  const songName=document.getElementById('songSelectedName')?.textContent||'';
+  const accentColor='#d90429';
+  const titleText=name&&document.getElementById('cAge')?.value?`${name} turns ${document.getElementById('cAge').value}! 🎂`:name?`Happy Birthday, ${name}! 🎊`:'Happy Birthday! 🎊';
+  const realPhotos=photos.filter(Boolean);
+  const wrap=document.getElementById('cardPagesPreview');
+  wrap.innerHTML='';
+
+  function makePage(icon,label,content,editScreen){
+    const page=document.createElement('div');
+    page.style.cssText=`background:#FFE135;border-radius:8px;padding:16px;border:3px solid #111;box-shadow:4px 4px 0 #111;`;
+    page.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:1.1rem;">${icon}</span>
+          <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.6;font-family:'Fredoka One',cursive;">${label}</span>
+        </div>
+        <button onclick="goTo('${editScreen}', true)" style="font-size:0.68rem;font-weight:600;color:white;background:${accentColor};border:2px solid #111;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'Fredoka One',cursive;box-shadow:2px 2px 0 #111;">Edit</button>
+      </div>
+      ${content}`;
+    wrap.appendChild(page);
+  }
+
+  makePage('🎊','Welcome Screen',`
+    <div style="text-align:center;font-family:'Fredoka One',cursive;font-size:1rem;color:#111;">${titleText}</div>
+    ${sender?`<div style="text-align:center;font-size:0.72rem;opacity:0.6;margin-top:4px;font-family:'Patrick Hand',cursive;">From ${sender} 🎊</div>`:''}
+  `,'s-name');
+
+  const photosHeading=document.getElementById('photosHeading')?.value.trim()||'Our Memories';
+  makePage('📸',photosHeading,
+    realPhotos.length?
+      `<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map(u=>`<img src="${u}" style="width:52px;height:52px;border-radius:4px;object-fit:cover;border:2px solid #111;">`).join('')}</div>`
+      :`<div style="font-size:0.8rem;opacity:0.5;font-style:italic;font-family:'Patrick Hand',cursive;">No photos added yet</div>`,
+  's-photos');
+
+  makePage('🎵','Song',
+    songName&&songName!=='—'?
+      `<div style="font-size:0.85rem;font-weight:600;color:${accentColor};font-family:'Fredoka One',cursive;">🎵 ${songName}</div>`
+      :`<div style="font-size:0.8rem;opacity:0.5;font-style:italic;font-family:'Patrick Hand',cursive;">No song selected yet</div>`,
+  's-song');
+
+  makePage('🗞️','Letter',
+    msg?`<div style="font-family:'Patrick Hand',cursive;font-size:0.88rem;line-height:1.7;color:#111;">${msg.length>140?msg.slice(0,140)+'...':msg}</div><div style="font-family:'Patrick Hand',cursive;font-style:italic;font-size:0.82rem;color:${accentColor};margin-top:8px;">${sign}</div>`
+    :`<div style="font-size:0.8rem;opacity:0.5;font-style:italic;font-family:'Patrick Hand',cursive;">No letter written yet</div>`,
+  's-letter');
+}
+
+async function saveAndShare(){
+  const overlay=document.getElementById('saveOverlay');
+  const bar=document.getElementById('saveBar');
+  const label=document.getElementById('saveLabel');
+  document.getElementById('saveEmoji').textContent=CFG.emoji;
+  function setProgress(pct,lbl){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;}
+  overlay.classList.add('show');
+  setProgress(10,'Creating your card... '+CFG.emoji);
+  let photoUrls=[];
+  // Use pre-uploaded URLs where available, upload any remaining ones
+  const slots=photos.map((p,i)=>({blob:p,idx:i})).filter(s=>s.blob);
+  let uploaded=0;
+  for(const s of slots){
+    if(uploadedUrls[s.idx]){
+      photoUrls.push(uploadedUrls[s.idx]);
+      uploaded++;
+      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Preparing your card... '+CFG.emoji);
+    } else {
+      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Uploading photo '+(uploaded+1)+'...');
+      try{
+        const fd=new FormData();
+        const blob=await fetch(s.blob).then(r=>r.blob());
+        fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
+        const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
+        const d=await res.json();if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
+      }catch(e){console.error(e);}
+      uploaded++;
+    }
+  }
+  setProgress(70,'Almost ready... '+CFG.emoji);
+  const now=Date.now();
+  const cardData={
+    type:CFG.cardType,
+    name:document.getElementById('cName')?.value.trim()||'',
+    age:document.getElementById('cAge')?.value.trim()||'',
+    sender:document.getElementById('cSender')?.value.trim()||'',
+    msg:document.getElementById('cMsg')?.value.trim()||'',
+    sign:document.getElementById('cSign')?.value.trim()||'',
+    spotify:document.getElementById('cSpotify')?.value.trim()||'',
+    songName:document.getElementById('songSelectedName')?.textContent||'',
+    memoriesHeading:document.getElementById('photosHeading')?.value.trim()||'Our Memories',
+    songScreenTitle:document.getElementById('songScreenTitle')?.value.trim()||'Party Anthem 🎵',
+    photos:photoUrls,created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
+  };
+  try{
+    setProgress(85,'Creating your card... '+CFG.emoji);
+    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
+    const data=await res.json();const cardId=data.name;
+    shareLink=CFG.shareUrl(cardId);
+    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
+    setProgress(100,'Card created! 🎉');
+    setTimeout(()=>{overlay.classList.remove('show');document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');document.getElementById('shareModal').classList.add('show');},600);
+  }catch(e){overlay.classList.remove('show');alert('Could not save card. Please try again.');}
+}
+
+function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
+function openWhatsApp(){
+  const name=document.getElementById('cName')?.value.trim()||'';
+  const sender=document.getElementById('cSender')?.value.trim()||'';
+  const msg=CFG.shareMsg(name,sender,shareLink);
+  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  // Try native Web Share API first (best on mobile — opens native share sheet)
+  if(navigator.share && isMobile){
+    navigator.share({text:msg}).catch(()=>{
+      // Fallback to WhatsApp deep link if share cancelled or fails
+      window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+    });
+  } else {
+    // Desktop or no share API
+    window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+  }
+}
+function closeShare(){document.getElementById('shareModal').classList.remove('show');}
+
+// ════ RECEIVER FUNCTIONS ════
+function initConfetti(){
+  const wrap=document.getElementById('confetti');if(!wrap)return;
+  const emojis=['🎉','🎊','⭐','🎈','✨','🎁','🎂','🥳'];
+  for(let i=0;i<20;i++){
+    const c=document.createElement('div');c.className='conf';
+    c.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    const s=0.8+Math.random()*0.8;
+    c.style.cssText=`font-size:${s}rem;left:${Math.random()*100}%;animation-duration:${6+Math.random()*8}s;animation-delay:${Math.random()*8}s;`;
+    wrap.appendChild(c);
+  }
+}
 
 async function loadCard(){
   const cardId=new URLSearchParams(window.location.search).get('card');
@@ -489,63 +986,58 @@ function renderCard(d){
   document.getElementById('rvPhotoTitle').textContent=heading;
   const sst=document.getElementById('rvSongScreenTitle');
   if(sst)sst.textContent=d.songScreenTitle||'Party Anthem 🎵';
-  // Photos — comic panel FLIP animation
+  // Photos — 2-column grid, all visible, tap opens lightbox
+  // Photos — comic panel FLIP, object-fit:contain so no cropping
+  const retroCaps=['POW! That\'s a vibe 💥','WOW, look at you! ⭐','YAY for this memory! 🎉','ZAP! Pure gold ✨','BOOM! Best one yet 🎊'];
   if(d.photos&&d.photos.length>0){
     const photos=d.photos;
     const customCaptions=d.photoCaptions||[];
-    const retroCaps=['POW! That\'s a vibe 💥','WOW, look at you! ⭐','YAY for this memory! 🎉','ZAP! Pure gold ✨','BOOM! Best one yet 🎊'];
     const captions=photos.map((_,i)=>customCaptions[i]||retroCaps[i%retroCaps.length]);
     const n=photos.length;
-    let idx=0, isFlipping=false;
-
-    // Preload all images
+    let idx=0,isFlipping=false;
     photos.forEach(url=>{const img=new Image();img.src=url;});
-
     const flipCard=document.getElementById('polFlipCard');
     const polImg=document.getElementById('polImg');
     const polCaption=document.getElementById('polCaption');
     const polCounter=document.getElementById('polCounter');
     const polPanelNum=document.getElementById('polPanelNum');
     const flash=document.getElementById('flipFlash');
-
-    function showPhoto(i, animate){
+    function showPhoto(i,animate){
       polPanelNum.textContent=i+1;
       polCounter.textContent=`${i+1} / ${n}`;
       polCaption.textContent=captions[i];
       if(animate){
-        // Phase 1: flip out
         flipCard.classList.add('flipping');
         flash.classList.add('flash');
         setTimeout(()=>{
-          // Swap image at midpoint
           polImg.style.opacity='0';
           polImg.src=photos[i];
-          polImg.onload=()=>{polImg.style.opacity='1';};
+          // Handle cached images
+          if(polImg.complete&&polImg.naturalWidth>0){
+            setTimeout(()=>{polImg.style.opacity='1';},30);
+          } else {
+            polImg.onload=()=>{polImg.style.opacity='1';};
+          }
           flash.classList.remove('flash');
-          // Phase 2: flip in
           flipCard.classList.remove('flipping');
-          flipCard.classList.add('flip-in');
-          setTimeout(()=>{
-            flipCard.classList.remove('flip-in');
-            isFlipping=false;
-          },350);
+          setTimeout(()=>{isFlipping=false;},350);
         },340);
       } else {
         polImg.src=photos[i];
-        polImg.onload=()=>{polImg.style.opacity='1';};
+        if(polImg.complete&&polImg.naturalWidth>0){
+          setTimeout(()=>{polImg.style.opacity='1';},30);
+        } else {
+          polImg.onload=()=>{polImg.style.opacity='1';};
+        }
       }
     }
-
     window.flipToNext=function(){
       if(isFlipping||n<2)return;
       isFlipping=true;
       idx=(idx+1)%n;
-      showPhoto(idx, true);
+      showPhoto(idx,true);
     };
-
-    // Init — show first photo
-    showPhoto(0, false);
-
+    showPhoto(0,false);
   }else{
     document.getElementById('polFlipCard').innerHTML='<div class="pol-face no-photo">🎊 A card made with love!</div>';
   }
@@ -576,6 +1068,13 @@ function renderCard(d){
 }
 
 function openLetter(){
+  const e=document.querySelector('.env-icon');
+  if(!e)return;
+  e.style.transform='scale(1.4)';e.textContent='💥';
+  setTimeout(()=>{e.style.transform='';e.textContent='🎈';goTo('rv-letter');},400);
+}
+
+let rvLetterText='';
   const e=document.querySelector('.env-icon');
   if(!e)return;
   e.style.transform='scale(1.4)';e.textContent='💥';
