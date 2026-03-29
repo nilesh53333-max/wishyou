@@ -96,7 +96,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .photo-hint .hl{color:rgba(20,160,140,0.55);font-weight:600;}
 .slot-plus{font-size:1.1rem;color:rgba(160,220,210,0.2);}
 .photo-col{display:flex;flex-direction:column;gap:4px;}
-.cap-input{width:100%;background:transparent;border:none;outline:none;font-size:0.62rem;font-style:italic;font-family:'DM Sans',sans-serif;color:rgba(160,220,210,0.5);padding:3px 2px;caret-color:#f0c040;text-align:center;line-height:1.4;resize:none;display:block;overflow:hidden;height:auto;}
+.cap-input{width:100%;background:transparent;border:none;outline:none;font-size:0.62rem;font-style:italic;font-family:'DM Sans',sans-serif;color:rgba(160,220,210,0.5);padding:3px 2px;caret-color:#f0c040;text-align:center;line-height:1.4;resize:none;display:block;overflow:visible;min-height:0;}
 .cap-input::placeholder{color:rgba(160,220,210,0.15);font-style:italic;}
 .cap-input:focus{color:rgba(160,220,210,0.8);}
 
@@ -856,7 +856,7 @@ function onRelationChange(val) {
   photoCaptions = [...content.captions];
   content.captions.forEach((cap, i) => {
     const el = document.getElementById('cap' + i);
-    if (el) el.value = cap;
+    if (el) { el.value = cap; autoResize(el); }
   });
 }
 
@@ -908,12 +908,12 @@ function buildPhotoSlots(captions) {
     grid.appendChild(col);
   });
   updateUploadCount();
-  requestAnimationFrame(autoResizeAll);
+  requestAnimationFrame(() => requestAnimationFrame(autoResizeAll));
 }
 
 function autoResize(el) {
-  el.style.height = '0px';
-  el.style.height = el.scrollHeight + 'px';
+  el.style.height = 'auto';
+  el.style.height = (el.scrollHeight) + 'px';
 }
 function autoResizeAll() {
   document.querySelectorAll('.cap-input').forEach(autoResize);
