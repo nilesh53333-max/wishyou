@@ -22,7 +22,6 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .screen.slide-out{opacity:0;}
 
 /* ── CREATOR ── */
-.creator-screen{align-items:stretch;justify-content:flex-start;background:#ECE5DD;}
 .step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
 .step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
 .step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom)+16px);}
@@ -194,116 +193,6 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 <div class="app" id="mainApp">
 
 <!-- CREATOR -->
-<div class="screen creator-screen" id="s-name">
-  <div class="step-progress"><div class="step-progress-fill" style="width:20%"></div></div>
-  <button class="step-back" onclick="window.location.href='/'">←</button>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="step-counter">Step 1 of 4</div>
-      <span class="step-emoji">💬</span>
-      <div class="step-title">Who is this chat for?</div>
-      <div class="step-sub">Their name appears on the contact header</div>
-      <div id="nameInputWrap"></div>
-    </div>
-    <div class="step-actions">
-      <button class="btn-next btn-chat" id="btn-name" onclick="goTo('s-photos')">Continue → Photos</button>
-    </div>
-  </div>
-</div>
-
-<div class="screen creator-screen" id="s-photos">
-  <div class="step-progress"><div class="step-progress-fill" style="width:40%"></div></div>
-  <button class="step-back" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="step-counter">Step 2 of 4</div>
-      <span class="step-emoji">📸</span>
-      <div class="step-title">Send some photos</div>
-      <div class="step-sub">They'll arrive like photo messages in a chat</div>
-      <div class="photos-grid" id="photosGrid"></div>
-      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
-    </div>
-    <div class="step-actions">
-      <button class="btn-next btn-chat" id="btn-photos" onclick="goTo('s-song')">Continue → Song</button>
-      <button class="btn-skip" onclick="goTo('s-song')">Skip for now</button>
-    </div>
-  </div>
-</div>
-
-<div class="screen creator-screen" id="s-song">
-  <div class="step-progress"><div class="step-progress-fill" style="width:60%"></div></div>
-  <button class="step-back" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="step-counter">Step 3 of 4</div>
-      <span class="step-emoji">🎵</span>
-      <div class="step-title">Share a song</div>
-      <div class="step-sub">Appears as an audio message in the chat</div>
-      <div class="song-selected-box" id="songSelectedBox">
-        <div style="font-size:0.7rem;color:rgba(255,255,255,0.6);margin-bottom:3px;">Selected:</div>
-        <div style="font-size:0.88rem;font-weight:600;color:white;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;" id="songSelectedName">—</div>
-      </div>
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <input id="ytSearchInput" class="regular-input" placeholder="Search song name..." style="flex:1;margin-bottom:0;" onkeydown="if(event.key==='Enter')searchSong()" maxlength="100">
-        <button onclick="searchSong()" id="searchBtn" style="padding:13px 16px;border:none;border-radius:14px;font-size:0.9rem;cursor:pointer;color:white;background:linear-gradient(135deg,#25D366,#128C7E);">🔍</button>
-      </div>
-      <div id="songResults" style="width:100%;margin-bottom:10px;"></div>
-      <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(37,211,102,0.15);border-radius:14px;padding:12px 14px;margin-bottom:8px;">
-        <div style="font-size:0.72rem;font-weight:600;color:#128C7E;margin-bottom:8px;">✨ AI Song Suggestions</div>
-        <input id="aiSongContext" class="regular-input" placeholder="e.g. romantic Hindi, 90s nostalgic..." style="margin-bottom:8px;font-size:0.85rem;" maxlength="100">
-        <button id="aiSongBtn" onclick="suggestSongs()" style="width:100%;padding:11px;background:linear-gradient(135deg,#25D366,#128C7E);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Suggest Songs</button>
-        <div class="ai-loading" id="songAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Finding songs...</span></div>
-        <div id="songAiResults" style="margin-top:6px;"></div>
-      </div>
-      <input type="hidden" id="cSpotify">
-    </div>
-    <div class="step-actions">
-      <button class="btn-next btn-chat" id="btn-song" onclick="goTo('s-letter')">Continue → Message</button>
-      <button class="btn-skip" onclick="goTo('s-letter')">Skip for now</button>
-    </div>
-  </div>
-</div>
-
-<div class="screen creator-screen" id="s-letter">
-  <div class="step-progress"><div class="step-progress-fill" style="width:80%"></div></div>
-  <button class="step-back" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="step-counter">Step 4 of 4</div>
-      <span class="step-emoji">💌</span>
-      <div class="step-title">Write your message</div>
-      <div class="step-sub">Arrives as the final heartfelt message in the chat</div>
-      <div style="background:rgba(255,255,255,0.6);border:1px solid rgba(37,211,102,0.15);border-radius:14px;padding:12px 14px;margin-bottom:12px;">
-        <div style="font-size:0.72rem;font-weight:600;color:#128C7E;margin-bottom:8px;">✨ Write with AI</div>
-        <input id="letterTone" class="regular-input" placeholder="e.g. emotional, funny, Hindi, Marathi..." style="margin-bottom:8px;" maxlength="60">
-        <button id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;background:linear-gradient(135deg,#25D366,#128C7E);color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">✨ Write with AI</button>
-        <div class="ai-loading" id="letterAiLoading" style="margin-top:8px;"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div><span style="font-size:0.78rem;">Writing...</span></div>
-        <div id="letterAiResult" style="display:none;font-size:0.72rem;color:#128C7E;margin-top:6px;">↑ Tap again for a different message</div>
-      </div>
-      <div id="letterInputWrap"></div>
-    </div>
-    <div class="step-actions">
-      <button class="btn-next btn-chat" id="btn-letter" onclick="goTo('s-preview')">Preview Chat →</button>
-    </div>
-  </div>
-</div>
-
-<div class="screen creator-screen" id="s-preview">
-  <div class="step-progress"><div class="step-progress-fill" style="width:100%"></div></div>
-  <button class="step-back" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="step-title" style="margin-bottom:4px;padding-top:4px;">Ready to send! 💬</div>
-      <div class="step-sub" style="margin-bottom:16px;">Review — tap Edit to change anything</div>
-      <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;"></div>
-    </div>
-    <div class="step-actions">
-      <button class="btn-next btn-chat" id="btn-share" onclick="saveAndShare()">💬 Send the Chat</button>
-    </div>
-  </div>
-</div>
-
-<!-- RECEIVER -->
 <div class="screen" id="rv-loading">
   <div class="wa-logo-wrap">💬</div>
   <div class="wa-dots"><div class="wa-dot"></div><div class="wa-dot"></div><div class="wa-dot"></div></div>
@@ -381,192 +270,30 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 
 <script>
 const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
-const CLOUDINARY_CLOUD='dkvbjazfe';
-const CLOUDINARY_PRESET='wishyou-uploads';
-const WORKER_URL='https://wild-fog-b15e.nilesh53333.workers.dev/';
 const CFG={
   cardType:'birthday-fakechat',
   defaultMsg:'Happy Birthday! 🎂\n\nI\'ve been thinking about what to say for days. And I still don\'t have the perfect words. But I know this — having you in my life is something I\'m grateful for every single day.\n\nToday is your day. Celebrate hard. You deserve every bit of it. 💚',
   shareMsg:(name,sender,link)=>`💬 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' sent you a special birthday chat 💬\n\n':'Someone sent you a birthday message 💬\n\n'}👆 Open here:\n${link}`,
   shareUrl:(id)=>`https://wishyou.ai/birthday/fakechat.html?card=${id}`
 };
-let curScreen='',photos=[],uploadedUrls={},currentSlotIdx=0,shareLink='',returnToPreview=false,aiLetterCount=0;
-const IS_RECEIVER=new URLSearchParams(window.location.search).has('card');
-const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter','s-preview'];
+let curScreen='';
 
-function goTo(id,fromPreview=false){
-  const prev=document.getElementById(curScreen),next=document.getElementById(id);
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
   if(!next||curScreen===id)return;
-  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
-  next.classList.add('active');curScreen=id;returnToPreview=fromPreview;
-  if(id==='s-letter'){aiLetterCount=0;const b=document.getElementById('aiLetterBtn');if(b)b.textContent='✨ Write with AI';const h=document.getElementById('letterAiResult');if(h)h.style.display='none';}
-  if(id==='s-preview')buildPreview();
-  if(!fromPreview&&id!=='s-preview'){
-    const nf={'s-name':{btn:'btn-name',label:'Continue → Photos',dest:'s-photos'},'s-photos':{btn:'btn-photos',label:'Continue → Song',dest:'s-song'},'s-song':{btn:'btn-song',label:'Continue → Message',dest:'s-letter'},'s-letter':{btn:'btn-letter',label:'Preview Chat →',dest:'s-preview'}};
-    const fl=nf[id];if(fl){const b=document.getElementById(fl.btn);if(b){b.textContent=fl.label;b.onclick=()=>goTo(fl.dest);}}
-  }
-  if(fromPreview){
-    const bm={'s-name':'btn-name','s-photos':'btn-photos','s-song':'btn-song','s-letter':'btn-letter'};
-    const bid=bm[id];if(bid){const b=document.getElementById(bid);if(b){b.textContent='Done → Back to Preview ✓';b.onclick=()=>goTo('s-preview');}}
-  }
-  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
-}
-function goBackCreator(){
-  if(returnToPreview){goTo('s-preview');return;}
-  const idx=CREATOR_ORDER.indexOf(curScreen);
-  if(idx>0)goTo(CREATOR_ORDER[idx-1]);else window.location.href='/';
+  if(prev)prev.classList.remove('active');
+  next.classList.add('active');
+  curScreen=id;
 }
 
 window.addEventListener('DOMContentLoaded',function(){
-  if(IS_RECEIVER){
-    goTo('rv-loading');loadCard();
-    let _rx=0,_ry=0,_rt=0;
-    document.getElementById('mainApp').addEventListener('touchstart',function(e){
-      _rx=e.changedTouches[0].clientX;_ry=e.changedTouches[0].clientY;_rt=Date.now();
-    },{passive:true});
-    document.getElementById('mainApp').addEventListener('touchend',function(e){
-      if(curScreen==='rv-loading'||curScreen==='rv-error') return;
-      const dx=e.changedTouches[0].clientX-_rx,dy=e.changedTouches[0].clientY-_ry,dt=Date.now()-_rt;
-      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
-      if(dx>0&&curScreen==='rv-chat') goTo('rv-loading');
-    },{passive:true});
-  }
-  else{
-    document.getElementById('nameInputWrap').innerHTML=`
-      <label class="field-label">Their Name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Priya..." maxlength="30">
-      <label class="field-label" style="margin-top:20px;">Your Name (From)</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30">`;
-    document.getElementById('letterInputWrap').innerHTML=`
-      <textarea class="letter-area" id="cMsg" placeholder="Type your birthday message here...">${CFG.defaultMsg}</textarea>`;
-    buildPhotoSlots();goTo('s-name');
-    let _tx=0,_ty=0,_tt=0;
-    document.getElementById('mainApp').addEventListener('touchstart',function(e){
-      _tx=e.changedTouches[0].clientX;_ty=e.changedTouches[0].clientY;_tt=Date.now();
-    },{passive:true});
-    document.getElementById('mainApp').addEventListener('touchend',function(e){
-      const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty,dt=Date.now()-_tt;
-      if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3)return;
-      const idx=CREATOR_ORDER.indexOf(curScreen);if(idx===-1)return;
-      if(dx<0&&idx<CREATOR_ORDER.length-1)goTo(CREATOR_ORDER[idx+1]);
-      else if(dx>0&&idx>0)goTo(CREATOR_ORDER[idx-1]);
-    },{passive:true});
-  }
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(cardId){goTo('rv-loading');loadCard();}else{goTo('rv-error');}
 });
 
-function buildPhotoSlots(){
-  const grid=document.getElementById('photosGrid');grid.innerHTML='';photos=[];
-  for(let i=0;i<5;i++){
-    const slot=document.createElement('div');slot.className='photo-slot';slot.id='slot'+i;
-    slot.innerHTML='<span style="opacity:0.4;color:#25D366;">+</span>';
-    slot.onclick=()=>triggerUpload(i);grid.appendChild(slot);
-  }
-}
-function triggerUpload(idx){currentSlotIdx=idx;document.getElementById('photoFileInput').click();}
-function handlePhotoUpload(inp){
-  const files=Array.from(inp.files);if(!files.length)return;
-  files.forEach((file,offset)=>{
-    let ti=-1;
-    for(let i=0;i<5;i++){
-      if(offset===0&&i===0){ti=currentSlotIdx;break;}
-      if(!photos[(currentSlotIdx+offset)%5]||offset>0){ti=(currentSlotIdx+offset)%5;break;}
-    }
-    if(ti<0||ti>4)return;
-    const url=URL.createObjectURL(file);photos[ti]=url;delete uploadedUrls[ti];
-    const slot=document.getElementById('slot'+ti);
-    if(slot){
-      slot.innerHTML=`<img src="${url}"><button class="photo-del" onclick="removePhoto(event,${ti})">✕</button>`;
-      const ind=document.createElement('div');ind.id='upind'+ti;
-      ind.style.cssText='position:absolute;bottom:3px;left:3px;right:3px;height:3px;background:rgba(37,211,102,0.2);border-radius:2px;overflow:hidden;';
-      ind.innerHTML=`<div style="height:100%;background:#25D366;width:0%;transition:width 0.3s;" id="upbar${ti}"></div>`;
-      slot.appendChild(ind);
-    }
-    uploadPhotoInBackground(file,ti);
-  });
-  inp.value='';
-}
-async function uploadPhotoInBackground(file,idx){
-  try{
-    const bar=document.getElementById('upbar'+idx);if(bar)bar.style.width='40%';
-    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
-    if(bar)bar.style.width='70%';
-    const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-    const d=await res.json();
-    if(d.secure_url){uploadedUrls[idx]=d.secure_url;if(bar){bar.style.width='100%';setTimeout(()=>{const ind=document.getElementById('upind'+idx);if(ind)ind.remove();},600);}}
-  }catch(e){console.error(e);}
-}
-function removePhoto(e,idx){
-  e.stopPropagation();photos[idx]=null;delete uploadedUrls[idx];
-  const slot=document.getElementById('slot'+idx);
-  slot.innerHTML='<span style="opacity:0.4;color:#25D366;">+</span>';
-  slot.onclick=()=>triggerUpload(idx);
-}
 
-async function searchSong(){
-  const q=document.getElementById('ytSearchInput').value.trim();
-  if(!q){alert('Please type a song name.');return;}
-  const rd=document.getElementById('songResults');
-  rd.innerHTML='<div style="text-align:center;padding:12px;font-size:0.85rem;color:#25D366;">🔍 Searching...</div>';
-  try{
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query:q})});
-    const data=await res.json();
-    if(!data.items||!data.items.length){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>';return;}
-    rd.innerHTML='';
-    data.items.slice(0,4).forEach(item=>{
-      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
-      const card=document.createElement('div');card.className='song-result';
-      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#111;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;">${channelTitle}</div></div><button class="song-use-btn">✓ Use</button>`;
-      card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
-      rd.appendChild(card);
-    });
-  }catch(e){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>';}
-}
-function selectSong(videoId,title,artist){
-  document.getElementById('cSpotify').value='https://www.youtube.com/watch?v='+videoId;
-  document.getElementById('songSelectedName').textContent=title+' — '+artist;
-  document.getElementById('songSelectedBox').style.display='block';
-  document.getElementById('songResults').innerHTML=`<div style="font-size:0.8rem;font-weight:600;padding:6px 0;color:#25D366;">✅ ${title} added!</div>`;
-}
-async function suggestSongs(){
-  const loading=document.getElementById('songAiLoading'),results=document.getElementById('songAiResults'),btn=document.getElementById('aiSongBtn');
-  loading.classList.add('show');results.innerHTML='';btn.disabled=true;
-  const context=document.getElementById('aiSongContext')?.value.trim()||'';
-  const name=document.getElementById('cName')?.value.trim()||'';
-  let prompt=`Suggest 4 real popular songs for a Birthday WhatsApp message`;
-  if(name)prompt+=` for ${name}`;
-  if(context)prompt+=`. Wants: "${context}"`;else prompt+=`. Mix Indian and international`;
-  prompt+=`. Return ONLY JSON: [{"name":"Song","artist":"Artist"}]`;
-  const text=await callClaude(prompt);
-  try{
-    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
-    songs.forEach(s=>{
-      const el=document.createElement('div');
-      el.style.cssText='display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.7);border:1px solid rgba(37,211,102,0.12);';
-      el.innerHTML=`<span style="font-size:1.1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:600;color:#111;">${s.name}</div><div style="font-size:0.72rem;color:#667781;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#25D366;">Search ›</span>`;
-      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
-      results.appendChild(el);
-    });
-  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Could not fetch. Try again.</div>';}
-  loading.classList.remove('show');btn.disabled=false;
-}
 
-async function runAILetter(){
-  const name=document.getElementById('cName')?.value.trim()||'them';
-  const sender=document.getElementById('cSender')?.value.trim()||'someone';
-  const toneInput=document.getElementById('letterTone')?.value.trim()||'';
-  const btn=document.getElementById('aiLetterBtn'),loading=document.getElementById('letterAiLoading');
-  aiLetterCount++;btn.disabled=true;loading.classList.add('show');
-  const langs=['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
-  const det=langs.find(l=>toneInput.toLowerCase().includes(l));
-  let langNote=det?` CRITICAL: Write ENTIRE message in ${det.charAt(0).toUpperCase()+det.slice(1)} script only.`:'';
-  const vari=aiLetterCount>1?` Attempt #${aiLetterCount} — COMPLETELY DIFFERENT.`:'';
-  const prompt=`Write a Birthday WhatsApp message from ${sender} to ${name} (3-5 sentences, casual style, may use emojis). Tone: ${toneInput||'warm heartfelt'}.${langNote}${vari} Return ONLY the message text.`;
-  const text=await callClaude(prompt);
-  if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
-  btn.disabled=false;loading.classList.remove('show');
-  const h=document.getElementById('letterAiResult');if(h)h.style.display='block';
-  btn.textContent='✨ Write Another';
-}
 async function callClaude(prompt){
   try{
     const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
@@ -576,77 +303,6 @@ async function callClaude(prompt){
 }
 function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
 
-function buildPreview(){
-  const name=document.getElementById('cName')?.value.trim()||'';
-  const sender=document.getElementById('cSender')?.value.trim()||'';
-  const msg=document.getElementById('cMsg')?.value.trim()||'';
-  const songName=document.getElementById('songSelectedName')?.textContent||'';
-  const realPhotos=photos.filter(Boolean);
-  const wrap=document.getElementById('cardPagesPreview');wrap.innerHTML='';
-  function makePage(icon,label,content,editScreen){
-    const page=document.createElement('div');
-    page.style.cssText='background:rgba(255,255,255,0.7);border-radius:16px;padding:16px;border:1.5px solid rgba(37,211,102,0.15);';
-    page.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:1.1rem;">${icon}</span><span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.5;">${label}</span></div><button onclick="goTo('${editScreen}',true)" style="font-size:0.68rem;font-weight:600;color:#25D366;background:none;border:1px solid #25D366;border-radius:20px;padding:4px 10px;cursor:pointer;">Edit</button></div>${content}`;
-    wrap.appendChild(page);
-  }
-  makePage('💬','Chat',`<div style="display:flex;align-items:center;gap:10px;"><div style="width:36px;height:36px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:1rem;">😊</div><div><div style="font-weight:600;color:#111;">${name||'—'}</div><div style="font-size:0.72rem;color:#667781;">from ${sender||'—'}</div></div></div>`,'s-name');
-  makePage('📸','Photos',realPhotos.length?`<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map(u=>`<img src="${u}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;">`).join('')}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No photos added yet</div>`,'s-photos');
-  makePage('🎵','Song',songName&&songName!=='—'?`<div style="font-size:0.85rem;font-weight:600;color:#128C7E;">🎵 ${songName}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No song selected yet</div>`,'s-song');
-  makePage('💌','Message',msg?`<div style="font-size:0.85rem;color:#111;line-height:1.6;white-space:pre-wrap;">${msg.length>140?msg.slice(0,140)+'...':msg}</div>`:`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No message written yet</div>`,'s-letter');
-}
-
-async function saveAndShare(){
-  const overlay=document.getElementById('saveOverlay'),bar=document.getElementById('saveBar'),label=document.getElementById('saveLabel');
-  function setProgress(pct,lbl){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;}
-  overlay.classList.add('show');setProgress(10,'Preparing your chat... 💬');
-  let photoUrls=[];
-  const slots=photos.map((p,i)=>({blob:p,idx:i})).filter(s=>s.blob);
-  let uploaded=0;
-  for(const s of slots){
-    if(uploadedUrls[s.idx]){photoUrls.push(uploadedUrls[s.idx]);uploaded++;setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Packing photos...');}
-    else{
-      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Uploading photo '+(uploaded+1)+'...');
-      try{
-        const fd=new FormData();fd.append('file',await fetch(s.blob).then(r=>r.blob()));fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
-        const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-        const d=await res.json();if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
-      }catch(e){console.error(e);}
-      uploaded++;
-    }
-  }
-  setProgress(70,'Almost there... 💬');
-  const now=Date.now();
-  const cardData={
-    type:CFG.cardType,
-    name:document.getElementById('cName')?.value.trim()||'',
-    sender:document.getElementById('cSender')?.value.trim()||'',
-    msg:document.getElementById('cMsg')?.value.trim()||'',
-    spotify:document.getElementById('cSpotify')?.value.trim()||'',
-    songName:document.getElementById('songSelectedName')?.textContent||'',
-    photos:photoUrls,created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
-  };
-  try{
-    setProgress(85,'Creating your chat... 💬');
-    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
-    const data=await res.json();const cardId=data.name;
-    shareLink=CFG.shareUrl(cardId);
-    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
-    setProgress(100,'Sent! 🎉');
-    setTimeout(()=>{overlay.classList.remove('show');document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');document.getElementById('shareModal').classList.add('show');},600);
-  }catch(e){overlay.classList.remove('show');alert('Could not save. Please try again.');}
-}
-function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
-function openWhatsApp(){
-  const name=document.getElementById('cName')?.value.trim()||'';
-  const sender=document.getElementById('cSender')?.value.trim()||'';
-  const msg=CFG.shareMsg(name,sender,shareLink);
-  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if(navigator.share&&isMobile){navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));}
-  else{window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');}
-}
-function closeShare(){document.getElementById('shareModal').classList.remove('show');}
-
-// ── RECEIVER ──
 async function loadCard(){
   const cardId=new URLSearchParams(window.location.search).get('card');
   if(!cardId){goTo('rv-error');return;}
