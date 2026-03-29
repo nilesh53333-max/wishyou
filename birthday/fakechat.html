@@ -52,9 +52,6 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .ai-loading.show{display:flex;}
 .ai-dot{width:6px;height:6px;border-radius:50%;background:#25D366;animation:aiPulse 1s ease-in-out infinite;}
 @keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
-.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
-.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;font-size:1.3rem;background:rgba(37,211,102,0.07);border:1.5px dashed rgba(37,211,102,0.3);}
-.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
 .photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#25D366;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 .song-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;background:rgba(255,255,255,0.7);border:1.5px solid rgba(37,211,102,0.12);}
 .song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
@@ -262,17 +259,6 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 
 <script>
 const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
-const CLOUDINARY_CLOUD='dkvbjazfe';
-const CLOUDINARY_PRESET='wishyou-uploads';
-const WORKER_URL='https://wild-fog-b15e.nilesh53333.workers.dev/';
-const CFG={
-  cardType:'birthday-fakechat',
-  defaultMsg:'Happy Birthday! 🎂\n\nI\'ve been thinking about what to say for days. And I still don\'t have the perfect words. But I know this — having you in my life is something I\'m grateful for every single day.\n\nToday is your day. Celebrate hard. You deserve every bit of it. 💚',
-  shareMsg:(name,sender,link)=>`💬 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' sent you a special birthday chat 💬\n\n':'Someone sent you a birthday message 💬\n\n'}👆 Open here:\n${link}`,
-  shareUrl:(id)=>`https://wishyou.ai/birthday/fakechat.html?card=${id}`
-};
-let curScreen='',photos=[],uploadedUrls={},currentSlotIdx=0,shareLink='',returnToPreview=false,aiLetterCount=0;
-const IS_RECEIVER=new URLSearchParams(window.location.search).has('card');
 function renderChat(d){
   const name=d.name||'';
   const sender=d.sender||'Someone Special';

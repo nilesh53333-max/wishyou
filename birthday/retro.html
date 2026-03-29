@@ -84,10 +84,6 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .yellow-dot{background:#d90429;}
 
 /* PHOTOS */
-.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
-.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;transition:background 0.2s;font-size:1.3rem;}
-.photo-slot.retro-slot{background:white;border:3px solid #111;box-shadow:2px 2px 0 #111;}
-.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
 .photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#d90429;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 
 /* SONG */
@@ -410,32 +406,10 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 <script>
 // ── CONFIG ──
 const FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
-const CLOUDINARY_CLOUD = 'dkvbjazfe';
-const CLOUDINARY_PRESET = 'wishyou-uploads';
-const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
 
-const CFG = {
-  cardType:'birthday-retro',
-  emoji:'🎊', stepEmoji:'🎊',
-  photosTitle:'Add your photos',
-  songTitle:'A song that reminds you of them',
-  letterTitle:'Write the party letter!',
-  defaultMsg:"Today the whole world stops to celebrate YOU! Every laugh, every memory, every crazy moment — it all led to this day. Here's to you, superstar!",
-  defaultSign:'From your biggest fan 🎊',
-  shareMsg:(name,sender,link)=>`🎊 *Happy Birthday${name?' '+name:''}!*\n\n${sender?sender+' made you a Retro Party card 🎉\n\n':'Someone made you a special card 🎉\n\n'}👆 Open here:\n${link}`,
-  shareUrl:(id)=>`https://wishyou.ai/birthday/retro.html?card=${id}`
-};
 
 // ── STATE ──
-let curScreen = '';
-let photos = [];
-let uploadedUrls = {}; // slot index -> cloudinary URL (pre-uploaded)
-let currentSlotIdx = 0;
-let shareLink = '';
-let returnToPreview = false;
-let aiLetterCount = 0;
 
-const IS_RECEIVER = new URLSearchParams(window.location.search).has('card');
 
 // ── NAVIGATION ──
 const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
@@ -447,11 +421,7 @@ function goTo(id, fromPreview=false){
   if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
   next.classList.add('active');
   curScreen=id;
-  returnToPreview=fromPreview;
-  if(id==='s-letter'){aiLetterCount=0;const btn=document.getElementById('aiLetterBtn');if(btn)btn.textContent='✨ Write Letter with AI';const h=document.getElementById('letterAiResult');if(h)h.style.display='none';}
   if(fromPreview){
-    const btnMap={'s-name':'btn-name','s-photos':'btn-photos','s-song':'btn-song','s-letter':'btn-letter'};
-    const btnId=btnMap[id];
   }
   // FIX: cassette reels only spin on song screen
   const r1=document.getElementById('reel1');
