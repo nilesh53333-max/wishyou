@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Breaking News 📰</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📰</text></svg>">
+<meta property="og:title" content="Breaking News — You need to see this 📰">
+<meta property="og:description" content="A special edition has been published. Open immediately.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:#1a1a1a;}
+.app{position:fixed;inset:0;overflow:hidden;background:#1a1a1a;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;border-radius:8px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.9);}
+}
+.screen{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 0.5s ease;display:flex;flex-direction:column;overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;}
+
+/* ── LOADING ── */
+#rv-loading{background:#f5f0e8;align-items:center;justify-content:center;gap:12px;}
+.load-press{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:#1a1a1a;letter-spacing:0.04em;}
+.load-sub{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:#666;animation:blink 1s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ── ERROR ── */
+#rv-error{background:#f5f0e8;align-items:center;justify-content:center;text-align:center;padding:40px;gap:12px;}
+.err-head{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#1a1a1a;}
+.err-sub{font-size:0.8rem;color:#666;line-height:1.6;}
+
+/* ── WELCOME / FRONT PAGE ── */
+#rv-welcome{background:#f5f0e8;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#rv-welcome::-webkit-scrollbar{display:none;}
+.paper{background:#f5f0e8;min-height:100%;padding:0 0 32px;}
+
+/* Masthead */
+.masthead{border-bottom:3px solid #1a1a1a;border-top:3px solid #1a1a1a;padding:6px 16px 8px;text-align:center;margin-bottom:0;}
+.masthead-top{display:flex;justify-content:space-between;align-items:center;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:#555;margin-bottom:4px;}
+.masthead-name{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,8vw,2.6rem);font-weight:900;color:#1a1a1a;line-height:1;letter-spacing:0.02em;}
+.masthead-tagline{font-size:0.58rem;font-style:italic;color:#555;margin-top:2px;letter-spacing:0.06em;}
+.masthead-rule{height:1px;background:#1a1a1a;margin:6px 0 0;}
+
+/* Breaking banner */
+.breaking-banner{background:#cc0000;color:white;text-align:center;padding:5px 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-shrink:0;}
+.breaking-pill{background:white;color:#cc0000;font-size:0.5rem;font-weight:700;letter-spacing:0.14em;padding:2px 7px;border-radius:2px;text-transform:uppercase;flex-shrink:0;}
+.breaking-text{font-size:0.65rem;font-weight:600;letter-spacing:0.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* Main story */
+.main-story{padding:14px 16px 0;}
+.story-kicker{font-size:0.55rem;letter-spacing:0.18em;text-transform:uppercase;color:#cc0000;font-weight:600;margin-bottom:6px;}
+.story-headline{font-family:'Playfair Display',serif;font-size:clamp(1.3rem,5.5vw,1.7rem);font-weight:900;color:#1a1a1a;line-height:1.15;margin-bottom:8px;}
+.story-deck{font-size:0.8rem;color:#333;line-height:1.55;font-style:italic;border-left:3px solid #cc0000;padding-left:10px;margin-bottom:12px;}
+
+/* Lead photo */
+.lead-photo-wrap{position:relative;margin:0 16px 0;background:#ddd;}
+.lead-photo{width:100%;max-height:260px;object-fit:cover;display:block;}
+.lead-photo-cap{font-size:0.58rem;color:#555;padding:5px 0 0;line-height:1.4;font-style:italic;}
+
+/* Divider rule */
+.col-rule{height:1px;background:#1a1a1a;margin:14px 16px;}
+.col-rule-double{height:3px;border-top:1px solid #1a1a1a;border-bottom:1px solid #1a1a1a;margin:14px 16px;}
+
+/* Byline */
+.byline{font-size:0.58rem;color:#555;padding:8px 16px 0;letter-spacing:0.04em;}
+.byline span{font-weight:600;color:#1a1a1a;}
+
+/* Sub stories grid */
+.sub-stories{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#1a1a1a;margin:14px 16px 0;border:1px solid #1a1a1a;}
+.sub-story{background:#f5f0e8;padding:10px;}
+.sub-photo{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;margin-bottom:6px;background:#ddd;}
+.sub-kicker{font-size:0.48rem;letter-spacing:0.14em;text-transform:uppercase;color:#cc0000;font-weight:600;margin-bottom:3px;}
+.sub-head{font-family:'Playfair Display',serif;font-size:0.72rem;font-weight:700;color:#1a1a1a;line-height:1.2;margin-bottom:4px;}
+.sub-cap{font-size:0.55rem;color:#555;line-height:1.4;font-style:italic;}
+
+/* More stories — remaining photos in list */
+.more-stories{padding:0 16px;}
+.more-title{font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:#1a1a1a;font-weight:700;margin-bottom:8px;padding-bottom:4px;border-bottom:2px solid #1a1a1a;}
+.more-item{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #ccc;}
+.more-img{width:60px;height:48px;object-fit:cover;flex-shrink:0;background:#ddd;}
+.more-text{}
+.more-head{font-family:'Playfair Display',serif;font-size:0.7rem;font-weight:700;color:#1a1a1a;line-height:1.2;margin-bottom:3px;}
+.more-cap{font-size:0.56rem;color:#555;line-height:1.35;font-style:italic;}
+
+/* Radio widget */
+.radio-widget{margin:14px 16px 0;border:2px solid #1a1a1a;background:#1a1a1a;border-radius:4px;overflow:hidden;}
+.radio-header{background:#1a1a1a;padding:8px 12px;display:flex;align-items:center;gap:8px;}
+.radio-dot{width:8px;height:8px;border-radius:50%;background:#cc0000;animation:radioPulse 1.2s ease-in-out infinite;}
+@keyframes radioPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
+.radio-label{font-size:0.55rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.6);}
+.radio-body{background:#f5f0e8;padding:10px 12px;}
+.radio-song{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;color:#1a1a1a;margin-bottom:2px;}
+.radio-sub{font-size:0.58rem;color:#555;font-style:italic;margin-bottom:8px;}
+.radio-btn{background:#cc0000;border:none;color:white;font-family:'DM Sans',sans-serif;font-size:0.7rem;font-weight:600;padding:7px 18px;border-radius:2px;cursor:pointer;touch-action:manipulation;letter-spacing:0.06em;}
+.radio-btn:active{transform:scale(0.97);}
+
+/* Editor's column button */
+.editors-col-btn{margin:14px 16px 0;border:2px solid #1a1a1a;padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer;touch-action:manipulation;background:#f5f0e8;}
+.editors-col-btn:active{background:#ede8dc;}
+.editors-icon{font-size:1.8rem;flex-shrink:0;}
+.editors-text{}
+.editors-kicker{font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;color:#cc0000;font-weight:600;margin-bottom:3px;}
+.editors-head{font-family:'Playfair Display',serif;font-size:0.88rem;font-weight:700;color:#1a1a1a;line-height:1.2;}
+.editors-arr{font-size:1.2rem;color:#1a1a1a;margin-left:auto;flex-shrink:0;}
+
+/* Footer */
+.paper-footer{text-align:center;padding:20px 16px 8px;border-top:3px double #1a1a1a;margin:14px 16px 0;}
+.footer-txt{font-size:0.52rem;color:#888;letter-spacing:0.08em;}
+
+/* ── SONG PLAYER ── */
+#rv-song{background:#1a1a1a;align-items:center;justify-content:center;padding:32px;}
+.sp-paper{background:#f5f0e8;width:100%;border-radius:4px;padding:24px 20px;text-align:center;}
+.sp-kicker{font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:#cc0000;font-weight:600;margin-bottom:10px;}
+.sp-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:900;color:#1a1a1a;margin-bottom:4px;line-height:1.3;}
+.sp-sub{font-size:0.7rem;color:#555;font-style:italic;margin-bottom:16px;}
+.yt-wrap{width:100%;border-radius:4px;overflow:hidden;margin-bottom:16px;display:none;}
+.yt-wrap iframe{width:100%;height:175px;border:none;display:block;}
+.yt-wrap.show{display:block;}
+.sp-close{background:#1a1a1a;border:none;color:#f5f0e8;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;padding:10px 28px;border-radius:2px;cursor:pointer;letter-spacing:0.08em;touch-action:manipulation;}
+
+/* ── LETTER / EDITOR'S COLUMN ── */
+#rv-letter{background:#f5f0e8;overflow:hidden;}
+.letter-paper{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0;}
+.letter-paper::-webkit-scrollbar{display:none;}
+.letter-masthead{border-bottom:3px double #1a1a1a;padding:10px 16px 10px;text-align:center;}
+.letter-pub{font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;color:#555;}
+.letter-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:900;color:#1a1a1a;margin:2px 0;}
+.letter-ed{font-size:0.58rem;font-style:italic;color:#555;}
+.letter-body-wrap{padding:16px 16px 0;}
+.letter-drop{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:900;color:#cc0000;float:left;line-height:0.75;margin-right:6px;margin-top:8px;}
+.letter-body{font-size:0.88rem;color:#1a1a1a;line-height:1.75;white-space:pre-wrap;font-family:'DM Sans',sans-serif;}
+.letter-rule{height:1px;background:#1a1a1a;margin:16px 16px;}
+.letter-sign-wrap{padding:0 16px 24px;text-align:right;}
+.letter-sign-lbl{font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;color:#555;margin-bottom:4px;}
+.letter-sign-name{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:#1a1a1a;}
+.letter-back{display:block;margin:0 16px 24px;background:#1a1a1a;border:none;color:#f5f0e8;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;padding:12px;border-radius:2px;cursor:pointer;letter-spacing:0.08em;touch-action:manipulation;text-align:center;width:calc(100% - 32px);}
+
+.wm{position:absolute;bottom:6px;right:10px;font-size:0.5rem;color:rgba(0,0,0,0.1);pointer-events:none;}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Loading -->
+<div class="screen" id="rv-loading">
+  <div class="load-press">THE WISHYOU TIMES</div>
+  <div class="load-sub">Printing your edition...</div>
+</div>
+
+<!-- Error -->
+<div class="screen" id="rv-error">
+  <div class="err-head">Edition Not Found</div>
+  <div class="err-sub">This edition has expired<br>or the link is incorrect.</div>
+  <button onclick="window.location.href='/'" style="margin-top:24px;background:#1a1a1a;color:#f5f0e8;border:none;border-radius:2px;padding:11px 26px;font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;letter-spacing:0.08em;">Create your own edition</button>
+</div>
+
+<!-- Front Page -->
+<div class="screen" id="rv-welcome">
+  <div class="paper" id="paperContent">
+    <!-- Injected by JS -->
+  </div>
+</div>
+
+<!-- Song Player -->
+<div class="screen" id="rv-song">
+  <div class="sp-paper">
+    <div class="sp-kicker">📻 WishYou FM — Special Broadcast</div>
+    <div class="sp-title" id="spTitle">A song has been selected</div>
+    <div class="sp-sub">Curated by our music correspondent</div>
+    <div class="yt-wrap" id="spYt"><div id="spYtInner"></div></div>
+    <button class="sp-close" onclick="goTo('rv-welcome')">← Back to Edition</button>
+  </div>
+</div>
+
+<!-- Editor's Letter -->
+<div class="screen" id="rv-letter">
+  <div class="letter-paper">
+    <div class="letter-masthead">
+      <div class="letter-pub">The WishYou Times — Special Edition</div>
+      <div class="letter-title">Editor's Column</div>
+      <div class="letter-ed" id="letEd">A personal note</div>
+    </div>
+    <div class="letter-body-wrap">
+      <div class="letter-body" id="letBody"></div>
+    </div>
+    <div class="letter-rule"></div>
+    <div class="letter-sign-wrap">
+      <div class="letter-sign-lbl">Yours truly,</div>
+      <div class="letter-sign-name" id="letSign"></div>
+    </div>
+    <button class="letter-back" onclick="goTo('rv-welcome')">← Back to Edition</button>
+  </div>
+  <div class="wm">WishYou.ai</div>
+</div>
+
+</div>
+<script>
+const FIREBASE='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+let curScreen='';
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next)return;
+  if(prev)prev.classList.remove('active');
+  next.classList.add('active');
+  curScreen=id;
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  goTo('rv-loading');
+  fetch(`${FIREBASE}/${cardId}.json`)
+    .then(r=>r.json())
+    .then(d=>{
+      if(!d){goTo('rv-error');return;}
+      if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+      buildNewspaper(d);
+    })
+    .catch(()=>goTo('rv-error'));
+});
+
+// ── INDIAN ENGLISH HEADLINES ──
+function getHeadline(name){
+  const n=name||'The Birthday Person';
+  const heads=[
+    `${n} Completes Another Lap Around the Sun; Nation Celebrates`,
+    `${n} Adds One More Year to Already Stellar Resume`,
+    `Confirmed: ${n} Only Getting Better With Age, Sources Say`,
+    `${n} Turns Another Year Older; Refuses to Act Like It`,
+    `${n} Successfully Completes ${new Date().getFullYear()-2000}+ Years of Being Absolutely Irreplaceable`,
+    `Breaking: ${n} Spotted Looking This Good Despite Everything`,
+  ];
+  return heads[Math.floor(Math.random()*heads.length)];
+}
+function getDeck(name, sender){
+  const n=name||'the individual';
+  const s=sender||'close sources';
+  const decks=[
+    `In what experts are calling "a truly remarkable achievement," ${n} has once again managed to be the best part of everyone's day. Our correspondent ${s} filed this special report.`,
+    `Senior correspondent ${s} confirms that ${n} continues to set unprecedented standards for being wonderful. Full coverage inside.`,
+    `${s} reports that ${n} has, against all odds, become even more essential to the people around them. Economists baffled.`,
+    `Sources close to ${n} — specifically ${s} — confirm that the birthday individual remains undefeated in terms of being absolutely themselves.`,
+  ];
+  return decks[Math.floor(Math.random()*decks.length)];
+}
+function getSubKicker(){
+  const k=['Exclusive Report','Our Correspondent Reports','Special Investigation','Breaking Update','Filed From the Heart','Eyewitness Account'];
+  return k[Math.floor(Math.random()*k.length)];
+}
+function getSubHeadline(idx, name){
+  const n=name||'Subject';
+  const h=[
+    [`"Best Person in the Room," Local Sources Confirm`,`${n} Consistently Raises Vibes Wherever Present, Study Finds`,`Witnesses Report ${n} Has a Laugh That Should Be Patented`],
+    [`${n}'s Friendship: A National Asset, Say Experts`,`Rare Footage Surfaces of ${n} Being Completely Themselves`,`${n} Continues Streak of Being Genuinely Irreplaceable`],
+    [`Scientists Unable to Explain Why ${n} Is This Wonderful`,`${n} Spotted Making Everyone Around Them Feel Special Again`,`"We Don't Deserve Them," Say Everyone Who Knows ${n}`],
+    [`${n} Sets New Record for Being the Best`,`Exclusive: ${n}'s Secret to Always Showing Up Revealed`,`${n} Once Again Proving They Are Built Different`],
+    [`Local Legend ${n} Celebrates Another Year of Excellence`,`${n}'s Impact on Those Around Them: A Full Analysis`],
+  ];
+  const group=h[idx%h.length];
+  return group[Math.floor(Math.random()*group.length)];
+}
+function getDate(){
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const now=new Date();
+  return `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+function buildNewspaper(d){
+  const name=d.name||'';
+  const sender=d.sender||'A Special Correspondent';
+  const photos=(d.photos||[]).filter(Boolean);
+  const captions=d.photoCaptions||[];
+  const songName=d.songName||'';
+  const hasSong=songName&&songName!=='—';
+  const hasLetter=!!(d.msg&&d.msg.trim());
+
+  // Setup song screen
+  if(hasSong){
+    document.getElementById('spTitle').textContent=songName;
+    const sp=d.spotify||'';
+    const ytM=sp.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if(ytM){
+      document.getElementById('spYt').classList.add('show');
+      document.getElementById('spYtInner').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;
+    }
+  }
+
+  // Setup letter screen
+  if(hasLetter){
+    document.getElementById('letEd').textContent=`By ${sender}`;
+    const body=d.msg;
+    const firstChar=body.trim()[0]||'';
+    const rest=body.trim().slice(1);
+    const bodyEl=document.getElementById('letBody');
+    if(firstChar){
+      bodyEl.innerHTML=`<span class="letter-drop">${firstChar}</span>${escHtml(rest)}`;
+    } else {
+      bodyEl.textContent=body;
+    }
+    document.getElementById('letSign').textContent=d.sign||(sender?sender:'The Editor');
+  }
+
+  // Build front page HTML
+  const paper=document.getElementById('paperContent');
+  let html='';
+
+  // Masthead
+  html+=`<div class="masthead">
+    <div class="masthead-top">
+      <span>Vol. ${new Date().getFullYear()} No. ${new Date().getDate()}</span>
+      <span>${getDate()}</span>
+      <span>Special Edition</span>
+    </div>
+    <div class="masthead-name">The WishYou Times</div>
+    <div class="masthead-tagline">"Saari Khabrein, Sab Se Pehle — Dil Se"</div>
+    <div class="masthead-rule"></div>
+  </div>`;
+
+  // Breaking banner
+  html+=`<div class="breaking-banner">
+    <div class="breaking-pill">Breaking</div>
+    <div class="breaking-text">BIRTHDAY DECLARED: ${(name||'THE BIRTHDAY PERSON').toUpperCase()} TURNS ANOTHER YEAR OF FABULOUS</div>
+  </div>`;
+
+  // Main story with lead photo
+  html+=`<div class="main-story">
+    <div class="story-kicker">🎂 Front Page — Birthday Bureau</div>
+    <div class="story-headline">${getHeadline(name)}</div>
+    <div class="story-deck">${getDeck(name,sender)}</div>
+  </div>`;
+
+  // Lead photo (first photo)
+  if(photos.length>0){
+    html+=`<div style="padding:0 16px;">
+      <img class="lead-photo" src="${photos[0]}" alt="" onerror="this.parentNode.style.display='none'">
+      <div class="lead-photo-cap">📸 ${captions[0]||`${name} — Exclusive photograph obtained by The WishYou Times`}</div>
+    </div>`;
+  }
+
+  html+=`<div class="byline"><span>By ${sender}</span> | Birthday Correspondent, The WishYou Times</div>`;
+  html+=`<div class="col-rule"></div>`;
+
+  // Sub stories — photos 2 and 3 in 2-col grid
+  const subPhotos=photos.slice(1,3);
+  if(subPhotos.length>0){
+    html+=`<div class="sub-stories">`;
+    subPhotos.forEach((url,i)=>{
+      const idx=i+1;
+      html+=`<div class="sub-story">
+        <img class="sub-photo" src="${url}" alt="" onerror="this.style.display='none'">
+        <div class="sub-kicker">${getSubKicker()}</div>
+        <div class="sub-head">${getSubHeadline(idx,name)}</div>
+        <div class="sub-cap">${captions[idx]||'Our correspondent reports.'}</div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // More stories — photos 4 and 5
+  const morePhotos=photos.slice(3);
+  if(morePhotos.length>0){
+    html+=`<div class="col-rule-double"></div>`;
+    html+=`<div class="more-stories"><div class="more-title">Also In This Edition</div>`;
+    morePhotos.forEach((url,i)=>{
+      const idx=i+3;
+      html+=`<div class="more-item">
+        <img class="more-img" src="${url}" alt="" onerror="this.style.display='none'">
+        <div class="more-text">
+          <div class="more-head">${getSubHeadline(idx,name)}</div>
+          <div class="more-cap">${captions[idx]||'Full report from our correspondent.'}</div>
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+
+  // Song radio widget
+  if(hasSong){
+    html+=`<div class="col-rule"></div>`;
+    html+=`<div class="radio-widget">
+      <div class="radio-header">
+        <div class="radio-dot"></div>
+        <div class="radio-label">📻 WishYou FM — Live Broadcast</div>
+      </div>
+      <div class="radio-body">
+        <div class="radio-song">${escHtml(songName)}</div>
+        <div class="radio-sub">Now playing on WishYou FM — selected by ${escHtml(sender)}</div>
+        <button class="radio-btn" onclick="goTo('rv-song')">▶ Tune In</button>
+      </div>
+    </div>`;
+  }
+
+  // Editor's column
+  if(hasLetter){
+    html+=`<div class="col-rule"></div>`;
+    html+=`<div class="editors-col-btn" onclick="goTo('rv-letter')">
+      <div class="editors-icon">✍️</div>
+      <div class="editors-text">
+        <div class="editors-kicker">Editor's Column — Personal</div>
+        <div class="editors-head">A Special Note From ${escHtml(sender)}</div>
+      </div>
+      <div class="editors-arr">→</div>
+    </div>`;
+  }
+
+  // Footer
+  html+=`<div class="paper-footer">
+    <div class="footer-txt">© The WishYou Times · Special Birthday Edition · All Rights Reserved · Made with ❤️ on WishYou.ai</div>
+  </div>`;
+
+  paper.innerHTML=html;
+  goTo('rv-welcome');
+}
+
+function escHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
