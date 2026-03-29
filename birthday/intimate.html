@@ -415,7 +415,7 @@ function goTo(id){
   if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
   next.classList.add('active');
   curScreen=id;
-  if(id==='rv-photos'&&_showFirst){setTimeout(()=>{_showFirst();_showFirst=null;},550);}
+  if(id==='rv-photos'&&_showFirst){setTimeout(()=>{_showFirst();_showFirst=null;},50);}
   const v=document.getElementById('rvVinyl');
   if(v){if(id==='rv-song')v.classList.remove('vinyl-pause');else v.classList.add('vinyl-pause');}
   if(id!=='rv-song'){const ifr=document.querySelector('#rvYtWrap iframe');if(ifr)ifr.src=ifr.src;}
@@ -576,6 +576,8 @@ function renderCard(d){
     let front=0, busy=false;
     // Preload all images
     photos.forEach(u=>{const i=new Image();i.src=u;});
+    // Set first card img src now so it loads during welcome screen
+    setTimeout(()=>{const firstImg=document.querySelector('#polStack img');if(firstImg&&photos[0])firstImg.src=photos[0];},0);
     // Build cards — append back-to-front so front card is last (on top visually via z-index)
     const cards=photos.map((url,i)=>{
       const c=document.createElement('div');
