@@ -513,7 +513,7 @@ const DEFAULT_CONTENT = {
   letterTone:'emotional and heartfelt',
   letterPlaceholder:'Dear Priya,\n\nAnother year around the sun...',
   signOff: n=>`With love, ${n} 🎂`,
-  aiLetterPrompt:(name,sender,tone)=>`Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone||'warm and heartfelt'}. Return ONLY the letter body — no greeting, no sign off.`
+  aiLetterPrompt:(name,sender,tone)=>`Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone||"warm and heartfelt"}. Return ONLY the letter body — no greeting, no sign off.`
 };
 
 
@@ -649,112 +649,191 @@ let photoCaptions = [...DEFAULT_CAPTIONS];
 // Relation-aware content — updates all fields at once
 function getRelationContent(rel) {
   const r = (rel||'').toLowerCase().trim();
-  const sender = document.getElementById('cSender')?.value.trim() || '';
-  const sign = n => n ? `With love, ${n} 💕` : 'With love 💕';
+  const sender = document.getElementById("cSender")?.value.trim() || '';
+  const sign = (n, tag) => n ? `${tag}, ${n}` : tag;
 
   if (/wife|girlfriend|partner|love/.test(r)) return {
-    photosHeading: 'Our Memories Together 💕',
-    songTitle: 'A song that\'s so us 🎵',
-    tone: 'deeply romantic and emotional',
-    signOff: sign(sender),
-    captions: ['My favourite person in the world 💕','You make everything better ✨','A moment I never want to forget 🌸','This smile gets me every time 💫','Always and forever mine 💝']
+    photosHeading: "Just You & Me",
+    songTitle: "The song that plays in my head",
+    tone: "deeply romantic, personal and emotional — like a love letter",
+    signOff: sign(sender, 'Yours, always 💕'),
+    captions: [
+      "The one I choose, every single day 💕",
+      "Home is wherever you are ✨",
+      "I'd pick this moment again and again 🌸",
+      "That smile. That one. 💫",
+      "Mine. Completely mine 💝"
+    ]
   };
   if (/husband|boyfriend/.test(r)) return {
-    photosHeading: 'Our Story So Far 💕',
-    songTitle: 'A song just for us 🎵',
-    tone: 'romantic and heartfelt',
-    signOff: sign(sender),
-    captions: ['My person, always 💕','You and me — always ✨','A memory I\'ll keep forever 🌟','That smile never gets old 😊','My favourite human 💫']
+    photosHeading: "You & Me",
+    songTitle: "The song that plays in my head",
+    tone: "romantic, genuine and heartfelt — not flowery, real",
+    signOff: sign(sender, 'Yours 💕'),
+    captions: [
+      "My person. Full stop 💕",
+      "Every day with you is a good day ✨",
+      "I still can't believe I get to keep you 🌟",
+      "This one lives in my heart forever 😊",
+      "Still my favourite person in any room 💫"
+    ]
   };
   if (/mom|mother|mum|mama|aai/.test(r)) return {
-    photosHeading: 'Moments with My Mom 🌸',
-    songTitle: 'A song for you, Mom 🎵',
-    tone: 'warm, emotional and grateful',
-    signOff: sender ? `Your loving child, ${sender} 🌸` : 'Your loving child 🌸',
-    captions: ['My first home 🌸','Everything good in me is you ✨','A memory I\'ll treasure forever 💕','You make every moment special 🌺','My safe place, always 💫']
+    photosHeading: "The Woman Who Made Me",
+    songTitle: "For the one who gave me everything",
+    tone: "deeply emotional, grateful and loving — from a child to their mother",
+    signOff: sign(sender, 'Your baby, always 🌸'),
+    captions: [
+      "Everything I am, I learned from you 🌸",
+      "My first safe place ✨",
+      "No one loves like you do 💕",
+      "I see you in everything good about me 🌺",
+      "The one I call when the world gets heavy 💫"
+    ]
   };
   if (/dad|father|papa|baba/.test(r)) return {
-    photosHeading: 'Moments with My Dad 💪',
-    songTitle: 'A song for you, Dad 🎵',
-    tone: 'heartfelt, proud and emotional',
-    signOff: sender ? `Your child, ${sender} 💪` : 'Your child 💪',
-    captions: ['My hero, always 💪','You taught me everything 🌟','A memory worth keeping forever ✨','Stronger than I\'ll ever be 🫶','My favourite role model 💫']
+    photosHeading: "The Man Who Showed Me How",
+    songTitle: "For the man who never gave up on me",
+    tone: "emotional, proud and raw — the things a child wishes they said more",
+    signOff: sign(sender, 'Your kid, always 💪'),
+    captions: [
+      "The strongest person I'll ever know 💪",
+      "I got my backbone from you ✨",
+      "Still trying to make you proud 🌟",
+      "You never asked for credit. You deserve all of it 🫶",
+      "I'll spend my whole life paying this forward 💫"
+    ]
   };
   if (/son|beta/.test(r)) return {
-    photosHeading: 'Memories with My Son 🌟',
-    songTitle: 'A song for my son 🎵',
-    tone: 'proud, loving and emotional',
-    signOff: sender ? `With all my love, ${sender} 🌟` : 'With all my love 🌟',
-    captions: ['My greatest adventure 🌟','Watching you grow is everything ✨','A moment to keep forever 💕','You make me so proud 🫶','My whole heart 💫']
+    photosHeading: "My Greatest Chapter",
+    songTitle: "For the one who changed everything",
+    tone: "proud, overwhelmed with love — a parent who can't find the right words",
+    signOff: sign(sender, 'Your biggest fan 🌟'),
+    captions: [
+      "I didn't know love like this existed 🌟",
+      "Watching you grow is the privilege of my life ✨",
+      "My heart walks around outside my body 💕",
+      "You make me want to be better 🫶",
+      "Every single day — I'm so proud of you 💫"
+    ]
   };
   if (/daughter|beti/.test(r)) return {
-    photosHeading: 'Memories with My Daughter 🌸',
-    songTitle: 'A song for my daughter 🎵',
-    tone: 'proud, warm and emotional',
-    signOff: sender ? `With all my love, ${sender} 🌸` : 'With all my love 🌸',
-    captions: ['My sunshine 🌸','You light up every room ✨','A memory I\'ll treasure always 💕','My proudest joy 🌺','My whole heart 💫']
+    photosHeading: "My Whole World",
+    songTitle: "For the one who made me complete",
+    tone: "tender, proud and deeply loving — a parent's letter to their daughter",
+    signOff: sign(sender, 'Your biggest fan 🌸'),
+    captions: [
+      "You are the best thing I ever did 🌸",
+      "That laugh. I'd do anything to keep it ✨",
+      "Watching you become you is everything 💕",
+      "You have no idea how bright you shine 🌺",
+      "My proudest moment, every single day 💫"
+    ]
   };
   if (/sister|sis|didi/.test(r)) return {
-    photosHeading: 'My Sister, My Person 💕',
-    songTitle: 'Our kind of song 🎵',
-    tone: 'fun, emotional and sisterly',
-    signOff: sender ? `Your sister, ${sender} 💕` : 'Your sister 💕',
-    captions: ['My built-in best friend 💕','No one gets me like you ✨','A memory just for us 🌸','My partner in everything 😊','Forever my favourite 💫']
+    photosHeading: "The One Who Knows Everything",
+    songTitle: "Our song — you know the one",
+    tone: "real, funny and emotional — like a message between sisters who know each other too well",
+    signOff: sign(sender, 'Your annoying sibling 💕'),
+    captions: [
+      "My first best friend 💕",
+      "You know too much about me and I trust you anyway ✨",
+      "Nobody makes me laugh like you 🌸",
+      "We've been through it. All of it 😊",
+      "Not just my sister. My person 💫"
+    ]
   };
   if (/brother|bro|bhai/.test(r)) return {
-    photosHeading: 'My Brother, Always 🤜',
-    songTitle: 'Our kind of song 🎵',
-    tone: 'fun, warm and brotherly',
-    signOff: sender ? `Your sibling, ${sender} 🤜` : 'Your sibling 🤜',
-    captions: ['My first friend 🤜','Always got my back ✨','A memory worth everything 🌟','The best kind of chaos 😄','My favourite brother 💫']
+    photosHeading: "The One Who Always Showed Up",
+    songTitle: "Our song — you know the one",
+    tone: "genuine, warm and slightly funny — the way brothers actually talk",
+    signOff: sign(sender, 'Your sibling 🤜'),
+    captions: [
+      "My first teammate 🤜",
+      "Annoying in the best way possible ✨",
+      "Didn't choose you. Grateful anyway 🌟",
+      "You've had my back before I even knew I needed it 😄",
+      "This one's for keeps 💫"
+    ]
   };
   if (/friend|buddy/.test(r)) return {
-    photosHeading: 'Best Memories with You 😊',
-    songTitle: 'Our kind of song 🎵',
-    tone: 'fun, warm and friendly',
-    signOff: sender ? `Your friend, ${sender} 😊` : 'Your friend 😊',
-    captions: ['The one who just gets it 💕','Best memories are with you ✨','A moment I never want to forget 😊','Ride or die, always 🌟','My kind of people 💫']
+    photosHeading: "The Good Ones",
+    songTitle: "The song we both know every word to",
+    tone: "fun, warm and genuine — the way close friends actually talk to each other",
+    signOff: sign(sender, 'Your person 😊'),
+    captions: [
+      "The one who picks up no matter what 💕",
+      "Years in and still my favourite chaos ✨",
+      "Some friendships just fit. This one fits 😊",
+      "The stories we never tell anyone else 🌟",
+      "Genuinely don't know what I'd do without you 💫"
+    ]
   };
   if (/grandma|grandmother|nani|dadi|aaji/.test(r)) return {
-    photosHeading: 'Moments with My Nani 🌸',
-    songTitle: 'A song for you 🎵',
-    tone: 'warm, loving and grateful',
-    signOff: sender ? `Your grandchild, ${sender} 🌸` : 'Your grandchild 🌸',
-    captions: ['Love without limits 🌸','The warmest arms in the world ✨','A memory filled with love 💕','Your blessings mean everything 🌺','My forever comfort 💫']
+    photosHeading: "A Love That Never Runs Out",
+    songTitle: "For the one whose love I'll never outgrow",
+    tone: "deeply grateful, warm and emotional — a grandchild who wants to say thank you properly",
+    signOff: sign(sender, 'Your grandchild, with so much love 🌸'),
+    captions: [
+      "The warmth I still feel when I close my eyes 🌸",
+      "Nobody in the world loves like you do ✨",
+      "Your hands. Your voice. Your food. Forever 💕",
+      "Everything soft in me came from you 🌺",
+      "I carry you everywhere I go 💫"
+    ]
   };
   if (/grandpa|grandfather|nana|dada|ajoba/.test(r)) return {
-    photosHeading: 'Moments with My Nana 🌟',
-    songTitle: 'A song for you 🎵',
-    tone: 'warm, respectful and grateful',
-    signOff: sender ? `Your grandchild, ${sender} 🌟` : 'Your grandchild 🌟',
-    captions: ['Wisdom and love in one 🌟','The strongest person I know ✨','A memory I treasure forever 💕','Your stories are my favourite 🫶','My greatest inspiration 💫']
+    photosHeading: "The One Who Built It All",
+    songTitle: "For the one who showed us how to live",
+    tone: "respectful, emotional and grateful — a grandchild in awe of who their grandfather is",
+    signOff: sign(sender, 'Your grandchild, with all my respect 🌟'),
+    captions: [
+      "The standard I'll spend my whole life reaching for 🌟",
+      "Quiet strength. That's what you are ✨",
+      "Your stories built who I am 💕",
+      "Everything you planted is still growing 🫶",
+      "The most unshakeable person I've ever known 💫"
+    ]
   };
   if (/colleague|coworker|boss|work/.test(r)) return {
-    photosHeading: 'Great Memories Together 🌟',
-    songTitle: 'A song for the occasion 🎵',
-    tone: 'warm, professional and cheerful',
-    signOff: sender ? `Warm regards, ${sender} 🎉` : 'Warm regards 🎉',
-    captions: ['The best team I\'ve been on 🌟','Making work feel easy ✨','A memory from our journey 😊','Great things happen with great people 💫','Here\'s to more wins together 🎉']
+    photosHeading: "Good People Make Good Work",
+    songTitle: "For a great year and a better person",
+    tone: "warm, genuine and professional — appreciative without being over the top",
+    signOff: sign(sender, 'Grateful to work with you 🎉'),
+    captions: [
+      "The kind of person who makes Mondays better 🌟",
+      "Work is actually good when you're around ✨",
+      "The one who always had the answer 😊",
+      "Built something real together 💫",
+      "Here's to what's next 🎉"
+    ]
   };
   if (/parents|family/.test(r)) return {
-    photosHeading: 'Moments with My Family 🌸',
-    songTitle: 'A song for our family 🎵',
-    tone: 'warm, loving and grateful',
-    signOff: sender ? `With love, ${sender} 🌸` : 'With love 🌸',
-    captions: ['My whole world 🌸','Everything I am is because of you ✨','A memory to treasure forever 💕','You make every day special 🌺','My safe place, always 💫']
-  };
-  // Generic fallback
-  return {
-    photosHeading: `Memories with My ${rel} 📸`,
-    songTitle: `A song for my ${rel} 🎵`,
-    tone: 'warm and heartfelt',
-    signOff: sign(sender),
+    photosHeading: "Where It All Begins",
+    songTitle: "For the ones who gave me everything",
+    tone: "emotional, grateful and warm — a child finally saying what they always meant to",
+    signOff: sign(sender, 'Your child, always 🌸'),
     captions: [
-      `The best ${rel} I could ask for 💕`,
-      'A memory worth keeping forever ✨',
-      'This one always makes me smile 😊',
-      'So grateful for moments like this 🌟',
-      `Lucky to have you as my ${rel} 💫`
+      "Everything I have starts with you 🌸",
+      "Home is the people, not the place ✨",
+      "I see it now — all you gave up for us 💕",
+      "The luckiest thing about my life is you 🌺",
+      "Thank you. For all of it 💫"
+    ]
+  };
+  // Generic — uses their actual word, feels personal not templated
+  const R = rel.charAt(0).toUpperCase() + rel.slice(1);
+  return {
+    photosHeading: `For My ${R}`,
+    songTitle: `A song picked just for you`,
+    tone: `warm, personal and heartfelt — written for someone's ${rel}`,
+    signOff: sign(sender, `With love 💕`),
+    captions: [
+      `The kind of ${rel} everyone wishes they had 💕`,
+      "A moment I never want to forget ✨",
+      "This one gets me every time 😊",
+      "Grateful for every second of this 🌟",
+      `My ${rel}. My person 💫`
     ]
   };
 }
