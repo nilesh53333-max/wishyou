@@ -169,22 +169,20 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 .rv-sec-tag{display:none;}
 .rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#4a0e2a;}
 
-.pol-grid{padding:10px 14px 8px;display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start;}
-.pol-grid.count-1{grid-template-columns:1fr;}
-.pol-grid.count-1 .pol{max-width:260px;margin:0 auto;width:100%;}
-.pol-grid.count-3 .pol:first-child{grid-column:1/-1;}
-.pol-grid.count-5 .pol:last-child{grid-column:1/-1;}
-
-.pol{background:white;padding:6px 6px 22px;box-shadow:0 8px 28px rgba(74,14,42,0.14),0 2px 6px rgba(74,14,42,0.06);border-radius:2px;cursor:pointer;touch-action:pan-y;position:relative;animation:polReveal 0.55s cubic-bezier(0.22,1,0.36,1) both;}
-.pol:nth-child(1){animation-delay:0.06s;}
-.pol:nth-child(2){animation-delay:0.14s;}
-.pol:nth-child(3){animation-delay:0.22s;}
-.pol:nth-child(4){animation-delay:0.30s;}
-.pol:nth-child(5){animation-delay:0.38s;}
-@keyframes polReveal{0%{opacity:0;transform:translateY(20px) scale(0.9);}60%{opacity:1;}100%{opacity:1;transform:translateY(0) scale(1);}}
-.pol:active{transform:scale(0.96);}
-.pol img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;display:block;}
-.pol-tap{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:0.5rem;color:#8d3a5a;opacity:0.35;letter-spacing:0.06em;}
+/* ── Stacked photo card animation ── */
+.pol-stack-scene{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:16px 24px 0;}
+.pol-stack{position:relative;width:240px;height:290px;cursor:pointer;touch-action:manipulation;margin-bottom:14px;}
+.pol-card{position:absolute;width:240px;background:#fff;padding:10px 10px 36px;border-radius:3px;box-shadow:0 8px 28px rgba(74,14,42,0.22);transition:transform 0.5s cubic-bezier(.4,0,.2,1),opacity 0.4s ease,box-shadow 0.4s ease;transform-origin:bottom center;will-change:transform,opacity;left:50%;}
+.pol-card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;border-radius:1px;}
+.pol-caption{text-align:center;font-size:0.68rem;color:#8d3a5a;margin-top:6px;font-style:italic;line-height:1.4;min-height:1em;}
+.pol-tap-hint{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:0.58rem;font-weight:700;color:#e91e63;letter-spacing:0.05em;pointer-events:none;}
+.pol-counter{font-size:0.65rem;color:rgba(74,14,42,0.35);letter-spacing:0.1em;text-align:center;margin-bottom:6px;}
+@keyframes arcToBack{
+  0%  {transform:translateX(-50%) translateY(0px)   rotate(0deg)  scale(1);    opacity:1;}
+  38% {transform:translateX(22%)  translateY(-12px) rotate(14deg) scale(0.96); opacity:0.85;}
+  100%{transform:translateX(-51%) translateY(29px)  rotate(-1deg) scale(0.88); opacity:0.45;}
+}
+.pol-card.arc-back{animation:arcToBack 0.5s cubic-bezier(.4,0,.2,1) forwards;pointer-events:none;z-index:0 !important;}
 .no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(74,14,42,0.35);font-style:italic;}
 .rv-nav-row{display:flex;gap:8px;padding:16px 16px max(20px,env(safe-area-inset-bottom));margin-top:4px;}
 .rv-next-btn{flex:1;background:linear-gradient(135deg,#e91e63,#f06292);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(233,30,99,0.35);transition:transform 0.2s;}
@@ -417,25 +415,20 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
 </div>
 
 <div class="screen" id="rv-photos">
-  <button class="rv-back" onclick="goTo(&#39;rv-welcome&#39;)">←</button>
+  <button class="rv-back" onclick="goTo('rv-welcome')">←</button>
   <div class="rv-sec-hdr">
     <span class="rv-sec-tag">Your Memories 📸</span>
     <div class="rv-sec-title" id="rvPhotoTitle">Moments just for you</div>
   </div>
-  <div class="pol-grid" id="polStrip"></div>
+  <div class="pol-stack-scene">
+    <div class="pol-stack" id="polStack" onclick="advanceStack()"></div>
+    <div class="pol-counter" id="polCounter"></div>
+  </div>
   <div class="rv-nav-row">
-    <button class="rv-next-btn" onclick="goTo(&#39;rv-song&#39;)">Next → Your Song 🎵</button>
+    <button class="rv-next-btn" onclick="goTo('rv-song')">Next → Your Song 🎵</button>
   </div>
 </div>
 
-<!-- Lightbox with swipe/arrows -->
-<div id="photoLightbox" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.93);z-index:1000;flex-direction:column;align-items:center;justify-content:center;">
-  <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:1.2rem;cursor:pointer;">✕</button>
-  <button id="lbPrev" onclick="lbNav(-1)" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">‹</button>
-  <img id="lightboxImg" style="max-width:90%;max-height:80vh;border-radius:8px;object-fit:contain;display:block;transition:opacity 0.18s ease;" src="" alt="">
-  <div id="lbCounter" style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-top:12px;"></div>
-  <button id="lbNext" onclick="lbNav(1)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer;">›</button>
-</div>
 
 <div class="screen" id="rv-song">
   <button class="rv-back" onclick="goTo('rv-photos')">←</button>
@@ -960,21 +953,68 @@ function renderCard(d){
   document.getElementById('rvPhotoTitle').textContent=heading;
   const sst=document.getElementById('rvSongScreenTitle');
   if(sst)sst.textContent=d.songScreenTitle||'Song that reminds me of you 🎵';
-  // Photos — 2-column grid, all visible, tap opens lightbox
-  const strip=document.getElementById('polStrip');
-  strip.innerHTML='';
-  strip.className='pol-grid';
+  // Photos — stacked card animation
+  const stack=document.getElementById('polStack');
+  stack.innerHTML='';
   if(d.photos&&d.photos.length>0){
-    const cnt=d.photos.length;
-    strip.classList.add('count-'+cnt);
-    lbPhotos=d.photos;
-    d.photos.forEach((url,i)=>{
-      const pol=document.createElement('div');pol.className='pol';
-      pol.innerHTML=`<img src="${url}" alt="photo" onerror="this.parentNode.style.display='none'"><div class="pol-tap">tap to expand</div>`;
-      pol.onclick=()=>openLightbox(i);
-      strip.appendChild(pol);
+    const photos=d.photos;
+    const captions=d.photoCaptions||[];
+    const n=photos.length;
+    // Back-card positions: [translateX, translateY, rotate, scale, opacity]
+    const POSITIONS=[
+      ['-50%','0px','0deg',1,1],
+      ['-48%','10px','3deg',0.97,0.88],
+      ['-52%','18px','-2.5deg',0.94,0.76],
+      ['-49%','24px','1.5deg',0.91,0.62],
+      ['-51%','29px','-1deg',0.88,0.48],
+    ];
+    let frontIdx=0;
+    let isAnimating=false;
+    // Build cards back-to-front so front card is on top in DOM
+    const cards=photos.map((url,i)=>{
+      const card=document.createElement('div');
+      card.className='pol-card';
+      card.innerHTML=`<img src="${url}" alt="" onerror="this.parentNode.style.display='none'"><div class="pol-caption">${captions[i]||''}</div>${i===0?'<div class="pol-tap-hint">Tap to Shuffle ✨</div>':''}`;
+      stack.appendChild(card);
+      return card;
     });
-  }else{strip.innerHTML='<div class="no-photo">💕 A card made with love</div>';}
+    function applyPositions(){
+      cards.forEach((card,i)=>{
+        const dist=(i-frontIdx+n)%n;
+        const [tx,ty,rot,sc,op]=POSITIONS[Math.min(dist,POSITIONS.length-1)];
+        card.style.transform=`translateX(${tx}) translateY(${ty}) rotate(${rot}) scale(${sc})`;
+        card.style.opacity=op;
+        card.style.zIndex=n-dist;
+        card.style.boxShadow=dist===0?'0 14px 40px rgba(74,14,42,0.35)':'0 4px 14px rgba(74,14,42,0.15)';
+        const hint=card.querySelector('.pol-tap-hint');
+        if(hint)hint.style.display=dist===0?'block':'none';
+      });
+      document.getElementById('polCounter').textContent=`${(frontIdx%n)+1} / ${n}`;
+    }
+    window.advanceStack=function(){
+      if(isAnimating||n<2)return;
+      isAnimating=true;
+      const frontCard=cards[frontIdx];
+      frontCard.style.zIndex=-1;
+      frontCard.classList.add('arc-back');
+      frontIdx=(frontIdx+1)%n;
+      setTimeout(()=>applyPositions(),60);
+      setTimeout(()=>{
+        frontCard.classList.remove('arc-back');
+        frontCard.style.transition='none';
+        const[tx,ty,rot,sc,op]=POSITIONS[n-1];
+        frontCard.style.transform=`translateX(${tx}) translateY(${ty}) rotate(${rot}) scale(${sc})`;
+        frontCard.style.opacity=op;
+        frontCard.style.zIndex=1;
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          frontCard.style.transition='';
+          applyPositions();
+          isAnimating=false;
+        }));
+      },480);
+    };
+    applyPositions();
+  }else{stack.innerHTML='<div class="no-photo">💕 A card made with love</div>';}
   // Song
   const sn=d.songName||'';
   if(sn&&sn!=='—'){
@@ -992,43 +1032,6 @@ function renderCard(d){
   goTo('rv-welcome');
 }
 
-// ── LIGHTBOX with left/right navigation ──
-let lbPhotos=[];
-let lbIdx=0;
-
-function openLightbox(idx){
-  lbIdx=idx;
-  const lb=document.getElementById('photoLightbox');
-  document.getElementById('lightboxImg').src=lbPhotos[lbIdx];
-  document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
-  document.getElementById('lbPrev').style.display=lbPhotos.length>1?'block':'none';
-  document.getElementById('lbNext').style.display=lbPhotos.length>1?'block':'none';
-  lb.style.display='flex';
-  // swipe inside lightbox
-  let _lx=0;
-  lb.ontouchstart=e=>{_lx=e.changedTouches[0].clientX;e.stopPropagation();};
-  lb.ontouchend=e=>{
-    e.stopPropagation();
-    const dx=e.changedTouches[0].clientX-_lx;
-    if(Math.abs(dx)>40) lbNav(dx<0?1:-1);
-  };
-}
-
-function lbNav(dir){
-  if(lbPhotos.length<=1) return;
-  const img=document.getElementById('lightboxImg');
-  img.style.opacity='0';
-  setTimeout(()=>{
-    lbIdx=(lbIdx+dir+lbPhotos.length)%lbPhotos.length;
-    img.src=lbPhotos[lbIdx];
-    img.style.opacity='1';
-    document.getElementById('lbCounter').textContent=`${lbIdx+1} / ${lbPhotos.length}`;
-  },180);
-}
-
-function closeLightbox(){
-  document.getElementById('photoLightbox').style.display='none';
-}
 
 let rvLetterText='';
 let rvLetterSign='';
