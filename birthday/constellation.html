@@ -3,506 +3,374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>WishYou.ai — Your Birthday Constellation ⭐</title>
+<title>WishYou.ai — Your Constellation ⭐</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
 <meta property="og:title" content="Someone made you a constellation ⭐">
 <meta property="og:description" content="Tap each star to reveal your birthday memories.">
-<meta property="og:image" content="https://wishyou.ai/og-image.png">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:#020818;}
+html,body{height:100%;overflow:hidden;background:#020818;}
 .app{position:fixed;inset:0;overflow:hidden;background:#020818;}
 @media(min-width:500px){
   .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
     width:430px;height:90vh;max-height:900px;border-radius:40px;
     box-shadow:0 40px 120px rgba(0,0,0,0.9);}
 }
-.screen{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 0.7s ease;overflow:hidden;}
+.screen{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 0.6s ease;display:flex;flex-direction:column;overflow:hidden;}
 .screen.active{opacity:1;pointer-events:all;}
 
-/* ── LOADING ── */
-#rv-loading{background:#020818;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
-.load-star{font-size:2.5rem;animation:loadPulse 1.4s ease-in-out infinite;}
-@keyframes loadPulse{0%,100%{opacity:0.2;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
-.load-text{font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;color:rgba(200,210,255,0.3);}
+#rv-loading{background:#020818;align-items:center;justify-content:center;gap:16px;}
+.load-star{font-size:2.5rem;animation:pulse 1.4s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.2;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
+.load-txt{font-size:0.65rem;letter-spacing:0.24em;text-transform:uppercase;color:rgba(200,210,255,0.3);}
 
-/* ── ERROR ── */
-#rv-error{background:#020818;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;gap:16px;}
-.err-text{font-size:0.9rem;color:rgba(200,210,255,0.35);line-height:1.7;}
+#rv-error{background:#020818;align-items:center;justify-content:center;text-align:center;padding:40px;gap:16px;}
+.err-t{font-size:0.85rem;color:rgba(200,210,255,0.35);line-height:1.8;}
 
-/* ── WELCOME ── */
-#rv-welcome{background:#020818;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;}
-.wc-eyebrow{font-size:0.6rem;letter-spacing:0.28em;text-transform:uppercase;color:rgba(200,210,255,0.3);margin-bottom:20px;}
-.wc-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,10vw,3.2rem);font-weight:300;color:rgba(230,235,255,0.92);text-align:center;line-height:1.1;margin-bottom:8px;}
-.wc-sub{font-size:0.8rem;color:rgba(200,210,255,0.35);text-align:center;letter-spacing:0.04em;margin-bottom:48px;}
-.wc-stars-preview{position:relative;width:160px;height:80px;margin:0 auto 40px;}
-.wc-star-p{position:absolute;font-size:1rem;animation:twinkle 2s ease-in-out infinite;}
-@keyframes twinkle{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
-.wc-open-btn{background:transparent;border:1px solid rgba(200,210,255,0.2);border-radius:50px;padding:14px 44px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;color:rgba(200,210,255,0.7);cursor:pointer;letter-spacing:0.1em;transition:all 0.3s;touch-action:manipulation;}
-.wc-open-btn:active{transform:scale(0.96);}
-.wc-hint{font-size:0.58rem;color:rgba(200,210,255,0.2);letter-spacing:0.1em;margin-top:16px;text-align:center;}
+#rv-welcome{background:#020818;align-items:center;justify-content:center;padding:40px 28px;}
+.wc-eye{font-size:0.58rem;letter-spacing:0.26em;text-transform:uppercase;color:rgba(200,210,255,0.25);margin-bottom:18px;}
+.wc-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,9vw,3rem);font-weight:300;color:rgba(230,235,255,0.9);text-align:center;line-height:1.1;margin-bottom:6px;}
+.wc-sub{font-size:0.75rem;color:rgba(200,210,255,0.3);text-align:center;margin-bottom:44px;}
+.wc-icon{font-size:3rem;margin-bottom:36px;animation:pulse 3s ease-in-out infinite;}
+.wc-btn{background:transparent;border:1px solid rgba(200,210,255,0.2);border-radius:50px;padding:14px 44px;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:rgba(200,210,255,0.6);cursor:pointer;letter-spacing:0.1em;touch-action:manipulation;transition:all 0.3s;}
+.wc-btn:active{transform:scale(0.96);}
+.wc-hint{font-size:0.56rem;color:rgba(200,210,255,0.18);letter-spacing:0.1em;margin-top:14px;text-align:center;}
 
-/* ── CONSTELLATION SCREEN ── */
-#rv-sky{background:#020818;position:relative;}
-.sky-canvas{position:absolute;inset:0;}
-.sky-title{position:absolute;top:max(20px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,210,255,0.2);pointer-events:none;}
-.sky-hint{position:absolute;bottom:max(24px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:0.6rem;letter-spacing:0.1em;color:rgba(200,210,255,0.25);transition:opacity 1s;}
-.sky-progress{position:absolute;top:max(44px,env(safe-area-inset-top)+24px);left:50%;transform:translateX(-50%);font-size:0.55rem;letter-spacing:0.16em;color:rgba(200,210,255,0.2);}
+#rv-sky{background:#020818;padding:0;}
+#skyCanvas{position:absolute;inset:0;width:100%;height:100%;}
+.sky-top{position:absolute;top:max(18px,env(safe-area-inset-top));left:0;right:0;text-align:center;pointer-events:none;z-index:2;}
+.sky-heading{font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,210,255,0.18);}
+.sky-prog{font-size:0.55rem;letter-spacing:0.14em;color:rgba(200,210,255,0.2);margin-top:4px;}
+.sky-hint{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-size:0.6rem;letter-spacing:0.1em;color:rgba(200,210,255,0.22);pointer-events:none;z-index:2;transition:opacity 0.5s;}
 
-/* Stars */
-.star-node{position:absolute;transform:translate(-50%,-50%);cursor:pointer;touch-action:manipulation;}
-.star-outer{position:relative;display:flex;align-items:center;justify-content:center;}
-.star-glow{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(180,200,255,0.4),transparent);opacity:0;transition:opacity 0.4s;pointer-events:none;}
-.star-dot{border-radius:50%;background:rgba(200,215,255,0.85);box-shadow:0 0 6px 2px rgba(180,200,255,0.5);transition:all 0.4s;position:relative;z-index:1;}
-.star-node.seen .star-dot{background:rgba(255,215,100,0.6);box-shadow:0 0 4px 1px rgba(255,200,80,0.3);}
-.star-node.active .star-dot{background:rgba(255,240,160,1);box-shadow:0 0 20px 8px rgba(255,220,100,0.7);}
-.star-node.active .star-glow{opacity:1;}
-/* Constellation lines */
-.const-line{position:absolute;transform-origin:0 50%;background:rgba(180,200,255,0.08);height:1px;pointer-events:none;}
-
-/* ── PHOTO REVEAL PANEL ── */
-.photo-panel{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,#010610 0%,rgba(2,8,24,0.95) 100%);border-radius:24px 24px 0 0;transform:translateY(100%);transition:transform 0.5s cubic-bezier(.4,0,.2,1);padding:0 0 max(24px,env(safe-area-inset-bottom));z-index:20;}
+.photo-panel{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,#010610,rgba(1,6,16,0.97));border-radius:22px 22px 0 0;transform:translateY(100%);transition:transform 0.45s cubic-bezier(.4,0,.2,1);padding-bottom:max(20px,env(safe-area-inset-bottom));z-index:10;}
 .photo-panel.open{transform:translateY(0);}
-.panel-drag{width:36px;height:4px;border-radius:2px;background:rgba(200,210,255,0.15);margin:12px auto 16px;}
-.panel-photo{width:calc(100% - 32px);max-height:52vh;object-fit:contain;object-position:center;border-radius:12px;display:block;margin:0 auto 14px;background:#0a1428;}
-.panel-caption{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:rgba(200,215,255,0.75);text-align:center;padding:0 28px;line-height:1.5;margin-bottom:6px;}
-.panel-num{font-size:0.55rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(200,210,255,0.2);text-align:center;margin-bottom:14px;}
-.panel-close{display:block;margin:0 auto;background:transparent;border:1px solid rgba(200,210,255,0.12);border-radius:50px;padding:8px 28px;font-size:0.72rem;letter-spacing:0.1em;color:rgba(200,210,255,0.35);cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
+.panel-pill{width:34px;height:3px;border-radius:2px;background:rgba(200,210,255,0.12);margin:10px auto 14px;}
+.panel-img{width:calc(100% - 28px);max-height:55vh;object-fit:contain;border-radius:10px;display:block;margin:0 auto 12px;background:#060e24;}
+.panel-cap{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(200,215,255,0.7);text-align:center;padding:0 24px;line-height:1.5;margin-bottom:4px;}
+.panel-num{font-size:0.52rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(200,210,255,0.18);text-align:center;margin-bottom:12px;}
+.panel-close{display:block;margin:0 auto;background:transparent;border:1px solid rgba(200,210,255,0.1);border-radius:50px;padding:7px 26px;font-size:0.68rem;letter-spacing:0.1em;color:rgba(200,210,255,0.28);cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
 
-/* ── SHOOTING STAR TRANSITION ── */
-.shooting-star{position:absolute;width:3px;height:3px;border-radius:50%;background:white;pointer-events:none;z-index:50;opacity:0;}
-.shooting-star::after{content:'';position:absolute;right:3px;top:50%;transform:translateY(-50%);width:80px;height:1px;background:linear-gradient(to left,rgba(255,255,255,0.6),transparent);}
-
-/* ── SONG SCREEN ── */
-#rv-song{background:radial-gradient(ellipse at 50% 60%,#0a1535 0%,#020818 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;}
-.song-constellation{font-size:2rem;margin-bottom:24px;letter-spacing:0.3em;}
-.song-label{font-size:0.55rem;letter-spacing:0.24em;text-transform:uppercase;color:rgba(200,210,255,0.25);margin-bottom:12px;}
-.song-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;color:rgba(230,235,255,0.88);text-align:center;margin-bottom:4px;line-height:1.3;}
-.song-artist{font-size:0.72rem;color:rgba(200,210,255,0.35);text-align:center;margin-bottom:28px;letter-spacing:0.06em;}
-.yt-wrap{width:100%;border-radius:12px;overflow:hidden;border:1px solid rgba(200,210,255,0.08);margin-bottom:20px;display:none;}
-.yt-wrap iframe{width:100%;height:180px;border:none;display:block;}
+#rv-song{background:radial-gradient(ellipse at 50% 50%,#081230,#020818);align-items:center;justify-content:center;padding:32px;}
+.song-icon{font-size:1.8rem;letter-spacing:0.3em;margin-bottom:22px;}
+.song-lbl{font-size:0.54rem;letter-spacing:0.22em;text-transform:uppercase;color:rgba(200,210,255,0.22);margin-bottom:10px;}
+.song-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:rgba(220,230,255,0.85);text-align:center;margin-bottom:4px;line-height:1.3;}
+.song-sub{font-size:0.7rem;color:rgba(200,210,255,0.3);text-align:center;margin-bottom:26px;}
+.yt-wrap{width:100%;border-radius:10px;overflow:hidden;border:1px solid rgba(200,210,255,0.07);margin-bottom:20px;display:none;}
+.yt-wrap iframe{width:100%;height:175px;border:none;display:block;}
 .yt-wrap.show{display:block;}
-.song-next-btn{background:transparent;border:1px solid rgba(200,210,255,0.15);border-radius:50px;padding:13px 36px;font-family:'DM Sans',sans-serif;font-size:0.82rem;color:rgba(200,210,255,0.55);cursor:pointer;letter-spacing:0.08em;transition:all 0.3s;touch-action:manipulation;}
-.song-next-btn:active{transform:scale(0.96);}
+.song-nxt{background:transparent;border:1px solid rgba(200,210,255,0.14);border-radius:50px;padding:12px 36px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:rgba(200,210,255,0.5);cursor:pointer;letter-spacing:0.08em;touch-action:manipulation;}
+.song-nxt:active{transform:scale(0.96);}
 
-/* ── LETTER SCREEN ── */
-#rv-letter{background:#020818;display:flex;flex-direction:column;overflow:hidden;}
-.letter-sky-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(20,40,80,0.6),transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(10,20,60,0.4),transparent 60%);pointer-events:none;}
-.letter-inner{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:max(52px,env(safe-area-inset-top)+32px) 28px 20px;position:relative;z-index:1;}
-.letter-inner::-webkit-scrollbar{display:none;}
-.letter-star-header{text-align:center;margin-bottom:32px;}
-.letter-star-icon{font-size:1.8rem;display:block;margin-bottom:12px;animation:letterStarPulse 3s ease-in-out infinite;}
-@keyframes letterStarPulse{0%,100%{opacity:0.5;transform:scale(0.9);}50%{opacity:1;transform:scale(1.1);}}
-.letter-from{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,210,255,0.25);}
-.letter-greeting{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:400;font-style:italic;color:rgba(200,215,255,0.6);margin-bottom:20px;line-height:1.4;}
-.letter-body{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:300;color:rgba(220,230,255,0.82);line-height:2;white-space:pre-wrap;margin-bottom:28px;}
-.letter-sign{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:rgba(200,210,255,0.5);text-align:right;margin-bottom:32px;}
-.letter-foot{display:flex;justify-content:center;padding-bottom:max(20px,env(safe-area-inset-bottom));}
-.letter-replay{background:transparent;border:1px solid rgba(200,210,255,0.12);border-radius:50px;padding:10px 28px;font-family:'DM Sans',sans-serif;font-size:0.72rem;color:rgba(200,210,255,0.3);cursor:pointer;letter-spacing:0.1em;touch-action:manipulation;}
-
-/* Background stars */
-.bg-star{position:absolute;border-radius:50%;background:white;pointer-events:none;}
-@keyframes bgTwinkle{0%,100%{opacity:var(--base-op);}50%{opacity:calc(var(--base-op)*2.5);}}
-
-/* Watermark */
-.wm{position:absolute;bottom:8px;right:12px;font-size:0.55rem;color:rgba(255,255,255,0.06);pointer-events:none;z-index:1;}
+#rv-letter{background:#020818;}
+.letter-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:max(50px,env(safe-area-inset-top)+28px) 28px 24px;}
+.letter-scroll::-webkit-scrollbar{display:none;}
+.letter-star{text-align:center;font-size:1.6rem;margin-bottom:20px;animation:pulse 3s ease-in-out infinite;}
+.letter-lbl{font-size:0.54rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(200,210,255,0.2);text-align:center;margin-bottom:24px;}
+.letter-greet{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;color:rgba(200,215,255,0.55);margin-bottom:18px;}
+.letter-body{font-family:'Cormorant Garamond',serif;font-size:1.02rem;font-weight:300;color:rgba(220,230,255,0.8);line-height:2;white-space:pre-wrap;margin-bottom:24px;}
+.letter-sign{font-family:'Cormorant Garamond',serif;font-size:0.95rem;font-style:italic;color:rgba(200,210,255,0.45);text-align:right;margin-bottom:36px;}
+.letter-replay{display:block;margin:0 auto;background:transparent;border:1px solid rgba(200,210,255,0.1);border-radius:50px;padding:10px 28px;font-family:'DM Sans',sans-serif;font-size:0.7rem;color:rgba(200,210,255,0.25);cursor:pointer;letter-spacing:0.1em;touch-action:manipulation;}
+.wm{position:absolute;bottom:6px;right:10px;font-size:0.52rem;color:rgba(255,255,255,0.05);pointer-events:none;z-index:1;}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- Loading -->
 <div class="screen" id="rv-loading">
-  <div class="load-star">⭐</div>
-  <div class="load-text">Finding your stars...</div>
+  <div class="load-star">✦</div>
+  <div class="load-txt">loading your stars...</div>
 </div>
 
-<!-- Error -->
 <div class="screen" id="rv-error">
-  <div style="font-size:2rem;margin-bottom:16px;">✦</div>
-  <div class="err-text">This constellation has faded<br>or couldn't be found.</div>
-  <button onclick="window.location.href='/'" style="margin-top:28px;background:transparent;color:rgba(200,210,255,0.35);border:1px solid rgba(200,210,255,0.15);border-radius:50px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;letter-spacing:0.08em;">Create your own</button>
+  <div class="err-t">This constellation has faded<br>or couldn't be found.</div>
+  <button onclick="window.location.href='/'" style="margin-top:24px;background:transparent;color:rgba(200,210,255,0.3);border:1px solid rgba(200,210,255,0.12);border-radius:50px;padding:11px 26px;font-family:'DM Sans',sans-serif;font-size:0.76rem;cursor:pointer;letter-spacing:0.08em;">Create your own</button>
 </div>
 
-<!-- Welcome -->
 <div class="screen" id="rv-welcome">
-  <div class="wc-eyebrow">A birthday constellation</div>
+  <div class="wc-eye">A birthday constellation</div>
   <div class="wc-name" id="rvName">Happy Birthday</div>
   <div class="wc-sub" id="rvSub"></div>
-  <div class="wc-stars-preview" id="previewStars"></div>
-  <button class="wc-open-btn" onclick="goTo('rv-sky')">✦ Open your sky</button>
+  <div class="wc-icon">⭐</div>
+  <button class="wc-btn" id="openSkyBtn">✦ Open your sky</button>
   <div class="wc-hint">tap each star to reveal a memory</div>
 </div>
 
-<!-- Sky / Constellation -->
 <div class="screen" id="rv-sky">
-  <canvas class="sky-canvas" id="skyCanvas"></canvas>
-  <div class="sky-title" id="skyTitle"></div>
-  <div class="sky-progress" id="skyProgress"></div>
+  <canvas id="skyCanvas"></canvas>
+  <div class="sky-top">
+    <div class="sky-heading" id="skyHeading"></div>
+    <div class="sky-prog" id="skyProg"></div>
+  </div>
   <div class="sky-hint" id="skyHint">tap a star ✦</div>
-  <!-- Star nodes injected by JS -->
-  <!-- Photo panel -->
   <div class="photo-panel" id="photoPanel">
-    <div class="panel-drag"></div>
-    <img class="panel-photo" id="panelPhoto" src="" alt="">
-    <div class="panel-caption" id="panelCaption"></div>
+    <div class="panel-pill"></div>
+    <img class="panel-img" id="panelImg" src="" alt="">
+    <div class="panel-cap" id="panelCap"></div>
     <div class="panel-num" id="panelNum"></div>
-    <button class="panel-close" onclick="closePanel()">close ✦</button>
+    <button class="panel-close" id="panelClose">close ✦</button>
   </div>
   <div class="wm">WishYou.ai</div>
 </div>
 
-<!-- Song -->
 <div class="screen" id="rv-song">
-  <div class="song-constellation">✦ ⭐ ✦</div>
-  <div class="song-label">A song from the stars</div>
-  <div class="song-title" id="rvSongT">A song just for you</div>
-  <div class="song-artist" id="rvSongA"></div>
-  <div class="yt-wrap" id="rvYtWrap"><div id="rvYtEmbed"></div></div>
-  <button class="song-next-btn" onclick="goTo('rv-letter')">Read your letter ✦</button>
+  <div class="song-icon">✦ ⭐ ✦</div>
+  <div class="song-lbl">A song from the stars</div>
+  <div class="song-title" id="rvSongT"></div>
+  <div class="song-sub">chosen just for you</div>
+  <div class="yt-wrap" id="rvYt"><div id="rvYtInner"></div></div>
+  <button class="song-nxt" onclick="goTo('rv-letter')">Read your letter ✦</button>
 </div>
 
-<!-- Letter -->
 <div class="screen" id="rv-letter">
-  <div class="letter-sky-bg"></div>
-  <div class="letter-inner">
-    <div class="letter-star-header">
-      <span class="letter-star-icon">✦</span>
-      <div class="letter-from">A letter written for you</div>
-    </div>
-    <div class="letter-greeting" id="rvLGreet"></div>
+  <div class="letter-scroll">
+    <div class="letter-star">✦</div>
+    <div class="letter-lbl">A letter written for you</div>
+    <div class="letter-greet" id="rvLGreet"></div>
     <div class="letter-body" id="rvLBody"></div>
     <div class="letter-sign" id="rvLSign"></div>
-    <div class="letter-foot">
-      <button class="letter-replay" onclick="goTo('rv-welcome')">✦ Replay from the start</button>
-    </div>
+    <button class="letter-replay" onclick="goTo('rv-welcome')">✦ Replay</button>
   </div>
 </div>
 
 </div>
 <script>
-const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const FIREBASE='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
 let curScreen='';
-let cardData=null;
 
 function goTo(id){
   const prev=document.getElementById(curScreen);
   const next=document.getElementById(id);
-  if(!next||curScreen===id)return;
+  if(!next)return;
   if(prev)prev.classList.remove('active');
   next.classList.add('active');
   curScreen=id;
-  if(id==='rv-sky'){
-    if(cardData){
-      setTimeout(()=>initSky(cardData),80);
-    } else {
-      // cardData not ready — poll until it is
-      const wait=setInterval(()=>{
-        if(cardData){clearInterval(wait);initSky(cardData);}
-      },100);
-    }
-  }
-  if(id!=='rv-song'){const ifr=document.querySelector('#rvYtWrap iframe');if(ifr)ifr.src=ifr.src;}
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
   const cardId=new URLSearchParams(window.location.search).get('card');
-  if(cardId){goTo('rv-loading');loadCard();}
-  else{goTo('rv-error');}
-  // Generate background stars
-  genBgStars();
+  if(!cardId){goTo('rv-error');return;}
+  goTo('rv-loading');
+  fetch(`${FIREBASE}/${cardId}.json`)
+    .then(r=>r.json())
+    .then(d=>{
+      if(!d){goTo('rv-error');return;}
+      if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+      setupCard(d);
+    })
+    .catch(()=>goTo('rv-error'));
 });
 
-function genBgStars(){
-  const app=document.querySelector('.app');
-  for(let i=0;i<120;i++){
-    const s=document.createElement('div');
-    s.className='bg-star';
-    const sz=Math.random()<0.15?1.5:Math.random()<0.4?1:0.6;
-    const op=0.04+Math.random()*0.18;
-    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--base-op:${op};opacity:${op};animation:bgTwinkle ${3+Math.random()*5}s ease-in-out infinite;animation-delay:${Math.random()*6}s;`;
-    app.appendChild(s);
-  }
-}
-
-async function loadCard(){
-  const cardId=new URLSearchParams(window.location.search).get('card');
-  if(!cardId){goTo('rv-error');return;}
-  try{
-    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
-    const d=await res.json();
-    if(!d){goTo('rv-error');return;}
-    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
-    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
-      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
-    });
-    cardData=d;
-    renderCard(d);
-  }catch(e){goTo('rv-error');}
-}
-
-function renderCard(d){
+function setupCard(d){
   const name=d.name||'';
   const sender=d.sender||'';
+  const photos=(d.photos||[]).filter(Boolean);
+  const captions=d.photoCaptions||[];
+  const songName=d.songName||'';
+  const hasSong=songName&&songName!=='—';
+
   document.getElementById('rvName').textContent=name||'Happy Birthday';
   document.getElementById('rvSub').textContent=sender?`from ${sender} ✦`:'✦';
-  document.getElementById('skyTitle').textContent=d.memoriesHeading||'Your Constellation';
+  document.getElementById('skyHeading').textContent=d.memoriesHeading||'Your Constellation';
 
-  // Preview stars on welcome
-  buildPreviewStars(d.photos?.length||0);
-
-  // Song
-  const sn=d.songName||'';
-  if(sn&&sn!=='—'){
-    document.getElementById('rvSongT').textContent=sn;
-    document.getElementById('rvSongA').textContent='A song chosen just for you';
+  if(hasSong){
+    document.getElementById('rvSongT').textContent=songName;
     const sp=d.spotify||'';
-    if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
+    const ytM=sp.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if(ytM){
+      document.getElementById('rvYt').classList.add('show');
+      document.getElementById('rvYtInner').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;
+    }
   } else {
-    document.querySelector('.song-next-btn').textContent='Read your letter ✦';
+    document.querySelector('.song-nxt').textContent='Read your letter ✦';
   }
 
-  // Letter
   document.getElementById('rvLGreet').textContent=name?`Dear ${name},`:'Dear you,';
   document.getElementById('rvLBody').textContent=d.msg||'';
   document.getElementById('rvLSign').textContent=d.sign||(sender?`With love, ${sender} ✦`:'With love ✦');
 
+  document.getElementById('openSkyBtn').onclick=()=>{
+    goTo('rv-sky');
+    setTimeout(()=>initSky(photos,captions,hasSong),80);
+  };
+
   goTo('rv-welcome');
 }
 
-function buildPreviewStars(n){
-  const wrap=document.getElementById('previewStars');
-  wrap.innerHTML='';
-  const positions=[[70,10],[130,20],[100,55],[50,45],[160,55]];
-  for(let i=0;i<Math.min(n||3,5);i++){
-    const s=document.createElement('div');
-    s.style.cssText=`position:absolute;left:${positions[i][0]}px;top:${positions[i][1]}px;font-size:${0.9+Math.random()*0.4}rem;opacity:0.5;animation:twinkle ${2+Math.random()*2}s ease-in-out infinite;animation-delay:${i*0.4}s;`;
-    s.textContent='✦';
-    wrap.appendChild(s);
-  }
-}
+function initSky(photos,captions,hasSong){
+  const sky=document.getElementById('rv-sky');
+  const canvas=document.getElementById('skyCanvas');
+  const W=sky.offsetWidth||window.innerWidth;
+  const H=sky.offsetHeight||window.innerHeight;
+  canvas.width=W;
+  canvas.height=H;
+  const ctx=canvas.getContext('2d');
 
-// ── SKY / CONSTELLATION ──
-let starsOpened=0;
-let totalStars=0;
-let activeStarIdx=-1;
-
-function initSky(d){
-  const photos=(d.photos||[]).filter(u=>u&&u.trim&&u.trim());
-  const captions=d.photoCaptions||[];
-  totalStars=photos.length;
-
-
-  starsOpened=0;
-  activeStarIdx=-1;
-
-  if(!photos.length){
-    // No photos — just show message and go to song
-    const hasSong=d.songName&&d.songName!=='—';
-    setTimeout(()=>goTo(hasSong?'rv-song':'rv-letter'),1200);
-    return;
+  // Generate star positions
+  const stars=[];
+  const PAD=0.13;
+  const MIN_D=Math.min(W,H)*0.2;
+  for(let a=0;a<1000&&stars.length<photos.length;a++){
+    const x=(PAD+Math.random()*(1-PAD*2))*W;
+    const y=(PAD+Math.random()*(1-PAD*2))*H;
+    if(stars.every(s=>Math.hypot(s.x-x,s.y-y)>=MIN_D))
+      stars.push({x,y,r:6+Math.random()*4,seen:false,active:false,phase:Math.random()*Math.PI*2});
   }
 
-  // Clear previous stars
-  document.querySelectorAll('.star-node,.const-line').forEach(e=>e.remove());
+  let opened=0;
+  let rafId=null;
+  let frame=0;
 
-  // Draw background nebula on canvas
-  drawNebula();
-
-  // Preload images
+  // Preload
   photos.forEach(u=>{const i=new Image();i.src=u;});
 
-  // Generate star positions — spread across the sky avoiding edges
-  const positions=generateStarPositions(photos.length);
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    frame++;
 
-  // Draw constellation lines between adjacent stars
-  drawConstellationLines(positions);
+    // Tiny bg stars (static positions via seeded pattern)
+    for(let i=0;i<180;i++){
+      const bx=((Math.sin(i*137.508)*0.5+0.5)*W);
+      const by=((Math.cos(i*97.3)*0.5+0.5)*H);
+      const op=0.04+0.1*Math.abs(Math.sin(frame*0.018+i*0.7));
+      const br=i%5===0?1.2:0.5;
+      ctx.beginPath();ctx.arc(bx,by,br,0,Math.PI*2);
+      ctx.fillStyle=`rgba(210,220,255,${op})`;ctx.fill();
+    }
 
-  // Create star nodes
-  positions.forEach((pos,i)=>{
-    createStar(pos, i, photos, captions, d);
-  });
+    // Lines between stars
+    for(let i=0;i<stars.length-1;i++){
+      ctx.beginPath();
+      ctx.moveTo(stars[i].x,stars[i].y);
+      ctx.lineTo(stars[i+1].x,stars[i+1].y);
+      ctx.strokeStyle='rgba(150,180,255,0.06)';
+      ctx.lineWidth=1;ctx.stroke();
+    }
 
-  updateProgress();
-  document.getElementById('skyHint').style.opacity='1';
-}
-
-function generateStarPositions(n){
-  const app=document.querySelector('.app');
-  const W=app.offsetWidth||window.innerWidth||390;
-  const H=app.offsetHeight||window.innerHeight||844;
-  const padX=0.12, padY=0.12;
-  const positions=[];
-  const minDist=Math.min(W,H)*0.22;
-
-  for(let attempt=0;attempt<500&&positions.length<n;attempt++){
-    const x=(padX+Math.random()*(1-padX*2))*W;
-    const y=(padY+Math.random()*(1-padY*2))*H;
-    const ok=positions.every(p=>Math.hypot(p.x-x,p.y-y)>=minDist);
-    if(ok)positions.push({x,y});
-  }
-  return positions;
-}
-
-function drawConstellationLines(positions){
-  const sky=document.getElementById('rv-sky');
-  // Connect each star to nearest 1-2 neighbours
-  positions.forEach((pos,i)=>{
-    const others=positions.map((p,j)=>({j,dist:Math.hypot(p.x-pos.x,p.y-pos.y)}))
-      .filter(o=>o.j!==i).sort((a,b)=>a.dist-b.dist).slice(0,1);
-    others.forEach(o=>{
-      if(o.j>i){ // avoid duplicate lines
-        const line=document.createElement('div');
-        line.className='const-line';
-        const dx=positions[o.j].x-pos.x;
-        const dy=positions[o.j].y-pos.y;
-        const len=Math.hypot(dx,dy);
-        const angle=Math.atan2(dy,dx)*180/Math.PI;
-        line.style.cssText=`left:${pos.x}px;top:${pos.y}px;width:${len}px;transform:rotate(${angle}deg);`;
-        sky.appendChild(line);
+    // Draw stars
+    stars.forEach((s,i)=>{
+      const tw=0.65+0.35*Math.sin(frame*0.035+s.phase);
+      if(s.active){
+        // Outer glow
+        const g=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*7);
+        g.addColorStop(0,'rgba(255,240,100,0.35)');
+        g.addColorStop(1,'rgba(255,220,60,0)');
+        ctx.beginPath();ctx.arc(s.x,s.y,s.r*7,0,Math.PI*2);
+        ctx.fillStyle=g;ctx.fill();
+        // Core
+        ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(255,248,160,1)';
+        ctx.shadowColor='rgba(255,220,80,1)';ctx.shadowBlur=20;
+        ctx.fill();ctx.shadowBlur=0;
+        // Spike cross
+        ctx.save();ctx.strokeStyle='rgba(255,248,180,0.7)';ctx.lineWidth=1;
+        [0,90].forEach(a=>{
+          ctx.save();ctx.translate(s.x,s.y);ctx.rotate(a*Math.PI/180);
+          ctx.beginPath();ctx.moveTo(0,-s.r*2.5);ctx.lineTo(0,s.r*2.5);ctx.stroke();
+          ctx.restore();
+        });ctx.restore();
+      } else if(s.seen){
+        ctx.beginPath();ctx.arc(s.x,s.y,s.r*0.65,0,Math.PI*2);
+        ctx.fillStyle=`rgba(255,210,80,${0.3*tw})`;ctx.fill();
+      } else {
+        // Twinkling white star
+        ctx.beginPath();ctx.arc(s.x,s.y,s.r*tw,0,Math.PI*2);
+        ctx.fillStyle=`rgba(200,218,255,${0.8*tw})`;
+        ctx.shadowColor='rgba(180,205,255,0.9)';ctx.shadowBlur=10*tw;
+        ctx.fill();ctx.shadowBlur=0;
+        // Spike
+        ctx.save();ctx.strokeStyle=`rgba(220,232,255,${0.45*tw})`;ctx.lineWidth=0.8;
+        [0,45,90,135].forEach(a=>{
+          ctx.save();ctx.translate(s.x,s.y);ctx.rotate(a*Math.PI/180);
+          ctx.beginPath();ctx.moveTo(0,-s.r*2);ctx.lineTo(0,s.r*2);ctx.stroke();
+          ctx.restore();
+        });ctx.restore();
       }
     });
-  });
-}
-
-function drawNebula(){
-  const canvas=document.getElementById('skyCanvas');
-  const app=document.querySelector('.app');
-  canvas.width=app.offsetWidth||window.innerWidth||390;
-  canvas.height=app.offsetHeight||window.innerHeight||844;
-  const ctx=canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  // Subtle nebula blobs
-  [[0.3,0.25,80,'rgba(30,50,120,0.08)'],[0.7,0.6,120,'rgba(20,30,90,0.06)'],[0.5,0.45,60,'rgba(50,30,100,0.05)']].forEach(([cx,cy,r,col])=>{
-    const grd=ctx.createRadialGradient(canvas.width*cx,canvas.height*cy,0,canvas.width*cx,canvas.height*cy,r);
-    grd.addColorStop(0,col);grd.addColorStop(1,'transparent');
-    ctx.fillStyle=grd;ctx.fillRect(0,0,canvas.width,canvas.height);
-  });
-}
-
-function createStar(pos, idx, photos, captions, d){
-  const sky=document.getElementById('rv-sky');
-  const size=10+Math.random()*6;
-
-  const node=document.createElement('div');
-  node.className='star-node';
-  node.dataset.idx=idx;
-  node.style.cssText=`left:${pos.x}px;top:${pos.y}px;`;
-
-  const outer=document.createElement('div');
-  outer.className='star-outer';
-  outer.style.cssText=`width:${size*4}px;height:${size*4}px;`;
-
-  const glow=document.createElement('div');
-  glow.className='star-glow';
-  glow.style.cssText=`width:${size*4}px;height:${size*4}px;`;
-
-  const dot=document.createElement('div');
-  dot.className='star-dot';
-  dot.style.cssText=`width:${size}px;height:${size}px;`;
-
-  // Twinkle
-  dot.style.animation=`bgTwinkle ${2+Math.random()*3}s ease-in-out infinite`;
-  dot.style.setProperty('--base-op','0.85');
-  dot.style.animationDelay=`${Math.random()*3}s`;
-
-  outer.appendChild(glow);
-  outer.appendChild(dot);
-  node.appendChild(outer);
-
-  node.addEventListener('click',()=>openStar(idx,photos,captions,d));
-  node.addEventListener('touchend',e=>{e.preventDefault();openStar(idx,photos,captions,d);});
-
-  sky.insertBefore(node,document.getElementById('photoPanel'));
-}
-
-function openStar(idx, photos, captions, d){
-  activeStarIdx=idx;
-  const nodes=document.querySelectorAll('.star-node');
-  nodes.forEach(n=>n.classList.remove('active'));
-  const node=nodes[idx];
-  if(!node)return;
-
-  node.classList.add('active');
-  if(!node.classList.contains('seen')){
-    node.classList.add('seen');
-    starsOpened++;
-    updateProgress();
+    rafId=requestAnimationFrame(draw);
   }
+  draw();
 
-  // Show photo panel
+  // Progress
+  function updateProg(){
+    document.getElementById('skyProg').textContent=
+      stars.length?`${opened} of ${stars.length} stars explored`:'';
+  }
+  updateProg();
+
+  // Panel
   const panel=document.getElementById('photoPanel');
-  const photo=document.getElementById('panelPhoto');
-  const caption=document.getElementById('panelCaption');
-  const num=document.getElementById('panelNum');
+  function closePanel(){
+    panel.classList.remove('open');
+    stars.forEach(s=>s.active=false);
+  }
+  document.getElementById('panelClose').onclick=closePanel;
 
-  photo.style.opacity='0';
-  photo.src=photos[idx]||'';
-  photo.onload=()=>{photo.style.transition='opacity 0.4s';photo.style.opacity='1';};
-  if(photo.complete&&photo.naturalWidth>0){photo.style.opacity='1';}
-  caption.textContent=captions[idx]||'';
-  caption.style.display=captions[idx]?'block':'none';
-  num.textContent=`memory ${idx+1} of ${photos.length}`;
-  panel.classList.add('open');
+  function openStar(i){
+    stars.forEach((s,j)=>s.active=j===i);
+    if(!stars[i].seen){stars[i].seen=true;opened++;updateProg();}
+    document.getElementById('panelImg').style.opacity='0';
+    document.getElementById('panelImg').src=photos[i]||'';
+    document.getElementById('panelImg').onload=()=>{
+      document.getElementById('panelImg').style.transition='opacity 0.35s';
+      document.getElementById('panelImg').style.opacity='1';
+    };
+    const cap=captions[i]||'';
+    document.getElementById('panelCap').textContent=cap;
+    document.getElementById('panelCap').style.display=cap?'block':'none';
+    document.getElementById('panelNum').textContent=`memory ${i+1} of ${stars.length}`;
+    panel.classList.add('open');
+    document.getElementById('skyHint').style.opacity='0';
+    if(opened>=stars.length){
+      setTimeout(()=>{closePanel();setTimeout(()=>shootAndGo(hasSong,ctx,W,H,rafId),900);},1400);
+    }
+  }
 
-  // Hide hint after first tap
-  document.getElementById('skyHint').style.opacity='0';
+  function onTap(ex,ey){
+    if(panel.classList.contains('open')){closePanel();return;}
+    const hit=stars.findIndex(s=>Math.hypot(s.x-ex,s.y-ey)<=Math.max(s.r*3,28));
+    if(hit>=0)openStar(hit);
+  }
 
-  // Check if all stars opened
-  if(starsOpened===photos.length){
-    setTimeout(()=>checkAllSeen(d),600);
+  canvas.addEventListener('click',e=>{
+    const r=canvas.getBoundingClientRect();
+    const scaleX=W/r.width, scaleY=H/r.height;
+    onTap((e.clientX-r.left)*scaleX,(e.clientY-r.top)*scaleY);
+  });
+  canvas.addEventListener('touchend',e=>{
+    e.preventDefault();
+    const t=e.changedTouches[0];
+    const r=canvas.getBoundingClientRect();
+    const scaleX=W/r.width, scaleY=H/r.height;
+    onTap((t.clientX-r.left)*scaleX,(t.clientY-r.top)*scaleY);
+  },{passive:false});
+
+  if(photos.length===0){
+    setTimeout(()=>goTo(hasSong?'rv-song':'rv-letter'),800);
   }
 }
 
-function closePanel(){
-  document.getElementById('photoPanel').classList.remove('open');
-  document.querySelectorAll('.star-node').forEach(n=>n.classList.remove('active'));
-  activeStarIdx=-1;
-}
-
-function updateProgress(){
-  const el=document.getElementById('skyProgress');
-  if(totalStars>0)el.textContent=`${starsOpened} of ${totalStars} stars explored`;
-}
-
-function checkAllSeen(d){
-  if(starsOpened<totalStars)return;
-  // Close panel first
-  closePanel();
-  // Show shooting star then transition
-  setTimeout(()=>shootingStarTransition(d),800);
-}
-
-function shootingStarTransition(d){
-  const sky=document.getElementById('rv-sky');
-  // Update hint
-  const hint=document.getElementById('skyHint');
-  hint.style.opacity='1';
-  hint.textContent='✦ all memories unlocked ✦';
-
-  const star=document.createElement('div');
-  star.className='shooting-star';
-  const startY=20+Math.random()*30;
-  star.style.cssText=`top:${startY}%;left:-10px;opacity:0;`;
-  sky.appendChild(star);
-
-  // Animate shooting star across screen
-  setTimeout(()=>{
-    star.style.transition='all 1.2s cubic-bezier(.4,0,.6,1)';
-    star.style.opacity='1';
-    star.style.left='110%';
-    star.style.top=(startY+15)+'%';
-  },100);
-
-  setTimeout(()=>{
-    star.style.opacity='0';
-    star.remove();
-    // Go to song or letter
-    const hasSong=d.songName&&d.songName!=='—';
-    goTo(hasSong?'rv-song':'rv-letter');
-  },1500);
+function shootAndGo(hasSong,ctx,W,H,rafId){
+  cancelAnimationFrame(rafId);
+  const startY=H*0.25;
+  let x=0;
+  const step=W/40;
+  function shoot(){
+    ctx.fillStyle='rgba(2,8,24,0.18)';ctx.fillRect(0,0,W,H);
+    const trail=Math.min(x,120);
+    const g=ctx.createLinearGradient(x-trail,startY+x*0.1,x,startY+x*0.1);
+    g.addColorStop(0,'rgba(255,255,255,0)');
+    g.addColorStop(1,'rgba(255,255,255,0.9)');
+    ctx.beginPath();ctx.moveTo(x-trail,startY+x*0.1);ctx.lineTo(x,startY+x*0.1);
+    ctx.strokeStyle=g;ctx.lineWidth=2;ctx.stroke();
+    ctx.beginPath();ctx.arc(x,startY+x*0.1,2.5,0,Math.PI*2);
+    ctx.fillStyle='white';ctx.shadowColor='white';ctx.shadowBlur=14;ctx.fill();ctx.shadowBlur=0;
+    x+=step;
+    if(x<W+130)requestAnimationFrame(shoot);
+    else setTimeout(()=>goTo(hasSong?'rv-song':'rv-letter'),200);
+  }
+  shoot();
 }
 </script>
 </body>
