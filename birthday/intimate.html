@@ -171,9 +171,9 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 
 /* ── Stacked polaroid cards ── */
 .pol-stack-scene{display:flex;flex-direction:column;align-items:center;flex:1;padding:0 8px;}
-.pol-stack{position:relative;width:calc(100vw - 40px);max-width:340px;height:calc((100vw - 40px) * 1.05);max-height:380px;cursor:pointer;touch-action:manipulation;margin-bottom:8px;}
-.pol-card{position:absolute;width:calc(100vw - 40px);max-width:340px;background:#fff;padding:5px 5px 0;border-radius:4px;box-shadow:0 10px 36px rgba(74,14,42,0.28);transition:transform 0.75s cubic-bezier(.4,0,.2,1),opacity 0.6s ease;transform-origin:bottom center;will-change:transform,opacity;left:50%;}
-.pol-card img{width:100%;height:calc((100vw - 50px) * 0.9);max-height:330px;object-fit:contain;object-position:center center;background:#fdf0f3;display:block;border-radius:2px;}
+.pol-stack{position:relative;width:calc(100vw - 24px);max-width:420px;height:calc((100vw - 24px) * 1.1);max-height:460px;cursor:pointer;touch-action:manipulation;margin-bottom:8px;}
+.pol-card{position:absolute;width:calc(100vw - 24px);max-width:420px;background:#fff;padding:5px 5px 0;border-radius:4px;box-shadow:0 10px 36px rgba(74,14,42,0.28);transition:transform 0.75s cubic-bezier(.4,0,.2,1),opacity 0.6s ease;transform-origin:bottom center;will-change:transform,opacity;left:50%;}
+.pol-card img{width:100%;height:calc((100vw - 34px) * 1.0);max-height:420px;object-fit:contain;object-position:center center;background:#fdf0f3;display:block;border-radius:2px;}
 .pol-caption-wrap{height:44px;display:flex;align-items:center;justify-content:center;position:relative;}
 .pol-caption{text-align:center;font-size:0.75rem;color:#c2185b;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;letter-spacing:0.02em;line-height:1.3;padding:0 12px;}
 .pol-tap-hint{position:absolute;right:10px;font-size:0.52rem;font-weight:700;color:#e91e63;letter-spacing:0.04em;pointer-events:none;opacity:0.6;}
@@ -369,22 +369,6 @@ There are no words...">Before I met you, the world was simply ordinary. After yo
       <input class="regular-input" id="cSign" value="Forever yours 💕" maxlength="60"></div>
     </div>
     <div class="step-actions">
-      <button class="btn-next btn-intimate" id="btn-letter" onclick="goTo(&#39;s-preview&#39;)">Preview My Card →</button>
-    </div>
-  </div>
-</div>
-
-<div class="screen creator-screen theme-intimate" id="s-preview">
-  <div class="step-progress"><div class="step-progress-fill intimate-progress" id="prog-preview" style="width:100%"></div></div>
-  <button class="step-back dark" onclick="goBackCreator()">←</button>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="step-title" style="margin-bottom:4px;padding-top:4px;">Almost there! 🎉</div>
-      <div class="step-sub" style="margin-bottom:16px;">Review each page — tap Edit to change anything</div>
-      <div id="cardPagesPreview" style="width:100%;display:flex;flex-direction:column;gap:10px;"></div>
-    </div>
-    <div class="step-actions">
-      <button class="btn-next btn-intimate" id="btn-share" onclick="saveAndShare()">🎁 Create &amp; Share Card</button>
     </div>
   </div>
 </div>
@@ -527,56 +511,37 @@ const CFG = {
 
 // ── STATE ──
 let curScreen = '';
+let _showFirstScene = null;
 let photos = [];
 let uploadedUrls = {}; // slot index -> cloudinary URL (pre-uploaded)
 let currentSlotIdx = 0;
 let shareLink = '';
-let returnToPreview = false;
-let aiLetterCount = 0;
 
 const IS_RECEIVER = new URLSearchParams(window.location.search).has('card');
 
 // ── NAVIGATION ──
 const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
 
-function goTo(id, fromPreview=false){
+function goTo(id){
   const prev=document.getElementById(curScreen);
   const next=document.getElementById(id);
   if(!next||curScreen===id) return;
   if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
   next.classList.add('active');
   curScreen=id;
-  returnToPreview=fromPreview;
-  if(id==='s-letter'){aiLetterCount=0;const btn=document.getElementById('aiLetterBtn');if(btn)btn.textContent='✨ Write Letter with AI';const h=document.getElementById('letterAiResult');if(h)h.style.display='none';}
-  if(id==='s-preview') buildPreview();
-  if(!fromPreview&&id!=='s-preview'){
-    const normalFlow={'s-name':{btn:'btn-name',label:'Continue → Photos',dest:'s-photos'},'s-photos':{btn:'btn-photos',label:'Continue → Song',dest:'s-song'},'s-song':{btn:'btn-song',label:'Continue → Letter',dest:'s-letter'},'s-letter':{btn:'btn-letter',label:'Preview My Card →',dest:'s-preview'}};
-    const flow=normalFlow[id];
-    if(flow){const b=document.getElementById(flow.btn);if(b){b.textContent=flow.label;b.onclick=()=>goTo(flow.dest);}}
+  // Trigger first photo only when rv-photos is actually visible
+  if(id==='rv-photos' && _showFirstScene){
+    setTimeout(()=>{_showFirstScene();_showFirstScene=null;},100);
   }
-  if(fromPreview){
-    const btnMap={'s-name':'btn-name','s-photos':'btn-photos','s-song':'btn-song','s-letter':'btn-letter'};
-    const btnId=btnMap[id];
-    if(btnId){const b=document.getElementById(btnId);if(b){b.textContent='Done → Back to Preview ✓';b.onclick=()=>goTo('s-preview');}}
-  }
-  // FIX: vinyl spin only on song screen
+  // vinyl spin only on song screen
   const v=document.getElementById('rvVinyl');
   if(v){if(id==='rv-song')v.classList.remove('vinyl-pause');else v.classList.add('vinyl-pause');}
-  // Stop YouTube when leaving song screen (permanently blank until re-entered)
-  if(id!=='rv-song'){
-    const iframe=document.querySelector('#rvYtWrap iframe');
-    if(iframe) iframe.src=iframe.src; // pause by reassigning
-  }
+  // Stop YouTube when leaving song screen
+  if(id!=='rv-song'){const iframe=document.querySelector('#rvYtWrap iframe');if(iframe) iframe.src=iframe.src;}
   setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
 }
 
-const CREATOR_ORDER=['s-name','s-photos','s-song','s-letter','s-preview'];
-function goBackCreator(){
-  if(returnToPreview){goTo('s-preview');return;}
-  const idx=CREATOR_ORDER.indexOf(curScreen);
-  if(idx>0) goTo(CREATOR_ORDER[idx-1]);
-  else window.location.href='/';
-}
+
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded',function(){
@@ -625,9 +590,10 @@ window.addEventListener('DOMContentLoaded',function(){
     document.getElementById('mainApp').addEventListener('touchend',function(e){
       const dx=e.changedTouches[0].clientX-_tx,dy=e.changedTouches[0].clientY-_ty,dt=Date.now()-_tt;
       if(dt>450||Math.abs(dx)<45||Math.abs(dx)<Math.abs(dy)*1.3) return;
-      const idx=CREATOR_ORDER.indexOf(curScreen);if(idx===-1)return;
-      if(dx<0&&idx<CREATOR_ORDER.length-1)goTo(CREATOR_ORDER[idx+1]);
-      else if(dx>0&&idx>0)goTo(CREATOR_ORDER[idx-1]);
+      const RV=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
+      const idx=RV.indexOf(curScreen);if(idx===-1)return;
+      if(dx<0&&idx<RV.length-1) goTo(RV[idx+1]);
+      else if(dx>0&&idx>0) goTo(RV[idx-1]);
     },{passive:true});
   }
 });
@@ -790,158 +756,6 @@ async function callClaude(prompt){
 }
 function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
 
-function buildPreview(){
-  const name=document.getElementById('cName')?.value.trim()||'';
-  const sender=document.getElementById('cSender')?.value.trim()||'';
-  const msg=document.getElementById('cMsg')?.value.trim()||'';
-  const sign=document.getElementById('cSign')?.value.trim()||CFG.defaultSign;
-  const songName=document.getElementById('songSelectedName')?.textContent||'';
-  const accentColor='#e91e63';
-  const titleText=`Happy Birthday${name?', '+name:''}! ${CFG.emoji}`;
-  const realPhotos=photos.filter(Boolean);
-  const wrap=document.getElementById('cardPagesPreview');
-  wrap.innerHTML='';
-
-  function makePage(icon,label,content,editScreen){
-    const page=document.createElement('div');
-    page.style.cssText=`background:linear-gradient(135deg,#fde8f0,#fce4ec);border-radius:16px;padding:16px;border:1.5px solid rgba(233,30,99,0.12);box-shadow:0 4px 16px rgba(233,30,99,0.1);`;
-    page.innerHTML=`
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:1.1rem;">${icon}</span>
-          <span style="font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.5;">${label}</span>
-        </div>
-        <button onclick="goTo('${editScreen}', true)" style="font-size:0.68rem;font-weight:600;color:${accentColor};background:none;border:1px solid ${accentColor};border-radius:20px;padding:4px 10px;cursor:pointer;opacity:0.8;">Edit</button>
-      </div>
-      ${content}`;
-    wrap.appendChild(page);
-  }
-
-  makePage(CFG.emoji,'Welcome Screen',`
-    <div style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:#4a0e2a;">${titleText}</div>
-    ${sender?`<div style="text-align:center;font-size:0.72rem;opacity:0.6;margin-top:4px;">From ${sender} 💝</div>`:''}
-  `,'s-name');
-
-  const photosHeading=document.getElementById('photosHeading')?.value.trim()||'Our Memories';
-  makePage('📸',photosHeading,
-    realPhotos.length?
-      `<div style="display:flex;gap:6px;flex-wrap:wrap;">${realPhotos.map(u=>`<img src="${u}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;border:2px solid rgba(233,30,99,0.2);">`).join('')}</div>`
-      :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No photos added yet</div>`,
-  's-photos');
-
-  makePage('🎵','Song',
-    songName&&songName!=='—'?
-      `<div style="font-size:0.85rem;font-weight:600;color:${accentColor};">🎵 ${songName}</div>`
-      :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No song selected yet</div>`,
-  's-song');
-
-  makePage('💌','Letter',
-    msg?`<div style="font-family:'Cormorant Garamond',serif;font-size:0.88rem;line-height:1.7;color:#3d1c1c;">${msg.length>140?msg.slice(0,140)+'...':msg}</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.82rem;color:${accentColor};margin-top:8px;">${sign}</div>`
-    :`<div style="font-size:0.8rem;opacity:0.4;font-style:italic;">No letter written yet</div>`,
-  's-letter');
-}
-
-async function saveAndShare(){
-  const overlay=document.getElementById('saveOverlay');
-  const bar=document.getElementById('saveBar');
-  const label=document.getElementById('saveLabel');
-  document.getElementById('saveEmoji').textContent=CFG.emoji;
-  function setProgress(pct,lbl){bar.style.width=pct+'%';if(lbl)label.textContent=lbl;}
-  overlay.classList.add('show');
-  setProgress(10,'Creating your card... '+CFG.emoji);
-  let photoUrls=[];
-  // Use pre-uploaded URLs where available, upload any remaining ones
-  const slots=photos.map((p,i)=>({blob:p,idx:i})).filter(s=>s.blob);
-  let uploaded=0;
-  for(const s of slots){
-    if(uploadedUrls[s.idx]){
-      photoUrls.push(uploadedUrls[s.idx]);
-      uploaded++;
-      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Preparing your card... '+CFG.emoji);
-    } else {
-      setProgress(10+(uploaded/Math.max(slots.length,1)*55),'Uploading photo '+(uploaded+1)+'...');
-      try{
-        const blob=await fetch(s.blob).then(r=>r.blob());
-        const fd=new FormData();fd.append('file',blob);fd.append('upload_preset',CLOUDINARY_PRESET);fd.append('folder','wishyou');
-        const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-        const d=await res.json();if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
-      }catch(e){console.error(e);}
-      uploaded++;
-    }
-  }
-  setProgress(70,'Almost ready... '+CFG.emoji);
-  const now=Date.now();
-  const cardData={
-    type:CFG.cardType,
-    name:document.getElementById('cName')?.value.trim()||'',
-    age:document.getElementById('cAge')?.value.trim()||'',
-    sender:document.getElementById('cSender')?.value.trim()||'',
-    msg:document.getElementById('cMsg')?.value.trim()||'',
-    sign:document.getElementById('cSign')?.value.trim()||'',
-    spotify:document.getElementById('cSpotify')?.value.trim()||'',
-    songName:document.getElementById('songSelectedName')?.textContent||'',
-    memoriesHeading:document.getElementById('photosHeading')?.value.trim()||'Our Memories',
-    songScreenTitle:document.getElementById('songScreenTitle')?.value.trim()||'Song that reminds me of you 🎵',
-    photos:photoUrls,created:now,createdAt:now,expiresAt:now+3*24*60*60*1000
-  };
-  try{
-    setProgress(85,'Creating your card... '+CFG.emoji);
-    const res=await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
-    const data=await res.json();const cardId=data.name;
-    shareLink=CFG.shareUrl(cardId);
-    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
-    setProgress(100,'Card created! 🎉');
-    setTimeout(()=>{overlay.classList.remove('show');document.getElementById('shareLinkTxt').textContent=shareLink.replace('https://','');document.getElementById('shareModal').classList.add('show');},600);
-  }catch(e){overlay.classList.remove('show');alert('Could not save card. Please try again.');}
-}
-
-function copyLink(){navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied! ✓';setTimeout(()=>btn.textContent='Copy',2000);});}
-function openWhatsApp(){
-  const name=document.getElementById('cName')?.value.trim()||'';
-  const sender=document.getElementById('cSender')?.value.trim()||'';
-  const msg=CFG.shareMsg(name,sender,shareLink);
-  const isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  // Try native Web Share API first (best on mobile — opens native share sheet)
-  if(navigator.share && isMobile){
-    navigator.share({text:msg}).catch(()=>{
-      // Fallback to WhatsApp deep link if share cancelled or fails
-      window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
-    });
-  } else {
-    // Desktop or no share API
-    window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
-  }
-}
-function closeShare(){document.getElementById('shareModal').classList.remove('show');}
-
-// ════ RECEIVER FUNCTIONS ════
-function initPetals(){
-  const wrap=document.getElementById('petals');if(!wrap)return;
-  const emojis=['🌸','💕','✨','🌷','💖','🎀'];
-  for(let i=0;i<16;i++){
-    const p=document.createElement('div');p.className='petal';
-    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
-    const s=0.7+Math.random()*0.8;
-    p.style.cssText=`font-size:${s}rem;left:${Math.random()*100}%;animation-duration:${8+Math.random()*10}s;animation-delay:${Math.random()*10}s;`;
-    wrap.appendChild(p);
-  }
-}
-
-async function loadCard(){
-  const cardId=new URLSearchParams(window.location.search).get('card');
-  if(!cardId){goTo('rv-error');return;}
-  try{
-    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
-    const d=await res.json();
-    if(!d){goTo('rv-error');return;}
-    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
-    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
-      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
-    }).catch(()=>{});
-    renderCard(d);
-  }catch(e){goTo('rv-error');}
-}
-
 function renderCard(d){
   const name=d.name||'';const sender=d.sender||'';
   document.getElementById('rvName').textContent=name?`Happy Birthday, ${name}! 🎂`:'Happy Birthday! 🎂';
@@ -1013,7 +827,7 @@ function renderCard(d){
         }));
       },700);
     };
-    applyPositions();
+    _showFirstScene = () => applyPositions();
   }else{stack.innerHTML='<div class="no-photo">💕 A card made with love</div>';}
   // Song
   const sn=d.songName||'';
