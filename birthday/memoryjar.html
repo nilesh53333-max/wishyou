@@ -337,10 +337,59 @@ const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-ca
 
 // ── STATE ──
 let curScreen='';
+
+function goTo(id,fromPreview=false){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
+  next.classList.add('active');
+  curScreen=id;
+  returnToPreview=fromPreview;
+  if(id==='s-letter'){aiLetterCount=0;const btn=document.getElementById('aiLetterBtn');if(btn)btn.textContent='✨ Write with AI';const h=document.getElementById('letterAiResult');if(h)h.style.display='none';}
+  if(id==='s-preview')buildPreview();
+  if(!fromPreview&&id!=='s-preview'){
+    const nf={'s-name':{btn:'btn-name',label:'Fill the jar → 📸',dest:'s-photos'},'s-photos':{btn:'btn-photos',label:'Add a song → 🎵',dest:'s-song'},'s-song':{btn:'btn-song',label:'Write the letter → 💌',dest:'s-letter'},'s-letter':{btn:'btn-letter',label:'Preview My Jar →',dest:'s-preview'}};
+    const fl=nf[id];if(fl){const b=document.getElementById(fl.btn);if(b){b.textContent=fl.label;b.onclick=()=>goTo(fl.dest);}}
+  }
+  if(fromPreview){
+    const bm={'s-name':'btn-name','s-photos':'btn-photos','s-song':'btn-song','s-letter':'btn-letter'};
+    const bid=bm[id];if(bid){const b=document.getElementById(bid);if(b){b.textContent='Done → Back to Preview ✓';b.onclick=()=>goTo('s-preview');}}
+  }
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollTo(0,0);},50);
+}
 let photos=[];
 let shareLink='';
 
 // ── CREATOR NAV ──
+
+window.addEventListener('DOMContentLoaded', function(){
+  const cardId = new URLSearchParams(window.location.search).get('card');
+  if(cardId){
+    goTo('rv-loading');
+    loadCard();
+  } else {
+    goTo('rv-error');
+  }
+});
+
+
+async function loadCard(){
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  try{
+    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
+    const d=await res.json();
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    cardData=d;
+    renderJar(d);
+  }catch(e){goTo('rv-error');}
+}
+
 function renderJar(d){
   const name=d.name||'';const sender=d.sender||'';
   document.getElementById('jarHeaderName').textContent=name?`Happy Birthday, ${name}! 🎂`:'Happy Birthday! 🎂';

@@ -259,6 +259,48 @@ body{font-family:'DM Sans',sans-serif;background:#111;}
 
 <script>
 const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+
+window.addEventListener('DOMContentLoaded', function(){
+  const cardId = new URLSearchParams(window.location.search).get('card');
+  if(cardId){
+    goTo('rv-loading');
+    loadCard();
+  } else {
+    goTo('rv-error');
+  }
+});
+
+let curScreen='';
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');}
+  next.classList.add('active');
+  curScreen=id;
+}
+
+async function loadCard(){
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  try{
+    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
+    const d=await res.json();
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderChat(d);
+  }catch(e){goTo('rv-error');}
+}
+
+function getTime(){
+  const d=new Date();
+  return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+}
+
 function renderChat(d){
   const name=d.name||'';
   const sender=d.sender||'Someone Special';
