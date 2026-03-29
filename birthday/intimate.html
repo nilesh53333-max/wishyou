@@ -961,6 +961,16 @@ function renderCard(d){
     const photos=d.photos;
     const captions=d.photoCaptions||[];
     const n=photos.length;
+
+    // Preload all images first so no flash when photo screen opens
+    let loaded=0;
+    const preloaded=photos.map(url=>{
+      const img=new Image();
+      img.src=url;
+      img.onload=img.onerror=()=>{ loaded++; };
+      return img;
+    });
+
     // Back-card positions: [translateX, translateY, rotate, scale, opacity]
     const POSITIONS=[
       ['-50%','0px','0deg',1,1],
@@ -975,7 +985,9 @@ function renderCard(d){
     const cards=photos.map((url,i)=>{
       const card=document.createElement('div');
       card.className='pol-card';
-      card.innerHTML=`<img src="${url}" alt="" onerror="this.parentNode.style.display='none'"><div class="pol-caption-wrap"><div class="pol-caption">${captions[i]||''}</div>${i===0?'<div class="pol-tap-hint">Tap to Shuffle ✨</div>':''}</div>`;
+      const imgStyle=i===0?'style="opacity:0;transition:opacity 0.4s ease;"':'';
+      const img=`<img src="${url}" alt="" ${imgStyle} onload="if(this.style.opacity==='0'){this.style.opacity='1';}" onerror="this.parentNode.style.display='none'">`;
+      card.innerHTML=`${img}<div class="pol-caption-wrap"><div class="pol-caption">${captions[i]||''}</div>${i===0?'<div class="pol-tap-hint">Tap to Shuffle ✨</div>':''}</div>`;
       stack.appendChild(card);
       return card;
     });
