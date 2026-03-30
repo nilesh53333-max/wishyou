@@ -307,6 +307,24 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-recipe .sv-pols .sv-pol-inner{background:#faefd5;color:#8B0000;font-weight:700;font-size:0.8rem;}
 .sv-recipe .sv-lines .sv-line{background:rgba(180,130,60,0.2);}
 .sv-recipe .sv-lines .sv-line:first-child{background:rgba(139,0,0,0.3);}
+/* Flipkart theme */
+.sv-flipkart{background:#f1f3f6;}
+.sv-fk-bar{background:#2874f0;margin:-12px -12px 0;padding:8px 12px;display:flex;align-items:center;}
+.sv-fk-logo{font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:700;color:#fff;}
+.sv-fk-logo em{color:#ffe500;font-style:italic;}
+.sv-flipkart .sv-lbl{color:rgba(40,116,240,0.6);}
+.sv-flipkart .sv-title{color:#212121;font-size:0.76rem;}
+.sv-flipkart .sv-sub{color:#878787;}
+.sv-flipkart .sv-dot{background:rgba(40,116,240,0.2);}
+.sv-flipkart .sv-dot.sv-dot-active{background:#2874f0;}
+.sv-flipkart .sv-name{color:#212121;}
+.sv-flipkart .sv-desc{color:#878787;}
+.sv-flipkart .sv-cta{color:#2874f0;}
+.sv-flipkart .sv-overlay-info{background:linear-gradient(to top,rgba(241,243,246,0.97) 0%,rgba(241,243,246,0.7) 70%,transparent);}
+.sv-flipkart .sv-pols .sv-pol-inner{background:#e8f5e9;color:#388e3c;font-weight:600;}
+.sv-flipkart .sv-vinyl-c{background:#388e3c;}
+.sv-flipkart .sv-lines .sv-line{background:rgba(40,116,240,0.15);}
+.sv-flipkart .sv-lines .sv-line:first-child{background:rgba(40,116,240,0.4);}
 .sv-gift-box{width:54px;height:54px;position:relative;margin:4px auto;}
 .sv-gift-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:48px;height:34px;background:linear-gradient(145deg,#c2410c,#9a3412);border-radius:3px 3px 5px 5px;}
 .sv-gift-lid{position:absolute;top:0;left:50%;transform:translateX(-50%);width:52px;height:14px;background:linear-gradient(145deg,#dc2626,#b91c1c);border-radius:4px 4px 2px 2px;}
@@ -601,6 +619,16 @@ const BIRTHDAY_STYLES = [
     defaultMemoriesHeading:'The best memories',
     receiverUrl: id => `https://wishyou.ai/mothersday/recipe.html?card=${id}`,
     shareMsg: (n,s,l) => `🍱 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' ne tumhare liye ek special recipe card banaya hai 🌸\n\n':'Someone made you a recipe card 🌸\n\n'}Kholo aur padhein:\n\n👆 Open:\n${l}`
+  },
+  {
+    id:'flipkart', name:'🛍️ Flipkart Order',
+    desc:'Most viral · Fake order page · Photos as reviews · Song & letter inside',
+    previewEmoji:'🛍️',
+    cardType:'mothers-flipkart',
+    defaultSongTitle:'Customers also listened 🎵',
+    defaultMemoriesHeading:'Customer Reviews',
+    receiverUrl: id => `https://wishyou.ai/mothersday/flipkart.html?card=${id}`,
+    shareMsg: (n,s,l) => `🛍️ *Flipkart Order Confirmed!*\n\n${n?'World\'s Best *'+n+'* — Limited Edition\n\n':'Special Mother\'s Day Order\n\n'}${s?s+' ne place kiya hai — ':''}"Delivered to your heart since birth" 🌸\n\nOrder dekho:\n\n👆 Open:\n${l}`
   }
 ];
 
@@ -717,6 +745,15 @@ function buildStylesList() {
         `<div class="sv-lbl">✦ Ingredients</div><div class="sv-sub" style="text-align:left;padding:0 8px;">∞ cups Unconditional love<br>Endless Patience<br>Daily — Her famous chai ☕</div>`,
         `<div class="sv-lbl">📸 Method Steps</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">①</div></div><div class="sv-pol"><div class="sv-pol-inner">②</div></div><div class="sv-pol"><div class="sv-pol-inner">③</div></div></div><div class="sv-sub">Photos as cooking steps with chef's notes</div>`,
         `<div class="sv-lbl">📝 Chef's Note</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:85%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#8B0000;">A letter written on lined paper 🌸</div>`
+      ]
+    },
+    flipkart: {
+      theme:'sv-flipkart',
+      slides:[
+        `<div class="sv-fk-bar"><div class="sv-fk-logo">flip<em>kart</em></div></div><div class="sv-lbl" style="margin-top:8px;">Order Confirmed!</div><div class="sv-title">World's Best Maa — Limited Edition</div>`,
+        `<div class="sv-lbl">★★★★★ Reviews</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">📸</div></div><div class="sv-pol"><div class="sv-pol-inner">💕</div></div><div class="sv-pol"><div class="sv-pol-inner">🌸</div></div></div><div class="sv-sub">Photos appear as verified customer reviews</div>`,
+        `<div class="sv-lbl">♪ Customers also listened</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Her song — in the Flipkart style</div>`,
+        `<div class="sv-lbl">Product Description</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:80%"></div><div class="sv-line" style="width:88%"></div></div><div class="sv-sub" style="margin-top:6px;color:#2874f0;font-style:italic;">Letter on yellow notepad 💛</div>`
       ]
     }
   };
