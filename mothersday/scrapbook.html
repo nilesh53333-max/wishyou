@@ -473,6 +473,8 @@ const STICKERS=['🌸','💕','🌷','✨','💐','🌼','🎀','🌹'];
 const TAPE_CLASSES=[['tape tape-tl','tape tape-tr'],['tape tape-tc'],['tape tape-tl','tape tape-tr']];
 
 function buildPhotos(photos,captions){
+  // Preload all images immediately so they are ready when scrapbook opens
+  photos.forEach(url=>{ const img=new Image(); img.src=url; });
   const wrap=document.getElementById('scrapPhotos');
   wrap.innerHTML='';
   photos.forEach((url,i)=>{
@@ -489,7 +491,7 @@ function buildPhotos(photos,captions){
     item.innerHTML=`
       ${tapeSet}
       <div class="polaroid">
-        <img src="${esc(url)}" loading="lazy" onerror="this.style.background='#f0dfc0'">
+        <img src="${esc(url)}" loading="eager" onerror="this.style.background='#f0dfc0'">
         <div class="polaroid-cap"><div class="polaroid-cap-txt">${esc(cap)||'&nbsp;'}</div></div>
         <div class="photo-sticker" style="${stickerPos}">${sticker}</div>
       </div>`;
