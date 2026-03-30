@@ -424,7 +424,7 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, car
   // Pinned letter post (top left if letter exists)
   if(hasLetter){
     const preview=(d.msg||'').slice(0,80)+(d.msg&&d.msg.length>80?'...':'');
-    html+=`<div class="ig-pinned" onclick="goTo('rv-letter')">
+    html+=`<div class="ig-pinned" id="igPinnedPost">
       <div class="ig-pin-icon">📌</div>
       <div class="ig-pin-text">
         <div class="ig-pin-lbl">Pinned · From @${esc(senderHandle)}</div>
@@ -436,14 +436,14 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, car
   // Photo grid items
   photos.forEach((url,i)=>{
     const cap=captions[i]||'';
-    html+=`<div class="ig-grid-item${cap?' has-caption':''}" onclick="openPost(${i})">
+    html+=`<div class="ig-grid-item${cap?' has-caption':''}" data-idx="${i}">
       <img src="${esc(url)}" loading="lazy" onerror="this.parentNode.style.display='none'">
     </div>`;
   });
 
-  // Song tile if no photos enough to fill
+  // Song tile
   if(hasSong){
-    html+=`<div class="ig-grid-item" onclick="goTo('rv-reel')" style="background:linear-gradient(135deg,#1a0a2e,#0d1a3a);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;">
+    html+=`<div class="ig-grid-item ig-song-tile" style="background:linear-gradient(135deg,#1a0a2e,#0d1a3a);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;">
       <div style="font-size:1.8rem;">🎵</div>
       <div style="font-size:0.52rem;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-align:center;padding:0 6px;">Play Reel</div>
     </div>`;
@@ -452,6 +452,19 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, car
   html+=`</div>`;
 
   document.getElementById('igProfileBody').innerHTML=html;
+
+  // Attach listeners AFTER innerHTML (inline onclick doesn't work reliably in injected HTML)
+  const pinned=document.getElementById('igPinnedPost');
+  if(pinned){pinned.addEventListener('click',()=>goTo('rv-letter'));}
+  document.querySelectorAll('.ig-grid-item[data-idx]').forEach(el=>{
+    el.addEventListener('click',()=>openPost(parseInt(el.dataset.idx)));
+    el.addEventListener('touchend',e=>{e.preventDefault();openPost(parseInt(el.dataset.idx));});
+  });
+  const songTile=document.querySelector('.ig-song-tile');
+  if(songTile){
+    songTile.addEventListener('click',()=>goTo('rv-reel'));
+    songTile.addEventListener('touchend',e=>{e.preventDefault();goTo('rv-reel');});
+  }
 }
 
 function openPost(idx){
