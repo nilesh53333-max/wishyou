@@ -167,6 +167,8 @@ html,body{height:100%;overflow:hidden;background:#000;}
 .letter-back-btn{display:block;margin:8px 0 max(20px,env(safe-area-inset-bottom));background:#1a1a1a;border:none;border-radius:12px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;color:#fff;cursor:pointer;width:100%;touch-action:manipulation;text-align:center;}
 
 .wm{position:absolute;bottom:6px;right:10px;font-size:0.5rem;color:rgba(255,255,255,0.06);pointer-events:none;z-index:1;}
+.confetti-piece{position:absolute;width:8px;height:8px;border-radius:2px;animation:confettiFall linear forwards;}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
 </style>
 </head>
 <body>
@@ -254,6 +256,13 @@ html,body{height:100%;overflow:hidden;background:#000;}
     </div>
     <button class="letter-back-btn" onclick="goTo('rv-profile')">← Back to Profile</button>
   </div>
+</div>
+
+<!-- Celebrate overlay -->
+<div id="celebrateOverlay" style="display:none;position:absolute;inset:0;z-index:200;pointer-events:none;overflow:hidden;"></div>
+<div id="celebrateBanner" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:201;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border-radius:20px;padding:22px 28px;text-align:center;pointer-events:none;transition:transform 0.4s cubic-bezier(.34,1.56,.64,1);">
+  <div id="celebrateName" style="font-size:1.4rem;font-weight:800;color:#fff;letter-spacing:0.02em;">🎂 Happy Birthday!</div>
+  <div style="font-size:0.75rem;color:rgba(255,255,255,0.8);margin-top:6px;">Wishing you all the joy ✨</div>
 </div>
 
 <!-- Follower modal -->
@@ -385,7 +394,7 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, car
     <div class="ig-bio">${esc(bio)}</div>
     <div class="ig-bio-sender">💌 A birthday edition by @${esc(senderHandle)}</div>
     <div class="ig-btns">
-      <button class="ig-follow-btn">🎂 Celebrate</button>
+      <button class="ig-follow-btn" onclick="celebrate()">🎂 Celebrate</button>
       <button class="ig-msg-btn" onclick="${hasLetter?'goTo(\'rv-letter\')':'void(0)'}">💌 Message</button>
     </div>
   </div>`;
@@ -467,23 +476,25 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, car
   document.querySelectorAll('.ig-highlight').forEach(el=>{
     const lbl=el.querySelector('.ig-highlight-lbl')?.textContent;
     if(lbl==='My Song'&&hasSong) el.onclick=()=>goTo('rv-reel');
-    if(lbl==='Letter'&&hasLetter) el.onclick=()=>goTo('rv-letter');
+    else if(lbl==='Letter'&&hasLetter) el.onclick=()=>goTo('rv-letter');
+    else if(lbl==='Birthday') el.onclick=()=>celebrate();
+    else if(lbl==='Memories'||lbl==='Moments') el.onclick=()=>openMemories();
   });
 }
 
 function openPost(idx){
   const d=cardData;
+  const cardId=new URLSearchParams(window.location.search).get('card')||'default';
   const photos=(d.photos||[]).filter(Boolean);
   const captions=d.photoCaptions||[];
   const name=d.name||'Birthday Star';
   const sender=d.sender||'someone_special';
   const url=photos[idx];
   const cap=captions[idx]||'';
-  const likes=Math.floor(Math.random()*900)+100;
-  const timeAgo=getTimeAgo(cardId);
-
-  const cardId=new URLSearchParams(window.location.search).get('card')||'default';
-  const comments=getFakeComments(name,cardId);
+  seedFrom(cardId+'likes'+idx);
+  const likes=Math.floor(sr()*900)+100;
+  const timeAgo=getTimeAgo(cardId+'t'+idx);
+  const comments=getFakeComments(name,cardId,idx);
 
   let html=`
     <div class="post-header">
@@ -542,10 +553,57 @@ function openPost(idx){
   goTo('rv-post');
 }
 
+function celebrate(){
+  const name=cardData?.name||'Birthday Star';
+  document.getElementById('celebrateName').textContent=`🎂 Happy Birthday, ${name}!`;
+  const overlay=document.getElementById('celebrateOverlay');
+  const banner=document.getElementById('celebrateBanner');
+  overlay.style.display='block';
+  banner.style.display='block';
+  requestAnimationFrame(()=>{banner.style.transform='translate(-50%,-50%) scale(1)';});
+  // Confetti
+  const colors=['#f09433','#e6683c','#dc2743','#cc2366','#bc1888','#FFD700','#fff'];
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.left=Math.random()*100+'%';
+    p.style.top='-10px';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.width=(6+Math.random()*8)+'px';
+    p.style.height=(6+Math.random()*8)+'px';
+    p.style.borderRadius=Math.random()>0.5?'50%':'2px';
+    p.style.animationDuration=(1.5+Math.random()*2)+'s';
+    p.style.animationDelay=(Math.random()*0.8)+'s';
+    overlay.appendChild(p);
+  }
+  setTimeout(()=>{
+    banner.style.transform='translate(-50%,-50%) scale(0)';
+    setTimeout(()=>{
+      overlay.style.display='none';
+      banner.style.display='none';
+      overlay.innerHTML='';
+    },400);
+  },2800);
+}
+
+function openMemories(){
+  // Scroll profile grid into view — photos are in igGrid
+  goTo('rv-profile');
+  setTimeout(()=>{
+    const grid=document.getElementById('igGrid');
+    if(grid) grid.scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
+}
+
+function openBirthday(){
+  celebrate();
+}
+
 function heartLetter(){
   const h=document.getElementById('letterHeart');
   h.textContent=h.textContent==='🤍'?'❤️':'🤍';
 }
+
 
 // ── HELPERS ──
 function toHandle(name){
@@ -590,8 +648,8 @@ function getSenderComment(idx){
   return pool[idx%pool.length];
 }
 
-function getFakeComments(name,cardId){
-  seedFrom(cardId+(name||''));
+function getFakeComments(name,cardId,idx){
+  seedFrom(cardId+(name||'')+(idx||0));
   // Premium, realistic Indian Instagram comments — no cringe
   const pool=[
     {emoji:'🥹',user:'simran.diaries',text:`Genuinely one of the best people I know. Happy birthday ${name} 💕`},
@@ -608,8 +666,8 @@ function getFakeComments(name,cardId){
   return shuffled.slice(0,3);
 }
 
-function getTimeAgo(cardId){
-  seedFrom((cardId||'')+'time');
+function getTimeAgo(seed){
+  seedFrom(seed||'time');
   const opts=['3 HOURS AGO','1 HOUR AGO','JUST NOW','5 HOURS AGO','2 HOURS AGO'];
   return pick(opts);
 }
