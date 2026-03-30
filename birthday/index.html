@@ -202,6 +202,20 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 
 /* Fake Chat theme */
 .sv-chat{background:linear-gradient(160deg,#1a1a2e,#16213e);}
+/* Instagram theme */
+.sv-instagram{background:#000;position:relative;overflow:hidden;}
+.sv-instagram .sv-lbl{color:#0095f6;font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;}
+.sv-instagram .sv-title{font-size:0.82rem;font-weight:700;color:#fff;line-height:1.2;}
+.sv-instagram .sv-sub{color:#aaa;font-size:0.6rem;}
+.sv-instagram .sv-dot{background:rgba(255,255,255,0.2);}
+.sv-instagram .sv-dot.sv-dot-active{background:#fff;}
+.sv-instagram .sv-name{color:#fff;}
+.sv-instagram .sv-desc{color:#aaa;}
+.sv-instagram .sv-cta{color:#0095f6;}
+.sv-instagram .sv-overlay-info{background:linear-gradient(to top,rgba(0,0,0,0.95) 0%,rgba(0,0,0,0.6) 70%,transparent);}
+.sv-ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;width:100%;}
+.sv-ig-cell{aspect-ratio:1;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.sv-ig-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 8px;}
 /* Newspaper theme */
 .sv-newspaper{background:#f5f0e8;position:relative;}
 .sv-newspaper .sv-lbl{color:#cc0000;font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;}
@@ -477,6 +491,16 @@ const BIRTHDAY_STYLES = [
     defaultMemoriesHeading:'Photo Archives',
     receiverUrl: id => `https://wishyou.ai/birthday/newspaper.html?card=${id}`,
     shareMsg: (n,s,l) => `📰 *BREAKING NEWS!*\n\n${n?'*'+n+'* ka birthday aaya hai!\n\n':'Birthday special edition!\n\n'}${s?s+' ne ek khaas edition publish ki hai — ':''}Abhi padhein:\n\n👆 Open:\n${l}`
+  },
+  {
+    id:'instagram', name:'📱 Insta Profile',
+    desc:'Most unique · Fake Instagram profile · Tap posts · Comments & reels',
+    previewEmoji:'📱',
+    cardType:'birthday-instagram',
+    defaultSongTitle:'Now Playing on Reels 🎵',
+    defaultMemoriesHeading:'Posts',
+    receiverUrl: id => `https://wishyou.ai/birthday/instagram.html?card=${id}`,
+    shareMsg: (n,s,l) => `📱 *Arre dekho dekho!*\n\n${n?'*'+n+'* ka birthday profile ban gaya hai 🎂\n\n':'Birthday special profile!\n\n'}${s?s+' ne banaya hai — ':''} Tap karo aur dekho:\n\n👆 Open:\n${l}`
   }
 ];
 
@@ -576,6 +600,15 @@ function buildStylesList() {
         `<div class="sv-lbl">Photo Archives</div><span class="sv-emoji">📸</span><div class="sv-sub" style="font-style:italic;">"Our correspondent files exclusive photos"</div>`,
         `<div class="sv-lbl">📻 WishYou FM</div><span class="sv-emoji">🎵</span><div class="sv-sub">Special song broadcast, selected by our music desk</div>`,
         `<div class="sv-lbl">Editor's Column</div><span class="sv-emoji">✍️</span><div class="sv-sub">A personal note from the editor — straight from the heart</div>`
+      ]
+    },
+    instagram: {
+      theme:'sv-instagram',
+      slides:[
+        `<div class="sv-ig-avatar">📸</div><div class="sv-lbl">@birthday.profile</div><div class="sv-title">Your Fake Insta Profile</div>`,
+        `<div class="sv-ig-grid"><div class="sv-ig-cell">📸</div><div class="sv-ig-cell">💕</div><div class="sv-ig-cell">✨</div><div class="sv-ig-cell">🌸</div><div class="sv-ig-cell">🎂</div><div class="sv-ig-cell">💫</div></div>`,
+        `<div class="sv-lbl">Tap any post</div><span class="sv-emoji">💬</span><div class="sv-sub">Captions appear as comments</div>`,
+        `<div class="sv-lbl">Reels & Letter</div><span class="sv-emoji">🎵</span><div class="sv-sub">Song plays as a reel · Letter as pinned comment</div>`
       ]
     },
     fakechat: {
