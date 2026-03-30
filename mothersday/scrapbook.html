@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Happy Mother's Day 🌸</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+<meta property="og:title" content="Someone made you a Mother's Day scrapbook 🌸">
+<meta property="og:description" content="A handmade scrapbook, just for you. Scroll to open it.">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:#2c1a0e;}
+.app{position:fixed;inset:0;overflow:hidden;background:#2c1a0e;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.9);}
+}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.5s ease;overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;}
+
+/* ── LOADING ── */
+#rv-loading{background:#fdf6ee;align-items:center;justify-content:center;gap:16px;}
+.ld-flower{font-size:3rem;animation:flSpin 2s ease-in-out infinite;}
+@keyframes flSpin{0%,100%{transform:rotate(-15deg) scale(1);}50%{transform:rotate(15deg) scale(1.1);}}
+.ld-txt{font-family:'Caveat',cursive;font-size:1.2rem;color:#8B4513;opacity:0.6;}
+
+/* ── ERROR ── */
+#rv-error{background:#fdf6ee;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;gap:14px;}
+.err-t{font-family:'Caveat',cursive;font-size:1.1rem;color:#8B4513;line-height:1.7;opacity:0.7;}
+
+/* ── WELCOME ── */
+#rv-welcome{
+  background:linear-gradient(160deg,#fdf6ee,#fce8d5);
+  align-items:center;justify-content:center;flex-direction:column;
+  padding:40px 28px;
+  position:relative;overflow:hidden;
+}
+/* decorative petals bg */
+.petal-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.pb{position:absolute;font-size:1.4rem;opacity:0.15;animation:pbDrift linear infinite;}
+@keyframes pbDrift{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:0.2;}90%{opacity:0.1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+.wlc-tag{font-family:'Caveat',cursive;font-size:0.9rem;color:rgba(139,69,19,0.5);letter-spacing:0.1em;margin-bottom:16px;}
+.wlc-flower{font-size:4.5rem;margin-bottom:14px;animation:wlcPop 0.6s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes wlcPop{from{transform:scale(0) rotate(-20deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
+.wlc-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,7vw,2.5rem);font-weight:600;color:#3d1a00;line-height:1.2;text-align:center;margin-bottom:8px;}
+.wlc-sub{font-family:'Caveat',cursive;font-size:1.05rem;color:rgba(139,69,19,0.6);text-align:center;margin-bottom:32px;line-height:1.5;}
+.wlc-btn{background:linear-gradient(135deg,#c2185b,#e91e63);color:white;border:none;border-radius:50px;padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 28px rgba(194,24,91,0.35);touch-action:manipulation;animation:btnGlow 2.5s ease-in-out infinite;}
+@keyframes btnGlow{0%,100%{box-shadow:0 8px 28px rgba(194,24,91,0.35);}50%{box-shadow:0 12px 40px rgba(194,24,91,0.55);}}
+.wlc-btn:active{transform:scale(0.97);}
+.wlc-make{margin-top:14px;background:none;border:1.5px solid rgba(194,24,91,0.2);color:rgba(194,24,91,0.5);border-radius:50px;padding:10px 28px;font-family:'DM Sans',sans-serif;font-size:0.8rem;cursor:pointer;}
+
+/* ══════════════════════════════════════
+   THE SCRAPBOOK PAGE
+   One long scrollable kraft paper page.
+   Everything on one continuous surface.
+══════════════════════════════════════ */
+#rv-scrapbook{
+  background:#2c1a0e;
+  display:flex;flex-direction:column;
+  position:relative;
+}
+
+/* The scrollable page */
+.scrap-scroll{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  position:relative;
+  background:
+    /* subtle texture lines */
+    repeating-linear-gradient(
+      0deg,
+      transparent,transparent 27px,
+      rgba(139,69,19,0.04) 27px,rgba(139,69,19,0.04) 28px
+    ),
+    /* kraft paper base */
+    linear-gradient(160deg,#f5e6cc,#ede0c4,#f0dfc0,#ece0c8);
+  min-height:100%;
+}
+.scrap-scroll::-webkit-scrollbar{display:none;}
+
+/* Paper grain overlay */
+.scrap-scroll::before{
+  content:'';position:sticky;top:0;display:block;height:0;
+  pointer-events:none;
+}
+
+/* Top torn edge — decorative */
+.torn-top{
+  width:100%;height:28px;flex-shrink:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 28' preserveAspectRatio='none'%3E%3Cpath d='M0,0 Q20,20 40,8 Q60,28 80,12 Q100,0 120,18 Q140,28 160,10 Q180,0 200,22 Q220,28 240,14 Q260,2 280,20 Q300,28 320,8 Q340,0 360,18 Q380,28 400,10 L400,0 Z' fill='%232c1a0e'/%3E%3C/svg%3E") no-repeat top center;
+  background-size:100% 100%;
+}
+
+/* ── SCRAPBOOK HEADER ── */
+.scrap-header{
+  padding:32px 24px 20px;
+  text-align:center;
+  position:relative;
+}
+.scrap-header-title{
+  font-family:'Caveat',cursive;
+  font-size:clamp(2rem,8vw,2.8rem);
+  font-weight:700;
+  color:#3d1a00;
+  line-height:1.1;
+  position:relative;
+  display:inline-block;
+}
+/* underline doodle */
+.scrap-header-title::after{
+  content:'';
+  position:absolute;bottom:-6px;left:10%;right:10%;height:3px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8'%3E%3Cpath d='M0,4 Q50,0 100,4 Q150,8 200,4' stroke='%23c2185b' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center;
+  background-size:100% 100%;
+}
+.scrap-header-sub{font-family:'Caveat',cursive;font-size:1rem;color:rgba(139,69,19,0.55);margin-top:14px;}
+/* corner flower stickers */
+.corner-fl{position:absolute;font-size:1.6rem;opacity:0.7;}
+.cf-tl{top:20px;left:16px;transform:rotate(-20deg);}
+.cf-tr{top:20px;right:16px;transform:rotate(15deg);}
+
+/* ── TORN DIVIDER between sections ── */
+.torn-div{
+  width:100%;height:22px;margin:16px 0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 22'%3E%3Cpath d='M0,11 Q15,2 30,11 Q45,20 60,11 Q75,2 90,11 Q105,20 120,11 Q135,2 150,11 Q165,20 180,11 Q195,2 210,11 Q225,20 240,11 Q255,2 270,11 Q285,20 300,11 Q315,2 330,11 Q345,20 360,11 Q375,2 390,11 L390,22 L0,22 Z' fill='rgba(139,69,19,0.12)'/%3E%3C/svg%3E") no-repeat center;
+  background-size:100% 100%;
+  opacity:0.8;
+}
+
+/* ── PHOTO SLOTS ── */
+.scrap-photos{
+  padding:0 16px;
+  display:flex;flex-direction:column;gap:0;
+}
+
+/* Each photo is a polaroid stuck with tape */
+.scrap-photo-item{
+  margin-bottom:8px;
+  position:relative;
+  align-self:center;
+  width:100%;
+  animation:scrSticker 0.5s cubic-bezier(.34,1.4,.64,1) both;
+}
+@keyframes scrSticker{from{transform:var(--rot) scale(0.8) translateY(20px);opacity:0;}to{transform:var(--rot) scale(1) translateY(0);opacity:1;}}
+
+/* Tape strips */
+.tape{
+  position:absolute;z-index:10;
+  width:54px;height:18px;
+  background:rgba(255,248,220,0.7);
+  border:1px solid rgba(180,150,80,0.3);
+  border-radius:2px;
+  backdrop-filter:blur(2px);
+}
+.tape::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(180,150,80,0.07) 0px,rgba(180,150,80,0.07) 2px,transparent 2px,transparent 6px);}
+.tape-tl{top:-9px;left:18px;transform:rotate(-8deg);}
+.tape-tr{top:-9px;right:18px;transform:rotate(7deg);}
+.tape-tc{top:-9px;left:50%;transform:translateX(-50%) rotate(-3deg);}
+
+/* Polaroid */
+.polaroid{
+  background:#fff;
+  padding:8px 8px 44px;
+  border-radius:2px;
+  box-shadow:0 4px 18px rgba(60,30,0,0.2),0 1px 4px rgba(60,30,0,0.12);
+  position:relative;overflow:hidden;
+}
+.polaroid img{
+  width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center 20%;
+  display:block;border-radius:1px;
+}
+.polaroid-cap{
+  position:absolute;bottom:0;left:0;right:0;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 10px;
+  background:#fff;
+}
+.polaroid-cap-txt{
+  font-family:'Caveat',cursive;
+  font-size:1rem;font-weight:600;
+  color:#3d1a00;
+  text-align:center;line-height:1.25;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+}
+
+/* Small decorative stickers on photos */
+.photo-sticker{position:absolute;font-size:1.4rem;z-index:5;pointer-events:none;}
+
+/* ── SONG SECTION ── */
+.scrap-song{
+  margin:8px 20px 8px;
+  background:linear-gradient(135deg,#1a0a2e,#2d1048);
+  border-radius:16px;
+  padding:18px 16px;
+  position:relative;
+  box-shadow:0 6px 20px rgba(60,30,0,0.25);
+  overflow:hidden;
+}
+/* tape on song section */
+.scrap-song::before{
+  content:'🎵';
+  position:absolute;top:-2px;left:50%;transform:translateX(-50%);
+  font-size:1rem;
+  background:rgba(255,248,220,0.75);
+  border:1px solid rgba(180,150,80,0.3);
+  border-radius:2px;padding:2px 10px;
+  z-index:5;
+}
+.scrap-song-label{font-family:'Caveat',cursive;font-size:0.85rem;color:rgba(255,150,200,0.5);margin-bottom:8px;margin-top:4px;letter-spacing:0.06em;}
+.scrap-vinyl-row{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.scrap-vinyl{
+  width:64px;height:64px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle,#fce4ec 0%,#fce4ec 13%,#1a0812 14%,#1a0812 18%,#2d1020 19%,#2d1020 25%,#1a0812 26%,#1a0812 32%,#2d1020 33%,#2d1020 39%,#1a0812 40%,#1a0812 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,0.5);
+  animation:vSpin 3s linear infinite;
+}
+@keyframes vSpin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+.scrap-vinyl-dot{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#f48fb1,#e91e63);}
+.scrap-song-info{flex:1;min-width:0;}
+.scrap-song-name{font-family:'Caveat',cursive;font-size:1.15rem;font-weight:700;color:#fff;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.scrap-song-sub{font-size:0.65rem;color:rgba(255,180,220,0.4);margin-top:3px;}
+.scrap-yt{width:100%;border-radius:10px;overflow:hidden;display:none;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.scrap-yt iframe{width:100%;height:150px;border:none;display:block;}
+.scrap-yt.show{display:block;}
+
+/* ── LETTER SECTION ── */
+.scrap-letter-wrap{
+  margin:8px 20px 8px;
+  position:relative;
+}
+/* tape on letter */
+.scrap-letter-tape{
+  position:absolute;top:-9px;left:50%;transform:translateX(-50%) rotate(-2deg);
+  width:64px;height:18px;background:rgba(255,248,220,0.75);
+  border:1px solid rgba(180,150,80,0.3);border-radius:2px;z-index:5;
+}
+.scrap-letter-tape::after{content:'💌';font-size:0.65rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.scrap-letter{
+  background:linear-gradient(160deg,#fffef9,#fffcf0);
+  border:1px solid rgba(180,150,80,0.25);
+  border-radius:4px 4px 12px 12px;
+  padding:22px 18px 20px;
+  box-shadow:0 4px 18px rgba(60,30,0,0.15);
+  position:relative;
+}
+/* ruled lines */
+.scrap-letter::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;
+  background:repeating-linear-gradient(transparent,transparent 29px,rgba(194,24,91,0.08) 29px,rgba(194,24,91,0.08) 30px);
+  pointer-events:none;
+}
+.scrap-letter-eye{font-family:'Caveat',cursive;font-size:0.85rem;color:rgba(194,24,91,0.45);margin-bottom:14px;}
+.scrap-letter-body{
+  font-family:'Caveat','Noto Sans Devanagari',cursive;
+  font-size:1.15rem;color:#2c1a00;line-height:2;
+  white-space:pre-wrap;position:relative;z-index:1;
+}
+.scrap-letter-sign{
+  font-family:'Caveat',cursive;font-size:1.1rem;
+  color:#c2185b;margin-top:16px;display:block;
+  font-weight:700;opacity:0;transition:opacity 0.8s ease;
+  position:relative;z-index:1;
+}
+.scrap-letter-sign.vis{opacity:1;}
+
+/* ── FOOTER ── */
+.scrap-footer{
+  padding:24px 24px max(32px,env(safe-area-inset-bottom));
+  text-align:center;
+  position:relative;
+}
+.scrap-footer-flowers{font-size:1.5rem;letter-spacing:4px;margin-bottom:10px;display:block;}
+.scrap-footer-txt{font-family:'Caveat',cursive;font-size:1rem;color:rgba(139,69,19,0.5);line-height:1.6;}
+.scrap-footer-brand{font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(139,69,19,0.25);margin-top:16px;display:block;}
+.scrap-replay{margin-top:16px;background:linear-gradient(135deg,#c2185b,#e91e63);color:white;border:none;border-radius:50px;padding:12px 32px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(194,24,91,0.3);touch-action:manipulation;}
+.scrap-make{margin-top:10px;display:block;background:none;border:1.5px solid rgba(194,24,91,0.2);color:rgba(194,24,91,0.5);border-radius:50px;padding:10px 24px;font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;width:100%;}
+
+/* SAVE / SHARE */
+.save-overlay{position:absolute;inset:0;background:rgba(60,30,0,0.85);backdrop-filter:blur(14px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay.show{display:flex;}
+.save-box{background:#fffef9;border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;box-shadow:0 20px 60px rgba(60,30,0,0.3);}
+.save-spinner{position:relative;width:60px;height:60px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;}
+.save-ring{position:absolute;inset:0;border-radius:50%;border:2.5px solid rgba(194,24,91,0.15);border-top-color:#c2185b;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.save-ico{font-size:1.6rem;}
+.save-lbl{font-family:'Caveat',cursive;font-size:1.1rem;color:#3d1a00;margin-bottom:12px;}
+.save-bar-bg{height:5px;border-radius:50px;background:rgba(194,24,91,0.1);overflow:hidden;}
+.save-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s;background:linear-gradient(90deg,#c2185b,#e91e63);}
+
+.share-modal{position:absolute;inset:0;background:rgba(60,30,0,0.88);backdrop-filter:blur(14px);z-index:600;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{background:#fffef9;border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;box-shadow:0 20px 60px rgba(60,30,0,0.3);}
+.sh-t{font-family:'Caveat',cursive;font-size:1.3rem;color:#3d1a00;margin-bottom:5px;}
+.sh-s{font-size:0.78rem;color:rgba(139,69,19,0.5);margin-bottom:14px;}
+.sh-row{background:rgba(194,24,91,0.05);border:1px solid rgba(194,24,91,0.15);border-radius:10px;padding:9px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sh-lnk{font-size:0.67rem;color:rgba(139,69,19,0.4);flex:1;text-align:left;word-break:break-all;}
+.sh-cp{padding:5px 12px;border:none;border-radius:7px;font-size:0.68rem;font-weight:700;cursor:pointer;background:#c2185b;color:white;white-space:nowrap;}
+.sh-wa{width:100%;padding:12px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.86rem;font-weight:600;cursor:pointer;margin-bottom:8px;touch-action:manipulation;}
+.sh-cl{width:100%;padding:10px;background:none;border:1.5px solid rgba(194,24,91,0.2);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.74rem;color:rgba(194,24,91,0.5);cursor:pointer;}
+
+.wm{position:absolute;bottom:6px;right:10px;font-size:0.48rem;color:rgba(60,30,0,0.12);pointer-events:none;z-index:1;}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- Loading -->
+<div class="screen active" id="rv-loading">
+  <div class="ld-flower">🌸</div>
+  <div class="ld-txt">Opening your scrapbook…</div>
+</div>
+
+<!-- Error -->
+<div class="screen" id="rv-error">
+  <div style="font-size:2.5rem;margin-bottom:12px;">🌸</div>
+  <div class="err-t">This card has expired<br>or couldn't be found.</div>
+  <button onclick="location.href='/'" style="margin-top:24px;background:linear-gradient(135deg,#c2185b,#e91e63);color:white;border:none;border-radius:50px;padding:13px 30px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;">🌸 Create your own</button>
+</div>
+
+<!-- Welcome -->
+<div class="screen" id="rv-welcome">
+  <div class="petal-bg" id="petalsBg"></div>
+  <div class="wlc-tag">WishYou.ai 🌸</div>
+  <div class="wlc-flower">🌸</div>
+  <div class="wlc-title" id="wlcTitle">Happy Mother's Day!</div>
+  <div class="wlc-sub" id="wlcSub">Someone made you a scrapbook 💐</div>
+  <button class="wlc-btn" onclick="openScrapbook()">Open Scrapbook 📖</button>
+  <button class="wlc-make" onclick="location.href='/'">🌸 Create a card like this</button>
+</div>
+
+<!-- THE SCRAPBOOK — one long scrollable page -->
+<div class="screen" id="rv-scrapbook">
+  <div class="scrap-scroll" id="scrapScroll">
+    <div class="torn-top"></div>
+
+    <!-- Header -->
+    <div class="scrap-header">
+      <div class="corner-fl cf-tl">🌸</div>
+      <div class="corner-fl cf-tr">💐</div>
+      <div class="scrap-header-title" id="scrapTitle">Happy Mother's Day</div>
+      <div class="scrap-header-sub" id="scrapSub">with love 🌷</div>
+    </div>
+
+    <div class="torn-div"></div>
+
+    <!-- Photos injected here -->
+    <div class="scrap-photos" id="scrapPhotos"></div>
+
+    <!-- Song section injected here -->
+    <div id="scrapSongWrap"></div>
+
+    <!-- Letter section injected here -->
+    <div id="scrapLetterWrap"></div>
+
+    <!-- Footer -->
+    <div class="scrap-footer">
+      <span class="scrap-footer-flowers">🌸🌷🌼🌹💐</span>
+      <div class="scrap-footer-txt" id="scrapFooterTxt">Made with love</div>
+      <button class="scrap-replay" onclick="goTo('rv-welcome')">🌸 Back to start</button>
+      <button class="scrap-make" onclick="location.href='/'">✨ Create a card like this</button>
+      <span class="scrap-footer-brand">WishYou.ai</span>
+    </div>
+  </div>
+</div>
+
+<!-- Save -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-box">
+    <div class="save-spinner"><div class="save-ring"></div><div class="save-ico">🌸</div></div>
+    <div class="save-lbl" id="saveLbl">Creating your card…</div>
+    <div class="save-bar-bg"><div class="save-bar" id="saveBar"></div></div>
+  </div>
+</div>
+
+<!-- Share -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:2rem;margin-bottom:8px;">🌸</div>
+    <div class="sh-t">Card is ready! 🎉</div>
+    <div class="sh-s">Send this link to her 💐</div>
+    <div class="sh-row"><span class="sh-lnk" id="shLnk"></span><button class="sh-cp" id="shCp" onclick="copyLink()">Copy</button></div>
+    <button class="sh-wa" onclick="shareWA()">💬 Share on WhatsApp</button>
+    <button class="sh-cl" onclick="document.getElementById('shareModal').classList.remove('show')">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div>
+
+<script>
+const FIREBASE_URL='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const WORKER_URL='https://wild-fog-b15e.nilesh53333.workers.dev';
+
+let curScreen='';
+let shareLink='';
+let letterText='', letterSign='';
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
+  next.classList.add('active');
+  curScreen=id;
+  // reset scroll on scrapbook open
+  if(id==='rv-scrapbook'){
+    setTimeout(()=>{
+      const s=document.getElementById('scrapScroll');
+      if(s)s.scrollTop=0;
+    },50);
+  }
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',()=>{
+  spawnPetals();
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  goTo('rv-loading');
+  fetch(`${FIREBASE_URL}/${cardId}.json`)
+    .then(r=>r.json())
+    .then(d=>{
+      if(!d){goTo('rv-error');return;}
+      if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+      fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+        fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+      }).catch(()=>{});
+      renderCard(d);
+    })
+    .catch(()=>goTo('rv-error'));
+});
+
+// ── RENDER ──
+function renderCard(d){
+  const name=d.name||'';
+  const sender=d.sender||'';
+  // Welcome
+  document.getElementById('wlcTitle').textContent=name?`Happy Mother's Day, ${name}! 🌸`:`Happy Mother's Day! 🌸`;
+  document.getElementById('wlcSub').textContent=sender?`${sender} made this just for you 💐`:'Someone made this just for you 💐';
+  // Scrapbook header
+  document.getElementById('scrapTitle').textContent=name?`For ${name} 🌸`:`Happy Mother's Day 🌸`;
+  document.getElementById('scrapSub').textContent=sender?`with love from ${sender} 🌷`:'with all my love 🌷';
+  document.getElementById('scrapFooterTxt').textContent=sender?`Made with love by ${sender} 💐`:'Made with love 💐';
+
+  // Photos
+  const photos=(d.photos||[]).filter(Boolean);
+  const captions=d.photoCaptions||[];
+  buildPhotos(photos,captions);
+
+  // Song
+  const hasSong=!!(d.songName&&d.songName!=='—');
+  if(hasSong) buildSong(d.songName,d.spotify||'');
+
+  // Letter
+  const hasLetter=!!(d.msg&&d.msg.trim());
+  if(hasLetter){
+    letterText=d.msg;
+    letterSign=d.sign||(sender?`With all my love, ${sender} 💕`:'With all my love 💕');
+    buildLetter();
+  }
+  goTo('rv-welcome');
+}
+
+// Rotation variants for polaroids — alternating for natural feel
+const ROTS=['rotate(-2.5deg)','rotate(1.8deg)','rotate(-1.2deg)','rotate(2.8deg)','rotate(-3deg)'];
+const STICKERS=['🌸','💕','🌷','✨','💐','🌼','🎀','🌹'];
+const TAPE_CLASSES=[['tape tape-tl','tape tape-tr'],['tape tape-tc'],['tape tape-tl','tape tape-tr']];
+
+function buildPhotos(photos,captions){
+  const wrap=document.getElementById('scrapPhotos');
+  wrap.innerHTML='';
+  photos.forEach((url,i)=>{
+    const rot=ROTS[i%ROTS.length];
+    const cap=captions[i]||'';
+    const sticker=STICKERS[i%STICKERS.length];
+    const stickerPos=i%2===0?'top:8px;right:-6px':'bottom:46px;left:-6px';
+    const tapeSet=i%3===0?'<div class="tape tape-tl"></div><div class="tape tape-tr"></div>':i%3===1?'<div class="tape tape-tc"></div>':'<div class="tape tape-tl"></div><div class="tape tape-tr"></div>';
+
+    const item=document.createElement('div');
+    item.className='scrap-photo-item';
+    item.style.setProperty('--rot',rot);
+    item.style.animationDelay=(i*0.12)+'s';
+    item.innerHTML=`
+      ${tapeSet}
+      <div class="polaroid">
+        <img src="${esc(url)}" loading="lazy" onerror="this.style.background='#f0dfc0'">
+        <div class="polaroid-cap"><div class="polaroid-cap-txt">${esc(cap)||'&nbsp;'}</div></div>
+        <div class="photo-sticker" style="${stickerPos}">${sticker}</div>
+      </div>`;
+    wrap.appendChild(item);
+    // add torn divider between photos except last
+    if(i<photos.length-1){
+      const div=document.createElement('div');
+      div.className='torn-div';
+      wrap.appendChild(div);
+    }
+  });
+  // torn div after photos section
+  const finalDiv=document.createElement('div');
+  finalDiv.className='torn-div';
+  wrap.appendChild(finalDiv);
+}
+
+function buildSong(songName,spotify){
+  const wrap=document.getElementById('scrapSongWrap');
+  const ytM=spotify.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  const ytId=ytM?ytM[1]:null;
+  wrap.innerHTML=`
+    <div class="scrap-song" id="scrapSong">
+      <div class="scrap-song-label">A song picked just for you 🎵</div>
+      <div class="scrap-vinyl-row">
+        <div class="scrap-vinyl" id="scrapVinyl"><div class="scrap-vinyl-dot"></div></div>
+        <div class="scrap-song-info">
+          <div class="scrap-song-name">${esc(songName)}</div>
+          <div class="scrap-song-sub">play it when you miss me 🌸</div>
+        </div>
+      </div>
+      ${ytId?`<div class="scrap-yt show"><iframe src="https://www.youtube.com/embed/${ytId}?autoplay=0" allowfullscreen></iframe></div>`:''}
+    </div>
+    <div class="torn-div"></div>`;
+}
+
+function buildLetter(){
+  const wrap=document.getElementById('scrapLetterWrap');
+  wrap.innerHTML=`
+    <div class="scrap-letter-wrap">
+      <div class="scrap-letter-tape"></div>
+      <div class="scrap-letter">
+        <div class="scrap-letter-eye">💌 A note from the heart</div>
+        <div class="scrap-letter-body" id="scrapLetterBody"></div>
+        <span class="scrap-letter-sign" id="scrapLetterSign">${esc(letterSign)}</span>
+      </div>
+    </div>
+    <div class="torn-div"></div>`;
+}
+
+function openScrapbook(){
+  goTo('rv-scrapbook');
+  // Start typewriting letter after scroll reaches it
+  const scroll=document.getElementById('scrapScroll');
+  let letterTyped=false;
+  scroll.addEventListener('scroll',function onScroll(){
+    if(letterTyped) return;
+    const letterEl=document.getElementById('scrapLetterBody');
+    const signEl=document.getElementById('scrapLetterSign');
+    if(!letterEl||!letterText) return;
+    const rect=letterEl.getBoundingClientRect();
+    const appRect=document.getElementById('mainApp').getBoundingClientRect();
+    if(rect.top < appRect.bottom - 80){
+      letterTyped=true;
+      scroll.removeEventListener('scroll',onScroll);
+      if(signEl) signEl.style.opacity='0';
+      setTimeout(()=>{
+        typewrite(letterEl,letterText,()=>{
+          if(signEl) signEl.classList.add('vis');
+        });
+      },300);
+    }
+  });
+}
+
+// ── PETALS ──
+function spawnPetals(){
+  const wrap=document.getElementById('petalsBg');
+  if(!wrap) return;
+  const petals=['🌸','🌷','🌼','💐'];
+  for(let i=0;i<12;i++){
+    const p=document.createElement('div');
+    p.className='pb';
+    p.textContent=petals[Math.floor(Math.random()*petals.length)];
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(6+Math.random()*8)+'s';
+    p.style.animationDelay=(Math.random()*6)+'s';
+    p.style.fontSize=(1+Math.random()*0.8)+'rem';
+    wrap.appendChild(p);
+  }
+}
+
+// ── TYPEWRITER ──
+function typewrite(el,text,onDone){
+  if(!el||!text)return;
+  el.textContent='';
+  const chars=text.split('');let i=0;
+  function next(){if(i<chars.length){el.textContent+=chars[i++];setTimeout(next,16);}else if(onDone)onDone();}
+  next();
+}
+
+// ── HELPERS ──
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(()=>{const b=document.getElementById('shCp');b.textContent='Copied ✓';setTimeout(()=>b.textContent='Copy',2000);});
+}
+function shareWA(){
+  const name=window._cardName||'';const sender=window._cardSender||'';
+  const msg=`🌸 *Happy Mother's Day${name?' '+name:''}!*\n\n${sender?sender+' ne tumhare liye ek special scrapbook banaya hai 💐\n\n':'Someone made you a scrapbook 💐\n\n'}Kholo aur dekho:\n${shareLink}`;
+  const mob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&mob)navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));
+  else window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+}
+</script>
+</body>
+</html>
