@@ -288,6 +288,8 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 function setupCard(d){
   if(!d||typeof d!=='object'){goTo('rv-error');return;}
+  const cardId=new URLSearchParams(window.location.search).get('card')||'default';
+  seedFrom(cardId);
   const name=d.name||'Birthday Star';
   const sender=d.sender||'someone_special';
   const photos=(d.photos||[]).filter(Boolean);
@@ -322,17 +324,17 @@ function setupCard(d){
   }
 
   // Build profile body
-  buildProfile(d, name, sender, photos, captions, hasSong, hasLetter);
+  buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, cardId);
 
   goTo('rv-splash');
 }
 
-function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter){
+function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, cardId){
   const handle=toHandle(name);
   const senderHandle=toHandle(sender);
   const postCount=photos.length;
   const followers=fakeFollowers();
-  const following=Math.floor(Math.random()*300)+50;
+  const following=Math.floor(sr()*300)+50;
 
   // Bio — use memoriesHeading or generate
   const bio=getBio(name, sender, d);
@@ -353,7 +355,7 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter){
   html+=`</div>
       <div class="ig-stats">
         <div class="ig-stat"><span class="ig-stat-n">${postCount}</span><span class="ig-stat-l">posts</span></div>
-        <div class="ig-stat"><span class="ig-stat-n">${followers}</span><span class="ig-stat-l">loved by</span></div>
+        <div class="ig-stat"><span class="ig-stat-n">${followers}</span><span class="ig-stat-l">followers</span></div>
         <div class="ig-stat"><span class="ig-stat-n">∞</span><span class="ig-stat-l">following</span></div>
       </div>
     </div>
@@ -440,9 +442,10 @@ function openPost(idx){
   const url=photos[idx];
   const cap=captions[idx]||'';
   const likes=Math.floor(Math.random()*900)+100;
-  const timeAgo=getTimeAgo();
+  const timeAgo=getTimeAgo(cardId);
 
-  const comments=getFakeComments(name);
+  const cardId=new URLSearchParams(window.location.search).get('card')||'default';
+  const comments=getFakeComments(name,cardId);
 
   let html=`
     <div class="post-header">
@@ -510,45 +513,67 @@ function heartLetter(){
 function toHandle(name){
   return (name||'birthday.person').toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_.]/g,'');
 }
+// Seeded random — same card always shows same content
+let _seed=1;
+function sr(){_seed=Math.imul(_seed^_seed>>>15,1|_seed)^Math.imul(_seed^_seed>>>7,61|_seed);return((_seed>>>0)/2**32);}
+function seedFrom(str){_seed=0;for(let i=0;i<str.length;i++)_seed=Math.imul(31,_seed)+str.charCodeAt(i)|0;_seed=_seed||1337;}
+function pick(arr){return arr[Math.floor(sr()*arr.length)];}
+
 function fakeFollowers(){
-  const opts=['Everyone 💕','All of us ❤️','Your whole squad','Dil wale','Sabhi log 🥹'];
-  return opts[Math.floor(Math.random()*opts.length)];
+  // Premium big numbers — feels real and impressive
+  const counts=['2.1M','1.8M','3.4M','946K','1.2M','2.7M','4.1M','876K'];
+  return pick(counts);
 }
-function getBio(name, sender, d){
+
+function fakePostCount(actual){
+  // Show actual + some extras for premium feel
+  return actual>0?actual:Math.floor(sr()*8)+3;
+}
+
+function getBio(name,sender,d){
   const bios=[
-    `Living my best life ✨\nBirthday edition 🎂\nMade with love by ${sender}`,
-    `${name} 🎂\nAnother year of being absolutely iconic\nPosted by ${sender} with ❤️`,
-    `Just existing and thriving 🌟\nBirthday ki Special Edition 🎂\nFrom the desk of ${sender}`,
-    `Life is good when you're ${name} ✨\nCelebrating another lap around the sun 🌍\nPosted by ${sender}`,
+    `${name} ✨\nLiving, loving, and being completely irreplaceable\n🎂 Birthday Edition — by ${sender}`,
+    `Just ${name} things 🌸\nMaking every room brighter since day one\n💌 A birthday tribute by ${sender}`,
+    `${name} 🎂\nThe kind of person songs are written about\n✨ Curated with love by ${sender}`,
+    `Being ${name} is a full-time job ✨\nAnd somehow they make it look effortless\n🎁 Posted by ${sender}`,
   ];
-  return bios[Math.floor(Math.random()*bios.length)];
+  return pick(bios);
 }
+
 function getSenderComment(idx){
-  const comments=[
-    'This one is my absolute favourite 💕',
-    'I love this photo so much 🥹',
-    'Look at you being perfect again ✨',
-    'This memory lives in my heart rent free 💖',
-    'Couldn\'t not include this one 🌸',
-  ];
-  return comments[idx%comments.length];
-}
-function getFakeComments(name){
+  // Warm, personal — as if sender actually wrote these
   const pool=[
-    {emoji:'😍',user:'bestie_forever_',text:'Omg happy birthday!! You deserve the world 🎂'},
-    {emoji:'🥹',user:'priya.sharma__',text:`${name} is literally the best person I know 💕`},
-    {emoji:'🎉',user:'aakash.official',text:'Happiest birthday yaar! So proud of you 🌟'},
-    {emoji:'🌸',user:'ritika_vibes',text:'This is so cute!! Happy birthday bestie ✨'},
-    {emoji:'💖',user:'sahil.exe',text:'Bro jaldi wapas aao, party karni hai 🎉'},
-    {emoji:'🤩',user:'divya.creates',text:'You\'re literally glowing!! HBD 🎂💕'},
+    'This one I keep coming back to 🥹 couldn\'t not post it',
+    'Look at you 😭 this photo does not do you justice but I tried',
+    'This memory. This exact moment. Forever in my heart 💕',
+    'I stared at this for 10 minutes before picking it 🌸',
+    'You have no idea how much this photo means to me 💖',
   ];
-  // Pick 2-3 random
-  const shuffled=pool.sort(()=>Math.random()-0.5);
-  return shuffled.slice(0,2+Math.floor(Math.random()*2));
+  return pool[idx%pool.length];
 }
-function getTimeAgo(){
-  const opts=['2 hours ago','5 hours ago','Just now','1 hour ago','3 hours ago'];
-  return opts[Math.floor(Math.random()*opts.length)].toUpperCase();
+
+function getFakeComments(name,cardId){
+  seedFrom(cardId+(name||''));
+  // Premium, realistic Indian Instagram comments — no cringe
+  const pool=[
+    {emoji:'🥹',user:'simran.diaries',text:`Genuinely one of the best people I know. Happy birthday ${name} 💕`},
+    {emoji:'✨',user:'anika._.creates',text:'The photos 😭 this is the most beautiful thing I\'ve seen today'},
+    {emoji:'🎂',user:'rohan.official_',text:`Arre yaar ${name} Happy Birthday!! Wish you all the happiness 🌟`},
+    {emoji:'💖',user:'meera.sunshine',text:'Okay but who made this?? This is SO premium 😭❤️'},
+    {emoji:'🌸',user:'tanvi.writes',text:`${name} you deserve every good thing that\'s coming 🥹 HBD`},
+    {emoji:'🤍',user:'kabir._.design',text:'The effort that went into this 😍 so wholesome'},
+    {emoji:'🎉',user:'pooja.captures',text:'Happy birthday!! May this year be your best one yet ✨🎂'},
+    {emoji:'💫',user:'arjun.aesthetic',text:`bhai ${name} bada ho gaya 😭 proud of you always`},
+  ];
+  // Shuffle consistently using seeded random
+  const shuffled=[...pool].sort(()=>sr()-0.5);
+  return shuffled.slice(0,3);
+}
+
+function getTimeAgo(cardId){
+  seedFrom((cardId||'')+'time');
+  const opts=['3 HOURS AGO','1 HOUR AGO','JUST NOW','5 HOURS AGO','2 HOURS AGO'];
+  return pick(opts);
 }
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 </script>
