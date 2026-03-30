@@ -91,7 +91,7 @@ html,body{height:100%;overflow:hidden;background:#000;}
 
 /* Photo grid */
 .ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding-bottom:max(20px,env(safe-area-inset-bottom));}
-.ig-grid-item{aspect-ratio:1;position:relative;overflow:hidden;cursor:pointer;background:#111;}
+.ig-grid-item{aspect-ratio:1;position:relative;overflow:hidden;cursor:pointer;background:#111;touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,255,255,0.1);}
 .ig-grid-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.2s;}
 .ig-grid-item:active img{transform:scale(0.96);}
 .ig-grid-item.has-caption::after{content:'💬';position:absolute;top:6px;right:6px;font-size:0.7rem;opacity:0.7;z-index:2;pointer-events:none;}
@@ -419,9 +419,8 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, car
   </div>`;
 
   // Photo grid
-  html+=`<div class="ig-grid">`;
+  html+=`<div class="ig-grid" id="igGrid">`;
 
-  // Pinned letter post (top left if letter exists)
   if(hasLetter){
     const preview=(d.msg||'').slice(0,80)+(d.msg&&d.msg.length>80?'...':'');
     html+=`<div class="ig-pinned" id="igPinnedPost">
@@ -433,19 +432,18 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, car
     </div>`;
   }
 
-  // Photo grid items
+  // Photo slots — no onclick in HTML, added via DOM after render
   photos.forEach((url,i)=>{
     const cap=captions[i]||'';
-    html+=`<div class="ig-grid-item${cap?' has-caption':''}" data-idx="${i}">
-      <img src="${esc(url)}" loading="lazy" onerror="this.parentNode.style.display='none'">
+    html+=`<div class="ig-grid-item${cap?' has-caption':''}" id="igPhoto${i}">
+      <img src="${esc(url)}" loading="lazy">
     </div>`;
   });
 
-  // Song tile
   if(hasSong){
-    html+=`<div class="ig-grid-item ig-song-tile" style="background:linear-gradient(135deg,#1a0a2e,#0d1a3a);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;">
+    html+=`<div class="ig-grid-item" id="igSongTile" style="background:linear-gradient(135deg,#1a0a2e,#0d1a3a);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;">
       <div style="font-size:1.8rem;">🎵</div>
-      <div style="font-size:0.52rem;color:rgba(255,255,255,0.5);letter-spacing:0.08em;text-align:center;padding:0 6px;">Play Reel</div>
+      <div style="font-size:0.52rem;color:rgba(255,255,255,0.5);text-align:center;padding:0 6px;">Play Reel</div>
     </div>`;
   }
 
@@ -453,18 +451,24 @@ function buildProfile(d, name, sender, photos, captions, hasSong, hasLetter, car
 
   document.getElementById('igProfileBody').innerHTML=html;
 
-  // Attach listeners AFTER innerHTML (inline onclick doesn't work reliably in injected HTML)
+  // Wire clicks AFTER innerHTML — direct onclick property (most reliable on iOS Safari)
   const pinned=document.getElementById('igPinnedPost');
-  if(pinned){pinned.addEventListener('click',()=>goTo('rv-letter'));}
-  document.querySelectorAll('.ig-grid-item[data-idx]').forEach(el=>{
-    el.addEventListener('click',()=>openPost(parseInt(el.dataset.idx)));
-    el.addEventListener('touchend',e=>{e.preventDefault();openPost(parseInt(el.dataset.idx));});
+  if(pinned) pinned.onclick=()=>goTo('rv-letter');
+
+  photos.forEach((_,i)=>{
+    const el=document.getElementById('igPhoto'+i);
+    if(el) el.onclick=()=>openPost(i);
   });
-  const songTile=document.querySelector('.ig-song-tile');
-  if(songTile){
-    songTile.addEventListener('click',()=>goTo('rv-reel'));
-    songTile.addEventListener('touchend',e=>{e.preventDefault();goTo('rv-reel');});
-  }
+
+  const songTile=document.getElementById('igSongTile');
+  if(songTile) songTile.onclick=()=>goTo('rv-reel');
+
+  // Highlights
+  document.querySelectorAll('.ig-highlight').forEach(el=>{
+    const lbl=el.querySelector('.ig-highlight-lbl')?.textContent;
+    if(lbl==='My Song'&&hasSong) el.onclick=()=>goTo('rv-reel');
+    if(lbl==='Letter'&&hasLetter) el.onclick=()=>goTo('rv-letter');
+  });
 }
 
 function openPost(idx){
