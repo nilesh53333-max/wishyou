@@ -43,8 +43,10 @@ html,body{height:100%;overflow:hidden;background:#000;}
 .splash-hint{font-size:0.6rem;color:#444;margin-top:12px;letter-spacing:0.06em;}
 
 /* ── INSTAGRAM PROFILE ── */
-#rv-profile{background:#000;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-#rv-profile::-webkit-scrollbar{display:none;}
+#rv-profile{background:#000;flex-direction:column;}
+.ig-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.ig-scroll::-webkit-scrollbar{display:none;}
+
 
 /* Top bar */
 .ig-topbar{display:flex;align-items:center;justify-content:space-between;padding:max(14px,env(safe-area-inset-top)) 16px 12px;background:#000;position:sticky;top:0;z-index:10;border-bottom:0.5px solid #1a1a1a;}
@@ -202,7 +204,9 @@ html,body{height:100%;overflow:hidden;background:#000;}
     <div class="ig-username" id="igUsername">@birthday.person</div>
     <div class="ig-more">⋮</div>
   </div>
-  <div id="igProfileBody"><!-- injected --></div>
+  <div class="ig-scroll">
+    <div id="igProfileBody"><!-- injected --></div>
+  </div>
   <div class="wm">WishYou.ai</div>
 </div>
 
