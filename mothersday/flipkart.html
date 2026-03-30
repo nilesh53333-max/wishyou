@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Order Confirmed 🎁</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>">
+<meta property="og:title" content="Your order has been delivered 🛍️">
+<meta property="og:description" content="Order #WY-MAA-001 — World's Best Maa. Delivered to your heart since birth.">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:#f1f3f6;}
+.app{position:fixed;inset:0;overflow:hidden;background:#f1f3f6;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.5);overflow:hidden;}
+}
+.screen{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;transition:opacity 0.4s ease;visibility:hidden;overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;visibility:visible;}
+
+/* ── FK COLOR VARS ── */
+:root{
+  --fk-blue:#2874f0;
+  --fk-yellow:#ffe500;
+  --fk-green:#388e3c;
+  --fk-orange:#ff6161;
+  --fk-bg:#f1f3f6;
+  --fk-white:#fff;
+  --fk-border:#e0e0e0;
+  --fk-text:#212121;
+  --fk-muted:#878787;
+  --fk-star:#f7a100;
+}
+
+/* ── LOADING ── */
+#rv-loading{background:#2874f0;align-items:center;justify-content:center;flex-direction:column;gap:20px;}
+.fk-logo-load{font-family:'DM Sans',sans-serif;font-size:1.6rem;font-weight:700;color:#fff;letter-spacing:-0.02em;}
+.fk-logo-load span{color:#ffe500;font-style:italic;}
+.ld-dots{display:flex;gap:6px;}
+.ld-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.3);animation:ldPulse 1.2s ease-in-out infinite;}
+.ld-dot:nth-child(2){animation-delay:0.2s;}
+.ld-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes ldPulse{0%,80%,100%{background:rgba(255,255,255,0.3);}40%{background:#fff;}}
+
+/* ── ERROR ── */
+#rv-error{background:#f1f3f6;align-items:center;justify-content:center;flex-direction:column;gap:14px;text-align:center;padding:40px;}
+.err-ico{font-size:3rem;}
+.err-t{font-size:0.9rem;color:#878787;line-height:1.7;}
+
+/* ── WELCOME / SPLASH ── */
+#rv-welcome{background:#2874f0;flex-direction:column;}
+.fk-splash-top{background:#2874f0;padding:max(18px,env(safe-area-inset-top)) 16px 18px;
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.fk-logo{font-family:'DM Sans',sans-serif;font-size:1.3rem;font-weight:700;color:#fff;letter-spacing:-0.01em;}
+.fk-logo em{color:#ffe500;font-style:italic;}
+.fk-search{flex:1;margin:0 12px;background:rgba(255,255,255,0.15);border-radius:3px;
+  padding:8px 12px;font-size:0.82rem;color:rgba(255,255,255,0.6);}
+.splash-body{flex:1;background:#f1f3f6;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:28px 20px;gap:0;overflow-y:auto;}
+.splash-confirm-banner{background:#fff;border-radius:4px;padding:18px;width:100%;margin-bottom:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);text-align:center;}
+.splash-tick{width:52px;height:52px;border-radius:50%;background:#388e3c;display:flex;
+  align-items:center;justify-content:center;margin:0 auto 12px;}
+.splash-tick-inner{width:22px;height:12px;border-left:3px solid #fff;border-bottom:3px solid #fff;
+  transform:rotate(-45deg) translate(2px,-2px);}
+.splash-confirm-title{font-size:1rem;font-weight:600;color:#212121;margin-bottom:4px;}
+.splash-confirm-sub{font-size:0.78rem;color:#878787;}
+.splash-order-id{font-family:monospace;font-size:0.72rem;color:#2874f0;margin-top:4px;}
+.splash-product-card{background:#fff;border-radius:4px;padding:14px;width:100%;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;gap:12px;margin-bottom:12px;cursor:pointer;
+  touch-action:manipulation;}
+.splash-product-card:active{background:#f5f5f5;}
+.splash-thumb{width:70px;height:70px;background:#e8f5e9;border-radius:3px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:2rem;}
+.splash-product-info{flex:1;min-width:0;}
+.splash-product-name{font-size:0.88rem;font-weight:500;color:#212121;margin-bottom:4px;line-height:1.35;}
+.splash-stars{color:#f7a100;font-size:0.75rem;margin-bottom:3px;}
+.splash-delivery{font-size:0.75rem;color:#388e3c;font-weight:500;}
+.splash-price{font-size:0.85rem;font-weight:600;color:#212121;margin-top:3px;}
+.splash-open-btn{width:100%;padding:14px;background:#ffe500;border:none;border-radius:3px;
+  font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:700;color:#212121;
+  cursor:pointer;touch-action:manipulation;letter-spacing:0.01em;}
+.splash-open-btn:active{background:#f0d800;}
+
+/* ── MAIN ORDER PAGE ── */
+#rv-order{background:#f1f3f6;flex-direction:column;}
+
+/* FK Topbar */
+.fk-topbar{background:#2874f0;padding:max(14px,env(safe-area-inset-top)) 14px 12px;
+  display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.fk-back{background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;
+  padding:2px 4px;touch-action:manipulation;}
+.fk-topbar-title{font-size:0.92rem;font-weight:500;color:#fff;}
+.fk-topbar-logo{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;color:#fff;}
+.fk-topbar-logo em{color:#ffe500;font-style:italic;}
+
+/* Order scroll */
+.order-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.order-scroll::-webkit-scrollbar{display:none;}
+
+/* Section card */
+.fk-card{background:#fff;margin-bottom:8px;padding:14px 16px;}
+
+/* ── ORDER STATUS ── */
+.order-status-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.order-id{font-size:0.72rem;color:#878787;}
+.order-status-badge{background:#e8f5e9;color:#2e7d32;font-size:0.68rem;font-weight:600;
+  padding:3px 10px;border-radius:2px;border:1px solid #a5d6a7;}
+
+/* delivery timeline */
+.delivery-timeline{display:flex;align-items:center;justify-content:space-between;padding:4px 0;}
+.timeline-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.timeline-dot{width:14px;height:14px;border-radius:50%;background:#2874f0;position:relative;z-index:1;}
+.timeline-dot.done{background:#388e3c;}
+.timeline-dot.active{background:#2874f0;box-shadow:0 0 0 3px rgba(40,116,240,0.2);}
+.timeline-dot.pending{background:#e0e0e0;}
+.timeline-line{flex:1;height:2px;background:#e0e0e0;margin:0 -2px;}
+.timeline-line.done{background:#388e3c;}
+.timeline-label{font-size:0.58rem;color:#878787;text-align:center;margin-top:2px;}
+.timeline-label.active{color:#2874f0;font-weight:600;}
+.timeline-label.done{color:#388e3c;}
+.timeline-wrap{display:flex;align-items:center;width:100%;}
+
+.delivery-msg{font-size:0.82rem;font-weight:500;color:#388e3c;margin-top:10px;}
+.delivery-date{font-size:0.72rem;color:#878787;margin-top:2px;}
+
+/* ── PRODUCT DETAIL ── */
+.product-row{display:flex;gap:12px;}
+.product-img{width:80px;height:80px;background:#e8f5e9;border-radius:3px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:2.2rem;}
+.product-detail{flex:1;min-width:0;}
+.product-name{font-size:0.9rem;font-weight:500;color:#212121;line-height:1.4;margin-bottom:5px;}
+.product-meta{font-size:0.72rem;color:#878787;margin-bottom:4px;}
+.product-stars{display:flex;align-items:center;gap:4px;margin-bottom:4px;}
+.stars-pill{background:#388e3c;color:#fff;font-size:0.65rem;font-weight:600;
+  padding:2px 6px;border-radius:2px;display:flex;align-items:center;gap:2px;}
+.stars-count{font-size:0.68rem;color:#878787;}
+.product-price{font-size:1rem;font-weight:600;color:#212121;}
+.product-mrp{font-size:0.72rem;color:#878787;text-decoration:line-through;margin-left:6px;}
+.product-discount{font-size:0.72rem;color:#388e3c;font-weight:500;margin-left:4px;}
+
+/* ── DELIVERY INFO ── */
+.info-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;
+  border-bottom:1px solid #f5f5f5;}
+.info-row:last-child{border-bottom:none;}
+.info-label{font-size:0.78rem;color:#878787;font-weight:400;}
+.info-val{font-size:0.78rem;color:#212121;font-weight:500;text-align:right;max-width:60%;}
+.info-val.green{color:#388e3c;}
+
+/* ── PHOTO REVIEWS ── */
+.reviews-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.reviews-title{font-size:0.9rem;font-weight:600;color:#212121;}
+.reviews-overall{display:flex;align-items:center;gap:8px;margin-bottom:14px;
+  padding-bottom:14px;border-bottom:1px solid #f5f5f5;}
+.reviews-big-num{font-size:2rem;font-weight:700;color:#212121;}
+.reviews-stars-wrap{display:flex;flex-direction:column;gap:2px;}
+.reviews-big-stars{color:#f7a100;font-size:0.9rem;letter-spacing:1px;}
+.reviews-total{font-size:0.68rem;color:#878787;}
+
+.review-item{padding:12px 0;border-bottom:1px solid #f5f5f5;}
+.review-item:last-child{border-bottom:none;}
+.review-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.reviewer-avatar{width:28px;height:28px;border-radius:50%;background:#e3f2fd;
+  display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:600;color:#1565c0;flex-shrink:0;}
+.reviewer-name{font-size:0.78rem;font-weight:500;color:#212121;}
+.reviewer-stars{color:#f7a100;font-size:0.65rem;}
+.review-verified{font-size:0.62rem;color:#388e3c;font-weight:500;}
+.review-photo-wrap{margin:8px 0;border-radius:3px;overflow:hidden;}
+.review-photo{width:100%;max-height:220px;object-fit:cover;object-position:center 20%;display:block;}
+.review-photo-placeholder{width:100%;height:140px;background:#f5f5f5;display:flex;
+  align-items:center;justify-content:center;color:#bdbdbd;font-size:0.8rem;}
+.review-caption{font-size:0.82rem;color:#212121;line-height:1.55;}
+.review-helpful{font-size:0.68rem;color:#878787;margin-top:6px;}
+.review-helpful span{color:#2874f0;font-weight:500;cursor:pointer;}
+
+/* ── SONG — "Customers also listened" ── */
+.song-section{background:#fff;margin-bottom:8px;overflow:hidden;}
+.song-header-strip{background:#2874f0;padding:8px 16px;}
+.song-header-txt{font-size:0.72rem;font-weight:600;color:#fff;letter-spacing:0.04em;text-transform:uppercase;}
+.song-card-inner{padding:14px 16px;}
+.song-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.song-vinyl{width:54px;height:54px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle,#e8f5e9 0%,#e8f5e9 12%,#212121 13%,#212121 18%,
+    #333 19%,#333 25%,#212121 26%,#212121 32%,#333 33%,#333 39%,#212121 40%,#212121 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,0.25);animation:vSpin 3s linear infinite;}
+@keyframes vSpin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+.song-vinyl-dot{width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#66bb6a,#388e3c);}
+.song-info{flex:1;min-width:0;}
+.song-badge{background:#ffe500;color:#212121;font-size:0.6rem;font-weight:700;
+  padding:2px 6px;border-radius:2px;display:inline-block;margin-bottom:3px;}
+.song-name{font-size:0.88rem;font-weight:500;color:#212121;line-height:1.3;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.song-sub{font-size:0.68rem;color:#878787;margin-top:2px;}
+.fk-yt{width:100%;border-radius:3px;overflow:hidden;display:none;}
+.fk-yt iframe{width:100%;height:150px;border:none;display:block;}
+.fk-yt.show{display:block;}
+
+/* ── LETTER — "Product Description" ── */
+.letter-section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.letter-section-title{font-size:0.9rem;font-weight:600;color:#212121;}
+.letter-expand-hint{font-size:0.72rem;color:#2874f0;cursor:pointer;}
+.letter-paper{background:#fffde7;border:1px solid #fff9c4;border-radius:3px;padding:14px;}
+.letter-body{font-size:0.88rem;color:#212121;line-height:1.85;white-space:pre-wrap;
+  font-family:'DM Sans','Noto Sans Devanagari',sans-serif;}
+.letter-sign{font-size:0.85rem;color:#2874f0;margin-top:12px;display:block;font-style:italic;
+  opacity:0;transition:opacity 0.8s ease;}
+.letter-sign.vis{opacity:1;}
+
+/* ── PRICE DETAILS ── */
+.price-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f5f5f5;}
+.price-row:last-child{border-bottom:none;font-weight:600;}
+.price-label{font-size:0.82rem;color:#212121;}
+.price-val{font-size:0.82rem;color:#212121;}
+.price-val.green{color:#388e3c;}
+.price-val.love{color:#e91e63;font-weight:600;}
+.price-total{font-size:0.9rem;font-weight:600;}
+
+/* ── FOOTER ── */
+.fk-footer{padding:16px;background:#fff;margin-bottom:8px;text-align:center;}
+.fk-footer-logo{font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:700;color:#2874f0;}
+.fk-footer-logo em{color:#ffe500;font-style:italic;}
+.fk-footer-txt{font-size:0.65rem;color:#878787;margin-top:3px;}
+.fk-replay{margin-top:12px;width:100%;padding:12px;background:#2874f0;border:none;
+  border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;
+  color:#fff;cursor:pointer;touch-action:manipulation;}
+.fk-make{margin-top:8px;width:100%;padding:11px;background:none;border:1px solid #e0e0e0;
+  border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.8rem;color:#878787;cursor:pointer;}
+
+/* SAVE / SHARE */
+.save-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
+  z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay.show{display:flex;}
+.save-box{background:#fff;border-radius:4px;padding:28px 24px;width:100%;max-width:320px;text-align:center;}
+.sv-spin{position:relative;width:52px;height:52px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;}
+.sv-ring{position:absolute;inset:0;border-radius:50%;border:2.5px solid rgba(40,116,240,0.15);
+  border-top-color:#2874f0;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.sv-ico{font-size:1.5rem;}
+.sv-lbl{font-size:0.9rem;font-weight:500;color:#212121;margin-bottom:12px;}
+.sv-bg{height:4px;border-radius:2px;background:rgba(40,116,240,0.1);overflow:hidden;}
+.sv-bar{height:100%;border-radius:2px;width:0%;transition:width 0.4s;background:#2874f0;}
+
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);
+  z-index:600;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{background:#fff;border-radius:4px;padding:26px 22px;width:100%;max-width:360px;text-align:center;}
+.sh-t{font-size:1rem;font-weight:600;color:#212121;margin-bottom:4px;}
+.sh-s{font-size:0.78rem;color:#878787;margin-bottom:14px;}
+.sh-row{background:#f5f5f5;border:1px solid #e0e0e0;border-radius:3px;padding:9px 12px;
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sh-lnk{font-size:0.67rem;color:#878787;flex:1;text-align:left;word-break:break-all;}
+.sh-cp{padding:6px 12px;border:none;border-radius:3px;font-size:0.7rem;font-weight:600;
+  cursor:pointer;background:#2874f0;color:#fff;white-space:nowrap;}
+.sh-wa{width:100%;padding:12px;border:none;border-radius:3px;
+  background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;
+  cursor:pointer;margin-bottom:8px;touch-action:manipulation;}
+.sh-cl{width:100%;padding:10px;background:none;border:1px solid #e0e0e0;border-radius:3px;
+  font-family:'DM Sans',sans-serif;font-size:0.8rem;color:#878787;cursor:pointer;}
+
+.wm{position:absolute;bottom:5px;right:8px;font-size:0.44rem;color:rgba(0,0,0,0.1);
+  pointer-events:none;z-index:1;}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- Loading -->
+<div class="screen active" id="rv-loading">
+  <div class="fk-logo-load">flip<span>kart</span></div>
+  <div class="ld-dots">
+    <div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div>
+  </div>
+</div>
+
+<!-- Error -->
+<div class="screen" id="rv-error">
+  <div class="err-ico">📦</div>
+  <div class="err-t">This order has expired<br>or the link is invalid.</div>
+  <button onclick="location.href='/'" style="margin-top:20px;background:#2874f0;color:#fff;border:none;border-radius:3px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;">Back to Home</button>
+</div>
+
+<!-- Welcome / Splash -->
+<div class="screen" id="rv-welcome">
+  <div class="fk-splash-top">
+    <div class="fk-logo">flip<em>kart</em></div>
+    <div class="fk-search">Search for products...</div>
+  </div>
+  <div class="splash-body">
+    <div class="splash-confirm-banner">
+      <div class="splash-tick"><div class="splash-tick-inner"></div></div>
+      <div class="splash-confirm-title">Order Confirmed! 🎉</div>
+      <div class="splash-confirm-sub" id="splashSub">Your order is on its way</div>
+      <div class="splash-order-id" id="splashOrderId">Order #WY-MAA-001</div>
+    </div>
+    <div class="splash-product-card" onclick="openOrder()">
+      <div class="splash-thumb">🌸</div>
+      <div class="splash-product-info">
+        <div class="splash-product-name" id="splashProductName">World's Best Maa — Limited Edition</div>
+        <div class="splash-stars">★★★★★ <span style="font-size:0.65rem;color:#878787;">(∞ ratings)</span></div>
+        <div class="splash-delivery" id="splashDelivery">Delivered to your heart since birth ✓</div>
+        <div class="splash-price">₹ <em style="text-decoration:line-through;color:#878787;font-style:normal;">Priceless</em> <span style="color:#388e3c;font-weight:600;">FREE</span></div>
+      </div>
+    </div>
+    <button class="splash-open-btn" onclick="openOrder()">View Order Details →</button>
+  </div>
+</div>
+
+<!-- MAIN ORDER PAGE -->
+<div class="screen" id="rv-order">
+  <div class="fk-topbar">
+    <button class="fk-back" onclick="goTo('rv-welcome')">←</button>
+    <div class="fk-topbar-logo">flip<em>kart</em></div>
+    <div style="flex:1;margin-left:8px;font-size:0.8rem;color:rgba(255,255,255,0.7);">Order Details</div>
+  </div>
+
+  <div class="order-scroll">
+
+    <!-- Order status -->
+    <div class="fk-card">
+      <div class="order-status-header">
+        <span class="order-id" id="orderIdTxt">Order #WY-MAA-001</span>
+        <span class="order-status-badge">Delivered</span>
+      </div>
+      <div class="timeline-wrap">
+        <div class="timeline-step">
+          <div class="timeline-dot done"></div>
+          <div class="timeline-label done">Ordered</div>
+        </div>
+        <div class="timeline-line done"></div>
+        <div class="timeline-step">
+          <div class="timeline-dot done"></div>
+          <div class="timeline-label done">Packed</div>
+        </div>
+        <div class="timeline-line done"></div>
+        <div class="timeline-step">
+          <div class="timeline-dot done"></div>
+          <div class="timeline-label done">Shipped</div>
+        </div>
+        <div class="timeline-line done"></div>
+        <div class="timeline-step">
+          <div class="timeline-dot active"></div>
+          <div class="timeline-label active">Delivered</div>
+        </div>
+      </div>
+      <div class="delivery-msg" id="deliveryMsg">Delivered to your heart since birth ✓</div>
+      <div class="delivery-date">Delivery: Since the day you were born 🌸</div>
+    </div>
+
+    <!-- Product -->
+    <div class="fk-card">
+      <div class="product-row">
+        <div class="product-img">🌸</div>
+        <div class="product-detail">
+          <div class="product-name" id="productName">World's Best Maa — Limited Edition</div>
+          <div class="product-meta" id="productMeta">Category: Irreplaceable · Only 1 in the world</div>
+          <div class="product-stars">
+            <div class="stars-pill">4.9 ★</div>
+            <div class="stars-count">∞ ratings</div>
+          </div>
+          <div>
+            <span class="product-price">₹ FREE</span>
+            <span class="product-mrp">₹ Priceless</span>
+            <span class="product-discount">100% off (Love discount)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delivery & address info -->
+    <div class="fk-card">
+      <div style="font-size:0.82rem;font-weight:600;color:#212121;margin-bottom:10px;">Delivery Information</div>
+      <div class="info-row">
+        <div class="info-label">Delivered to</div>
+        <div class="info-val" id="deliveredTo">Your heart</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Seller</div>
+        <div class="info-val" id="sellerName">Someone who loves you</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Warranty</div>
+        <div class="info-val">Lifetime (unconditional)</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Return Policy</div>
+        <div class="info-val" style="color:#e53935;">Non-returnable ❤️</div>
+      </div>
+    </div>
+
+    <!-- REVIEWS = Photos -->
+    <div class="fk-card" id="reviewsCard">
+      <div class="reviews-header">
+        <div class="reviews-title">Ratings & Reviews</div>
+      </div>
+      <div class="reviews-overall">
+        <div class="reviews-big-num">5.0</div>
+        <div class="reviews-stars-wrap">
+          <div class="reviews-big-stars">★★★★★</div>
+          <div class="reviews-total">∞ verified reviews</div>
+        </div>
+      </div>
+      <div id="reviewsList"><!-- injected --></div>
+    </div>
+
+    <!-- SONG = Customers also listened -->
+    <div class="song-section" id="songSection" style="display:none;">
+      <div class="song-header-strip">
+        <div class="song-header-txt">♪ Customers also listened to</div>
+      </div>
+      <div class="song-card-inner">
+        <div class="song-row">
+          <div class="song-vinyl" id="songVinyl"><div class="song-vinyl-dot"></div></div>
+          <div class="song-info">
+            <div class="song-badge">TOP PICK</div>
+            <div class="song-name" id="songName">Loading song...</div>
+            <div class="song-sub">Recommended for this product 🎵</div>
+          </div>
+        </div>
+        <div class="fk-yt" id="fkYt"></div>
+      </div>
+    </div>
+
+    <!-- LETTER = Product Description -->
+    <div class="fk-card" id="letterCard" style="display:none;">
+      <div class="letter-section-header">
+        <div class="letter-section-title">Product Description</div>
+        <div class="letter-expand-hint">Read more</div>
+      </div>
+      <div class="letter-paper">
+        <div class="letter-body" id="letterBody"></div>
+        <span class="letter-sign" id="letterSign"></span>
+      </div>
+    </div>
+
+    <!-- Price breakdown -->
+    <div class="fk-card">
+      <div style="font-size:0.82rem;font-weight:600;color:#212121;margin-bottom:10px;">Price Details</div>
+      <div class="price-row">
+        <div class="price-label">Price (1 item)</div>
+        <div class="price-val">Priceless</div>
+      </div>
+      <div class="price-row">
+        <div class="price-label">Love Discount</div>
+        <div class="price-val green">- 100%</div>
+      </div>
+      <div class="price-row">
+        <div class="price-label">Delivery Charges</div>
+        <div class="price-val green">FREE ✓</div>
+      </div>
+      <div class="price-row" style="border-top:1px solid #212121;margin-top:4px;padding-top:10px;">
+        <div class="price-label price-total">Total Amount</div>
+        <div class="price-val price-total love">Just your love 💕</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="fk-footer">
+      <div class="fk-footer-logo">flip<em>kart</em></div>
+      <div class="fk-footer-txt">Powered by WishYou.ai · Made with love 🌸</div>
+      <button class="fk-replay" onclick="goTo('rv-welcome')">← Back to Order Summary</button>
+      <button class="fk-make" onclick="location.href='/'">Create a card like this ✨</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Save -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-box">
+    <div class="sv-spin"><div class="sv-ring"></div><div class="sv-ico">🛍️</div></div>
+    <div class="sv-lbl" id="svLbl">Processing your order...</div>
+    <div class="sv-bg"><div class="sv-bar" id="svBar"></div></div>
+  </div>
+</div>
+
+<!-- Share -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:1.8rem;margin-bottom:8px;">🛍️</div>
+    <div class="sh-t">Order Ready! 🎉</div>
+    <div class="sh-s">Send this to her 🌸</div>
+    <div class="sh-row"><span class="sh-lnk" id="shLnk"></span>
+      <button class="sh-cp" id="shCp" onclick="copyLink()">Copy</button></div>
+    <button class="sh-wa" onclick="shareWA()">💬 Share on WhatsApp</button>
+    <button class="sh-cl" onclick="document.getElementById('shareModal').classList.remove('show')">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div>
+
+<script>
+const FIREBASE='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const WORKER='https://wild-fog-b15e.nilesh53333.workers.dev';
+
+let curScreen='', shareLink='', letterText='', letterSign='', letterTyped=false;
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');setTimeout(()=>{},500);}
+  next.classList.add('active');
+  if(prev) prev.classList.remove('active');
+  curScreen=id;
+  if(id==='rv-order'){
+    setTimeout(()=>{document.querySelector('.order-scroll').scrollTop=0;},50);
+    // trigger letter typewrite check
+    setupLetterScroll();
+  }
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  const cardId=new URLSearchParams(location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  goTo('rv-loading');
+  fetch(`${FIREBASE}/${cardId}.json`).then(r=>r.json()).then(d=>{
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE}/${cardId}/views.json`,{method:'PUT',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderCard(d);
+  }).catch(()=>goTo('rv-error'));
+});
+
+// Fake review names for the photo reviews
+const REVIEWERS=[
+  {initials:'RS',name:'Rohan S.',loc:'Mumbai',comment:'Best product I have ever received. No words.'},
+  {initials:'PK',name:'Priya K.',loc:'Delhi',comment:'Delivered fresh, every single day. 5 stars.'},
+  {initials:'AV',name:'Arjun V.',loc:'Pune',comment:'Quality is unmatched. Highly recommend to everyone.'},
+  {initials:'SM',name:'Sneha M.',loc:'Bangalore',comment:'Cannot return, cannot replace. Truly priceless.'},
+  {initials:'NK',name:'Nilesh K.',loc:'Nagpur',comment:'Been using since birth. Still perfect. 10/10.'},
+];
+
+function renderCard(d){
+  const name=d.name||'Maa';
+  const sender=d.sender||'Someone who loves you';
+  const cardId=new URLSearchParams(location.search).get('card')||'001';
+  const shortId='WY-'+cardId.slice(-6).toUpperCase();
+
+  // Splash
+  document.getElementById('splashSub').textContent=sender+' placed this order just for you 🌸';
+  document.getElementById('splashOrderId').textContent='Order #'+shortId;
+  document.getElementById('splashProductName').textContent='World\'s Best '+name+' — Limited Edition';
+
+  // Order page
+  document.getElementById('orderIdTxt').textContent='Order #'+shortId;
+  document.getElementById('productName').textContent='World\'s Best '+name+' — Limited Edition';
+  document.getElementById('productMeta').textContent='Category: Irreplaceable · Only 1 in the world · Sold by '+sender;
+  document.getElementById('deliveredTo').textContent=name+'\'s heart';
+  document.getElementById('sellerName').textContent=sender;
+  document.getElementById('deliveryMsg').textContent='Delivered to '+name+'\'s heart since birth ✓';
+  document.getElementById('splashDelivery').textContent='Delivered to '+name+'\'s heart since birth ✓';
+
+  // Reviews = photos
+  const photos=(d.photos||[]).filter(Boolean);
+  const captions=d.photoCaptions||[];
+  buildReviews(photos,captions,sender);
+
+  // Song
+  const hasSong=!!(d.songName&&d.songName!=='—');
+  if(hasSong){
+    document.getElementById('songSection').style.display='block';
+    document.getElementById('songName').textContent=d.songName;
+    const ytM=(d.spotify||'').match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if(ytM){
+      const ytWrap=document.getElementById('fkYt');
+      ytWrap.classList.add('show');
+      ytWrap.innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}?autoplay=0" allowfullscreen></iframe>`;
+    }
+  }
+
+  // Letter
+  if(d.msg&&d.msg.trim()){
+    letterText=d.msg;
+    letterSign=d.sign||(sender?`— ${sender} 💕`:'— with love 💕');
+    document.getElementById('letterCard').style.display='block';
+    document.getElementById('letterSign').textContent=letterSign;
+  }
+
+  goTo('rv-welcome');
+}
+
+function buildReviews(photos,captions,sender){
+  const list=document.getElementById('reviewsList');
+  list.innerHTML='';
+  if(!photos.length){
+    list.innerHTML='<div style="font-size:0.82rem;color:#878787;font-style:italic;padding:8px 0;">No photos yet — but the memories are priceless 🌸</div>';
+    return;
+  }
+  photos.forEach((url,i)=>{
+    const rev=REVIEWERS[i%REVIEWERS.length];
+    const cap=captions[i]||rev.comment;
+    const div=document.createElement('div');
+    div.className='review-item';
+    div.innerHTML=`
+      <div class="review-top">
+        <div class="reviewer-avatar">${i===0?'<span style="font-size:0.65rem;">YOU</span>':rev.initials}</div>
+        <div>
+          <div class="reviewer-name">${i===0?esc(sender):rev.name} ${i===0?'<span class="review-verified">✓ Verified</span>':''}</div>
+          <div class="reviewer-stars">★★★★★</div>
+        </div>
+      </div>
+      <div class="review-photo-wrap">
+        <img class="review-photo" src="${esc(url)}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=review-photo-placeholder>📸 Photo</div>'">
+      </div>
+      <div class="review-caption">${esc(cap)}</div>
+      <div class="review-helpful">Helpful? <span>Yes (${Math.floor(Math.random()*200)+50})</span> · <span>No</span></div>`;
+    list.appendChild(div);
+  });
+}
+
+function openOrder(){goTo('rv-order');}
+
+function setupLetterScroll(){
+  const scroll=document.querySelector('.order-scroll');
+  if(!scroll||letterTyped)return;
+  const check=()=>{
+    if(letterTyped)return;
+    const el=document.getElementById('letterBody');
+    const se=document.getElementById('letterSign');
+    if(!el||!letterText)return;
+    const rect=el.getBoundingClientRect();
+    const appRect=document.getElementById('mainApp').getBoundingClientRect();
+    if(rect.top < appRect.bottom - 60){
+      letterTyped=true;
+      scroll.removeEventListener('scroll',check);
+      if(se)se.style.opacity='0';
+      setTimeout(()=>typewrite(el,letterText,()=>{if(se)se.classList.add('vis');}),300);
+    }
+  };
+  scroll.addEventListener('scroll',check);
+}
+
+function typewrite(el,text,onDone){
+  if(!el||!text)return;el.textContent='';
+  const chars=text.split('');let i=0;
+  function next(){if(i<chars.length){el.textContent+=chars[i++];setTimeout(next,15);}else if(onDone)onDone();}
+  next();
+}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(()=>{
+    const b=document.getElementById('shCp');b.textContent='Copied ✓';
+    setTimeout(()=>b.textContent='Copy',2000);
+  });
+}
+function shareWA(){
+  const pName=document.getElementById('productName')?.textContent||'World\'s Best Maa';
+  const msg=`🛍️ *Flipkart Order Confirmed!*\n\n"${pName}"\n\nKisine tumhare liye ek special order place kiya hai 🌸\n\nOrder details dekho:\n${shareLink}`;
+  const mob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&mob)navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));
+  else window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+}
+</script>
+</body>
+</html>
