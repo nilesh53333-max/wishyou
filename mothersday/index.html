@@ -325,6 +325,24 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-flipkart .sv-vinyl-c{background:#388e3c;}
 .sv-flipkart .sv-lines .sv-line{background:rgba(40,116,240,0.15);}
 .sv-flipkart .sv-lines .sv-line:first-child{background:rgba(40,116,240,0.4);}
+/* Certificate theme */
+.sv-certificate{background:linear-gradient(160deg,#fffef5,#fef9e0);border:2px solid #c9a84c;position:relative;}
+.sv-cert-header{text-align:center;padding:4px 0;}
+.sv-cert-dots{display:flex;justify-content:center;gap:6px;margin-bottom:4px;font-size:0.6rem;color:rgba(201,168,76,0.6);}
+.sv-certificate .sv-lbl{color:rgba(139,105,20,0.55);}
+.sv-certificate .sv-title{color:#3d2800;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;}
+.sv-certificate .sv-sub{color:rgba(100,70,10,0.6);}
+.sv-certificate .sv-dot{background:rgba(201,168,76,0.25);}
+.sv-certificate .sv-dot.sv-dot-active{background:#c9a84c;}
+.sv-certificate .sv-name{color:#3d2800;}
+.sv-certificate .sv-desc{color:rgba(100,70,10,0.6);}
+.sv-certificate .sv-cta{color:#8B6914;}
+.sv-certificate .sv-overlay-info{background:linear-gradient(to top,rgba(255,254,245,0.97) 0%,rgba(255,254,245,0.7) 70%,transparent);}
+.sv-cert-pol .sv-pol-inner{background:#fef9e0;color:#8B6914;font-weight:700;font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;}
+.sv-cert-vinyl{box-shadow:0 0 0 3px rgba(201,168,76,0.3);}
+.sv-cert-vinyl-c{background:radial-gradient(circle at 38% 32%,#f0d070,#c9a84c);}
+.sv-certificate .sv-lines .sv-line{background:rgba(201,168,76,0.2);}
+.sv-certificate .sv-lines .sv-line:first-child{background:rgba(201,168,76,0.5);}
 .sv-gift-box{width:54px;height:54px;position:relative;margin:4px auto;}
 .sv-gift-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:48px;height:34px;background:linear-gradient(145deg,#c2410c,#9a3412);border-radius:3px 3px 5px 5px;}
 .sv-gift-lid{position:absolute;top:0;left:50%;transform:translateX(-50%);width:52px;height:14px;background:linear-gradient(145deg,#dc2626,#b91c1c);border-radius:4px 4px 2px 2px;}
@@ -629,6 +647,16 @@ const BIRTHDAY_STYLES = [
     defaultMemoriesHeading:'Customer Reviews',
     receiverUrl: id => `https://wishyou.ai/mothersday/flipkart.html?card=${id}`,
     shareMsg: (n,s,l) => `🛍️ *Flipkart Order Confirmed!*\n\n${n?'World\'s Best *'+n+'* — Limited Edition\n\n':'Special Mother\'s Day Order\n\n'}${s?s+' ne place kiya hai — ':''}"Delivered to your heart since birth" 🌸\n\nOrder dekho:\n\n👆 Open:\n${l}`
+  },
+  {
+    id:'certificate', name:'🏆 Certificate',
+    desc:'Most emotional · Official award · Gold seal · Photos as exhibits · Formal letter',
+    previewEmoji:'🏆',
+    cardType:'mothers-certificate',
+    defaultSongTitle:'Award ceremony song 🎵',
+    defaultMemoriesHeading:'Supporting Evidence',
+    receiverUrl: id => `https://wishyou.ai/mothersday/certificate.html?card=${id}`,
+    shareMsg: (n,s,l) => `🏆 *Certificate of Excellence*\n\n${n?'"World\'s Best *'+n+'*"\n\n':'Special Mother\'s Day Certificate\n\n'}${s?s+' ne issue kiya hai — ':''}Tumhare naam ek official certificate hai 🌸\n\nKholo:\n\n👆 Open:\n${l}`
   }
 ];
 
@@ -754,6 +782,15 @@ function buildStylesList() {
         `<div class="sv-lbl">★★★★★ Reviews</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">📸</div></div><div class="sv-pol"><div class="sv-pol-inner">💕</div></div><div class="sv-pol"><div class="sv-pol-inner">🌸</div></div></div><div class="sv-sub">Photos appear as verified customer reviews</div>`,
         `<div class="sv-lbl">♪ Customers also listened</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Her song — in the Flipkart style</div>`,
         `<div class="sv-lbl">Product Description</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:80%"></div><div class="sv-line" style="width:88%"></div></div><div class="sv-sub" style="margin-top:6px;color:#2874f0;font-style:italic;">Letter on yellow notepad 💛</div>`
+      ]
+    },
+    certificate: {
+      theme:'sv-certificate',
+      slides:[
+        `<div class="sv-cert-header"><div class="sv-cert-dots"><span>✦</span><span>✦</span><span>✦</span></div><div class="sv-lbl">Certificate of Excellence</div><div class="sv-title">World's Best Maa</div></div>`,
+        `<div class="sv-lbl">📸 Supporting Evidence</div><div class="sv-pols"><div class="sv-pol sv-cert-pol"><div class="sv-pol-inner">A</div></div><div class="sv-pol sv-cert-pol"><div class="sv-pol-inner">B</div></div><div class="sv-pol sv-cert-pol"><div class="sv-pol-inner">C</div></div></div><div class="sv-sub">Photos as official exhibits</div>`,
+        `<div class="sv-lbl">♪ Musical Accompaniment</div><div class="sv-vinyl sv-cert-vinyl"><div class="sv-vinyl-c sv-cert-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Song as award ceremony music</div>`,
+        `<div class="sv-lbl">📜 Statement of Merit</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:82%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#8B6914;">Letter as official citation 🌸</div>`
       ]
     }
   };
