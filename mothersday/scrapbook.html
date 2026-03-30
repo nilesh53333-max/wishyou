@@ -18,6 +18,7 @@ html,body{height:100%;overflow:hidden;background:#2c1a0e;}
     box-shadow:0 40px 120px rgba(0,0,0,0.9);}
 }
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.5s ease;overflow:hidden;}
+#rv-scrapbook{transition:opacity 0.5s ease;}
 .screen.active{opacity:1;pointer-events:all;}
 
 /* ── LOADING ── */
@@ -60,12 +61,14 @@ html,body{height:100%;overflow:hidden;background:#2c1a0e;}
   background:#2c1a0e;
   display:flex;flex-direction:column;
   position:relative;
+  overflow:hidden;
 }
 
 /* The scrollable page */
 .scrap-scroll{
   flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
   position:relative;
+  height:100%;
   background:
     /* subtle texture lines */
     repeating-linear-gradient(
