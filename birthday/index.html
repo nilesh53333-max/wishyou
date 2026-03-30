@@ -150,9 +150,6 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-lbl{font-size:0.5rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
 .sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:10px 14px 12px;z-index:5;}
 .sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(253,232,240,0.97) 0%,rgba(253,232,240,0.7) 70%,transparent);}
-.sv-retro .sv-overlay-info{background:linear-gradient(to top,rgba(255,225,53,0.97) 0%,rgba(255,225,53,0.7) 70%,transparent);}
-.sv-cinematic .sv-overlay-info{background:linear-gradient(to top,rgba(10,10,10,0.97) 0%,rgba(10,10,10,0.7) 70%,transparent);}
-.sv-jar .sv-overlay-info{background:linear-gradient(to top,rgba(254,243,226,0.97) 0%,rgba(254,243,226,0.7) 70%,transparent);}
 .sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,0.97) 0%,rgba(22,21,46,0.7) 70%,transparent);}
 .sv-dots{display:flex;gap:5px;justify-content:center;margin-bottom:6px;}
 .sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.3;}
@@ -188,58 +185,16 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-line{height:2px;border-radius:2px;background:rgba(74,14,42,0.1);margin-bottom:4px;}
 .sv-line:first-child{width:55%;background:rgba(233,30,99,0.35);}
 
-/* Retro theme */
-.sv-retro{background:#FFE135;}
-.sv-retro .sv-lbl{color:#d90429;}
-.sv-retro .sv-title{color:#111;}
-.sv-retro .sv-sub{color:#555;}
-.sv-retro .sv-dot{background:#d90429;}
-.sv-retro .sv-dot.sv-dot-active{background:#d90429;}
-.sv-retro .sv-name{color:#d90429;}
-.sv-retro .sv-desc{color:#555;}
-.sv-retro .sv-cta{color:#d90429;}
-.sv-comic{display:flex;gap:3px;justify-content:center;margin:4px 0;}
-.sv-panel{width:36px;height:44px;border:2px solid #111;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
-.sv-panel:nth-child(1){background:#fff9c4;}
-.sv-panel:nth-child(2){background:#ffe0b2;}
-.sv-panel:nth-child(3){background:#fce4ec;}
-.sv-balloon{font-size:2.4rem;animation:ballFloat 1.5s ease-in-out infinite;}
-@keyframes ballFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
 
 .sv-news-head{font-size:0.46rem;font-weight:700;color:#111;border-bottom:1.5px double #111;margin-bottom:3px;padding-bottom:2px;}
 .sv-news-hl{background:#d90429;color:white;font-size:0.42rem;font-weight:700;padding:1px 4px;border-radius:1px;margin-bottom:3px;}
 .sv-news-lines{display:flex;flex-direction:column;gap:2px;}
 .sv-news-line{height:2px;background:rgba(0,0,0,0.1);border-radius:1px;}
 
-/* Cinematic theme */
-.sv-cinematic{background:linear-gradient(160deg,#111,#1a1a1a);}
-.sv-cinematic .sv-lbl{color:rgba(255,215,0,0.4);}
-.sv-cinematic .sv-title{color:rgba(255,255,255,0.85);}
-.sv-cinematic .sv-sub{color:rgba(255,255,255,0.4);}
-.sv-cinematic .sv-dot{background:rgba(255,215,0,0.4);}
-.sv-cinematic .sv-dot.sv-dot-active{background:#FFD700;}
-.sv-cinematic .sv-name{color:rgba(255,255,255,0.9);}
-.sv-cinematic .sv-desc{color:rgba(255,255,255,0.4);}
-.sv-cinematic .sv-cta{color:#FFD700;}
-.sv-film-frames{display:flex;gap:3px;justify-content:center;margin:4px 0;}
-.sv-frame{width:32px;height:42px;border:2px solid #444;background:#222;display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
-.sv-clapboard{font-size:2.4rem;animation:clapWig 2s ease-in-out infinite;}
-@keyframes clapWig{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
-.sv-cin-lines{width:80%;margin:4px auto;}
-.sv-cin-line{height:2px;border-radius:2px;background:rgba(255,215,0,0.2);margin-bottom:4px;}
 
-/* Memory Jar theme */
-.sv-jar{background:linear-gradient(160deg,#fef3e2,#fde8c8);}
-.sv-jar .sv-lbl{color:rgba(120,80,20,0.5);}
-.sv-jar .sv-title{color:#6b4226;}
-.sv-jar .sv-sub{color:rgba(120,80,20,0.55);}
-.sv-jar .sv-dot{background:#c17f3c;}
-.sv-jar .sv-dot.sv-dot-active{background:#c17f3c;}
-.sv-jar .sv-name{color:#6b4226;}
-.sv-jar .sv-desc{color:rgba(120,80,20,0.6);}
-.sv-jar .sv-cta{color:#c17f3c;}
-.sv-jar-icon{font-size:2.6rem;animation:jarWig 2.5s ease-in-out infinite;}
-@keyframes jarWig{0%,100%{transform:rotate(-2deg);}50%{transform:rotate(2deg);}}
+
+
 .sv-notes{display:flex;gap:6px;justify-content:center;margin:4px 0;}
 .sv-note{width:36px;height:42px;background:#fffde7;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 6px rgba(0,0,0,0.1);transform:rotate(-3deg);}
 .sv-note:nth-child(2){transform:rotate(0deg);}
@@ -494,36 +449,6 @@ const BIRTHDAY_STYLES = [
     shareMsg: (n,s,l) => `💝 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a card 💌\n\n':'Someone made you a card 💌\n\n'}👆 Open:\n${l}`
   },
   {
-    id:'retro', name:'🎊 Retro Party',
-    desc:'Fun & loud · Balloon pop · Newspaper letter',
-    previewEmoji:'🎊',
-    cardType:'birthday-retro',
-    defaultSongTitle:'Party Anthem 🎵',
-    defaultMemoriesHeading:'Moments with you',
-    receiverUrl: id => `https://wishyou.ai/birthday/retro.html?card=${id}`,
-    shareMsg: (n,s,l) => `🎊 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a card 🎉\n\n':'Someone made you a card 🎉\n\n'}👆 Open:\n${l}`
-  },
-  {
-    id:'cinematic', name:'🎬 Cinematic',
-    desc:'Dark & dramatic · Film frames · Gold subtitle letter',
-    previewEmoji:'🎬',
-    cardType:'birthday-cinematic',
-    defaultSongTitle:'The Score 🎵',
-    defaultMemoriesHeading:'The Story',
-    receiverUrl: id => `https://wishyou.ai/birthday/cinematic.html?card=${id}`,
-    shareMsg: (n,s,l) => `🎬 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a card 🎞️\n\n':'Someone made you a card 🎞️\n\n'}▶ Open:\n${l}`
-  },
-  {
-    id:'memoryjar', name:'🫙 Memory Jar',
-    desc:'Cozy & warm · Pull notes from a jar · Handwritten',
-    previewEmoji:'🫙',
-    cardType:'birthday-memoryjar',
-    defaultSongTitle:'Song for you 🎵',
-    defaultMemoriesHeading:'Moments with you',
-    receiverUrl: id => `https://wishyou.ai/birthday/memoryjar.html?card=${id}`,
-    shareMsg: (n,s,l) => `🫙 *Happy Birthday${n?' '+n:''}!*\n\n${s?s+' made you a memory jar 💛\n\n':'Someone made you a jar 💛\n\n'}👆 Open:\n${l}`
-  },
-  {
     id:'fakechat', name:'💬 Fake Chat',
     desc:'Playful & modern · Chat bubble reveal · Surprise ending',
     previewEmoji:'💬',
@@ -633,36 +558,6 @@ function buildStylesList() {
         `<div class="sv-lbl">Song Screen</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Your Special Song 🎵</div>`,
         `<div class="sv-lbl">Envelope Reveal</div><div class="sv-env">💌</div><div class="sv-sub">Tap to open the letter...</div>`,
         `<div class="sv-lbl">Heartfelt Letter</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:85%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#e91e63;">Forever yours 💕</div>`
-      ]
-    },
-    retro: {
-      theme:'sv-retro',
-      slides:[
-        `<div class="sv-lbl" style="color:#d90429;">Welcome</div><span class="sv-emoji">🎂</span><div class="sv-title">Happy Birthday!</div><div class="sv-sub">Someone special made this 🎊</div>`,
-        `<div class="sv-lbl" style="color:#d90429;">Comic Strip Photos</div><div class="sv-comic"><div class="sv-panel">🎂</div><div class="sv-panel">🎉</div><div class="sv-panel">🎈</div></div><div class="sv-sub">Your photos as a comic strip!</div>`,
-        `<div class="sv-lbl" style="color:#d90429;">Party Anthem</div><span class="sv-emoji">🎵</span><div class="sv-title">Your Party Song!</div>`,
-        `<div class="sv-lbl" style="color:#d90429;">Balloon Pop!</div><div class="sv-balloon">🎈</div><div class="sv-sub">Pop it to reveal the letter!</div>`,
-        `<div class="sv-lbl" style="color:#d90429;">Newspaper Letter</div><div class="sv-newspaper"><div class="sv-news-head">🗞️ THE BIRTHDAY GAZETTE</div><div class="sv-news-hl">BREAKING: IT'S YOUR BIRTHDAY!</div><div class="sv-news-lines"><div class="sv-news-line"></div><div class="sv-news-line" style="width:80%"></div><div class="sv-news-line" style="width:90%"></div></div></div>`
-      ]
-    },
-    cinematic: {
-      theme:'sv-cinematic',
-      slides:[
-        `<div class="sv-lbl">Title Card</div><span class="sv-emoji">🎬</span><div class="sv-title">A Cinematic Birthday</div><div class="sv-sub">A story made just for you</div>`,
-        `<div class="sv-lbl">Film Stills</div><div class="sv-film-frames"><div class="sv-frame">🌆</div><div class="sv-frame">✨</div><div class="sv-frame">💫</div></div><div class="sv-sub">Your photos as cinematic frames</div>`,
-        `<div class="sv-lbl">Background Score</div><div class="sv-clapboard">🎬</div><div class="sv-sub" style="color:#FFD700;">The perfect song for your story</div>`,
-        `<div class="sv-lbl">Reveal</div><span class="sv-emoji">🎞️</span><div class="sv-sub">Tap to reveal the final message</div>`,
-        `<div class="sv-lbl">The Message</div><div class="sv-cin-lines"><div class="sv-cin-line" style="width:100%"></div><div class="sv-cin-line" style="width:80%"></div><div class="sv-cin-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;color:rgba(255,215,0,0.6);font-style:italic;">— With love 🎬</div>`
-      ]
-    },
-    memoryjar: {
-      theme:'sv-jar',
-      slides:[
-        `<div class="sv-lbl">The Jar</div><div class="sv-jar-icon">🫙</div><div class="sv-sub">A jar filled with love, just for you</div>`,
-        `<div class="sv-lbl">Photo Notes</div><div class="sv-notes"><div class="sv-note">📸</div><div class="sv-note">💕</div><div class="sv-note">🌸</div></div><div class="sv-sub">Tap each note to unfold it</div>`,
-        `<div class="sv-lbl">Song Note</div><span class="sv-emoji">🎵</span><div class="sv-sub">A golden note with your song inside</div>`,
-        `<div class="sv-lbl">Letter Note</div><span class="sv-emoji">💌</span><div class="sv-sub">Fold out the handwritten letter</div>`,
-        `<div class="sv-lbl">All Opened</div><span class="sv-emoji">🫙</span><div class="sv-sub" style="font-style:italic;">"That's everything I wanted to say."</div>`
       ]
     },
     constellation: {
