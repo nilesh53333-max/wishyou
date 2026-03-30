@@ -1184,7 +1184,7 @@ async function createCard(style) {
       overlay.classList.remove('show');
       document.getElementById('shareEmoji').textContent = style.previewEmoji;
       document.getElementById('shareReceiverName').textContent = cardData.name||'them';
-      document.getElementById('shareLinkTxt').textContent = shareLinkShort;
+      document.getElementById('shareLinkTxt').textContent = shareLink;
       document.getElementById('shareModal').classList.add('show');
     }, 700);
   } catch(e) { console.error('Save error:',e); overlay.classList.remove('show'); alert('Could not save card. Please try again. Error: '+e.message); }
