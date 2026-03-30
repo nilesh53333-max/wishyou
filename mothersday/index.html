@@ -289,6 +289,24 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-saree .sv-overlay-info{background:linear-gradient(to top,rgba(26,10,46,0.97) 0%,rgba(26,10,46,0.7) 70%,transparent);}
 .sv-saree .sv-pols .sv-pol-inner{background:#2d1048;}
 .sv-saree .sv-vinyl-c{background:#d4a853;}
+/* Recipe theme */
+.sv-recipe{background:linear-gradient(160deg,#fdf6e3,#faefd5);position:relative;}
+.sv-recipe::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 18px,rgba(180,130,60,0.1) 18px,rgba(180,130,60,0.1) 19px);
+  pointer-events:none;}
+.sv-recipe::after{content:'';position:absolute;top:0;left:22px;bottom:0;width:1px;background:rgba(200,60,60,0.2);pointer-events:none;}
+.sv-recipe .sv-lbl{color:rgba(139,0,0,0.5);}
+.sv-recipe .sv-title{color:#3d1a00;font-size:0.78rem;font-family:'Libre Baskerville',Georgia,serif;}
+.sv-recipe .sv-sub{color:rgba(100,50,10,0.6);}
+.sv-recipe .sv-dot{background:rgba(139,0,0,0.2);}
+.sv-recipe .sv-dot.sv-dot-active{background:#8B0000;}
+.sv-recipe .sv-name{color:#3d1a00;}
+.sv-recipe .sv-desc{color:rgba(100,50,10,0.6);}
+.sv-recipe .sv-cta{color:#8B0000;}
+.sv-recipe .sv-overlay-info{background:linear-gradient(to top,rgba(253,246,227,0.97) 0%,rgba(253,246,227,0.7) 70%,transparent);}
+.sv-recipe .sv-pols .sv-pol-inner{background:#faefd5;color:#8B0000;font-weight:700;font-size:0.8rem;}
+.sv-recipe .sv-lines .sv-line{background:rgba(180,130,60,0.2);}
+.sv-recipe .sv-lines .sv-line:first-child{background:rgba(139,0,0,0.3);}
 .sv-gift-box{width:54px;height:54px;position:relative;margin:4px auto;}
 .sv-gift-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:48px;height:34px;background:linear-gradient(145deg,#c2410c,#9a3412);border-radius:3px 3px 5px 5px;}
 .sv-gift-lid{position:absolute;top:0;left:50%;transform:translateX(-50%);width:52px;height:14px;background:linear-gradient(145deg,#dc2626,#b91c1c);border-radius:4px 4px 2px 2px;}
@@ -573,6 +591,16 @@ const BIRTHDAY_STYLES = [
     defaultMemoriesHeading:'Woven memories',
     receiverUrl: id => `https://wishyou.ai/mothersday/saree.html?card=${id}`,
     shareMsg: (n,s,l) => `🪡 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' ne tumhare liye ek special saree card banaya hai ✨\n\n':'Someone made you a saree card ✨\n\n'}Kholo aur dekho:\n\n👆 Open:\n${l}`
+  },
+  {
+    id:'recipe', name:'🍱 Recipe Card',
+    desc:'Most unique · Handwritten recipe · Photos as cooking steps · Chef note letter',
+    previewEmoji:'🍱',
+    cardType:'mothers-recipe',
+    defaultSongTitle:'Her favourite song 🎵',
+    defaultMemoriesHeading:'The best memories',
+    receiverUrl: id => `https://wishyou.ai/mothersday/recipe.html?card=${id}`,
+    shareMsg: (n,s,l) => `🍱 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' ne tumhare liye ek special recipe card banaya hai 🌸\n\n':'Someone made you a recipe card 🌸\n\n'}Kholo aur padhein:\n\n👆 Open:\n${l}`
   }
 ];
 
@@ -680,6 +708,15 @@ function buildStylesList() {
         `<div class="sv-lbl">📸 Embroidery Hoops</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">🪡</div></div><div class="sv-pol"><div class="sv-pol-inner">💜</div></div><div class="sv-pol"><div class="sv-pol-inner">✨</div></div></div><div class="sv-sub">Memories stitched with gold thread</div>`,
         `<div class="sv-lbl">🎵 Zari Song</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">A song woven into the fabric</div>`,
         `<div class="sv-lbl">💌 Pallu Letter</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:82%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#d4a853;">A letter as beautiful as her 🪡</div>`
+      ]
+    },
+    recipe: {
+      theme:'sv-recipe',
+      slides:[
+        `<div class="sv-lbl">🍱 Recipe Card Opens</div><span class="sv-emoji">📖</span><div class="sv-title">Recipe for the World's Best Maa</div>`,
+        `<div class="sv-lbl">✦ Ingredients</div><div class="sv-sub" style="text-align:left;padding:0 8px;">∞ cups Unconditional love<br>Endless Patience<br>Daily — Her famous chai ☕</div>`,
+        `<div class="sv-lbl">📸 Method Steps</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">①</div></div><div class="sv-pol"><div class="sv-pol-inner">②</div></div><div class="sv-pol"><div class="sv-pol-inner">③</div></div></div><div class="sv-sub">Photos as cooking steps with chef's notes</div>`,
+        `<div class="sv-lbl">📝 Chef's Note</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:85%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#8B0000;">A letter written on lined paper 🌸</div>`
       ]
     }
   };
