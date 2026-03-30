@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — Certificate of Excellence 🏆</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+<meta property="og:title" content="You've received a certificate 🏆">
+<meta property="og:description" content="Certificate of Excellence — World's Best Maa. Tap to open.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:#1a1200;}
+.app{position:fixed;inset:0;overflow:hidden;background:#1a1200;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.95);}
+}
+.screen{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;transition:opacity 0.5s ease;visibility:hidden;overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;visibility:visible;}
+
+/* ── LOADING ── */
+#rv-loading{background:#fffef5;align-items:center;justify-content:center;gap:16px;}
+.ld-seal{width:60px;height:60px;border-radius:50%;background:#c9a84c;
+  display:flex;align-items:center;justify-content:center;
+  border:3px solid #8B6914;animation:sealPulse 1.2s ease-in-out infinite;}
+@keyframes sealPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+.ld-seal-inner{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#fffef5;}
+.ld-txt{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(139,105,20,0.55);font-style:italic;}
+
+/* ── ERROR ── */
+#rv-error{background:#fffef5;align-items:center;justify-content:center;flex-direction:column;
+  text-align:center;padding:40px;gap:14px;}
+.err-t{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(139,105,20,0.6);line-height:1.7;}
+
+/* ── WELCOME ── */
+#rv-welcome{
+  background:linear-gradient(160deg,#1a1200,#2d2000,#1a1200);
+  align-items:center;justify-content:center;flex-direction:column;
+  padding:40px 28px;position:relative;overflow:hidden;
+}
+/* Gold particle background */
+.gold-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.gp{position:absolute;border-radius:50%;background:#c9a84c;animation:gpFloat linear infinite;opacity:0;}
+@keyframes gpFloat{0%{transform:translateY(0) scale(1);opacity:0;}20%{opacity:0.4;}80%{opacity:0.1;}100%{transform:translateY(-80vh) scale(0.5);opacity:0;}}
+
+.wlc-envelope{
+  width:100%;max-width:300px;
+  background:linear-gradient(160deg,#fffef5,#fef9e0);
+  border:2px solid #c9a84c;border-radius:4px;
+  padding:24px 20px;text-align:center;
+  box-shadow:0 0 0 6px rgba(201,168,76,0.12),0 16px 48px rgba(0,0,0,0.5);
+  position:relative;
+}
+/* ornate corners */
+.wlc-envelope::before,.wlc-envelope::after{
+  content:'❧';position:absolute;font-size:1rem;color:rgba(201,168,76,0.4);
+}
+.wlc-envelope::before{top:8px;left:10px;}
+.wlc-envelope::after{bottom:8px;right:10px;}
+
+.wlc-eyebrow{font-size:0.55rem;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(139,105,20,0.5);margin-bottom:14px;}
+.wlc-seal-icon{font-size:3rem;margin-bottom:12px;animation:sealBounce 0.6s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes sealBounce{from{transform:scale(0) rotate(-20deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}
+.wlc-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,5.5vw,1.9rem);
+  font-weight:700;color:#3d2800;line-height:1.2;margin-bottom:6px;}
+.wlc-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.92rem;
+  color:rgba(139,105,20,0.6);margin-bottom:20px;line-height:1.5;}
+.wlc-divider{display:flex;align-items:center;gap:8px;margin:14px 0;}
+.wlc-divider::before,.wlc-divider::after{content:'';flex:1;height:1px;background:rgba(201,168,76,0.4);}
+.wlc-divider span{font-size:0.75rem;color:rgba(201,168,76,0.6);}
+.wlc-btn{background:linear-gradient(135deg,#c9a84c,#a07830);color:#fffef5;border:none;
+  border-radius:3px;padding:14px 36px;font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;font-weight:700;cursor:pointer;letter-spacing:0.04em;
+  box-shadow:0 6px 20px rgba(201,168,76,0.4);touch-action:manipulation;font-style:italic;}
+.wlc-btn:active{transform:scale(0.97);}
+.wlc-make{margin-top:12px;background:none;border:none;font-family:'DM Sans',sans-serif;
+  font-size:0.78rem;color:rgba(201,168,76,0.35);cursor:pointer;padding:8px;}
+
+/* ══════════════════════════════════
+   THE CERTIFICATE
+   One beautiful scrollable page.
+   Aged parchment, gold borders,
+   official seals, signatures.
+══════════════════════════════════ */
+#rv-cert{background:#1a1200;}
+
+.cert-scroll{position:absolute;top:0;left:0;right:0;bottom:0;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  background:linear-gradient(160deg,#1a1200,#2d2000,#1a1200);}
+.cert-scroll::-webkit-scrollbar{display:none;}
+
+/* Outer frame — dark gold */
+.cert-outer{margin:max(20px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));
+  border:2px solid #c9a84c;border-radius:4px;
+  box-shadow:0 0 0 1px rgba(201,168,76,0.2),0 0 40px rgba(201,168,76,0.08),inset 0 0 40px rgba(0,0,0,0.3);
+  overflow:hidden;position:relative;}
+
+/* Inner parchment */
+.cert-inner{
+  background:linear-gradient(160deg,#fffef5,#fef9e0,#fffaec,#fef9e0);
+  padding:28px 24px 24px;
+  position:relative;
+}
+/* Parchment texture lines */
+.cert-inner::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 44px,rgba(201,168,76,0.06) 44px,rgba(201,168,76,0.06) 45px);
+  pointer-events:none;}
+
+/* Double border inside */
+.cert-border{border:1.5px solid rgba(201,168,76,0.4);padding:20px;position:relative;}
+.cert-border::before{content:'';position:absolute;inset:6px;
+  border:0.5px solid rgba(201,168,76,0.2);pointer-events:none;}
+
+/* Corner ornaments */
+.corner{position:absolute;font-size:1.1rem;color:rgba(201,168,76,0.5);line-height:1;}
+.c-tl{top:8px;left:8px;}
+.c-tr{top:8px;right:8px;transform:scaleX(-1);}
+.c-bl{bottom:8px;left:8px;transform:scaleY(-1);}
+.c-br{bottom:8px;right:8px;transform:scale(-1);}
+
+/* ── HEADER ── */
+.cert-header{text-align:center;margin-bottom:18px;position:relative;z-index:1;}
+.cert-org{font-family:'DM Sans',sans-serif;font-size:0.55rem;font-weight:600;
+  letter-spacing:0.22em;text-transform:uppercase;color:rgba(139,105,20,0.5);margin-bottom:8px;}
+.cert-org-divider{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.cert-org-divider::before,.cert-org-divider::after{content:'';flex:1;height:1px;background:rgba(201,168,76,0.35);}
+.cert-org-divider span{font-size:0.65rem;color:rgba(201,168,76,0.6);}
+.cert-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1rem,4vw,1.3rem);
+  font-weight:700;color:#5c3d00;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+.cert-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,6vw,2.2rem);
+  font-weight:700;color:#3d2800;line-height:1.1;margin-bottom:4px;}
+.cert-rule{height:2px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:10px 0;}
+
+/* ── BODY ── */
+.cert-body{text-align:center;margin-bottom:20px;position:relative;z-index:1;}
+.cert-presented{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;
+  color:rgba(100,70,10,0.6);margin-bottom:6px;}
+.cert-name{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,8vw,2.8rem);
+  font-weight:700;font-style:italic;color:#3d2800;margin-bottom:6px;line-height:1.1;}
+.cert-name-underline{height:1.5px;background:linear-gradient(90deg,transparent,#c9a84c 30%,#c9a84c 70%,transparent);
+  width:70%;margin:0 auto 14px;}
+.cert-for{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;
+  color:rgba(100,70,10,0.6);margin-bottom:10px;}
+.cert-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,4.5vw,1.5rem);
+  font-weight:700;color:#5c3d00;letter-spacing:0.04em;margin-bottom:10px;}
+.cert-description{font-family:'Cormorant Garamond',serif;font-size:0.88rem;
+  color:rgba(80,55,10,0.65);line-height:1.8;max-width:85%;margin:0 auto 16px;}
+
+/* ── EVIDENCE PHOTOS ── */
+.evidence-label{font-size:0.55rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(139,105,20,0.45);text-align:center;margin-bottom:10px;position:relative;z-index:1;}
+.evidence-grid{display:grid;gap:8px;margin-bottom:16px;position:relative;z-index:1;}
+.evidence-grid.cols-1{grid-template-columns:1fr;}
+.evidence-grid.cols-2{grid-template-columns:1fr 1fr;}
+.evidence-grid.cols-3{grid-template-columns:1fr 1fr 1fr;}
+
+.evidence-item{position:relative;background:#fff;padding:5px 5px 22px;
+  box-shadow:0 3px 12px rgba(60,30,0,0.15);
+  border:1px solid rgba(201,168,76,0.2);}
+.evidence-img{width:100%;aspect-ratio:1;object-fit:cover;object-position:center 20%;display:block;}
+.evidence-caption{position:absolute;bottom:0;left:0;right:0;height:22px;
+  display:flex;align-items:center;justify-content:center;padding:0 4px;background:#fff;}
+.evidence-caption-txt{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.65rem;color:#5c3d00;text-align:center;line-height:1.2;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;}
+/* exhibit number */
+.exhibit-num{position:absolute;top:4px;left:4px;background:#c9a84c;color:#fffef5;
+  font-size:0.48rem;font-weight:700;padding:2px 5px;letter-spacing:0.06em;text-transform:uppercase;}
+
+/* ── SONG — "Musical Accompaniment" ── */
+.cert-music{background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.25);
+  border-radius:3px;padding:14px;margin-bottom:16px;text-align:center;position:relative;z-index:1;}
+.cert-music-label{font-size:0.55rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(139,105,20,0.45);margin-bottom:10px;}
+.music-row{display:flex;align-items:center;gap:12px;}
+.music-vinyl{width:52px;height:52px;border-radius:50%;flex-shrink:0;
+  background:radial-gradient(circle,#fef9e0 0%,#fef9e0 12%,#2d2000 13%,#2d2000 18%,
+    #3d2800 19%,#3d2800 25%,#2d2000 26%,#2d2000 32%,#3d2800 33%,#3d2800 39%,#2d2000 40%,#2d2000 100%);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);animation:vSpin 4s linear infinite;}
+@keyframes vSpin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+.music-vinyl-dot{width:16px;height:16px;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#f0d070,#c9a84c);}
+.music-info{flex:1;text-align:left;min-width:0;}
+.music-title-lbl{font-size:0.55rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(139,105,20,0.4);margin-bottom:3px;}
+.music-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;
+  color:#3d2800;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.cert-yt{width:100%;border-radius:2px;overflow:hidden;margin-top:10px;display:none;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);}
+.cert-yt iframe{width:100%;height:145px;border:none;display:block;}
+.cert-yt.show{display:block;}
+
+/* ── LETTER — "Statement of Merit" ── */
+.cert-statement{background:#fff;border:1px solid rgba(201,168,76,0.3);border-top:3px solid #c9a84c;
+  padding:18px 16px 20px;margin-bottom:20px;position:relative;z-index:1;}
+.cert-statement-label{font-size:0.55rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(139,105,20,0.45);margin-bottom:12px;}
+.statement-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;
+  font-size:1.02rem;color:#2c1a00;line-height:2;white-space:pre-wrap;}
+.statement-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;
+  color:#8B6914;margin-top:16px;display:block;opacity:0;transition:opacity 0.8s ease;}
+.statement-sign.vis{opacity:1;}
+
+/* ── SEAL & SIGNATURES ── */
+.cert-footer{display:flex;align-items:flex-end;justify-content:space-between;
+  margin-top:16px;padding-top:16px;border-top:1px solid rgba(201,168,76,0.25);
+  position:relative;z-index:1;}
+.sig-block{text-align:center;flex:1;}
+.sig-line{height:1px;background:rgba(139,105,20,0.4);margin:0 8px 4px;}
+.sig-label{font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(139,105,20,0.45);}
+.sig-name{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.78rem;color:#5c3d00;}
+.cert-seal{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#c9a84c,#a07830);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;
+  border:2px solid #8B6914;box-shadow:0 4px 12px rgba(201,168,76,0.3);}
+.seal-text{font-family:'Cormorant Garamond',serif;font-size:0.42rem;font-weight:700;
+  color:#fffef5;text-align:center;letter-spacing:0.04em;line-height:1.3;text-transform:uppercase;}
+.seal-star{font-size:0.7rem;color:#fffef5;margin-bottom:1px;}
+
+/* ── PAGE BOTTOM ── */
+.cert-page-footer{padding:16px 24px max(28px,env(safe-area-inset-bottom));text-align:center;}
+.cert-brand{font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(201,168,76,0.3);margin-bottom:14px;}
+.cert-replay{background:linear-gradient(135deg,#c9a84c,#a07830);color:#fffef5;border:none;
+  border-radius:3px;padding:12px 32px;font-family:'Cormorant Garamond',serif;
+  font-size:1rem;font-style:italic;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 14px rgba(201,168,76,0.3);touch-action:manipulation;display:block;
+  width:100%;margin-bottom:10px;letter-spacing:0.02em;}
+.cert-make{width:100%;padding:11px;background:none;border:1px solid rgba(201,168,76,0.2);
+  border-radius:3px;font-family:'DM Sans',sans-serif;font-size:0.78rem;
+  color:rgba(201,168,76,0.4);cursor:pointer;}
+
+/* SAVE / SHARE */
+.save-overlay{position:absolute;inset:0;background:rgba(26,18,0,0.9);backdrop-filter:blur(14px);
+  z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.save-overlay.show{display:flex;}
+.save-box{background:#fffef5;border:1px solid rgba(201,168,76,0.3);border-radius:4px;
+  padding:28px 24px;width:100%;max-width:320px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.sv-spin{position:relative;width:56px;height:56px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;}
+.sv-ring{position:absolute;inset:0;border-radius:50%;border:2.5px solid rgba(201,168,76,0.15);
+  border-top-color:#c9a84c;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.sv-ico{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:#8B6914;font-style:italic;}
+.sv-lbl{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#3d2800;margin-bottom:12px;font-style:italic;}
+.sv-bg{height:4px;border-radius:2px;background:rgba(201,168,76,0.15);overflow:hidden;}
+.sv-bar{height:100%;border-radius:2px;width:0%;transition:width 0.4s;
+  background:linear-gradient(90deg,#c9a84c,#a07830);}
+
+.share-modal{position:absolute;inset:0;background:rgba(26,18,0,0.92);backdrop-filter:blur(14px);
+  z-index:600;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{background:#fffef5;border:1px solid rgba(201,168,76,0.3);border-radius:4px;
+  padding:26px 22px;width:100%;max-width:360px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.sh-t{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;
+  color:#3d2800;margin-bottom:4px;}
+.sh-s{font-size:0.78rem;color:rgba(139,105,20,0.5);margin-bottom:14px;}
+.sh-row{background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);
+  border-radius:3px;padding:9px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sh-lnk{font-size:0.67rem;color:rgba(139,105,20,0.4);flex:1;text-align:left;word-break:break-all;}
+.sh-cp{padding:6px 12px;border:none;border-radius:2px;font-size:0.7rem;font-weight:700;
+  cursor:pointer;background:#c9a84c;color:#fffef5;white-space:nowrap;}
+.sh-wa{width:100%;padding:12px;border:none;border-radius:3px;
+  background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;
+  cursor:pointer;margin-bottom:8px;touch-action:manipulation;}
+.sh-cl{width:100%;padding:10px;background:none;border:1px solid rgba(201,168,76,0.2);
+  border-radius:3px;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.88rem;color:rgba(139,105,20,0.45);cursor:pointer;}
+
+.wm{position:absolute;bottom:5px;right:8px;font-size:0.44rem;
+  color:rgba(201,168,76,0.15);pointer-events:none;z-index:1;}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- Loading -->
+<div class="screen active" id="rv-loading">
+  <div class="ld-seal"><div class="ld-seal-inner">WY</div></div>
+  <div class="ld-txt">Preparing your certificate…</div>
+</div>
+
+<!-- Error -->
+<div class="screen" id="rv-error">
+  <div style="font-size:2.5rem;margin-bottom:12px;">🏆</div>
+  <div class="err-t">This certificate has expired<br>or couldn't be found.</div>
+  <button onclick="location.href='/'" style="margin-top:20px;background:#c9a84c;color:#fffef5;border:none;border-radius:3px;padding:12px 28px;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;font-style:italic;cursor:pointer;">Create your own</button>
+</div>
+
+<!-- Welcome -->
+<div class="screen" id="rv-welcome">
+  <div class="gold-particles" id="goldParticles"></div>
+  <div class="wlc-envelope">
+    <div class="wlc-eyebrow">WishYou.ai · Mother's Day</div>
+    <div class="wlc-seal-icon">🏆</div>
+    <div class="wlc-title" id="wlcTitle">Certificate of Excellence</div>
+    <div class="wlc-sub" id="wlcSub">Awarded to the most remarkable person</div>
+    <div class="wlc-divider"><span>✦</span></div>
+    <button class="wlc-btn" onclick="openCert()">Open Certificate →</button>
+    <button class="wlc-make" onclick="location.href='/'">Create a card like this</button>
+  </div>
+</div>
+
+<!-- CERTIFICATE PAGE -->
+<div class="screen" id="rv-cert">
+  <div class="cert-scroll" id="certScroll">
+    <div class="cert-outer">
+      <div class="cert-inner">
+        <div class="cert-border">
+
+          <div class="corner c-tl">❧</div>
+          <div class="corner c-tr">❧</div>
+          <div class="corner c-bl">❧</div>
+          <div class="corner c-br">❧</div>
+
+          <!-- Header -->
+          <div class="cert-header">
+            <div class="cert-org">WishYou.ai · Est. with Love</div>
+            <div class="cert-org-divider"><span>✦ ✦ ✦</span></div>
+            <div class="cert-h1">Certificate of Excellence</div>
+            <div class="cert-rule"></div>
+            <div class="cert-h2">World's Best Maa</div>
+            <div class="cert-rule"></div>
+          </div>
+
+          <!-- Body -->
+          <div class="cert-body">
+            <div class="cert-presented">This certificate is proudly presented to</div>
+            <div class="cert-name" id="certName">Maa</div>
+            <div class="cert-name-underline"></div>
+            <div class="cert-for">in recognition of her extraordinary achievement in</div>
+            <div class="cert-title">Unconditional Love · Lifelong Sacrifice<br>Making Everything Better</div>
+            <div class="cert-description" id="certDesc">
+              For being the most irreplaceable person in the world,
+              for love that knows no bounds, and for making every day
+              feel like it was made just for us.
+            </div>
+          </div>
+
+          <!-- Evidence = Photos -->
+          <div class="evidence-label" id="evidenceLabel">Supporting Evidence</div>
+          <div class="evidence-grid" id="evidenceGrid">
+            <!-- injected -->
+          </div>
+
+          <!-- Song -->
+          <div class="cert-music" id="certMusic" style="display:none;">
+            <div class="cert-music-label">Musical Accompaniment</div>
+            <div class="music-row">
+              <div class="music-vinyl" id="certVinyl"><div class="music-vinyl-dot"></div></div>
+              <div class="music-info">
+                <div class="music-title-lbl">Selected piece</div>
+                <div class="music-name" id="musicName">Loading…</div>
+              </div>
+            </div>
+            <div class="cert-yt" id="certYt"></div>
+          </div>
+
+          <!-- Letter -->
+          <div class="cert-statement" id="certStatement" style="display:none;">
+            <div class="cert-statement-label">Statement of Merit</div>
+            <div class="statement-body" id="statementBody"></div>
+            <span class="statement-sign" id="statementSign"></span>
+          </div>
+
+          <!-- Seals & Signatures -->
+          <div class="cert-footer">
+            <div class="sig-block">
+              <div class="sig-name" id="sigName">— with love</div>
+              <div class="sig-line"></div>
+              <div class="sig-label">Presented by</div>
+            </div>
+            <div class="cert-seal">
+              <div class="seal-star">★</div>
+              <div class="seal-text">Official<br>Seal<br>WY</div>
+            </div>
+            <div class="sig-block">
+              <div class="sig-name" id="sigDate">Mother's Day</div>
+              <div class="sig-line"></div>
+              <div class="sig-label">Date of Award</div>
+            </div>
+          </div>
+
+        </div><!-- /cert-border -->
+      </div><!-- /cert-inner -->
+    </div><!-- /cert-outer -->
+
+    <!-- Page footer -->
+    <div class="cert-page-footer">
+      <div class="cert-brand">WishYou.ai · Made with Love 🌸</div>
+      <button class="cert-replay" onclick="goTo('rv-welcome')">← Back to Start</button>
+      <button class="cert-make" onclick="location.href='/'">✨ Create a card like this</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Save -->
+<div class="save-overlay" id="saveOverlay">
+  <div class="save-box">
+    <div class="sv-spin"><div class="sv-ring"></div><div class="sv-ico">WY</div></div>
+    <div class="sv-lbl" id="svLbl">Preparing your certificate…</div>
+    <div class="sv-bg"><div class="sv-bar" id="svBar"></div></div>
+  </div>
+</div>
+
+<!-- Share -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:1.8rem;margin-bottom:8px;">🏆</div>
+    <div class="sh-t">Certificate Issued! 🎉</div>
+    <div class="sh-s">Send this to her 🌸</div>
+    <div class="sh-row"><span class="sh-lnk" id="shLnk"></span>
+      <button class="sh-cp" id="shCp" onclick="copyLink()">Copy</button></div>
+    <button class="sh-wa" onclick="shareWA()">💬 Share on WhatsApp</button>
+    <button class="sh-cl" onclick="document.getElementById('shareModal').classList.remove('show')">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div>
+
+<script>
+const FIREBASE='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+const WORKER='https://wild-fog-b15e.nilesh53333.workers.dev';
+
+let curScreen='', shareLink='', letterText='', letterSign='', letterTyped=false;
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev) prev.classList.remove('active');
+  next.classList.add('active');
+  curScreen=id;
+  if(id==='rv-cert') setTimeout(()=>{document.getElementById('certScroll').scrollTop=0;setupLetterScroll();},50);
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  spawnGold();
+  const cardId=new URLSearchParams(location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  goTo('rv-loading');
+  fetch(`${FIREBASE}/${cardId}.json`).then(r=>r.json()).then(d=>{
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE}/${cardId}/views.json`,{method:'PUT',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderCard(d);
+  }).catch(()=>goTo('rv-error'));
+});
+
+function renderCard(d){
+  const name=d.name||'Maa';
+  const sender=d.sender||'someone who loves you';
+
+  // Welcome
+  document.getElementById('wlcTitle').textContent='Certificate of Excellence';
+  document.getElementById('wlcSub').textContent='Awarded to '+name+' — with love from '+sender;
+
+  // Cert name
+  document.getElementById('certName').textContent=name;
+  document.getElementById('certDesc').textContent=
+    'For being the most irreplaceable person in the world, for love that knows no bounds, and for making every day feel like it was made just for us.';
+  document.getElementById('sigName').textContent='— '+sender;
+  document.getElementById('sigDate').textContent="Mother's Day "+new Date().getFullYear();
+
+  // Photos as evidence
+  const photos=(d.photos||[]).filter(Boolean);
+  const captions=d.photoCaptions||[];
+  buildEvidence(photos,captions);
+
+  // Song
+  const hasSong=!!(d.songName&&d.songName!=='—');
+  if(hasSong){
+    document.getElementById('certMusic').style.display='block';
+    document.getElementById('musicName').textContent=d.songName;
+    const ytM=(d.spotify||'').match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if(ytM){
+      const yt=document.getElementById('certYt');
+      yt.classList.add('show');
+      yt.innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}?autoplay=0" allowfullscreen></iframe>`;
+    }
+  }
+
+  // Letter
+  if(d.msg&&d.msg.trim()){
+    letterText=d.msg;
+    letterSign=d.sign||(sender?`— ${sender} 💕`:'— with all my love 💕');
+    document.getElementById('certStatement').style.display='block';
+    document.getElementById('statementSign').textContent=letterSign;
+  }
+
+  goTo('rv-welcome');
+}
+
+const EXHIBIT_LABELS=['Exhibit A','Exhibit B','Exhibit C','Exhibit D','Exhibit E'];
+
+function buildEvidence(photos,captions){
+  const grid=document.getElementById('evidenceGrid');
+  const label=document.getElementById('evidenceLabel');
+  grid.innerHTML='';
+
+  if(!photos.length){
+    label.style.display='none';
+    return;
+  }
+
+  // Choose grid layout based on count
+  const n=photos.length;
+  if(n===1) grid.className='evidence-grid cols-1';
+  else if(n===2) grid.className='evidence-grid cols-2';
+  else grid.className='evidence-grid cols-3';
+
+  photos.forEach((url,i)=>{
+    const cap=captions[i]||'';
+    const div=document.createElement('div');
+    div.className='evidence-item';
+    div.innerHTML=`
+      <div class="exhibit-num">${EXHIBIT_LABELS[i]||'Exhibit '+(i+1)}</div>
+      <img class="evidence-img" src="${esc(url)}" loading="lazy" onerror="this.style.background='#f5edd0'">
+      <div class="evidence-caption"><div class="evidence-caption-txt">${esc(cap)||'&nbsp;'}</div></div>`;
+    grid.appendChild(div);
+  });
+}
+
+function openCert(){ goTo('rv-cert'); }
+
+function setupLetterScroll(){
+  if(letterTyped||!letterText) return;
+  const scroll=document.getElementById('certScroll');
+  const check=()=>{
+    if(letterTyped)return;
+    const el=document.getElementById('statementBody');
+    const se=document.getElementById('statementSign');
+    if(!el)return;
+    const rect=el.getBoundingClientRect();
+    const appRect=document.getElementById('mainApp').getBoundingClientRect();
+    if(rect.top < appRect.bottom - 60){
+      letterTyped=true;
+      scroll.removeEventListener('scroll',check);
+      if(se)se.style.opacity='0';
+      setTimeout(()=>typewrite(el,letterText,()=>{if(se)se.classList.add('vis');}),300);
+    }
+  };
+  scroll.addEventListener('scroll',check);
+  check(); // check immediately in case already visible
+}
+
+function spawnGold(){
+  const wrap=document.getElementById('goldParticles');
+  if(!wrap)return;
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    p.className='gp';
+    const size=2+Math.random()*4;
+    p.style.width=size+'px';p.style.height=size+'px';
+    p.style.left=Math.random()*100+'%';
+    p.style.bottom=Math.random()*40+'%';
+    p.style.animationDuration=(4+Math.random()*5)+'s';
+    p.style.animationDelay=(Math.random()*5)+'s';
+    p.style.opacity='0';
+    wrap.appendChild(p);
+  }
+}
+
+function typewrite(el,text,onDone){
+  if(!el||!text)return;el.textContent='';
+  const chars=text.split('');let i=0;
+  function next(){if(i<chars.length){el.textContent+=chars[i++];setTimeout(next,14);}else if(onDone)onDone();}
+  next();
+}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(()=>{
+    const b=document.getElementById('shCp');b.textContent='Copied ✓';
+    setTimeout(()=>b.textContent='Copy',2000);
+  });
+}
+function shareWA(){
+  const name=document.getElementById('certName')?.textContent||'Maa';
+  const msg=`🏆 *Certificate of Excellence*\n\n"World's Best ${name}"\n\nKisine tumhare liye ek official certificate issue kiya hai 🌸\n\nKholo aur dekho:\n${shareLink}`;
+  const mob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&mob)navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));
+  else window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+}
+</script>
+</body>
+</html>
