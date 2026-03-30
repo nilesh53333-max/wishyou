@@ -213,6 +213,24 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-instagram .sv-desc{color:#aaa;}
 .sv-instagram .sv-cta{color:#0095f6;}
 .sv-instagram .sv-overlay-info{background:linear-gradient(to top,rgba(0,0,0,0.95) 0%,rgba(0,0,0,0.6) 70%,transparent);}
+/* Unboxing theme */
+.sv-unboxing{background:linear-gradient(160deg,#2d1a00,#1a0a00);}
+.sv-unboxing .sv-lbl{color:rgba(245,158,11,0.45);}
+.sv-unboxing .sv-title{color:rgba(255,220,120,0.9);font-size:0.78rem;}
+.sv-unboxing .sv-sub{color:rgba(255,200,100,0.45);}
+.sv-unboxing .sv-dot{background:rgba(245,158,11,0.2);}
+.sv-unboxing .sv-dot.sv-dot-active{background:rgba(245,158,11,0.85);}
+.sv-unboxing .sv-name{color:rgba(255,220,120,0.9);}
+.sv-unboxing .sv-desc{color:rgba(255,200,100,0.45);}
+.sv-unboxing .sv-cta{color:rgba(245,158,11,0.7);}
+.sv-unboxing .sv-overlay-info{background:linear-gradient(to top,rgba(26,10,0,0.97) 0%,rgba(26,10,0,0.7) 70%,transparent);}
+.sv-gift-box{width:54px;height:54px;position:relative;margin:4px auto;}
+.sv-gift-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:48px;height:34px;background:linear-gradient(145deg,#c2410c,#9a3412);border-radius:3px 3px 5px 5px;}
+.sv-gift-lid{position:absolute;top:0;left:50%;transform:translateX(-50%);width:52px;height:14px;background:linear-gradient(145deg,#dc2626,#b91c1c);border-radius:4px 4px 2px 2px;}
+.sv-gift-ribbon-v{position:absolute;left:50%;transform:translateX(-50%);width:10px;height:100%;background:rgba(245,158,11,0.7);z-index:1;}
+.sv-gift-bow{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:1.1rem;z-index:2;}
+.sv-gift-open{font-size:2.6rem;animation:giftBounce 1.2s ease-in-out infinite;}
+@keyframes giftBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
 .sv-ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;width:100%;}
 .sv-ig-cell{aspect-ratio:1;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
 .sv-ig-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 8px;}
@@ -226,8 +244,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-newspaper .sv-name{color:#1a1a1a;}
 .sv-newspaper .sv-desc{color:#555;}
 .sv-newspaper .sv-cta{color:#cc0000;}
-.sv-newspaper .sv-overlay-info{background:linear-gradient(to top,rgba(245,240,232,0.97) 0%,rgba(245,240,232,0.7) 70%,transparent);}
-.sv-news-rule{width:100%;height:2px;background:#1a1a1a;margin:4px 0;}
+.sv-newspaper .sv-overlay-info{background:linear-gradient(to top,rgba(245,240,232,0.97) 0%,rgba(245,240,232,0.7) 70%,transparent);}.sv-news-rule{width:100%;height:2px;background:#1a1a1a;margin:4px 0;}
 /* Constellation theme */
 .sv-constellation{background:#020818;position:relative;overflow:hidden;}
 .sv-constellation .sv-lbl{color:rgba(200,210,255,0.35);}
@@ -501,6 +518,16 @@ const BIRTHDAY_STYLES = [
     defaultMemoriesHeading:'Posts',
     receiverUrl: id => `https://wishyou.ai/birthday/instagram.html?card=${id}`,
     shareMsg: (n,s,l) => `📱 *Arre dekho dekho!*\n\n${n?'*'+n+'* ka birthday profile ban gaya hai 🎂\n\n':'Birthday special profile!\n\n'}${s?s+' ne banaya hai — ':''} Tap karo aur dekho:\n\n👆 Open:\n${l}`
+  },
+  {
+    id:'unboxing', name:'🎁 Unboxing',
+    desc:'Most fun · Tap to unbox · Photos pulled out one by one · TikTok energy',
+    previewEmoji:'🎁',
+    cardType:'birthday-unboxing',
+    defaultSongTitle:'Unwrap this song 🎵',
+    defaultMemoriesHeading:'Inside the box',
+    receiverUrl: id => `https://wishyou.ai/birthday/unboxing.html?card=${id}`,
+    shareMsg: (n,s,l) => `🎁 *Tera gift aa gaya!*\n\n${n?'*'+n+'* ke liye ek special unboxing 🎀\n\n':'Birthday unboxing special!\n\n'}${s?s+' ne pack kiya hai — ':''}Tap karke kholo:\n\n👆 Open:\n${l}`
   }
 ];
 
@@ -619,6 +646,15 @@ function buildStylesList() {
         `<div class="sv-lbl">Still Typing...</div><div class="sv-bubbles"><div class="sv-typing"><div class="sv-typing-dot"></div><div class="sv-typing-dot"></div><div class="sv-typing-dot"></div></div></div><div class="sv-sub" style="margin-top:8px;">Building suspense...</div>`,
         `<div class="sv-lbl">Song Drops</div><span class="sv-emoji">🎵</span><div class="sv-sub">Your song plays in the chat</div>`,
         `<div class="sv-lbl">The Reveal</div><div class="sv-reveal">💝 Open the surprise!</div><div class="sv-sub" style="margin-top:6px;">The full letter appears</div>`
+      ]
+    },
+    unboxing: {
+      theme:'sv-unboxing',
+      slides:[
+        `<div class="sv-gift-box"><div class="sv-gift-body"><div class="sv-gift-ribbon-v"></div></div><div class="sv-gift-lid"><div class="sv-gift-ribbon-v"></div></div><div class="sv-gift-bow">🎀</div></div><div class="sv-lbl" style="margin-top:8px;">Tap to Unbox</div><div class="sv-title">Your gift is packed & ready</div>`,
+        `<div class="sv-gift-open">📸</div><div class="sv-lbl">Photos Inside</div><div class="sv-sub">Pulled out one by one with a snap</div>`,
+        `<div class="sv-gift-open">🎵</div><div class="sv-lbl">Song Inside</div><div class="sv-sub">A vinyl record spins out of the box</div>`,
+        `<div class="sv-gift-open">💌</div><div class="sv-lbl">Letter Inside</div><div class="sv-sub">Typewritten letter at the very bottom</div>`
       ]
     }
   };
