@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — A Rose For You 🌹</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>">
+<meta property="og:title" content="Someone left a rose for you 🌹">
+<meta property="og:description" content="Tap to open it.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:#000;}
+.app{position:fixed;inset:0;overflow:hidden;background:#0a0004;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.95);}
+}
+
+/* ── SCREENS ── */
+.screen{position:absolute;top:0;left:0;right:0;bottom:0;
+  opacity:0;pointer-events:none;transition:opacity 0.8s ease;visibility:hidden;}
+.screen.active{opacity:1;pointer-events:all;visibility:visible;}
+
+/* ══════════════════════
+   LOADING
+══════════════════════ */
+#rv-loading{background:#0a0004;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;}
+.ld-rose{font-size:3rem;animation:ldPulse 1.4s ease-in-out infinite;}
+@keyframes ldPulse{0%,100%{transform:scale(1);opacity:0.6;}50%{transform:scale(1.15);opacity:1;}}
+.ld-txt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(200,80,80,0.4);}
+
+/* ══════════════════════
+   ERROR
+══════════════════════ */
+#rv-error{background:#0a0004;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:40px;}
+.err-t{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(200,100,100,0.5);line-height:1.7;}
+
+/* ══════════════════════
+   WELCOME — dark, bud
+══════════════════════ */
+#rv-welcome{
+  background:radial-gradient(ellipse at 50% 60%,#1a0008 0%,#0a0004 60%,#000 100%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+.welcome-particles{position:absolute;inset:0;pointer-events:none;}
+.wp{position:absolute;width:2px;height:2px;border-radius:50%;background:#c00030;
+  animation:wpFloat linear infinite;opacity:0;}
+@keyframes wpFloat{0%{opacity:0;transform:translateY(0);}20%{opacity:0.4;}80%{opacity:0.1;}100%{opacity:0;transform:translateY(-100vh);}}
+
+.wlc-inner{text-align:center;position:relative;z-index:2;}
+.wlc-tag{font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(200,80,80,0.35);margin-bottom:32px;display:block;}
+.wlc-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,6vw,2.2rem);
+  font-weight:300;color:rgba(255,200,200,0.85);line-height:1.3;margin-bottom:8px;}
+.wlc-sub{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.92rem;color:rgba(200,80,80,0.45);margin-bottom:48px;}
+
+/* The rosebud — pure CSS */
+.rosebud-wrap{position:relative;width:120px;height:120px;margin:0 auto 40px;cursor:pointer;touch-action:manipulation;}
+.rosebud-wrap:active{transform:scale(0.96);}
+
+/* Stem */
+.stem{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);
+  width:3px;height:40px;background:linear-gradient(to bottom,#1a5c1a,#0d3d0d);border-radius:2px;}
+.stem-leaf{position:absolute;width:18px;height:10px;background:#1a5c1a;
+  border-radius:50% 0 50% 0;top:8px;}
+.stem-leaf.left{left:-16px;transform:rotate(-20deg);}
+.stem-leaf.right{right:-16px;transform:rotate(20deg) scaleX(-1);}
+
+/* Bud petals — 5 layers */
+.bud{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.bud-petal{position:absolute;border-radius:50% 50% 40% 40%;transform-origin:bottom center;
+  transition:transform 1.2s cubic-bezier(0.34,1.2,0.64,1),opacity 0.8s ease;}
+
+/* Outer petals — closed state */
+.bp1{width:50px;height:65px;background:radial-gradient(ellipse at 40% 30%,#c8003a,#8b0020);
+  transform:translateX(-50%) translateY(10px) rotate(-25deg) scaleY(0.7);
+  left:50%;top:10px;z-index:3;}
+.bp2{width:50px;height:65px;background:radial-gradient(ellipse at 60% 30%,#c8003a,#8b0020);
+  transform:translateX(-50%) translateY(10px) rotate(25deg) scaleY(0.7);
+  left:50%;top:10px;z-index:3;}
+.bp3{width:44px;height:60px;background:radial-gradient(ellipse at 50% 25%,#a00028,#6b0018);
+  transform:translateX(-50%) translateY(8px) scaleY(0.65);
+  left:50%;top:14px;z-index:2;}
+/* Inner petal cluster */
+.bp4{width:34px;height:50px;background:radial-gradient(ellipse at 50% 30%,#800020,#500010);
+  transform:translateX(-50%) translateY(6px) scaleY(0.6);
+  left:50%;top:20px;z-index:1;}
+.bp5{width:24px;height:38px;background:radial-gradient(ellipse at 50% 35%,#600018,#300008);
+  transform:translateX(-50%) translateY(4px) scaleY(0.55);
+  left:50%;top:28px;z-index:0;}
+
+/* Tap hint pulse ring */
+.tap-ring{position:absolute;inset:-12px;border-radius:50%;border:1.5px solid rgba(200,0,60,0.25);
+  animation:ringPulse 2s ease-in-out infinite;}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.08);opacity:0.15;}}
+.tap-hint{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.82rem;
+  color:rgba(200,80,80,0.4);margin-top:16px;}
+
+/* ══════════════════════
+   BLOOM SCREEN
+   The rose opens here
+══════════════════════ */
+#rv-bloom{
+  background:radial-gradient(ellipse at 50% 45%,#1a0008 0%,#0a0004 55%,#000 100%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+
+/* The full bloom rose */
+.rose-stage{position:relative;width:280px;height:280px;margin:0 auto;flex-shrink:0;}
+
+/* Each petal is a photo frame */
+.rose-petal{
+  position:absolute;
+  border-radius:50% 50% 40% 40%;
+  transform-origin:bottom center;
+  overflow:hidden;
+  cursor:pointer;
+  transition:filter 0.3s ease;
+  box-shadow:inset 0 0 20px rgba(0,0,0,0.4),0 4px 20px rgba(0,0,0,0.5);
+}
+.rose-petal:active{filter:brightness(1.2);}
+.rose-petal img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center 20%;
+  display:block;opacity:0;transition:opacity 0.6s ease;
+}
+.rose-petal img.loaded{opacity:0.75;}
+/* petal tint overlay — keeps rose look even with photos */
+.rose-petal::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 40% 30%,rgba(180,0,40,0.45),rgba(80,0,20,0.65));
+  pointer-events:none;z-index:1;
+  transition:opacity 0.4s ease;
+}
+.rose-petal:hover::after,.rose-petal.open::after{opacity:0.25;}
+
+/* Caption on petal */
+.petal-cap{
+  position:absolute;bottom:8px;left:0;right:0;z-index:2;
+  text-align:center;padding:0 8px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.65rem;color:rgba(255,200,200,0.85);
+  line-height:1.3;opacity:0;transition:opacity 0.5s ease 0.3s;
+  text-shadow:0 1px 4px rgba(0,0,0,0.8);
+}
+.rose-petal.bloomed .petal-cap{opacity:1;}
+
+/* Petal positions — 5 petals arranged like a rose */
+/* Closed state: all folded up at center */
+.rp0{width:90px;height:110px;top:85px;left:95px;
+  transform:rotate(-36deg) translateY(55px) scaleY(0.3);opacity:0;z-index:5;}
+.rp1{width:90px;height:110px;top:50px;left:128px;
+  transform:rotate(0deg) translateY(55px) scaleY(0.3);opacity:0;z-index:4;}
+.rp2{width:90px;height:110px;top:85px;left:161px;
+  transform:rotate(36deg) translateY(55px) scaleY(0.3);opacity:0;z-index:3;}
+.rp3{width:90px;height:110px;top:140px;left:148px;
+  transform:rotate(108deg) translateY(55px) scaleY(0.3);opacity:0;z-index:2;}
+.rp4{width:90px;height:110px;top:140px;left:42px;
+  transform:rotate(-108deg) translateY(55px) scaleY(0.3);opacity:0;z-index:1;}
+
+/* Bloomed state */
+.rp0.bloomed{transform:rotate(-36deg) translateY(0px) scaleY(1);opacity:1;}
+.rp1.bloomed{transform:rotate(0deg) translateY(0px) scaleY(1);opacity:1;}
+.rp2.bloomed{transform:rotate(36deg) translateY(0px) scaleY(1);opacity:1;}
+.rp3.bloomed{transform:rotate(108deg) translateY(0px) scaleY(1);opacity:1;}
+.rp4.bloomed{transform:rotate(-108deg) translateY(0px) scaleY(1);opacity:1;}
+
+/* Transition delays per petal */
+.rp0{transition:transform 1s cubic-bezier(0.34,1.1,0.64,1) 0.1s,opacity 0.6s ease 0.1s;}
+.rp1{transition:transform 1s cubic-bezier(0.34,1.1,0.64,1) 0.35s,opacity 0.6s ease 0.35s;}
+.rp2{transition:transform 1s cubic-bezier(0.34,1.1,0.64,1) 0.6s,opacity 0.6s ease 0.6s;}
+.rp3{transition:transform 1s cubic-bezier(0.34,1.1,0.64,1) 0.85s,opacity 0.6s ease 0.85s;}
+.rp4{transition:transform 1s cubic-bezier(0.34,1.1,0.64,1) 1.1s,opacity 0.6s ease 1.1s;}
+
+/* Rose center — the song button */
+.rose-center{
+  position:absolute;width:70px;height:70px;border-radius:50%;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 40% 35%,#ff4060,#c00030 50%,#7a0020);
+  z-index:10;cursor:pointer;touch-action:manipulation;
+  box-shadow:0 0 0 4px rgba(200,0,60,0.2),0 0 30px rgba(200,0,60,0.3);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  opacity:0;transition:opacity 0.8s ease 1.8s,box-shadow 0.3s ease;
+}
+.rose-center.show{opacity:1;}
+.rose-center:active{box-shadow:0 0 0 4px rgba(200,0,60,0.4),0 0 40px rgba(200,0,60,0.5);}
+.center-note{font-size:0.55rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,200,200,0.8);margin-top:2px;}
+.center-spin{
+  width:32px;height:32px;border-radius:50%;
+  background:radial-gradient(circle,#ff8090 0%,#ff8090 20%,#300010 21%,#300010 28%,
+    #500018 29%,#500018 36%,#300010 37%,#300010 44%,#500018 45%,#500018 52%,#300010 53%,#300010 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.center-spin.spinning{animation:cSpin 3s linear infinite;}
+@keyframes cSpin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+.center-dot{width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ff4060,#c00030);}
+
+/* bloom subtext */
+.bloom-sub{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.82rem;color:rgba(200,80,80,0.4);margin-top:20px;text-align:center;
+  opacity:0;transition:opacity 0.8s ease 2s;}
+.bloom-sub.show{opacity:1;}
+
+/* song name below rose */
+.bloom-song{font-family:'Cormorant Garamond',serif;font-size:0.9rem;
+  color:rgba(255,180,180,0.6);text-align:center;margin-top:8px;
+  opacity:0;transition:opacity 0.6s ease;max-width:240px;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;}
+.bloom-song.show{opacity:1;}
+
+/* YT embed */
+.bloom-yt{width:100%;max-width:280px;border-radius:8px;overflow:hidden;
+  margin-top:10px;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.5);}
+.bloom-yt iframe{width:100%;height:130px;border:none;display:block;}
+.bloom-yt.show{display:block;}
+
+/* ══════════════════════
+   LETTER SCREEN
+   Petals falling, letter reveals
+══════════════════════ */
+#rv-letter{
+  background:linear-gradient(160deg,#0a0004,#120008,#0a0004);
+  display:flex;flex-direction:column;overflow:hidden;position:relative;
+}
+
+/* Falling petals canvas */
+#petalCanvas{position:absolute;inset:0;pointer-events:none;z-index:0;}
+
+.letter-scroll{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  z-index:1;padding:max(48px,env(safe-area-inset-top)) 0 0;
+}
+.letter-scroll::-webkit-scrollbar{display:none;}
+
+.letter-paper{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(200,0,60,0.1);
+  border-top:2px solid rgba(200,0,60,0.4);
+  border-radius:2px;margin:0 20px 24px;
+  padding:24px 22px 28px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+  position:relative;
+}
+.letter-paper::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 31px,rgba(200,0,60,0.04) 31px,rgba(200,0,60,0.04) 32px);
+  pointer-events:none;}
+
+.letter-from{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.75rem;color:rgba(200,0,60,0.4);margin-bottom:18px;letter-spacing:0.06em;}
+.letter-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;
+  font-size:1.05rem;color:rgba(255,210,210,0.9);line-height:2.1;white-space:pre-wrap;
+  position:relative;z-index:1;}
+.letter-sign{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.1rem;color:rgba(200,0,60,0.8);margin-top:20px;display:block;
+  opacity:0;transition:opacity 1s ease;position:relative;z-index:1;}
+.letter-sign.vis{opacity:1;}
+
+.letter-footer{padding:16px 20px max(28px,env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;gap:8px;position:relative;z-index:1;}
+.letter-replay{background:linear-gradient(135deg,#c00030,#800020);color:rgba(255,200,200,0.9);
+  border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;
+  font-size:0.88rem;font-weight:500;cursor:pointer;touch-action:manipulation;
+  box-shadow:0 6px 20px rgba(192,0,48,0.4);}
+.letter-make{background:none;border:1px solid rgba(200,0,60,0.2);color:rgba(200,0,60,0.4);
+  border-radius:50px;padding:12px;font-family:'DM Sans',sans-serif;
+  font-size:0.78rem;cursor:pointer;}
+
+/* ══════════════════════
+   SHARE MODAL
+══════════════════════ */
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(14px);
+  z-index:600;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{background:#1a0008;border:1px solid rgba(200,0,60,0.2);border-radius:16px;
+  padding:26px 22px;width:100%;max-width:360px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);}
+.sh-t{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:rgba(255,200,200,0.9);margin-bottom:4px;}
+.sh-s{font-size:0.78rem;color:rgba(200,80,80,0.4);margin-bottom:14px;}
+.sh-row{background:rgba(200,0,60,0.06);border:1px solid rgba(200,0,60,0.15);
+  border-radius:8px;padding:9px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sh-lnk{font-size:0.67rem;color:rgba(200,80,80,0.4);flex:1;text-align:left;word-break:break-all;}
+.sh-cp{padding:6px 12px;border:none;border-radius:6px;font-size:0.7rem;font-weight:700;
+  cursor:pointer;background:#c00030;color:rgba(255,200,200,0.9);white-space:nowrap;}
+.sh-wa{width:100%;padding:12px;border:none;border-radius:50px;
+  background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;
+  cursor:pointer;margin-bottom:8px;touch-action:manipulation;}
+.sh-cl{width:100%;padding:10px;background:none;border:1px solid rgba(200,0,60,0.15);
+  border-radius:50px;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.88rem;color:rgba(200,0,60,0.4);cursor:pointer;}
+
+.wm{position:absolute;bottom:5px;right:8px;font-size:0.44rem;
+  color:rgba(200,0,60,0.1);pointer-events:none;z-index:1;}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- Loading -->
+<div class="screen active" id="rv-loading">
+  <div class="ld-rose">🌹</div>
+  <div class="ld-txt">Someone left something for you…</div>
+</div>
+
+<!-- Error -->
+<div class="screen" id="rv-error">
+  <div style="font-size:2.5rem;margin-bottom:14px;">🌹</div>
+  <div class="err-t">This rose has wilted<br>or the link is broken.</div>
+  <button onclick="location.href='/'" style="margin-top:20px;background:#c00030;color:rgba(255,200,200,0.9);border:none;border-radius:50px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;">Back to Home</button>
+</div>
+
+<!-- Welcome -->
+<div class="screen" id="rv-welcome">
+  <div class="welcome-particles" id="welcomeParticles"></div>
+  <div class="wlc-inner">
+    <span class="wlc-tag">WishYou.ai · Valentine's Day</span>
+    <div class="wlc-title" id="wlcTitle">Someone left<br>something for you</div>
+    <div class="wlc-sub" id="wlcSub">Tap the rose to open it</div>
+    <div class="rosebud-wrap" onclick="startBloom()" id="rosebud">
+      <div class="tap-ring"></div>
+      <div class="bud">
+        <div class="bp5"></div>
+        <div class="bp4"></div>
+        <div class="bp3"></div>
+        <div class="bp1"></div>
+        <div class="bp2"></div>
+      </div>
+      <div class="stem">
+        <div class="stem-leaf left"></div>
+        <div class="stem-leaf right"></div>
+      </div>
+    </div>
+    <div class="tap-hint">tap to open 🌹</div>
+  </div>
+</div>
+
+<!-- Bloom -->
+<div class="screen" id="rv-bloom">
+  <div class="rose-stage" id="roseStage">
+    <!-- petals injected by JS -->
+    <div class="rose-center" id="roseCenter" onclick="toggleSong()">
+      <div class="center-spin" id="centerSpin">
+        <div class="center-dot"></div>
+      </div>
+      <div class="center-note">tap ♪</div>
+    </div>
+  </div>
+  <div class="bloom-sub" id="bloomSub">tap a petal to see the memory · tap center to play your song</div>
+  <div class="bloom-song" id="bloomSong"></div>
+  <div class="bloom-yt" id="bloomYt"></div>
+  <div style="padding:16px 20px max(20px,env(safe-area-inset-bottom));width:100%;display:flex;flex-direction:column;gap:8px;margin-top:auto;">
+    <button onclick="openLetter()" style="background:linear-gradient(135deg,#c00030,#800020);color:rgba(255,200,200,0.9);border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;cursor:pointer;box-shadow:0 6px 20px rgba(192,0,48,0.4);touch-action:manipulation;opacity:0;transition:opacity 0.8s ease 2.2s;" id="letterBtn">Read the Letter 💌</button>
+    <button onclick="goTo('rv-welcome')" style="background:none;border:1px solid rgba(200,0,60,0.2);color:rgba(200,0,60,0.4);border-radius:50px;padding:11px;font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;">← Back</button>
+  </div>
+</div>
+
+<!-- Letter -->
+<div class="screen" id="rv-letter">
+  <canvas id="petalCanvas"></canvas>
+  <div class="letter-scroll" id="letterScroll">
+    <div class="letter-paper">
+      <div class="letter-from" id="letterFrom">A letter for you 🌹</div>
+      <div class="letter-body" id="letterBody"></div>
+      <span class="letter-sign" id="letterSign"></span>
+    </div>
+    <div class="letter-footer">
+      <button class="letter-replay" onclick="goTo('rv-bloom')">← Back to the Rose</button>
+      <button class="letter-make" onclick="location.href='/'">✨ Create a card like this</button>
+    </div>
+  </div>
+</div>
+
+<!-- Share -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:1.8rem;margin-bottom:8px;">🌹</div>
+    <div class="sh-t">Your rose is ready 💋</div>
+    <div class="sh-s">Send this link to them</div>
+    <div class="sh-row"><span class="sh-lnk" id="shLnk"></span>
+      <button class="sh-cp" id="shCp" onclick="copyLink()">Copy</button></div>
+    <button class="sh-wa" onclick="shareWA()">💬 Share on WhatsApp</button>
+    <button class="sh-cl" onclick="document.getElementById('shareModal').classList.remove('show')">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div>
+
+<script>
+const FIREBASE='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+let curScreen='', shareLink='';
+let letterText='', letterSign='', letterTyped=false;
+let songName='', ytId='', songPlaying=false;
+let cardPhotos=[], cardCaptions=[];
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev) prev.classList.remove('active');
+  next.classList.add('active');
+  curScreen=id;
+  if(id==='rv-letter') startLetterScene();
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',()=>{
+  spawnParticles();
+  const cardId=new URLSearchParams(location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  goTo('rv-loading');
+  fetch(`${FIREBASE}/${cardId}.json`).then(r=>r.json()).then(d=>{
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE}/${cardId}/views.json`,{method:'PUT',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderCard(d);
+  }).catch(()=>goTo('rv-error'));
+});
+
+function renderCard(d){
+  const name=d.name||'';
+  const sender=d.sender||'';
+  cardPhotos=(d.photos||[]).filter(Boolean);
+  cardCaptions=d.photoCaptions||[];
+  songName=d.songName&&d.songName!=='—'?d.songName:'';
+  const sp=d.spotify||'';
+  const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  ytId=ytM?ytM[1]:'';
+  letterText=d.msg||'';
+  letterSign=d.sign||(sender?`Forever yours, ${sender} ❤️`:'Forever yours ❤️');
+
+  // Welcome
+  document.getElementById('wlcTitle').textContent=
+    name?`Someone left\na rose for you`:'Someone left\na rose for you';
+  document.getElementById('wlcSub').textContent=
+    sender?`From ${sender}, with love`:'Tap the rose to open it';
+
+  // Letter from line
+  document.getElementById('letterFrom').textContent=
+    sender&&name?`For ${name}, from ${sender} 🌹`:
+    name?`For ${name} 🌹`:
+    sender?`From ${sender} 🌹`:'A letter for you 🌹';
+
+  goTo('rv-welcome');
+}
+
+// ── BLOOM ──
+function startBloom(){
+  goTo('rv-bloom');
+  buildRose();
+  // trigger bloom after transition
+  setTimeout(()=>{
+    const petals=document.querySelectorAll('.rose-petal');
+    petals.forEach(p=>p.classList.add('bloomed'));
+    setTimeout(()=>{
+      document.getElementById('roseCenter').classList.add('show');
+      document.getElementById('bloomSub').classList.add('show');
+      const btn=document.getElementById('letterBtn');
+      if(btn)btn.style.opacity='1';
+      // show song name
+      if(songName){
+        const sEl=document.getElementById('bloomSong');
+        sEl.textContent='♪ '+songName;
+        sEl.classList.add('show');
+      }
+    },1400);
+  },100);
+}
+
+function buildRose(){
+  const stage=document.getElementById('roseStage');
+  // Remove existing petals
+  stage.querySelectorAll('.rose-petal').forEach(p=>p.remove());
+
+  const PETAL_POS=[
+    {cls:'rp0',rot:-36},{cls:'rp1',rot:0},{cls:'rp2',rot:36},
+    {cls:'rp3',rot:108},{cls:'rp4',rot:-108}
+  ];
+  const COLORS=[
+    'radial-gradient(ellipse at 40% 30%,#c8003a,#8b0020)',
+    'radial-gradient(ellipse at 60% 30%,#c00030,#7a0018)',
+    'radial-gradient(ellipse at 45% 25%,#d40040,#960025)',
+    'radial-gradient(ellipse at 55% 35%,#b00028,#6e0016)',
+    'radial-gradient(ellipse at 50% 28%,#c80035,#88001e)',
+  ];
+
+  PETAL_POS.forEach((pos,i)=>{
+    const petal=document.createElement('div');
+    petal.className=`rose-petal ${pos.cls}`;
+    petal.style.background=COLORS[i];
+
+    // Photo inside petal
+    if(cardPhotos[i]){
+      const img=document.createElement('img');
+      img.src=cardPhotos[i];
+      img.onload=()=>img.classList.add('loaded');
+      img.onerror=()=>{};
+      petal.appendChild(img);
+    }
+
+    // Caption
+    const cap=document.createElement('div');
+    cap.className='petal-cap';
+    cap.textContent=cardCaptions[i]||'';
+    petal.appendChild(cap);
+
+    // Tap to see full photo
+    petal.addEventListener('click',()=>openPetalPhoto(i));
+
+    // Insert before center
+    stage.insertBefore(petal,document.getElementById('roseCenter'));
+  });
+}
+
+// Full photo view on petal tap
+function openPetalPhoto(i){
+  if(!cardPhotos[i])return;
+  const ov=document.createElement('div');
+  ov.style.cssText='position:absolute;inset:0;background:rgba(0,0,0,0.92);z-index:50;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;';
+  ov.innerHTML=`
+    <img src="${esc(cardPhotos[i])}" style="max-width:100%;max-height:75%;object-fit:contain;border-radius:4px;box-shadow:0 8px 40px rgba(200,0,60,0.2);">
+    <div style="font-family:Cormorant Garamond,serif;font-style:italic;font-size:1rem;color:rgba(255,180,180,0.7);margin-top:16px;text-align:center;">${esc(cardCaptions[i]||'')}</div>
+    <div style="font-size:0.6rem;color:rgba(200,80,80,0.3);margin-top:14px;letter-spacing:0.1em;text-transform:uppercase;">tap to close</div>`;
+  ov.onclick=()=>ov.remove();
+  document.getElementById('mainApp').appendChild(ov);
+}
+
+// ── SONG ──
+function toggleSong(){
+  songPlaying=!songPlaying;
+  const spin=document.getElementById('centerSpin');
+  if(songPlaying){
+    spin.classList.add('spinning');
+    if(ytId){
+      const yt=document.getElementById('bloomYt');
+      yt.innerHTML=`<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
+      yt.classList.add('show');
+    }
+  } else {
+    spin.classList.remove('spinning');
+    const yt=document.getElementById('bloomYt');
+    yt.classList.remove('show');
+    setTimeout(()=>{yt.innerHTML='';},400);
+  }
+}
+
+// ── LETTER ──
+function openLetter(){
+  goTo('rv-letter');
+}
+
+function startLetterScene(){
+  // Start falling petals
+  startFallingPetals();
+  // Typewrite letter
+  if(letterTyped) return;
+  setTimeout(()=>{
+    const el=document.getElementById('letterBody');
+    const se=document.getElementById('letterSign');
+    if(!el||!letterText)return;
+    if(se)se.style.opacity='0';
+    typewrite(el,letterText,()=>{
+      letterTyped=true;
+      if(se)se.classList.add('vis');
+    });
+  },600);
+}
+
+// ── FALLING PETALS CANVAS ──
+function startFallingPetals(){
+  const canvas=document.getElementById('petalCanvas');
+  const app=document.getElementById('mainApp');
+  canvas.width=app.offsetWidth||430;
+  canvas.height=app.offsetHeight||900;
+  const ctx=canvas.getContext('2d');
+  const petals=[];
+  for(let i=0;i<22;i++){
+    petals.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*-canvas.height,
+      size:6+Math.random()*12,
+      speed:0.6+Math.random()*1.2,
+      drift:0.3+Math.random()*0.8,
+      rot:Math.random()*Math.PI*2,
+      rotSpeed:(Math.random()-0.5)*0.04,
+      alpha:0.3+Math.random()*0.4,
+      hue:340+Math.random()*30,
+    });
+  }
+  let raf;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    petals.forEach(p=>{
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha=p.alpha;
+      // Draw petal shape
+      ctx.beginPath();
+      ctx.ellipse(0,0,p.size/2,p.size,0,0,Math.PI*2);
+      ctx.fillStyle=`hsl(${p.hue},80%,45%)`;
+      ctx.fill();
+      ctx.restore();
+      p.y+=p.speed;
+      p.x+=Math.sin(p.y*0.02)*p.drift;
+      p.rot+=p.rotSpeed;
+      if(p.y>canvas.height+20){
+        p.y=-20;p.x=Math.random()*canvas.width;
+      }
+    });
+    if(curScreen==='rv-letter'){raf=requestAnimationFrame(draw);}
+    else{cancelAnimationFrame(raf);}
+  }
+  draw();
+}
+
+// ── PARTICLES ──
+function spawnParticles(){
+  const wrap=document.getElementById('welcomeParticles');
+  for(let i=0;i<16;i++){
+    const p=document.createElement('div');
+    p.className='wp';
+    p.style.left=Math.random()*100+'%';
+    p.style.bottom=Math.random()*50+'%';
+    p.style.animationDuration=(3+Math.random()*4)+'s';
+    p.style.animationDelay=(Math.random()*4)+'s';
+    p.style.width=p.style.height=(1+Math.random()*2)+'px';
+    wrap.appendChild(p);
+  }
+}
+
+// ── HELPERS ──
+function typewrite(el,text,onDone){
+  el.textContent='';
+  const chars=text.split('');let i=0;
+  function next(){if(i<chars.length){el.textContent+=chars[i++];setTimeout(next,14);}
+    else if(onDone)onDone();}
+  next();
+}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(()=>{
+    const b=document.getElementById('shCp');b.textContent='Copied ✓';
+    setTimeout(()=>b.textContent='Copy',2000);
+  });
+}
+function shareWA(){
+  const msg=`🌹 *Happy Valentine's Day!*\n\nKisine tumhare liye ek special rose banaya hai 💋\n\nKholo:\n${shareLink}`;
+  const mob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&mob)navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));
+  else window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+}
+</script>
+</body>
+</html>
