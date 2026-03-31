@@ -1,1124 +1,685 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Valentine's Day Card — WishYou.ai</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💋</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>WishYou.ai — Happy Valentine's Day</title>
+<link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=&#39;http://www.w3.org/2000/svg&#39; viewBox=&#39;0 0 100 100&#39;&gt;&lt;text y=&#39;.9em&#39; font-size=&#39;90&#39;&gt;%F0%9F%92%9D&lt;/text&gt;&lt;/svg&gt;">
+<meta property="og:title" content="Someone made you a Valentine's Day card">
+<meta property="og:description" content="Someone made you a special interactive card with photos, music &amp; a heartfelt letter.">
+<meta property="og:image" content="https://wishyou.ai/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
 <style>
+/* ── BASE ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
-.app{position:fixed;inset:0;overflow:hidden;}
+html,body{margin:0;padding:0;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:#0a0004;}
+.app{position:fixed;top:0;left:0;right:0;bottom:0;overflow:hidden;background:#111;}
+@media(min-width:500px){
+  .app{
+    top:50%;left:50%;right:auto;bottom:auto;
+    transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;
+    border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.8);
+  }
+}
 
-/* Ambient glows */
-.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;}
-.bg-glow::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(20,160,140,0.09) 0%,transparent 65%);}
-.bg-glow::after{content:'';position:absolute;bottom:-10%;right:-5%;width:500px;height:400px;background:radial-gradient(ellipse,rgba(240,192,64,0.06) 0%,transparent 65%);}
-
-/* Screen system */
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);transform:translateX(60px);z-index:1;}
+/* ── SCREEN SYSTEM ── */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);transform:translateX(60px);overflow:hidden;}
 .screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
 .screen.slide-out{opacity:0;transform:translateX(-60px);}
 
-/* Step dots */
-.step-dots{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:center;gap:6px;padding-top:12px;}
-.step-dot{width:6px;height:6px;border-radius:50%;background:rgba(160,220,210,0.15);transition:all 0.4s ease;}
-.step-dot.active{width:20px;border-radius:3px;background:rgba(20,160,140,0.7);}
-.step-dot.done{background:rgba(20,160,140,0.35);}
+/* ── CREATOR SCREENS ── */
+.creator-screen{padding:0;align-items:stretch;justify-content:flex-start;}
+.theme-intimate{background:linear-gradient(160deg,#120008,#1e000e,#fdf0f5);}
 
-/* Nav */
-.top-nav{position:absolute;top:0;left:0;right:0;z-index:10;padding:28px 22px 0;display:flex;align-items:center;justify-content:space-between;}
-.back-btn{width:34px;height:34px;border-radius:50%;background:rgba(160,220,210,0.05);border:1px solid rgba(160,220,210,0.1);display:flex;align-items:center;justify-content:center;color:rgba(160,220,210,0.45);font-size:0.95rem;cursor:pointer;touch-action:manipulation;}
-.back-btn:active{background:rgba(160,220,210,0.1);}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:0.82rem;font-weight:400;letter-spacing:0.16em;text-transform:uppercase;color:rgba(160,220,210,0.3);}
-.step-pill{font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,192,64,0.4);border:1px solid rgba(240,192,64,0.14);border-radius:50px;padding:4px 11px;}
+.step-wrap{flex:1;display:flex;flex-direction:column;padding:56px 22px 0;overflow:hidden;min-height:0;}
+.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;min-height:0;}
+.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom) + 16px);}
 
-/* Relation chips */
-.relation-wrap{margin-bottom:20px;}
-.relation-lbl{font-size:0.56rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,192,64,0.45);margin-bottom:10px;}
+.step-progress{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,0.15);}
+.step-progress-fill{height:100%;transition:width 0.5s ease;}
+.intimate-progress{background:linear-gradient(90deg,#800015,#b00020);}
 
+.step-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;touch-action:manipulation;transition:background 0.2s;z-index:5;}
+.step-back.dark{background:rgba(0,0,0,0.1);color:#333;}
+.step-back.dark:active{background:rgba(0,0,0,0.18);}
 
-/* Step wrap */
-.step-wrap{flex:1;display:flex;flex-direction:column;padding:76px 22px 0;overflow:hidden;min-height:0;}
-.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:10px;min-height:0;}
-.step-content::-webkit-scrollbar{display:none;}
-.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom) + 18px);}
+.step-counter{font-size:0.62rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;opacity:0.5;}
+.step-counter.dark{color:#333;}
+.step-emoji{font-size:2.2rem;margin-bottom:10px;display:block;animation:softFloat 2.5s ease-in-out infinite;}
+@keyframes softFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,5vw,1.9rem);font-weight:700;line-height:1.2;margin-bottom:6px;word-break:break-word;}
+.step-sub{font-size:0.82rem;line-height:1.6;margin-bottom:20px;opacity:0.6;}
 
-/* Eyebrow */
-.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.eyebrow-line{width:18px;height:1px;background:rgba(240,192,64,0.3);}
-.eyebrow-txt{font-size:0.56rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,192,64,0.4);}
+/* INPUTS */
+.field-label{display:block;font-size:0.68rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;opacity:0.5;}
+.big-input{width:100%;border:none;border-bottom:2px solid rgba(233,30,99,0.25);background:transparent;padding:10px 0;font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:600;outline:none;transition:border-color 0.3s;text-align:center;}
+.big-input::placeholder{opacity:0.25;font-style:italic;}
+.big-input:focus{border-color:rgba(233,30,99,0.6);}
+.regular-input{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:14px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:rgba(255,255,255,0.7);outline:none;transition:border-color 0.3s;margin-bottom:12px;backdrop-filter:blur(10px);}
+.regular-input::placeholder{opacity:0.35;font-style:italic;}
+.regular-input:focus{border-color:rgba(233,30,99,0.4);background:rgba(255,255,255,0.9);}
+.letter-area{width:100%;border:1.5px solid rgba(0,0,0,0.1);border-radius:16px;padding:16px;font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;line-height:2;background:rgba(255,255,255,0.7);outline:none;resize:none;min-height:160px;transition:border-color 0.3s;backdrop-filter:blur(10px);}
+.letter-area:focus{border-color:rgba(233,30,99,0.4);}
+.letter-area::placeholder{opacity:0.35;font-style:italic;}
 
-/* Title */
-.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,6vw,2.2rem);font-weight:300;line-height:1.15;color:rgba(224,240,238,0.92);margin-bottom:4px;text-align:left;}
-.page-title em{font-style:italic;color:#f0c040;}
-.page-sub{font-size:0.78rem;color:rgba(160,220,210,0.3);line-height:1.7;margin-bottom:20px;text-align:left;}
+/* BUTTONS */
+.btn-next{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;touch-action:manipulation;margin-top:8px;position:relative;overflow:hidden;transition:transform 0.15s,box-shadow 0.15s;}
+.btn-next:active{transform:scale(0.97);}
+.btn-intimate{background:linear-gradient(135deg,#b00020,#800015);color:white;box-shadow:0 8px 24px rgba(176,0,32,0.4);}
+.btn-skip{background:none;border:none;font-size:0.82rem;cursor:pointer;padding:10px;margin-top:4px;width:100%;opacity:0.5;font-family:'DM Sans',sans-serif;}
+.btn-wa{width:100%;padding:15px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(37,211,102,0.3);margin-top:8px;touch-action:manipulation;}
 
-/* Section header pill */
-.sec-hdr{display:flex;align-items:center;gap:8px;margin:18px 0 11px;}
-.sec-hdr-line{flex:1;height:1px;background:rgba(160,220,210,0.07);}
-.sec-hdr-txt{font-size:0.9rem;flex-shrink:0;}
-.sec-hdr-pill{display:flex;align-items:center;gap:4px;background:rgba(20,160,140,0.08);border:1px solid rgba(20,160,140,0.22);border-radius:20px;padding:5px 10px;cursor:text;}
-.sec-hdr-pill:focus-within{border-color:rgba(20,160,140,0.5);background:rgba(20,160,140,0.12);}
-.sec-hdr-pencil{font-size:0.65rem;opacity:0.6;flex-shrink:0;pointer-events:none;}
-.sec-hdr-input{background:transparent;border:none;outline:none;font-size:0.76rem;font-weight:600;color:rgba(160,220,210,0.85);min-width:60px;max-width:170px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;}
-.sec-hdr-input::placeholder{color:rgba(160,220,210,0.3);font-weight:400;}
-
-/* Inputs */
-.field-label{display:block;font-size:0.58rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.27);margin-bottom:8px;}
-.big-input{width:100%;border:none;border-bottom:1.5px solid rgba(20,160,140,0.18);background:transparent;padding:8px 0;font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;outline:none;color:rgba(224,240,238,0.9);transition:border-color 0.3s;caret-color:#f0c040;}
-.big-input::placeholder{color:rgba(160,220,210,0.13);font-style:italic;}
-.big-input:focus{border-color:rgba(20,160,140,0.45);}
-.regular-input{width:100%;border:1px solid rgba(160,220,210,0.09);border-radius:11px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:rgba(255,255,255,0.03);outline:none;color:rgba(224,240,238,0.82);transition:border-color 0.3s,background 0.3s;caret-color:#f0c040;}
-.regular-input::placeholder{color:rgba(160,220,210,0.18);font-style:italic;}
-.regular-input:focus{border-color:rgba(20,160,140,0.3);background:rgba(255,255,255,0.05);}
-
-/* Photos */
-.photos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:0;align-items:start;}
-.photo-slot{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:none;user-select:none;background:rgba(20,160,140,0.04);border:1.5px dashed rgba(20,160,140,0.15);color:rgba(160,220,210,0.2);font-size:1.1rem;transition:border-color 0.18s,box-shadow 0.18s;}
-.photo-slot.has-photo{border-style:solid;border-color:rgba(20,160,140,0.2);}
-.photo-slot.active{border-color:rgba(20,160,140,0.6);box-shadow:0 0 0 2px rgba(20,160,140,0.18);}
-.photo-slot.active .slot-num{color:#f0c040;}
-.photo-slot.drag-over{border-color:rgba(240,192,64,0.6);box-shadow:0 0 0 2px rgba(240,192,64,0.15);}
-.photo-slot.dragging-src{opacity:0.2;}
-.slot-num{position:absolute;top:3px;left:4px;font-size:0.46rem;font-weight:700;color:rgba(255,255,255,0.25);pointer-events:none;z-index:2;}
-.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
-.photo-del{position:absolute;top:2px;right:2px;width:17px;height:17px;background:rgba(240,192,64,0.9);color:#061818;border-radius:50%;border:none;font-size:0.52rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;font-weight:800;}
-.upind{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(20,160,140,0.15);overflow:hidden;}
-.upbar{height:100%;background:rgba(20,160,140,0.75);width:0%;transition:width 0.3s;}
-.up-dot{position:absolute;top:3px;left:3px;width:7px;height:7px;border-radius:50%;display:none;}
-.up-dot.uploading{display:block;background:rgba(240,192,64,0.8);animation:dotPulse 0.8s ease-in-out infinite;}
-.up-dot.done{display:block;background:rgba(20,160,140,0.9);}
-@keyframes dotPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
-.photo-hint{font-size:0.62rem;color:rgba(160,220,210,0.2);margin-bottom:4px;}
-.photo-hint .hl{color:rgba(20,160,140,0.55);font-weight:600;}
-.slot-plus{font-size:1.1rem;color:rgba(160,220,210,0.2);}
-.photo-col{display:flex;flex-direction:column;gap:4px;}
-.cap-input{width:100%;background:transparent;border:none;outline:none;font-size:0.62rem;font-style:italic;font-family:'DM Sans',sans-serif;color:rgba(160,220,210,0.5);padding:3px 2px;caret-color:#f0c040;text-align:center;line-height:1.4;resize:none;display:block;overflow:visible;min-height:0;}
-.cap-input::placeholder{color:rgba(160,220,210,0.15);font-style:italic;}
-.cap-input:focus{color:rgba(160,220,210,0.8);}
-
-/* Song */
-.song-search-row{display:flex;gap:7px;margin-bottom:8px;}
-.song-search-row .regular-input{flex:1;margin-bottom:0;}
-.search-btn{padding:12px 14px;border:1px solid rgba(20,160,140,0.16);border-radius:11px;background:rgba(20,160,140,0.06);color:rgba(160,220,210,0.55);font-size:0.88rem;cursor:pointer;touch-action:manipulation;flex-shrink:0;}
-.song-result{display:flex;align-items:center;gap:9px;border-radius:9px;padding:9px 11px;margin-bottom:5px;cursor:pointer;background:rgba(255,255,255,0.025);border:1px solid rgba(160,220,210,0.06);touch-action:manipulation;}
-.song-result img{width:44px;height:33px;border-radius:4px;object-fit:cover;flex-shrink:0;}
-.song-rt{flex:1;min-width:0;}
-.song-rt-title{font-size:0.78rem;font-weight:500;color:rgba(224,240,238,0.78);overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;}
-.song-rt-ch{font-size:0.64rem;color:rgba(160,220,210,0.27);margin-top:1px;}
-.song-use-btn{padding:5px 11px;border:none;border-radius:18px;font-size:0.66rem;font-weight:600;cursor:pointer;background:rgba(20,160,140,0.6);color:rgba(224,240,238,0.88);flex-shrink:0;}
-.song-selected-box{border-radius:10px;padding:10px 13px;margin-bottom:8px;display:none;background:rgba(20,160,140,0.07);border:1px solid rgba(20,160,140,0.16);}
-.song-sel-lbl{font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(160,220,210,0.27);margin-bottom:3px;}
-.song-sel-name{font-size:0.84rem;font-weight:500;color:rgba(224,240,238,0.76);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
-
-/* AI / Letter */
-.ai-box{background:rgba(240,192,64,0.03);border:1px solid rgba(240,192,64,0.09);border-radius:11px;padding:11px 13px;margin-bottom:10px;}
-.ai-box-lbl{font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(240,192,64,0.36);margin-bottom:7px;}
-.ai-row{display:flex;gap:7px;}
-.ai-row .regular-input{flex:1;font-size:0.84rem;padding:10px 12px;margin-bottom:0;}
-.ai-go-btn{padding:10px 13px;border:1px solid rgba(240,192,64,0.16);border-radius:10px;background:rgba(240,192,64,0.06);color:rgba(240,192,64,0.6);font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
-.ai-loading{display:none;align-items:center;gap:6px;margin-top:7px;font-size:0.68rem;color:rgba(160,220,210,0.32);}
+/* AI */
+.btn-ai{width:100%;padding:12px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;cursor:pointer;margin-bottom:10px;touch-action:manipulation;transition:background 0.2s;}
+.btn-ai.soft{background:rgba(176,0,32,0.06);border:1.5px solid rgba(233,30,99,0.2);color:#b00020;}
+.ai-loading{display:none;align-items:center;gap:8px;font-size:0.78rem;margin:6px 0;}
 .ai-loading.show{display:flex;}
-.ai-dot{width:5px;height:5px;border-radius:50%;background:rgba(240,192,64,0.42);animation:aiPulse 1s ease-in-out infinite;}
-.ai-dot:nth-child(2){animation-delay:0.2s;}
-.ai-dot:nth-child(3){animation-delay:0.4s;}
+.ai-dot{width:6px;height:6px;border-radius:50%;animation:aiPulse 1s ease-in-out infinite;}
 @keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
-.letter-area{width:100%;border:1px solid rgba(160,220,210,0.08);border-radius:12px;padding:14px;font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.8;background:rgba(255,255,255,0.022);outline:none;resize:none;min-height:120px;color:rgba(224,240,238,0.8);transition:border-color 0.3s;caret-color:#f0c040;word-wrap:break-word;overflow-wrap:break-word;white-space:pre-wrap;}
-.letter-area:focus{border-color:rgba(20,160,140,0.25);}
-.letter-area::placeholder{color:rgba(160,220,210,0.13);font-style:italic;}
-.sign-row{display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:rgba(255,255,255,0.025);border:1px solid rgba(160,220,210,0.08);border-radius:11px;}
-.sign-lbl{font-size:0.57rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.4);white-space:nowrap;font-weight:600;}
-.sign-input{flex:1;border:none;background:transparent;padding:4px 0;font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(224,240,238,0.82);outline:none;caret-color:#f0c040;}
-.sign-input::placeholder{color:rgba(160,220,210,0.25);font-style:italic;}
+.pink-dot{background:#e91e63;}
 
-/* Primary btn */
-.btn-primary{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:transform 0.15s;background:linear-gradient(135deg,rgba(20,160,140,0.88),rgba(16,130,115,0.88));color:rgba(224,240,238,0.95);box-shadow:0 8px 28px rgba(20,160,140,0.2);letter-spacing:0.04em;position:relative;overflow:hidden;}
-.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.06),transparent);}
-.btn-primary:active{transform:scale(0.97);}
-.rule{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(20,160,140,0.12),rgba(240,192,64,0.07),transparent);margin:18px 0 0;}
+/* PHOTOS */
+.photos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.photo-slot{aspect-ratio:1;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:manipulation;transition:background 0.2s;font-size:1.3rem;}
+.photo-slot.soft-slot{background:rgba(176,0,32,0.06);border:1.5px dashed rgba(176,0,32,0.25);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
+.photo-del{position:absolute;top:4px;right:4px;width:20px;height:20px;background:#800015;color:white;border-radius:50%;border:none;font-size:0.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 
-/* Card style slideshow */
-.styles-list-v{display:flex;flex-direction:column;gap:16px;}
-.style-card-wrap{border-radius:20px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;}
-.style-card-wrap:active{transform:scale(0.97);}
-.sv{width:100%;height:220px;position:relative;overflow:hidden;}
-.sv-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 12px 60px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
-.sv-slide.sv-active{opacity:1;}
-.sv-lbl{font-size:0.5rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
-.sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:10px 14px 12px;z-index:5;}
-.sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(26,0,8,0.97) 0%,rgba(26,0,8,0.7) 70%,transparent);}
-.sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,0.97) 0%,rgba(22,21,46,0.7) 70%,transparent);}
-.sv-dots{display:flex;gap:5px;justify-content:center;margin-bottom:6px;}
-.sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.3;}
-.sv-dot.sv-dot-active{width:14px;border-radius:3px;opacity:0.9;}
-.sv-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;margin-bottom:1px;}
-.sv-desc{font-size:0.58rem;opacity:0.6;line-height:1.4;}
-.sv-cta{margin-top:5px;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;opacity:0.75;}
-.sv-emoji{font-size:2.2rem;margin-bottom:6px;display:block;}
-.sv-title{font-size:0.82rem;font-weight:700;margin-bottom:3px;}
-.sv-sub{font-size:0.6rem;opacity:0.55;}
+/* SONG */
+.song-result{display:flex;align-items:center;gap:10px;border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer;}
+.song-result.soft-result{background:rgba(255,255,255,0.6);border:1.5px solid rgba(233,30,99,0.1);}
+.song-result img{width:56px;height:42px;border-radius:6px;object-fit:cover;flex-shrink:0;}
+.song-use-btn{padding:6px 12px;border:none;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
+.soft-use{background:linear-gradient(135deg,#b00020,#800015);color:white;}
+.song-selected-box{border-radius:14px;padding:12px 14px;margin-bottom:10px;display:none;}
+.soft-selected{background:linear-gradient(135deg,#1a0008,#0a0004);}
 
-/* Intimate theme */
-.sv-intimate{background:linear-gradient(160deg,#1a0008,#2d000f);}
-.sv-intimate .sv-lbl{color:rgba(255,140,140,0.5);}
-.sv-intimate .sv-title{color:#ffe0e0;}
-.sv-intimate .sv-sub{color:rgba(255,140,140,0.55);}
-.sv-intimate .sv-dot{background:rgba(176,0,32,0.4);}
-.sv-intimate .sv-dot.sv-dot-active{background:#b00020;}
-.sv-intimate .sv-name{color:#ffe0e0;}
-.sv-intimate .sv-desc{color:rgba(255,140,140,0.55);}
-.sv-intimate .sv-cta{color:#b00020;}
-.sv-pols{display:flex;gap:5px;justify-content:center;margin:4px 0;}
-.sv-pol{width:32px;height:40px;background:white;padding:2px 2px 8px;box-shadow:0 3px 8px rgba(74,14,42,0.18);border-radius:1px;}
-.sv-pol:nth-child(odd){transform:rotate(-3deg);}
-.sv-pol:nth-child(even){transform:rotate(2.5deg);}
-.sv-pol-inner{width:100%;height:100%;background:#fce4ec;border-radius:1px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;}
-.sv-vinyl{width:42px;height:42px;border-radius:50%;background:conic-gradient(#1a0812 0deg,#2d1020 30deg,#1a0812 60deg,#2d1020 90deg,#1a0812 120deg,#2d1020 150deg,#1a0812 180deg,#2d1020 210deg,#1a0812 240deg,#2d1020 270deg,#1a0812 300deg,#2d1020 330deg,#1a0812 360deg);display:flex;align-items:center;justify-content:center;animation:vinylSpin 3s linear infinite;box-shadow:0 0 0 3px #2d1020;}
-@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.sv-vinyl-c{width:12px;height:12px;border-radius:50%;background:#e91e63;}
-.sv-env{font-size:2.6rem;animation:envWig 2s ease-in-out infinite;}
-@keyframes envWig{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
-.sv-lines{width:80%;margin:4px auto;}
-.sv-line{height:2px;border-radius:2px;background:rgba(74,14,42,0.1);margin-bottom:4px;}
-.sv-line:first-child{width:55%;background:rgba(233,30,99,0.35);}
-
-
-
-.sv-news-head{font-size:0.46rem;font-weight:700;color:#111;border-bottom:1.5px double #111;margin-bottom:3px;padding-bottom:2px;}
-.sv-news-hl{background:#d90429;color:white;font-size:0.42rem;font-weight:700;padding:1px 4px;border-radius:1px;margin-bottom:3px;}
-.sv-news-lines{display:flex;flex-direction:column;gap:2px;}
-.sv-news-line{height:2px;background:rgba(0,0,0,0.1);border-radius:1px;}
-
-
-
-
-.sv-notes{display:flex;gap:6px;justify-content:center;margin:4px 0;}
-.sv-note{width:36px;height:42px;background:#fffde7;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 6px rgba(0,0,0,0.1);transform:rotate(-3deg);}
-.sv-note:nth-child(2){transform:rotate(0deg);}
-.sv-note:nth-child(3){transform:rotate(3deg);}
-
-/* Fake Chat theme */
-.sv-chat{background:linear-gradient(160deg,#1a1a2e,#16213e);}
-/* Instagram theme */
-.sv-instagram{background:#000;position:relative;overflow:hidden;}
-.sv-instagram .sv-lbl{color:#0095f6;font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;}
-.sv-instagram .sv-title{font-size:0.82rem;font-weight:700;color:#fff;line-height:1.2;}
-.sv-instagram .sv-sub{color:#aaa;font-size:0.6rem;}
-.sv-instagram .sv-dot{background:rgba(255,255,255,0.2);}
-.sv-instagram .sv-dot.sv-dot-active{background:#fff;}
-.sv-instagram .sv-name{color:#fff;}
-.sv-instagram .sv-desc{color:#aaa;}
-.sv-instagram .sv-cta{color:#0095f6;}
-.sv-instagram .sv-overlay-info{background:linear-gradient(to top,rgba(0,0,0,0.95) 0%,rgba(0,0,0,0.6) 70%,transparent);}
-/* Unboxing theme */
-.sv-unboxing{background:linear-gradient(160deg,#2d1a00,#1a0a00);}
-.sv-unboxing .sv-lbl{color:rgba(245,158,11,0.45);}
-.sv-unboxing .sv-title{color:rgba(255,220,120,0.9);font-size:0.78rem;}
-.sv-unboxing .sv-sub{color:rgba(255,200,100,0.45);}
-.sv-unboxing .sv-dot{background:rgba(245,158,11,0.2);}
-.sv-unboxing .sv-dot.sv-dot-active{background:rgba(245,158,11,0.85);}
-.sv-unboxing .sv-name{color:rgba(255,220,120,0.9);}
-.sv-unboxing .sv-desc{color:rgba(255,200,100,0.45);}
-.sv-unboxing .sv-cta{color:rgba(245,158,11,0.7);}
-.sv-unboxing .sv-overlay-info{background:linear-gradient(to top,rgba(26,10,0,0.97) 0%,rgba(26,10,0,0.7) 70%,transparent);}
-.sv-gift-box{width:54px;height:54px;position:relative;margin:4px auto;}
-.sv-gift-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:48px;height:34px;background:linear-gradient(145deg,#c2410c,#9a3412);border-radius:3px 3px 5px 5px;}
-.sv-gift-lid{position:absolute;top:0;left:50%;transform:translateX(-50%);width:52px;height:14px;background:linear-gradient(145deg,#dc2626,#b91c1c);border-radius:4px 4px 2px 2px;}
-.sv-gift-ribbon-v{position:absolute;left:50%;transform:translateX(-50%);width:10px;height:100%;background:rgba(245,158,11,0.7);z-index:1;}
-.sv-gift-bow{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:1.1rem;z-index:2;}
-.sv-gift-open{font-size:2.6rem;animation:giftBounce 1.2s ease-in-out infinite;}
-@keyframes giftBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-.sv-ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;width:100%;}
-.sv-ig-cell{aspect-ratio:1;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
-.sv-ig-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 8px;}
-/* Newspaper theme */
-.sv-newspaper{background:#f5f0e8;position:relative;}
-.sv-newspaper .sv-lbl{color:#cc0000;font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;}
-.sv-newspaper .sv-title{font-family:'Playfair Display',Georgia,serif;font-size:0.85rem;font-weight:900;color:#1a1a1a;line-height:1.2;}
-.sv-newspaper .sv-sub{color:#555;font-size:0.6rem;font-style:italic;}
-.sv-newspaper .sv-dot{background:rgba(26,26,26,0.2);}
-.sv-newspaper .sv-dot.sv-dot-active{background:#cc0000;}
-.sv-newspaper .sv-name{color:#1a1a1a;}
-.sv-newspaper .sv-desc{color:#555;}
-.sv-newspaper .sv-cta{color:#cc0000;}
-.sv-newspaper .sv-overlay-info{background:linear-gradient(to top,rgba(245,240,232,0.97) 0%,rgba(245,240,232,0.7) 70%,transparent);}.sv-news-rule{width:100%;height:2px;background:#1a1a1a;margin:4px 0;}
-/* Constellation theme */
-.sv-constellation{background:#020818;position:relative;overflow:hidden;}
-.sv-constellation .sv-lbl{color:rgba(200,210,255,0.35);}
-.sv-constellation .sv-title{color:rgba(220,230,255,0.85);}
-.sv-constellation .sv-sub{color:rgba(200,210,255,0.4);}
-.sv-constellation .sv-dot{background:rgba(200,210,255,0.2);}
-.sv-constellation .sv-dot.sv-dot-active{background:rgba(200,210,255,0.8);}
-.sv-constellation .sv-name{color:rgba(220,230,255,0.9);}
-.sv-constellation .sv-desc{color:rgba(200,210,255,0.4);}
-.sv-constellation .sv-cta{color:rgba(200,210,255,0.6);}
-.sv-constellation .sv-overlay-info{background:linear-gradient(to top,rgba(2,8,24,0.97) 0%,rgba(2,8,24,0.7) 70%,transparent);}
-.sv-star-field{position:absolute;inset:0;pointer-events:none;}
-.sv-star{position:absolute;border-radius:50%;background:white;}
-.sv-chat .sv-lbl{color:rgba(37,211,102,0.5);}
-.sv-chat .sv-title{color:rgba(255,255,255,0.85);}
-.sv-chat .sv-sub{color:rgba(255,255,255,0.35);}
-.sv-chat .sv-dot{background:rgba(37,211,102,0.4);}
-.sv-chat .sv-dot.sv-dot-active{background:#25d366;}
-.sv-chat .sv-name{color:rgba(255,255,255,0.9);}
-.sv-chat .sv-desc{color:rgba(255,255,255,0.4);}
-.sv-chat .sv-cta{color:#25d366;}
-.sv-bubbles{display:flex;flex-direction:column;gap:5px;width:90%;margin:0 auto;}
-.sv-bub{padding:5px 10px;border-radius:14px;font-size:0.6rem;max-width:80%;}
-.sv-bub.sent{background:#25d366;color:white;align-self:flex-end;border-radius:14px 14px 3px 14px;}
-.sv-bub.recv{background:rgba(255,255,255,0.12);color:white;align-self:flex-start;border-radius:14px 14px 14px 3px;}
-.sv-typing{display:flex;gap:3px;padding:6px 10px;background:rgba(255,255,255,0.1);border-radius:14px;width:fit-content;animation:typingPulse 1.4s ease-in-out infinite;}
-@keyframes typingPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
-.sv-typing-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.6);}
-.sv-reveal{background:linear-gradient(135deg,#e91e63,#f06292);color:white;padding:8px 16px;border-radius:50px;font-size:0.68rem;font-weight:700;margin-top:6px;}
-
-/* Save overlay */
-.save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
+/* SAVE OVERLAY */
+.save-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
 .save-overlay.show{display:flex;}
-.save-box{text-align:center;width:100%;max-width:280px;}
-.save-spinner{position:relative;width:58px;height:58px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
-.save-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(20,160,140,0.12);border-top-color:rgba(20,160,140,0.75);animation:spin 1s linear infinite;}
+.save-box{border-radius:24px;padding:28px 24px;width:100%;max-width:320px;text-align:center;}
+.save-box.soft-save{background:#1a0008;box-shadow:0 20px 60px rgba(233,30,99,0.2);}
+.save-spinner{position:relative;width:64px;height:64px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
+.save-ring{position:absolute;inset:0;border-radius:50%;border:3px solid rgba(233,30,99,0.15);border-top-color:#b00020;animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.save-emoji-big{font-size:1.5rem;position:relative;z-index:1;}
-.save-label{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(224,240,238,0.6);margin-bottom:14px;}
-.save-bar-wrap{height:2px;background:rgba(20,160,140,0.1);border-radius:2px;overflow:hidden;width:100%;}
-.save-bar{height:100%;background:linear-gradient(90deg,rgba(20,160,140,0.8),rgba(240,192,64,0.6));width:0%;transition:width 0.4s ease;}
+.save-emoji{font-size:1.8rem;position:relative;z-index:1;}
+.save-label{font-size:1rem;font-weight:600;margin-bottom:14px;}
+.save-bar-wrap{height:8px;border-radius:50px;overflow:hidden;width:100%;margin-bottom:8px;}
+.soft-bar-wrap{background:rgba(176,0,32,0.12);}
+.save-bar{height:100%;border-radius:50px;width:0%;transition:width 0.4s ease;}
+.soft-bar{background:linear-gradient(90deg,#800015,#b00020);}
+.save-step{font-size:0.75rem;opacity:0.6;display:none;}
 
-/* Share modal */
-.share-modal{position:fixed;inset:0;background:rgba(6,24,24,0.91);backdrop-filter:blur(16px);z-index:600;display:none;align-items:center;justify-content:center;padding:22px;}
+/* SHARE MODAL */
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(12px);z-index:400;display:none;align-items:center;justify-content:center;padding:20px;}
 .share-modal.show{display:flex;}
-.share-box{background:rgba(255,255,255,0.032);border:1px solid rgba(160,220,210,0.09);border-radius:22px;padding:26px 22px;width:100%;max-width:360px;text-align:center;}
-.share-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:rgba(224,240,238,0.9);margin-bottom:5px;}
-.share-sub{font-size:0.74rem;color:rgba(160,220,210,0.3);margin-bottom:12px;}
-.share-expiry{font-size:0.63rem;color:rgba(160,220,210,0.2);margin-bottom:12px;}
-.share-link-row{background:rgba(255,255,255,0.022);border:1px solid rgba(160,220,210,0.07);border-radius:9px;padding:9px 13px;margin-bottom:12px;display:flex;align-items:center;gap:9px;}
-.share-link-txt{font-size:0.67rem;color:rgba(160,220,210,0.42);flex:1;text-align:left;word-break:break-all;}
-.copy-btn{padding:5px 13px;border:none;border-radius:7px;background:rgba(20,160,140,0.62);color:rgba(224,240,238,0.9);font-size:0.67rem;font-weight:600;cursor:pointer;white-space:nowrap;}
-.btn-wa{width:100%;padding:13px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;margin-bottom:8px;touch-action:manipulation;}
-.share-close-btn{width:100%;padding:11px;background:none;border:1px solid rgba(160,220,210,0.08);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:rgba(160,220,210,0.28);cursor:pointer;}
+.share-box{border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;}
+.share-box.soft-share{background:#1a0008;}
+.share-link-row{border-radius:12px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.soft-link-row{background:rgba(176,0,32,0.08);border:1px solid rgba(176,0,32,0.2);}
+.share-link-txt{font-size:0.7rem;word-break:break-all;flex:1;text-align:left;}
+.copy-btn{padding:6px 12px;border:none;border-radius:8px;font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.soft-copy{background:#800015;color:white;}
+.modal-close{width:100%;padding:12px;background:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;margin-top:6px;}
+.soft-close{border:1.5px solid rgba(233,30,99,0.2);color:rgba(255,160,160,0.65);}
+
+/* ── RECEIVER SCREENS ── */
+/* FIX: all receiver screens fill 100% — no black edges */
+#rv-loading,#rv-error,#rv-welcome,#rv-photos,#rv-song,#rv-envelope,#rv-letter{
+  position:absolute;inset:0;
+}
+#rv-loading{background:linear-gradient(160deg,#120008,#1e000e);display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.rv-loading-heart{font-size:3rem;animation:hb 1.2s ease-in-out infinite;}
+@keyframes hb{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+.rv-loading-text{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(255,160,160,0.65);margin-top:14px;opacity:0.6;}
+
+#rv-error{background:linear-gradient(160deg,#120008,#1e000e);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px;}
+.rv-error-emoji{font-size:3rem;margin-bottom:16px;display:block;}
+.rv-error-text{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:rgba(255,160,160,0.65);line-height:1.7;}
+
+/* WELCOME */
+#rv-welcome{background:linear-gradient(160deg,#0a0004 0%,#1a0008 50%,#0a0004 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;padding:40px 28px;}
+.petals-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.petal{position:absolute;animation:pf linear infinite;opacity:0;}
+@keyframes pf{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:0.4;}100%{transform:translateY(100vh) rotate(360deg);opacity:0;}}
+.rv-inner{position:relative;z-index:2;text-align:center;width:100%;}
+.rv-tag{font-size:0.6rem;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(233,30,99,0.45);margin-bottom:22px;display:block;}
+.rv-emoji{font-size:4rem;margin-bottom:18px;display:block;animation:hb2 1.8s ease-in-out infinite;}
+@keyframes hb2{0%,100%{transform:scale(1);}14%{transform:scale(1.15);}28%{transform:scale(1);}42%{transform:scale(1.08);}56%{transform:scale(1);}}
+.rv-name{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,7vw,2.6rem);font-weight:700;color:#ffe8e8;line-height:1.1;margin-bottom:8px;}
+.rv-sub{font-size:0.85rem;color:rgba(255,160,160,0.65);opacity:0.65;margin-bottom:8px;line-height:1.5;}
+.rv-from{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:rgba(255,160,160,0.35);margin-bottom:28px;}
+.rv-open-btn{background:linear-gradient(135deg,#b00020,#800015);color:white;border:none;border-radius:50px;padding:16px 44px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 8px 28px rgba(176,0,32,0.6);transition:transform 0.2s;touch-action:manipulation;animation:bp 2.5s ease-in-out infinite;}
+@keyframes bp{0%,100%{box-shadow:0 8px 28px rgba(176,0,32,0.6);}50%{box-shadow:0 12px 36px rgba(176,0,32,0.8);}}
+.rv-open-btn:active{transform:scale(0.97);}
+.rv-create-btn{margin-top:14px;background:none;border:1.5px solid rgba(233,30,99,0.3);color:#b00020;border-radius:50px;padding:10px 28px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:all 0.2s;}
+.rv-create-btn:active{background:rgba(233,30,99,0.08);}
+
+/* FIX: Back button for receiver */
+.rv-back{position:absolute;top:14px;left:16px;width:36px;height:36px;border-radius:50%;background:rgba(176,0,32,0.12);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;color:rgba(255,160,160,0.65);z-index:10;touch-action:manipulation;transition:background 0.2s;}
+.rv-back:active{background:rgba(233,30,99,0.2);}
+
+/* PHOTOS — 2-column grid, all visible at once */
+#rv-photos{background:linear-gradient(160deg,#120008,#1e000e,#fdf0f5);display:flex;flex-direction:column;padding:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+#rv-photos::-webkit-scrollbar{display:none;}
+.rv-sec-hdr{padding:52px 24px 10px;text-align:center;flex-shrink:0;}
+.rv-sec-tag{display:none;}
+.rv-sec-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#ffe8e8;}
+
+/* ── Stacked card animation ── */
+.pol-stack-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 12px;}
+.pol-stack{position:relative;width:calc(100vw - 40px);max-width:360px;height:calc((100vw - 40px) * 1.35);max-height:460px;cursor:pointer;touch-action:manipulation;}
+.pol-card{position:absolute;left:50%;width:calc(100vw - 40px);max-width:360px;background:#fff;padding:8px 8px 52px;border-radius:3px;box-shadow:0 12px 40px rgba(74,14,42,0.28);transition:transform 0.7s cubic-bezier(.4,0,.2,1),opacity 0.5s ease,box-shadow 0.4s ease;transform-origin:bottom center;will-change:transform,opacity;}
+.pol-card img{width:100%;height:calc((100vw - 56px) * 1.1);max-height:370px;object-fit:contain;object-position:center center;background:#fef0f4;display:block;border-radius:1px;}
+.pol-caption-wrap{position:absolute;bottom:0;left:0;right:0;height:52px;display:flex;align-items:center;justify-content:center;background:#fff;}
+.pol-caption{text-align:center;font-size:1rem;color:#800015;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;padding:0 16px;line-height:1.3;}
+.pol-tap-hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:0.58rem;color:#800015;opacity:0.7;letter-spacing:0.04em;pointer-events:none;font-family:'DM Sans',sans-serif;}
+.pol-counter{font-size:0.62rem;color:rgba(255,160,160,0.3);letter-spacing:0.1em;text-align:center;margin-top:6px;flex-shrink:0;}
+@keyframes arcSide{
+  0%  {transform:translateX(-50%) translateY(0px)   rotate(0deg)  scale(1);    opacity:1;}
+  35% {transform:translateX(10%)  translateY(-8px)  rotate(10deg) scale(0.98); opacity:1;}
+  65% {transform:translateX(120%) translateY(0px)   rotate(20deg) scale(0.95); opacity:0.8;}
+  66% {transform:translateX(-60%) translateY(30px)  rotate(-5deg) scale(0.87); opacity:0;}
+  100%{transform:translateX(-60%) translateY(30px)  rotate(-5deg) scale(0.87); opacity:1;}
+}
+.pol-card.arc-back{animation:arcSide 1.0s cubic-bezier(0.4,0,0.2,1) forwards;pointer-events:none;}
+.no-photo{flex:1;display:flex;align-items:center;justify-content:center;color:rgba(255,160,160,0.3);font-style:italic;}
+
+.pol{background:white;padding:6px 6px 22px;box-shadow:0 8px 28px rgba(74,14,42,0.14),0 2px 6px rgba(74,14,42,0.06);border-radius:2px;cursor:pointer;touch-action:pan-y;position:relative;animation:polReveal 0.55s cubic-bezier(0.22,1,0.36,1) both;}
+.pol:nth-child(1){animation-delay:0.06s;}
+.pol:nth-child(2){animation-delay:0.14s;}
+.pol:nth-child(3){animation-delay:0.22s;}
+.pol:nth-child(4){animation-delay:0.30s;}
+.pol:nth-child(5){animation-delay:0.38s;}
+@keyframes polReveal{0%{opacity:0;transform:translateY(20px) scale(0.9);}60%{opacity:1;}100%{opacity:1;transform:translateY(0) scale(1);}}
+.pol:active{transform:scale(0.96);}
+.pol img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center 20%;display:block;}
+.pol-tap{position:absolute;bottom:4px;left:0;right:0;text-align:center;font-size:0.5rem;color:rgba(255,160,160,0.65);opacity:0.35;letter-spacing:0.06em;}
+.no-photo{text-align:center;padding:40px 20px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(255,160,160,0.3);font-style:italic;}
+.rv-nav-row{display:flex;gap:8px;padding:16px 16px max(20px,env(safe-area-inset-bottom));margin-top:4px;}
+.rv-next-btn{flex:1;background:linear-gradient(135deg,#b00020,#800015);color:white;border:none;border-radius:50px;padding:14px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(176,0,32,0.5);transition:transform 0.2s;}
+.rv-next-btn:active{transform:scale(0.97);}
+
+/* SONG — Beautiful vinyl */
+#rv-song{background:linear-gradient(160deg,#120008,#1e000e);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 28px 20px;}
+.vinyl-wrap{width:170px;height:170px;margin:0 auto 20px;position:relative;}
+.vinyl{
+  width:100%;height:100%;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 50% 50%,
+    #fce4ec 0%,#fce4ec 14%,
+    #1a0812 15%,#1a0812 17%,
+    #2d1020 18%,#2d1020 22%,
+    #1a0812 23%,#1a0812 27%,
+    #2d1020 28%,#2d1020 32%,
+    #1a0812 33%,#1a0812 37%,
+    #2d1020 38%,#2d1020 42%,
+    #1a0812 43%,#1a0812 47%,
+    #2d1020 48%,#2d1020 52%,
+    #1a0812 53%,#1a0812 100%
+  );
+  box-shadow:0 16px 48px rgba(74,14,42,0.4),0 0 0 4px rgba(233,30,99,0.2),inset 0 2px 8px rgba(255,255,255,0.05);
+  display:flex;align-items:center;justify-content:center;
+}
+.vinyl-label{
+  width:56px;height:56px;border-radius:50%;
+  background:radial-gradient(circle at 38% 32%,#b00020,#800015 50%,#4a000c);
+  box-shadow:0 3px 10px rgba(0,0,0,0.5),inset 0 1px 3px rgba(255,255,255,0.25);
+  position:relative;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+}
+.vinyl-label::after{
+  content:'';position:absolute;
+  width:9px;height:9px;border-radius:50%;
+  background:rgba(255,255,255,0.95);
+  box-shadow:0 0 0 2px rgba(0,0,0,0.3);
+}
+.vinyl-spin{animation:vsr 2.8s linear infinite;}
+@keyframes vsr{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.vinyl-pause{animation-play-state:paused;}
+.rv-song-t{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:#ffe8e8;text-align:center;margin-bottom:4px;width:100%;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.rv-song-a{font-size:0.75rem;color:rgba(255,160,160,0.65);opacity:0.55;text-align:center;margin-bottom:16px;width:100%;}
+.yt-wrap{width:100%;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(74,14,42,0.12);margin-bottom:14px;display:none;}
+.yt-wrap iframe{width:100%;height:180px;border:none;display:block;}
+.yt-wrap.show{display:block;}
+.rv-song-nav{display:flex;gap:8px;width:100%;margin-top:4px;}
+
+/* ENVELOPE */
+#rv-envelope{background:linear-gradient(160deg,#120008,#1e000e,#fdf0f5);display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.env-inner{text-align:center;padding:28px;}
+.env-t{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#ffe8e8;margin-bottom:8px;}
+.env-h{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.88rem;color:rgba(255,160,160,0.65);opacity:0.6;margin-bottom:28px;}
+.env-icon{font-size:5rem;display:block;cursor:pointer;animation:ef 2s ease-in-out infinite;transition:transform 0.2s;}
+@keyframes ef{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-12px) rotate(3deg);}}
+.env-icon:active{transform:scale(0.9)!important;}
+
+/* LETTER — full screen, centered, nice paper */
+#rv-letter{background:linear-gradient(160deg,#120008,#1e000e,#fdf0f5);display:flex;flex-direction:column;overflow:hidden;}
+.letter-bar{height:3px;background:linear-gradient(90deg,#800015,#b00020);flex-shrink:0;}
+.letter-paper-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:48px 16px 100px;}
+.letter-paper{background:#fff8f8;border-radius:16px;padding:22px 20px;box-shadow:0 4px 20px rgba(176,0,32,0.1);border-top:3px solid #800015;}
+.l-greet{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:#ffe8e8;margin-bottom:18px;}
+.l-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;font-size:1.05rem;color:#1a000a;line-height:2.1;white-space:pre-wrap;}
+.l-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:#b00020;margin-top:22px;display:block;}
+.letter-foot{position:absolute;bottom:0;left:0;right:0;padding:10px 20px max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(10,0,4,1) 70%,rgba(10,0,4,0));}
+.letter-foot-row{display:flex;gap:8px;}
+.replay-btn{flex:1;background:linear-gradient(135deg,#b00020,#800015);color:white;border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;box-shadow:0 6px 20px rgba(176,0,32,0.5);}
+.create-again-btn{background:none;border:1.5px solid rgba(233,30,99,0.35);color:#b00020;border-radius:50px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;touch-action:manipulation;}
+
+.wm{position:absolute;bottom:10px;right:14px;z-index:999;font-size:0.6rem;color:rgba(255,160,160,0.12);}
+@keyframes ripple{to{transform:scale(4);opacity:0;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes letterFade{to{opacity:1;}}
 </style>
 </head>
 <body>
 <div class="app" id="mainApp">
-<div class="bg-glow"></div>
 
-<!-- ════ PAGE 1 — INPUTS ════ -->
-<div class="screen active" id="p-info">
-  <div class="step-dots">
-    <div class="step-dot done"></div>
-    <div class="step-dot active"></div>
-    <div class="step-dot"></div>
+<!-- ══ RECEIVER SCREENS ══ -->
+<div class="screen" id="rv-loading">
+  <span class="rv-loading-heart">💝</span>
+  <div class="rv-loading-text">Opening your card...</div>
+</div>
+
+<div class="screen" id="rv-error">
+  <span class="rv-error-emoji">💔</span>
+  <div class="rv-error-text">This card has expired<br>or couldn't be found.</div>
+  <button onclick="window.location.href=&#39;/&#39;" style="margin-top:28px;background:linear-gradient(135deg,#b00020,#800015);color:white;border:none;border-radius:50px;padding:14px 32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(176,0,32,0.5);">💝 Create your own card</button>
+</div>
+
+<div class="screen" id="rv-welcome">
+  <div class="petals-bg" id="petals"></div>
+  <div class="rv-inner">
+    <span class="rv-tag">WishYou.ai</span>
+    <span class="rv-emoji">💝</span>
+    <div class="rv-name" id="rvName">Happy Birthday!</div>
+    <div class="rv-sub" id="rvSub">Someone made this just for you ❤️</div>
+    <div class="rv-from" id="rvFrom"></div>
+    <button class="rv-open-btn" onclick="goTo(&#39;rv-photos&#39;)">Open Your Valentine ✨</button>
+    <br>
+    <button class="rv-create-btn" onclick="window.location.href=&#39;/&#39;">💝 Create a card like this</button>
   </div>
-  <div class="top-nav">
-    <button class="back-btn" onclick="window.location.href='../'">←</button>
-    <span class="step-pill">Step 2 of 3</span>
+</div>
+
+<div class="screen" id="rv-photos">
+  <button class="rv-back" onclick="goTo('rv-welcome')">←</button>
+  <div class="rv-sec-hdr">
+    <div class="rv-sec-title" id="rvPhotoTitle">Moments just for you</div>
   </div>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">💋 Valentine's Day</span><span class="eyebrow-line"></span></div>
-      <div class="page-title">Make it<br><em>unforgettable.</em></div>
-      <div class="page-sub">Fill in the details — they'll feel everything.</div>
+  <div class="pol-stack-wrap">
+    <div class="pol-stack" id="polStack" onclick="advanceStack()"></div>
+    <div class="pol-counter" id="polCounter"></div>
+  </div>
+  <div class="rv-nav-row">
+    <button class="rv-next-btn" onclick="goTo('rv-song')">Next → Your Song 🎵</button>
+  </div>
+</div>
 
-      <!-- Relation row -->
-      <div class="relation-wrap">
-        <div class="relation-lbl">Who is this for?</div>
-        <input class="regular-input" id="relationInput" placeholder="e.g. girlfriend, boyfriend, wife, husband, jaan, love..." maxlength="40" autocomplete="off" oninput="onRelationChange(this.value)">
-      </div>
-
-      <label class="field-label" id="nameLabel">To — Their name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Anika" maxlength="30" autocomplete="off" oninput="saveDraft()">
-      <div style="height:18px;"></div>
-      <label class="field-label">From — Your name</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;" oninput="if(!signManuallyEdited){const v=this.value.trim();document.getElementById('cSign').value=v?getSignOff(v):'';}">
-
-      <!-- Photos -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">📸</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="photosHeading" value="Us, always 💋" maxlength="30" autocomplete="off">
-        </div>
-        <span class="sec-hdr-line"></span>
-      </div>
-      <div class="photos-grid" id="photosGrid"></div>
-      <div class="photo-hint" style="margin-top:6px;margin-bottom:2px;">Hold & drag any photo to shuffle order · Captions stay fixed</div>
-      <div class="photo-hint" style="margin-top:4px;">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
-      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
-
-      <!-- Song -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">🎵</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="songScreenTitle" value="Our song 💋" maxlength="35" autocomplete="off">
-        </div>
-        <span class="sec-hdr-line"></span>
-      </div>
-      <div class="song-selected-box" id="songSelectedBox">
-        <div class="song-sel-lbl">Selected song</div>
-        <div class="song-sel-name" id="songSelectedName">—</div>
-      </div>
-      <div class="song-search-row">
-        <input class="regular-input" id="ytSearchInput" placeholder="Search your song..." maxlength="100" onkeydown="if(event.key==='Enter')searchSong()">
-        <button class="search-btn" onclick="searchSong()">🔍</button>
-      </div>
-      <div id="songResults"></div>
-
-      <!-- Letter -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">💌</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="letterToneHeader" value="deeply romantic and personal" maxlength="50" autocomplete="off" placeholder="e.g. romantic, Hindi, funny...">
-        </div>
-        <span class="sec-hdr-line"></span>
-      </div>
-      <div class="ai-box">
-        <div class="ai-box-lbl">✨ Write with AI using the tone above</div>
-        <button class="ai-go-btn" id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;">Write Letter ✨</button>
-        <div class="ai-loading" id="letterAiLoading">
-          <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
-          <span>Writing your letter...</span>
-        </div>
-      </div>
-      <textarea class="letter-area" id="cMsg" oninput="saveDraft()" placeholder="Every moment with you feels like the first..." rows="5"></textarea>
-      <div class="sign-row">
-        <span class="sign-lbl">Sign off</span>
-        <input class="sign-input" id="cSign" placeholder="Forever yours ❤️" maxlength="60" oninput="signManuallyEdited=true">
-      </div>
-      <div class="rule"></div>
+<div class="screen" id="rv-song">
+  <button class="rv-back" onclick="goTo('rv-photos')">←</button>
+  <span class="rv-sec-tag" style="margin-top:52px;margin-bottom:12px;display:block;text-align:center;" id="rvSongScreenTitle">Song that reminds me of you 🎵</span>
+  <div class="vinyl-wrap">
+    <div class="vinyl vinyl-spin vinyl-pause" id="rvVinyl">
+      <div class="vinyl-label"></div>
     </div>
-    <div class="step-actions">
-      <button class="btn-primary" onclick="goToStylePage()">Continue → Pick Card Style 💋</button>
+  </div>
+  <div class="rv-song-t" id="rvSongT">A song just for you</div>
+  <div class="rv-song-a" id="rvSongA"></div>
+  <div class="yt-wrap" id="rvYtWrap"><div id="rvYtEmbed"></div></div>
+  <div class="rv-song-nav">
+    <button class="rv-next-btn" onclick="goTo(&#39;rv-envelope&#39;)">Next → Your Letter 💌</button>
+  </div>
+</div>
+
+<div class="screen" id="rv-envelope">
+  <button class="rv-back" onclick="goTo(&#39;rv-song&#39;)">←</button>
+  <div class="env-inner">
+    <div class="env-t">I wrote you something</div>
+    <div class="env-h">Open it — I mean every word</div>
+    <span class="env-icon" onclick="openLetter()">💌</span>
+  </div>
+</div>
+
+<div class="screen" id="rv-letter">
+  <div class="letter-bar"></div>
+  <button class="rv-back" onclick="goTo(&#39;rv-envelope&#39;)" style="top:16px;">←</button>
+  <div class="letter-paper-wrap">
+    <div class="letter-paper">
+      <div class="l-greet" id="rvLGreet">Dear you,</div>
+      <div class="l-body" id="rvLBody"></div>
+      <span class="l-sign" id="rvLSign"></span>
+    </div>
+  </div>
+  <div class="letter-foot">
+    <div class="letter-foot-row">
+      <button class="replay-btn" onclick="goTo(&#39;rv-welcome&#39;)">💝 Replay</button>
+      <button class="create-again-btn" onclick="window.location.href=&#39;/&#39;">✨ Create a card like this</button>
     </div>
   </div>
 </div>
 
-<!-- ════ PAGE 2 — STYLE PICKER ════ -->
-<div class="screen" id="p-style">
-  <div class="step-dots">
-    <div class="step-dot done"></div>
-    <div class="step-dot done"></div>
-    <div class="step-dot active"></div>
-  </div>
-  <div class="top-nav">
-    <button class="back-btn" onclick="goTo('p-info')">←</button>
-    <span class="step-pill">Step 3 of 3</span>
-  </div>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">💋 Card Style</span><span class="eyebrow-line"></span></div>
-      <div class="page-title">Pick your<br><em>style.</em></div>
-      <div class="page-sub" style="margin-bottom:20px;">Valentine's Day · pick the vibe that feels right</div>
-      <div class="styles-list-v" id="stylesList"></div>
-      <div style="height:16px;"></div>
-      <div class="rule"></div>
-    </div>
-  </div>
-</div>
 
 <!-- Save overlay -->
 <div class="save-overlay" id="saveOverlay">
-  <div class="save-box">
-    <div class="save-spinner"><div class="save-ring"></div><span class="save-emoji-big" id="saveEmoji">💋</span></div>
+  <div class="save-box soft-save" id="saveBox">
+    <div class="save-spinner">
+      <div class="save-ring"></div>
+      <span class="save-emoji" id="saveEmoji">💝</span>
+    </div>
     <div class="save-label" id="saveLabel">Creating your card...</div>
-    <div class="save-bar-wrap"><div class="save-bar" id="saveBar"></div></div>
+    <div class="save-bar-wrap soft-bar-wrap" id="saveBarWrap"><div class="save-bar soft-bar" id="saveBar"></div></div>
+    <div class="save-step" id="saveStep"></div>
   </div>
 </div>
 
 <!-- Share modal -->
 <div class="share-modal" id="shareModal">
-  <div class="share-box">
-    <div style="font-size:2rem;margin-bottom:10px;" id="shareEmoji">💋</div>
-    <div class="share-title">Card is ready! 🎉</div>
-    <div class="share-sub">Send this to <span id="shareReceiverName">them</span> 💝</div>
-    <div class="share-expiry">⏳ Link expires in 3 days</div>
-    <div class="share-link-row">
+  <div class="share-box soft-share" id="shareBox">
+    <div style="font-size:2rem;margin-bottom:8px;">💝</div>
+    <div style="font-size:1.2rem;font-weight:700;margin-bottom:6px;">Card is ready! 🎉</div>
+    <div style="font-size:0.82rem;opacity:0.6;margin-bottom:14px;">Send this link to them 💝</div>
+    <div style="font-size:0.72rem;opacity:0.5;border-radius:10px;padding:7px 12px;margin-bottom:12px;" id="expiryNote">⏳ Card expires in 3 days</div>
+    <div class="share-link-row soft-link-row" id="shareLinkRow">
       <span class="share-link-txt" id="shareLinkTxt"></span>
-      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
+      <button class="copy-btn soft-copy" id="copyBtn" onclick="copyLink()">Copy</button>
     </div>
     <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
-    <button class="share-close-btn" onclick="closeShare()">Done ✓</button>
+    <button class="modal-close soft-close" id="modalClose" onclick="closeShare()">Done ✓</button>
   </div>
 </div>
 
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+
 </div><!-- /app -->
+
 <script>
 // ── CONFIG ──
 const FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
-const CLOUDINARY_CLOUD = 'dkvbjazfe';
-const CLOUDINARY_PRESET = 'wishyou-uploads';
-const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
+
 
 // ── STATE ──
-let curScreen = 'p-info';
-let photos = [];
-let uploadedUrls = {};
-let currentSlotIdx = 0;
-let selectedVideoId = '';
-let shareLink = '';
-let shareLinkShort = '';
+let curScreen = '';
+let _showFirst = null;
 let aiLetterCount = 0;
-let signManuallyEdited = false;
-
-// ── BIRTHDAY CARD STYLES ──
-const BIRTHDAY_STYLES = [
-  {
-    id:'intimate', name:'💋 Intimate',
-    desc:'Deep & romantic · Polaroid memories · Vinyl song · Handwritten letter',
-    previewEmoji:'💋',
-    cardType:'valentine-intimate',
-    defaultSongTitle:'Our song 💋',
-    defaultMemoriesHeading:'Us, always',
-    receiverUrl: id => `https://wishyou.ai/valentine/intimate.html?card=${id}`,
-    shareMsg: (n,s,l) => `💋 *Happy Valentine's Day${n?' '+n:''}!*\n\n${s?s+' made you something special ❤️\n\n':'Someone made you something special ❤️\n\n'}Open it when you're alone:\n\n👆 Open:\n${l}`
-  }
-];
-
-// ── RELATION CONTENT ──
-const DEFAULT_CONTENT = {
-  photosHeading:'Us, always 💋',
-  photoCaptions:['The moment I knew it was you 💫','You, always you ✨','I could look at this forever 😊','My whole world 💋','The one I choose, every time ❤️'],
-  songHeading:'Our song 💋',songPlaceholder:'Search your song...',
-  letterTone:'deeply romantic and personal',
-  letterPlaceholder:'Every moment with you feels like the first...',
-  signOff: n=>`Forever yours, ${n} ❤️`,
-  aiLetterPrompt:(name,sender,tone)=>`Write a short Valentine's Day love letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone||"deeply romantic and personal"}. Return ONLY the letter body — no greeting, no sign off.`
-};
-
-
-function getSignOff(senderName) {
-  const c = DEFAULT_CONTENT;
-  return c ? c.signOff(senderName) : `Forever yours, ${senderName} ❤️`;
-}
 
 
 // ── NAVIGATION ──
-function goTo(id) {
-  const prev = document.getElementById(curScreen);
-  const next = document.getElementById(id);
-  if (!next || curScreen === id) return;
-  if (prev) { prev.classList.remove('active'); prev.classList.add('slide-out'); setTimeout(() => prev.classList.remove('slide-out'), 500); }
-  if (curScreen === 'p-style' && id !== 'p-style') stopAllSlideshows();
+const RV_ORDER=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev){prev.classList.remove('active');prev.classList.add('slide-out');setTimeout(()=>prev.classList.remove('slide-out'),500);}
   next.classList.add('active');
-  curScreen = id;
-  setTimeout(() => { const sc = next.querySelector('.step-content'); if (sc) sc.scrollTo(0, 0); }, 50);
-  saveDraft();
+  curScreen=id;
+  if(id==='rv-photos'&&_showFirst){setTimeout(()=>{_showFirst();_showFirst=null;},50);}
+  const v=document.getElementById('rvVinyl');
+  if(v){if(id==='rv-song')v.classList.remove('vinyl-pause');else v.classList.add('vinyl-pause');}
+  if(id!=='rv-song'){const ifr=document.querySelector('#rvYtWrap iframe');if(ifr)ifr.src=ifr.src;}
 }
 
-function goToStylePage() {
-  const name = document.getElementById('cName').value.trim();
-  if (!name) {
-    const inp = document.getElementById('cName');
-    inp.focus();
-    inp.style.borderBottomColor = 'rgba(240,192,64,0.6)';
-    setTimeout(() => inp.style.borderBottomColor = '', 1800);
-    return;
-  }
-  buildStylesList();
-  goTo('p-style');
-}
-
-// ── SLIDESHOWS ──
-const slideshowTimers = {};
-function stopAllSlideshows() {
-  Object.values(slideshowTimers).forEach(t => clearInterval(t));
-  Object.keys(slideshowTimers).forEach(k => delete slideshowTimers[k]);
-}
-function startSlideshow(id, total) {
-  if (slideshowTimers[id]) clearInterval(slideshowTimers[id]);
-  let idx = 0;
-  slideshowTimers[id] = setInterval(() => {
-    const slides = document.querySelectorAll(`#${id} .sv-slide`);
-    const dots = document.querySelectorAll(`#${id} .sv-dot`);
-    slides.forEach(s => s.classList.remove('sv-active'));
-    dots.forEach(d => d.classList.remove('sv-dot-active'));
-    idx = (idx + 1) % total;
-    if (slides[idx]) slides[idx].classList.add('sv-active');
-    if (dots[idx]) dots[idx].classList.add('sv-dot-active');
-  }, 2200);
-}
-
-function buildStylesList() {
-  const list = document.getElementById('stylesList');
-  list.innerHTML = '';
-  stopAllSlideshows();
-
-  const slideshows = {
-    intimate: {
-      theme:'sv-intimate',
-      slides:[
-        `<div class="sv-lbl">Welcome</div><span class="sv-emoji">💋</span><div class="sv-title">Happy Valentine's Day</div><div class="sv-sub">Someone made this just for you ❤️</div>`,
-        `<div class="sv-lbl">Your Memories</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">🌹</div></div><div class="sv-pol"><div class="sv-pol-inner">❤️</div></div><div class="sv-pol"><div class="sv-pol-inner">💋</div></div></div><div class="sv-sub">Your photos as beautiful polaroids</div>`,
-        `<div class="sv-lbl">Your Song</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Your song, spinning just for you 💋</div>`,
-        `<div class="sv-lbl">Envelope Reveal</div><div class="sv-env">💌</div><div class="sv-sub">Tap to open the letter...</div>`,
-        `<div class="sv-lbl">Love Letter</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:85%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#b00020;">Forever yours ❤️</div>`
-      ]
-    }
-  };
-
-  BIRTHDAY_STYLES.forEach((style, i) => {
-    const sw = slideshows[style.id];
-    if (!sw) { console.warn('Missing slideshow for style:', style.id); return; }
-    const cardId = `sv-card-${style.id}`;
-    const card = document.createElement('div');
-    card.className = 'style-card-wrap';
-    card.id = cardId;
-    const dotsHtml = sw.slides.map((_,j) => `<div class="sv-dot${j===0?' sv-dot-active':''}"></div>`).join('');
-    const slidesHtml = sw.slides.map((content,j) => `<div class="sv-slide${j===0?' sv-active':''}">${content}</div>`).join('');
-    card.innerHTML = `<div class="sv ${sw.theme}">${slidesHtml}<div class="sv-overlay-info"><div class="sv-dots">${dotsHtml}</div><div class="sv-name">${style.name}</div><div class="sv-desc">${style.desc}</div><div class="sv-cta">Tap to create →</div></div></div>`;
-    card.onclick = () => createCard(style);
-    list.appendChild(card);
-    setTimeout(() => startSlideshow(cardId, sw.slides.length), i * 600);
-  });
-}
-
-// ── PHOTOS ──
-const DEFAULT_CAPTIONS = ['The memory I keep coming back to 💫','You, in your element ✨','This one always makes me smile 😊','Look how far you\'ve come 🌟','My favourite version of you 💕'];
-let photoCaptions = ['','','','',''];
-
-// Relation-aware content — updates all fields at once
-function getRelationContent(rel) {
-  const r = (rel||'').toLowerCase().trim();
-  const sender = document.getElementById("cSender")?.value.trim() || '';
-  const sign = (n, tag) => n ? `${tag}, ${n}` : tag;
-
-  if (/girlfriend|gf/.test(r)) return {
-    photosHeading: "Us 💋",
-    songTitle: "Our song — you already know which one",
-    tone: "deeply romantic and passionate — a boyfriend writing to his girlfriend on Valentine's Day, raw and from the heart, not a greeting card",
-    signOff: sign(sender, "Yours, always ❤️"),
-    letterPlaceholder: "Every moment with you feels like the first...",
-    captions: ["The moment I knew it was you 💫","You, always you ❤️","I could look at this forever 😍","My whole world, right here 💋","The one I choose, every single day ❤️"]
-  };
-
-  if (/boyfriend|bf/.test(r)) return {
-    photosHeading: "Us 💋",
-    songTitle: "Our song — you already know which one",
-    tone: "deeply romantic and genuine — a girlfriend writing to her boyfriend on Valentine's Day, honest and from the heart, not over the top",
-    signOff: sign(sender, "Yours, always ❤️"),
-    letterPlaceholder: "I never knew it could feel like this...",
-    captions: ["Still can't believe you're mine 💫","You make everything better ❤️","This one lives rent-free in my head 😍","My person. In every way 💋","Lucky doesn't even cover it ❤️"]
-  };
-
-  if (/wife/.test(r)) return {
-    photosHeading: "My Everything 💍",
-    songTitle: "Our song — the one from that night",
-    tone: "deeply romantic and intimate — a husband writing to his wife on Valentine's Day, saying what he feels every day but rarely puts into words",
-    signOff: sign(sender, "Forever yours ❤️"),
-    letterPlaceholder: "Loving you is the best decision I ever made...",
-    captions: ["Every day I choose you. Every single one 💕","Home is wherever you are ❤️","That smile. It still gets me every time 💫","My favourite chapter, and it's still going 💍","Everything I didn't know I needed ❤️"]
-  };
-
-  if (/husband/.test(r)) return {
-    photosHeading: "My Everything 💍",
-    songTitle: "Our song — the one from that night",
-    tone: "deeply romantic and tender — a wife writing to her husband on Valentine's Day, saying what she feels every single day",
-    signOff: sign(sender, "Forever yours ❤️"),
-    letterPlaceholder: "I fall in love with you a little more every day...",
-    captions: ["Still my favourite person in any room 💕","Home is wherever you are ❤️","Life is just better with you in it 💫","My person. Always 💍","Grateful for you, every single day ❤️"]
-  };
-
-  if (/fianc/.test(r)) return {
-    photosHeading: "Soon Forever 💍",
-    songTitle: "Our song — for always",
-    tone: "romantic and full of anticipation — writing to your fiancé on Valentine's Day, celebrating the love and the forever you're stepping into",
-    signOff: sign(sender, "Soon forever yours ❤️"),
-    letterPlaceholder: "I can't wait to spend every Valentine's Day with you...",
-    captions: ["The beginning of our forever 💍","I'd say yes a thousand times over ❤️","You make forever sound easy 💫","Our best days are still ahead 💕","Can't wait to call you mine, forever ❤️"]
-  };
-
-  if (/jaan|babe|baby|darling|jaanu|love|partner|sweetheart/.test(r)) return {
-    photosHeading: "Us 💋",
-    songTitle: "Our song — you already know which one",
-    tone: "deeply romantic and personal — a Valentine's Day love letter, intimate and straight from the heart",
-    signOff: sign(sender, "Forever yours ❤️"),
-    letterPlaceholder: "Every moment with you feels like the first...",
-    captions: ["The moment I knew it was you 💫","You, always you ❤️","I could look at this forever 😍","My whole world 💋","The one I choose, every time ❤️"]
-  };
-
-  return {
-    photosHeading: "Us, always 💋",
-    songTitle: "Our song 💋",
-    tone: "deeply romantic and personal — a Valentine's Day love letter from the heart",
-    signOff: sign(sender, "Forever yours ❤️"),
-    letterPlaceholder: "Every moment with you feels like the first...",
-    captions: ["The moment I knew it was you 💫","You, always you ❤️","I could look at this forever 😍","My whole world 💋","The one I choose, every time ❤️"]
-  };
-}
-
-
-function onRelationChange(val) {
-  saveDraft();
-  if (!val.trim()) return;
-  const content = getRelationContent(val);
-  // Update all fields
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
-  set('photosHeading', content.photosHeading);
-  set('songScreenTitle', content.songTitle);
-  set('letterToneHeader', content.tone);
-  if (!signManuallyEdited) set('cSign', content.signOff);
-  if (content.letterPlaceholder) {
-    const msgEl = document.getElementById('cMsg');
-    if (msgEl && !msgEl.value.trim()) msgEl.placeholder = content.letterPlaceholder;
-  }
-  // Update captions
-  photoCaptions = [...content.captions];
-  content.captions.forEach((cap, i) => {
-    const el = document.getElementById('cap' + i);
-    if (el) { el.value = cap; autoResize(el); }
-  });
-}
-
-
-function buildPhotoSlots(captions) {
-  captions = captions || photoCaptions;
-  photoCaptions = [...captions];
-  const grid = document.getElementById('photosGrid');
-  grid.innerHTML = '';
-  photos = photos.length === 5 ? photos : new Array(5).fill(null);
-  captions.forEach((cap, i) => {
-    // Wrapper column: photo slot + caption below
-    const col = document.createElement('div');
-    col.className = 'photo-col';
-
-    const slot = document.createElement('div');
-    slot.className = 'photo-slot';
-    slot.id = 'slot' + i;
-    slot.dataset.idx = i;
-    if (photos[i]) {
-      slot.classList.add('has-photo');
-      slot.draggable = true;
-      slot.innerHTML = `<span class="slot-num">${i+1}</span><img src="${photos[i]}"><div class="up-dot ${uploadedUrls[i]?'done':'uploading'}" id="upd${i}"></div><button class="photo-del" onclick="removePhoto(event,${i})">✕</button>`;
-      slot.onclick = null;
-    } else {
-      slot.innerHTML = `<span class="slot-num">${i+1}</span><span class="slot-plus">+</span>`;
-      slot.onclick = () => { currentSlotIdx=i; document.getElementById('photoFileInput').click(); };
-    }
-    slot.addEventListener('dragstart', _onDragStart);
-    slot.addEventListener('dragover', _onDragOver);
-    slot.addEventListener('drop', _onDrop);
-    slot.addEventListener('dragend', _onDragEnd);
-    slot.addEventListener('touchstart', _onTouchStart, {passive:false});
-
-    // Caption textarea directly below slot
-    const ta = document.createElement('textarea');
-    ta.className = 'cap-input';
-    ta.id = 'cap' + i;
-    ta.value = photoCaptions[i] || '';
-    ta.placeholder = 'Caption...';
-    ta.maxLength = 100;
-    ta.rows = 1;
-    ta.addEventListener('input', () => { photoCaptions[i] = ta.value; autoResize(ta); });
-    // Auto-resize on build
-    requestAnimationFrame(() => autoResize(ta));
-
-    col.appendChild(slot);
-    col.appendChild(ta);
-    grid.appendChild(col);
-  });
-  updateUploadCount();
-  requestAnimationFrame(() => requestAnimationFrame(autoResizeAll));
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = (el.scrollHeight) + 'px';
-}
-function autoResizeAll() {
-  document.querySelectorAll('.cap-input').forEach(autoResize);
-}
-
-// ── Drag to rearrange ──
-let _dragSrc = -1, _touchClone = null;
-
-function _onDragStart(e) {
-  const i = parseInt(this.dataset.idx);
-  if (!photos[i]) { e.preventDefault(); return; }
-  _dragSrc = i;
-  e.dataTransfer.effectAllowed = 'move';
-  setTimeout(() => this.classList.add('dragging-src'), 0);
-}
-function _onDragOver(e) {
-  e.preventDefault();
-  if (_dragSrc === -1) return;
-  document.querySelectorAll('.photo-slot').forEach(s => s.classList.remove('drag-over'));
-  if (parseInt(this.dataset.idx) !== _dragSrc) this.classList.add('drag-over');
-}
-function _onDrop(e) {
-  e.preventDefault();
-  const dest = parseInt(this.dataset.idx);
-  if (dest !== _dragSrc) _swapPhotos(_dragSrc, dest);
-  document.querySelectorAll('.photo-slot').forEach(s => s.classList.remove('drag-over'));
-}
-function _onDragEnd() {
-  this.classList.remove('dragging-src');
-  document.querySelectorAll('.photo-slot').forEach(s => s.classList.remove('drag-over'));
-  _dragSrc = -1;
-}
-function _onTouchStart(e) {
-  const idx = parseInt(this.dataset.idx);
-  if (!photos[idx]) return;
-  let moved = false;
-  const sx = e.touches[0].clientX, sy = e.touches[0].clientY;
-  let touchSrc = idx;
-  const onMove = mv => {
-    const dx = mv.touches[0].clientX-sx, dy = mv.touches[0].clientY-sy;
-    if (!moved && Math.hypot(dx,dy) > 10) {
-      moved = true;
-      const r = document.getElementById('slot'+touchSrc).getBoundingClientRect();
-      _touchClone = document.createElement('div');
-      _touchClone.style.cssText = `position:fixed;width:${r.width}px;height:${r.height}px;border-radius:10px;opacity:0.9;pointer-events:none;z-index:999;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.5);`;
-      const img = document.getElementById('slot'+touchSrc).querySelector('img');
-      if (img) { const c=img.cloneNode(); c.style.cssText='width:100%;height:100%;object-fit:cover;'; _touchClone.appendChild(c); }
-      document.body.appendChild(_touchClone);
-      document.getElementById('slot'+touchSrc).classList.add('dragging-src');
-    }
-    if (moved && _touchClone) {
-      mv.preventDefault();
-      _touchClone.style.left=(mv.touches[0].clientX-_touchClone.offsetWidth/2)+'px';
-      _touchClone.style.top=(mv.touches[0].clientY-_touchClone.offsetHeight/2)+'px';
-      document.querySelectorAll('.photo-slot').forEach(s=>s.classList.remove('drag-over'));
-      const el=document.elementFromPoint(mv.touches[0].clientX,mv.touches[0].clientY);
-      const slotEl=el?.closest('.photo-slot');
-      if(slotEl&&slotEl!==document.getElementById('slot'+touchSrc)) slotEl.classList.add('drag-over');
-    }
-  };
-  const onEnd = ev => {
-    document.removeEventListener('touchmove',onMove);
-    document.removeEventListener('touchend',onEnd);
-    document.getElementById('slot'+touchSrc)?.classList.remove('dragging-src');
-    if(_touchClone){_touchClone.remove();_touchClone=null;}
-    if(!moved) return;
-    const touch=ev.changedTouches[0];
-    const el=document.elementFromPoint(touch.clientX,touch.clientY);
-    const slotEl=el?.closest('.photo-slot');
-    if(slotEl&&slotEl!==document.getElementById('slot'+touchSrc)) _swapPhotos(touchSrc,parseInt(slotEl.dataset.idx));
-    document.querySelectorAll('.photo-slot').forEach(s=>s.classList.remove('drag-over'));
-  };
-  document.addEventListener('touchmove',onMove,{passive:false});
-  document.addEventListener('touchend',onEnd);
-}
-
-function _swapPhotos(a, b) {
-  [photos[a], photos[b]] = [photos[b], photos[a]];
-  [uploadedUrls[a], uploadedUrls[b]] = [uploadedUrls[b], uploadedUrls[a]];
-  buildPhotoSlots();
-}
-
-function triggerUpload(idx) {
-  currentSlotIdx = idx;
-  document.getElementById('photoFileInput').click();
-}
-
-async function handlePhotoUpload(input) {
-  const files = Array.from(input.files);
-  if (!files.length) return;
-  const startIdx = currentSlotIdx;
-  for (let f = 0; f < files.length && startIdx + f < 5; f++) {
-    const idx = startIdx + f;
-    const file = files[f];
-    const localUrl = URL.createObjectURL(file);
-    photos[idx] = localUrl;
-    const slot = document.getElementById('slot' + idx);
-    slot.innerHTML = `<img src="${localUrl}"><div class="up-dot uploading" id="upd${idx}"></div><div class="upind"><div class="upbar" id="upb${idx}"></div></div><button class="photo-del" onclick="removePhoto(event,${idx})">✕</button>`;
-    slot.classList.add('has-photo');
-    slot.onclick = null;
-    updateUploadCount();
-    uploadPhotoInBackground(file, idx);
-  }
-  input.value = '';
-}
-
-async function uploadPhotoInBackground(file, idx) {
-  try {
-    const fd = new FormData();
-    fd.append('file', file); fd.append('upload_preset', CLOUDINARY_PRESET); fd.append('folder', 'wishyou');
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-    const d = await res.json();
-    if (d.secure_url) {
-      uploadedUrls[idx] = d.secure_url;
-      const dot = document.getElementById('upd'+idx);
-      if (dot) { dot.classList.remove('uploading'); dot.classList.add('done'); }
-      const bar = document.getElementById('upb'+idx);
-      if (bar) bar.style.width = '100%';
-      updateUploadCount();
-    }
-  } catch(e) { console.error('Upload failed',e); }
-}
-
-function removePhoto(e, idx) {
-  e.stopPropagation();
-  photos[idx] = null;
-  delete uploadedUrls[idx];
-  // Clear caption for this slot too
-  photoCaptions[idx] = '';
-  const capEl = document.getElementById('cap' + idx);
-  if (capEl) { capEl.value = ''; autoResize(capEl); }
-  const slot = document.getElementById('slot'+idx);
-  slot.className = 'photo-slot';
-  slot.draggable = false;
-  slot.innerHTML = `<span class="slot-num">${idx+1}</span><span class="slot-plus">+</span>`;
-  slot.onclick = () => { currentSlotIdx=idx; document.getElementById('photoFileInput').click(); };
-  updateUploadCount();
-}
-
-function updateUploadCount() {
-  const total = photos.filter(Boolean).length;
-  const done = Object.keys(uploadedUrls).length;
-  document.getElementById('totalCount').textContent = total;
-  document.getElementById('uploadedCount').textContent = done;
-}
-
-
-// ── SONG ──
-async function searchSong() {
-  const q = document.getElementById('ytSearchInput').value.trim(); if (!q) return;
-  const rd = document.getElementById('songResults');
-  rd.innerHTML = `<div style="font-size:0.74rem;color:rgba(160,220,210,0.32);padding:8px 0;">🔍 Searching...</div>`;
-  try {
-    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({type:'youtube_search',query:q}) });
-    const data = await res.json();
-    if (!data.items || !data.items.length) { rd.innerHTML = '<div style="font-size:0.74rem;opacity:0.32;padding:6px 0;">No results found.</div>'; return; }
-    rd.innerHTML = '';
-    data.items.slice(0,4).forEach(item => {
-      const {videoId} = item.id, {title,channelTitle,thumbnails} = item.snippet;
-      const card = document.createElement('div'); card.className = 'song-result';
-      card.innerHTML = `<img src="${thumbnails.default.url}"><div class="song-rt"><div class="song-rt-title">${title}</div><div class="song-rt-ch">${channelTitle}</div></div><button class="song-use-btn">✓ Use</button>`;
-      card.querySelector('button').onclick = e => { e.stopPropagation(); selectSong(videoId, title, channelTitle); };
-      rd.appendChild(card);
-    });
-  } catch(e) { rd.innerHTML = '<div style="font-size:0.74rem;opacity:0.32;padding:6px 0;">Search failed. Try again.</div>'; }
-}
-
-function selectSong(videoId, title, artist) {
-  selectedVideoId = videoId;
-  document.getElementById('songSelectedName').textContent = title + ' — ' + artist;
-  document.getElementById('songSelectedBox').style.display = 'block';
-  document.getElementById('songResults').innerHTML = `<div style="font-size:0.74rem;color:rgba(20,160,140,0.6);padding:5px 0;">✅ ${title} added!</div>`;
-}
-
-// ── AI LETTER ──
-async function runAILetter() {
-  const name = document.getElementById('cName').value.trim() || 'them';
-  const sender = document.getElementById('cSender').value.trim() || 'someone';
-  const toneInput = document.getElementById('letterToneHeader')?.value.trim() || 'emotional and heartfelt';
-  const btn = document.getElementById('aiLetterBtn');
-  const loading = document.getElementById('letterAiLoading');
-  aiLetterCount++;
-  btn.disabled = true; loading.classList.add('show');
-  const variationHint = aiLetterCount > 1 ? ` Attempt #${aiLetterCount} — write a COMPLETELY DIFFERENT letter.` : '';
-  const langs = ['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
-  const detectedLang = langs.find(l => toneInput.toLowerCase().includes(l));
-  let langNote = '';
-  if (detectedLang) { const ln = detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1); langNote = ` CRITICAL: Write ENTIRE letter in ${ln} script only.`; }
-  const c = DEFAULT_CONTENT;
-  const relation = (document.getElementById('relationInput')?.value||'').trim();
-  const relationHint = relation ? ` The recipient is the sender's ${relation}.` : '';
-  const prompt = c.aiLetterPrompt(name, sender, toneInput) + relationHint + langNote + variationHint;
-  const text = await callClaude(prompt);
-  if (text) { const el = document.getElementById('cMsg'); if (el) el.value = stripMarkdown(text); }
-  btn.disabled = false; loading.classList.remove('show');
-  btn.textContent = 'Again ✨';
-}
-
-
-async function callClaude(prompt) {
-  try {
-    const res = await fetch(WORKER_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
-    const data = await res.json(); if (data.error) return '';
-    return data.content && data.content[0] ? data.content[0].text : '';
-  } catch(e) { return ''; }
-}
-
-function stripMarkdown(t) { return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim(); }
-
-function clearDraft(){try{localStorage.removeItem(DRAFT_KEY);}catch(e){}}
-
-// ── CREATE CARD ──
-async function createCard(style) {
-  const overlay = document.getElementById('saveOverlay');
-  const bar = document.getElementById('saveBar');
-  const label = document.getElementById('saveLabel');
-  document.getElementById('saveEmoji').textContent = style.previewEmoji;
-  function setP(pct, lbl) { bar.style.width = pct+'%'; if(lbl) label.textContent = lbl; }
-  overlay.classList.add('show'); setP(10,'Preparing your card...');
-
-  let photoUrls = [];
-  const slots = photos.map((p,i) => ({blob:p,idx:i})).filter(s=>s.blob);
-  let uploaded = 0;
-  for (const s of slots) {
-    if (uploadedUrls[s.idx]) {
-      photoUrls.push(uploadedUrls[s.idx]); uploaded++;
-      setP(10+(uploaded/Math.max(slots.length,1)*50),'Photos ready ✓');
-    } else if (typeof s.blob==='string'&&s.blob.startsWith('https://')) {
-      // Already a remote URL (e.g. restored from draft) — use directly
-      photoUrls.push(s.blob); uploadedUrls[s.idx]=s.blob; uploaded++;
-      setP(10+(uploaded/Math.max(slots.length,1)*50),'Photos ready ✓');
-    } else {
-      setP(10+(uploaded/Math.max(slots.length,1)*50),`Uploading photo ${uploaded+1}...`);
-      try {
-        const blob = await fetch(s.blob).then(r=>r.blob());
-        const fd = new FormData(); fd.append('file',blob); fd.append('upload_preset',CLOUDINARY_PRESET); fd.append('folder','wishyou');
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-        const d = await res.json(); if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
-      } catch(e){console.error('Upload error:',e);}
-      uploaded++;
-    }
-  }
-
-  setP(70,'Saving your card...');
-  // Read caption textareas fresh — only save captions for slots that have a photo
-  for (let i = 0; i < 5; i++) {
-    const el = document.getElementById('cap' + i);
-    if (el) photoCaptions[i] = photos[i] ? el.value.trim() : '';
-  }
-  const now = Date.now();
-  const cardData = {
-    type: style.cardType,
-    name: document.getElementById('cName').value.trim()||'',
-    sender: document.getElementById('cSender').value.trim()||'',
-    msg: document.getElementById('cMsg').value.trim()||'',
-    sign: document.getElementById('cSign').value.trim()||'',
-    spotify: selectedVideoId?`https://www.youtube.com/watch?v=${selectedVideoId}`:'',
-    songName: document.getElementById('songSelectedName').textContent||'',
-    memoriesHeading: document.getElementById('photosHeading').value.trim()||style.defaultMemoriesHeading||'Memories',
-    songScreenTitle: document.getElementById('songScreenTitle').value.trim()||style.defaultSongTitle||'Song for you 🎵',
-    photoCaptions: photoCaptions,
-    photos: photoUrls, created:now, createdAt:now, expiresAt:now+3*24*60*60*1000
-  };
-
-  try {
-    setP(85,'Almost there...');
-    const res = await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
-    const data = await res.json(); const cardId = data.name;
-    shareLink = style.receiverUrl(cardId);
-    shareLinkShort = `wishyou.ai/b/${cardId}`;
-    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
-    setP(100,'Card created! 🎉');
-    clearDraft();
-    setTimeout(() => {
-      overlay.classList.remove('show');
-      document.getElementById('shareEmoji').textContent = style.previewEmoji;
-      document.getElementById('shareReceiverName').textContent = cardData.name||'them';
-      document.getElementById('shareLinkTxt').textContent = shareLink;
-      document.getElementById('shareModal').classList.add('show');
-    }, 700);
-  } catch(e) { console.error('Save error:',e); overlay.classList.remove('show'); alert('Could not save card. Please try again. Error: '+e.message); }
-}
-
-// ── SHARE ──
-function copyLink() {
-  navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy',2000);});
-}
-function openWhatsApp() {
-  const name = document.getElementById('cName').value.trim()||'';
-  const sender = document.getElementById('cSender').value.trim()||'';
-  const style = BIRTHDAY_STYLES.find(s=>shareLink.includes(s.id));
-  const msg = style ? style.shareMsg(name,sender,shareLink) : shareLink;
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if (navigator.share && isMobile) { navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')); }
-  else { window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank'); }
-}
-function closeShare() { document.getElementById('shareModal').classList.remove('show'); }
-
-// ── DRAFT ──
-const DRAFT_KEY = 'wishyou_valentine_draft';
-function saveDraft() {
-  try {
-    // Read captions fresh from DOM
-    for (let i = 0; i < 5; i++) {
-      const el = document.getElementById('cap' + i);
-      if (el) photoCaptions[i] = el.value;
-    }
-    localStorage.setItem(DRAFT_KEY, JSON.stringify({
-      screen: curScreen,
-      cName: document.getElementById('cName')?.value||'',
-      cSender: document.getElementById('cSender')?.value||'',
-      relationInput: document.getElementById('relationInput')?.value||'',
-      photosHeading: document.getElementById('photosHeading')?.value||'',
-      songScreenTitle: document.getElementById('songScreenTitle')?.value||'',
-      letterToneHeader: document.getElementById('letterToneHeader')?.value||'',
-      cMsg: document.getElementById('cMsg')?.value||'',
-      cSign: document.getElementById('cSign')?.value||'',
-      signManuallyEdited,
-      songSelectedName: document.getElementById('songSelectedName')?.textContent||'—',
-      selectedVideoId,
-      photoCaptions,
-      uploadedUrls,
-    }));
-  } catch(e){}
-}
-
-function restoreDraft() {
-  try {
-    const raw = localStorage.getItem(DRAFT_KEY);
-    if (!raw) return;
-    const d = JSON.parse(raw);
-    if (!d.cName && !d.cSender) return;
-
-    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined && val !== '') el.value = val; };
-    const setText = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
-
-    set('cName', d.cName);
-    set('cSender', d.cSender);
-    set('relationInput', d.relationInput);
-    set('photosHeading', d.photosHeading);
-    set('songScreenTitle', d.songScreenTitle);
-    set('letterToneHeader', d.letterToneHeader);
-    set('cMsg', d.cMsg);
-    set('cSign', d.cSign);
-
-    if (d.signManuallyEdited) signManuallyEdited = true;
-    if (d.selectedVideoId) selectedVideoId = d.selectedVideoId;
-
-    if (d.songSelectedName && d.songSelectedName !== '—') {
-      setText('songSelectedName', d.songSelectedName);
-      const box = document.getElementById('songSelectedBox');
-      if (box) box.style.display = 'block';
-    }
-
-    // Restore captions
-    if (d.photoCaptions) {
-      photoCaptions = d.photoCaptions;
-    }
-
-    // Restore uploaded photo URLs — rebuild slots with Cloudinary URLs as previews
-    if (d.uploadedUrls && Object.keys(d.uploadedUrls).length > 0) {
-      uploadedUrls = d.uploadedUrls;
-      Object.entries(uploadedUrls).forEach(([idx, url]) => {
-        const i = parseInt(idx);
-        photos[i] = url; // use cloudinary URL as preview
-      });
-      buildPhotoSlots(photoCaptions);
-    }
-
-    // Restore screen
-    if (d.screen && d.screen !== 'p-info') {
-      if (d.screen === 'p-style') buildStylesList();
-      const el = document.getElementById(d.screen);
-      if (el) {
-        document.getElementById('p-info').classList.remove('active');
-        el.classList.add('active');
-        curScreen = d.screen;
-      }
-    }
-  } catch(e) { console.warn('restoreDraft:', e); }
-}
 
 // ── INIT ──
-window.addEventListener('DOMContentLoaded', () => {
-  photos = new Array(5).fill(null);
-  buildPhotoSlots();
-  restoreDraft();
+window.addEventListener('DOMContentLoaded',function(){
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(cardId){goTo('rv-loading');loadCard();}else{goTo('rv-error');}
+  let _sx=0, _sy=0;
+  document.addEventListener('touchstart',e=>{
+    _sx=e.changedTouches[0].clientX;
+    _sy=e.changedTouches[0].clientY;
+  },{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-_sx;
+    const dy=e.changedTouches[0].clientY-_sy;
+    // Ignore if more vertical than horizontal
+    if(Math.abs(dx)<50||Math.abs(dy)>Math.abs(dx))return;
+    // On rv-photos screen — swipe navigates photos, not pages
+    if(curScreen==='rv-photos'){
+      if(dx<0&&typeof advanceStack==='function') advanceStack();
+      // swipe right does nothing (stack only goes forward)
+      return;
+    }
+    const RV=['rv-welcome','rv-photos','rv-song','rv-envelope','rv-letter'];
+    const idx=RV.indexOf(curScreen);if(idx===-1)return;
+    if(dx<0&&idx<RV.length-1)goTo(RV[idx+1]);
+    else if(dx>0&&idx>0)goTo(RV[idx-1]);
+  },{passive:true});
 });
+
+// ════ CREATOR FUNCTIONS (exact from index.html) ════
+
+async function searchSong(){
+  const q=document.getElementById('ytSearchInput').value.trim();
+  if(!q){alert('Please type a song name.');return;}
+  const rd=document.getElementById('songResults');
+  rd.innerHTML=`<div style="text-align:center;padding:12px;font-size:0.85rem;color:#b00020;">🔍 Searching...</div>`;
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'youtube_search',query:q})});
+    const data=await res.json();
+    if(!data.items||!data.items.length){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">No results found.</div>';return;}
+    rd.innerHTML='';
+    data.items.slice(0,4).forEach(item=>{
+      const {videoId}=item.id,{title,channelTitle,thumbnails}=item.snippet;
+      const card=document.createElement('div');
+      card.className='song-result soft-result';
+      card.innerHTML=`<img src="${thumbnails.default.url}"><div style="flex:1;min-width:0;"><div style="font-size:0.8rem;font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${title}</div><div style="font-size:0.68rem;opacity:0.5;margin-top:2px;">${channelTitle}</div></div><button class="song-use-btn soft-use">✓ Use</button>`;
+      card.querySelector('button').onclick=e=>{e.stopPropagation();selectSong(videoId,title,channelTitle);};
+      rd.appendChild(card);
+    });
+  }catch(e){rd.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:8px;">Search failed. Try again.</div>';}
+}
+
+function selectSong(videoId,title,artist){
+  const ytUrl='https://www.youtube.com/watch?v='+videoId;
+  document.getElementById('cSpotify').value=ytUrl;
+  spotifySrc='https://www.youtube.com/embed/'+videoId+'?autoplay=0&rel=0';
+  document.getElementById('songSelectedName').textContent=title+' — '+artist;
+  document.getElementById('songSelectedBox').style.display='block';
+  document.getElementById('songResults').innerHTML=`<div style="font-size:0.8rem;font-weight:600;padding:6px 0;color:#b00020;">✅ ${title} added!</div>`;
+}
+
+async function suggestSongs(){
+  const loading=document.getElementById('songAiLoading');
+  const results=document.getElementById('songAiResults');
+  const btn=document.getElementById('aiSongBtn');
+  loading.classList.add('show');results.innerHTML='';btn.disabled=true;
+  const context=document.getElementById('aiSongContext')?.value.trim()||'';
+  const name=document.getElementById('cName')?.value.trim()||'';
+  let prompt=`Suggest 4 real popular songs for a Birthday card`;
+  if(name) prompt+=` for someone named ${name}`;
+  if(context){prompt+=`. User specifically wants: "${context}". Follow this exactly — if they say Marathi, give ONLY Marathi songs. If they say romantic Hindi, give romantic Hindi songs only.`;}
+  else{prompt+=`. Mix languages, include emotional and upbeat options`;}
+  prompt+=`. Return ONLY a JSON array, no markdown: [{"name":"Song Name","artist":"Artist Name"}]`;
+  const text=await callClaude(prompt);
+  try{
+    const songs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    if(!songs.length){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Try being more specific.</div>';return;}
+    songs.forEach(s=>{
+      const el=document.createElement('div');
+      el.style.cssText='display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;margin-bottom:6px;cursor:pointer;background:rgba(255,255,255,0.7);border:1px solid rgba(233,30,99,0.1);touch-action:manipulation;';
+      el.innerHTML=`<span style="font-size:1.1rem;">🎵</span><div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:600;color:#ffe8e8;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;">${s.name}</div><div style="font-size:0.72rem;color:rgba(255,160,160,0.65);opacity:0.7;">${s.artist}</div></div><span style="font-size:0.7rem;font-weight:600;color:#b00020;white-space:nowrap;">Search ›</span>`;
+      el.onclick=()=>{document.getElementById('ytSearchInput').value=s.name+' '+s.artist;searchSong();};
+      results.appendChild(el);
+    });
+  }catch(e){results.innerHTML='<div style="font-size:0.8rem;opacity:0.5;padding:6px;">Could not fetch. Try again.</div>';}
+  loading.classList.remove('show');btn.disabled=false;
+}
+
+async function runAILetter(){
+  const name=document.getElementById('cName')?.value.trim()||'them';
+  const sender=document.getElementById('cSender')?.value.trim()||'someone';
+  const toneInput=document.getElementById('letterTone')?.value.trim()||'';
+  const btn=document.getElementById('aiLetterBtn');
+  const loading=document.getElementById('letterAiLoading');
+  const resultHint=document.getElementById('letterAiResult');
+  aiLetterCount++;
+  btn.disabled=true;loading.classList.add('show');
+  const variationHint=aiLetterCount>1?` Attempt #${aiLetterCount} — write a COMPLETELY DIFFERENT letter with different words and ideas.`:'';
+  const langs=['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
+  const detectedLang=langs.find(l=>toneInput.toLowerCase().includes(l));
+  let langNote='';
+  if(detectedLang){
+    const langName=detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1);
+    langNote=` CRITICAL: Write the ENTIRE letter in ${langName} script only. Use simple natural everyday ${langName} — exactly how real people speak to loved ones. NOT formal or poetic. NOT translated English.`;
+  }
+  const toneDesc=toneInput||'warm and heartfelt';
+  const prompt=`Write a short Birthday letter from ${sender} to ${name} (3-4 sentences). Tone/style: ${toneDesc}.${langNote}${variationHint} Return ONLY the letter body — no greeting line, no sign off.`;
+  const text=await callClaude(prompt);
+  if(text){const el=document.getElementById('cMsg');if(el)el.value=stripMarkdown(text);}
+  btn.disabled=false;loading.classList.remove('show');
+  if(resultHint)resultHint.style.display='block';
+  btn.textContent='✨ Write Another Letter';
+}
+
+async function callClaude(prompt){
+  try{
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();if(data.error)return'';
+    return data.content&&data.content[0]?data.content[0].text:'';
+  }catch(e){return'';}
+}
+function stripMarkdown(t){return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim();}
+
+async function loadCard(){
+  const cardId=new URLSearchParams(window.location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  try{
+    const res=await fetch(`${FIREBASE_URL}/${cardId}.json`);
+    const d=await res.json();
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE_URL}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE_URL}/${cardId}/views.json`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderCard(d);
+  }catch(e){goTo('rv-error');}
+}
+
+function renderCard(d){
+  const name=d.name||'';const sender=d.sender||'';
+  document.getElementById('rvName').textContent=name?`Happy Valentine's Day, ${name}!`:`Happy Valentine's Day!`;
+  document.getElementById('rvSub').textContent=sender?`${sender} made this just for you 🌸`:'Someone made this just for you ❤️';
+  document.getElementById('rvFrom').textContent='';
+  // Photos heading = main title only
+  const heading=d.memoriesHeading||'Our Memories';
+  document.getElementById('rvPhotoTitle').textContent=heading;
+  const sst=document.getElementById('rvSongScreenTitle');
+  if(sst)sst.textContent=d.songScreenTitle||'Song that reminds me of you 🎵';
+  // Photos — stacked card animation, tap front card → arcs sideways → goes behind stack
+  const stack=document.getElementById('polStack');
+  const counter=document.getElementById('polCounter');
+  stack.innerHTML='';
+  if(d.photos&&d.photos.length>0){
+    const photos=d.photos;
+    const captions=d.photoCaptions||[];
+    const defCaps=['The memory I keep coming back to 💫','You, in your element ✨','This one always makes me smile 😊','Look how far you\'ve come 🌟','My favourite version of you 💕'];
+    const n=photos.length;
+    const POSITIONS=[
+      ['-50%','0px','0deg',  1,    1   ],  // front — centered
+      ['-38%','12px','6deg', 0.96, 1   ],  // 2nd — peeks right
+      ['-62%','20px','-5deg',0.93, 1   ],  // 3rd — peeks left
+      ['-40%','26px','4deg', 0.90, 1   ],  // 4th
+      ['-60%','30px','-3deg',0.87, 1   ],  // 5th
+    ];
+    let front=0, busy=false;
+    // Preload all images
+    photos.forEach(u=>{const i=new Image();i.src=u;});
+    // Set first card img src now so it loads during welcome screen
+    setTimeout(()=>{const firstImg=document.querySelector('#polStack img');if(firstImg&&photos[0])firstImg.src=photos[0];},0);
+    // Build cards — append back-to-front so front card is last (on top visually via z-index)
+    const cards=photos.map((url,i)=>{
+      const c=document.createElement('div');
+      c.className='pol-card';
+      const cap=captions[i]||'';
+      c.innerHTML=`<img src="${url}" alt="" style="opacity:0;transition:opacity 0.4s ease;" onload="this.style.opacity='1'" onerror="this.parentNode.style.display='none'"><div class="pol-caption-wrap"><div class="pol-caption">${cap}</div>${i===0?'<div class="pol-tap-hint">swipe or tap to shuffle ✨</div>':''}</div>`;
+      stack.appendChild(c);
+      return c;
+    });
+    function place(){
+      cards.forEach((c,i)=>{
+        const dist=(i-front+n)%n;
+        const[tx,ty,rot,sc,op]=POSITIONS[Math.min(dist,n-1)];
+        c.style.transform=`translateX(${tx}) translateY(${ty}) rotate(${rot}) scale(${sc})`;
+        c.style.opacity=op;
+        c.style.zIndex=n-dist;
+        c.style.boxShadow=dist===0?'0 16px 44px rgba(74,14,42,0.32)':'0 4px 14px rgba(74,14,42,0.12)';
+        const hint=c.querySelector('.pol-tap-hint');
+        if(hint)hint.style.display=dist===0?'block':'none';
+      });
+      counter.textContent=`${(front%n)+1} / ${n}`;
+    }
+    window.advanceStack=function(){
+      if(busy||n<2)return; busy=true;
+      const fc=cards[front];
+      fc.style.zIndex=-1;
+      fc.classList.add('arc-back');
+      front=(front+1)%n;
+      setTimeout(()=>place(),60);
+      setTimeout(()=>{
+        fc.classList.remove('arc-back');
+        fc.style.transition='none';
+        const[tx,ty,rot,sc,op]=POSITIONS[n-1];
+        fc.style.transform=`translateX(${tx}) translateY(${ty}) rotate(${rot}) scale(${sc})`;
+        fc.style.opacity=op; fc.style.zIndex=1;
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{fc.style.transition='';place();busy=false;}));
+      },950);
+    };
+    _showFirst=()=>place();
+  }else{stack.innerHTML='<div class="no-photo">💕 A card made with love</div>';}
+  // Song
+  const sn=d.songName||'';
+  if(sn&&sn!=='—'){
+    document.getElementById('rvSongT').textContent=sn;
+    document.getElementById('rvSongA').textContent='A song chosen just for you';
+    const sp=d.spotify||'';
+    if(sp){const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);if(ytM){document.getElementById('rvYtWrap').classList.add('show');document.getElementById('rvYtEmbed').innerHTML=`<iframe src="https://www.youtube.com/embed/${ytM[1]}" allow="autoplay" allowfullscreen></iframe>`;}}
+  }
+  // Letter
+  document.getElementById('rvLGreet').textContent='';
+  rvLetterText=d.msg||'';
+  rvLetterSign=d.sign||(sender?`With love, ${sender} 💕`:'With love 💕');
+  document.getElementById('rvLBody').textContent=rvLetterText;
+  document.getElementById('rvLSign').textContent=rvLetterSign;
+  goTo('rv-welcome');
+}
+
+let rvLetterText='';
+let rvLetterSign='';
+
+function openLetter(){
+  const e=document.querySelector('.env-icon');
+  e.style.transform='scale(1.3) rotate(15deg)';
+  setTimeout(()=>{e.style.transform='';goTo('rv-letter');setTimeout(typewriteLetter,300);},380);
+}
+
+function typewriteLetter(){
+  const el=document.getElementById('rvLBody');
+  const signEl=document.getElementById('rvLSign');
+  if(!el||!rvLetterText) return;
+  el.textContent='';
+  signEl.style.opacity='0';
+  const chars=rvLetterText.split('');
+  let i=0;
+  // Fast typewriter — each char 18ms
+  function next(){
+    if(i<chars.length){
+      el.textContent+=chars[i];
+      i++;
+      setTimeout(next,18);
+    } else {
+      // Fade in sign after text done
+      setTimeout(()=>{
+        signEl.style.transition='opacity 0.6s ease';
+        signEl.style.opacity='1';
+      },200);
+    }
+  }
+  next();
+}
 </script>
-</body>
-</html>
+
+
+</body></html>
