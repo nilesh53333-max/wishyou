@@ -259,36 +259,9 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-blossom .sv-pols .sv-pol-inner{background:#fce4ec;}
 .sv-blossom .sv-vinyl-c{background:#e91e63;}
 
-/* Sunshine theme */
-.sv-sunshine{background:linear-gradient(180deg,#87CEEB 0%,#b0e0ff 40%,#90d060 70%,#5a8a30 100%);}
-.sv-sunshine .sv-lbl{color:rgba(90,138,48,0.7);}
-.sv-sunshine .sv-title{color:#1a3a0a;font-size:0.78rem;}
-.sv-sunshine .sv-sub{color:rgba(26,58,10,0.6);}
-.sv-sunshine .sv-dot{background:rgba(255,193,7,0.3);}
-.sv-sunshine .sv-dot.sv-dot-active{background:#f59e0b;}
-.sv-sunshine .sv-name{color:#1a3a0a;}
-.sv-sunshine .sv-desc{color:rgba(26,58,10,0.65);}
-.sv-sunshine .sv-cta{color:#5a8a30;}
-.sv-sunshine .sv-overlay-info{background:linear-gradient(to top,rgba(90,138,48,0.95) 0%,rgba(90,138,48,0.6) 70%,transparent);}
-.sv-sunshine .sv-name{color:#fff;}
-.sv-sunshine .sv-desc{color:rgba(255,255,255,0.75);}
-.sv-sunshine .sv-cta{color:#fde68a;}
-.sv-sunshine .sv-pols .sv-pol-inner{background:#fef9c3;}
-.sv-sunshine .sv-vinyl-c{background:#f59e0b;}
 
-/* Saree theme */
-.sv-saree{background:linear-gradient(160deg,#1a0a2e,#2d1048);}
-.sv-saree .sv-lbl{color:rgba(212,168,83,0.45);}
-.sv-saree .sv-title{color:rgba(255,230,180,0.9);font-size:0.78rem;}
-.sv-saree .sv-sub{color:rgba(212,168,83,0.5);}
-.sv-saree .sv-dot{background:rgba(212,168,83,0.2);}
-.sv-saree .sv-dot.sv-dot-active{background:#d4a853;}
-.sv-saree .sv-name{color:rgba(255,230,180,0.9);}
-.sv-saree .sv-desc{color:rgba(212,168,83,0.55);}
-.sv-saree .sv-cta{color:#d4a853;}
-.sv-saree .sv-overlay-info{background:linear-gradient(to top,rgba(26,10,46,0.97) 0%,rgba(26,10,46,0.7) 70%,transparent);}
-.sv-saree .sv-pols .sv-pol-inner{background:#2d1048;}
-.sv-saree .sv-vinyl-c{background:#d4a853;}
+
+
 /* Recipe theme */
 .sv-recipe{background:linear-gradient(160deg,#fdf6e3,#faefd5);position:relative;}
 .sv-recipe::before{content:'';position:absolute;inset:0;
@@ -609,26 +582,6 @@ const BIRTHDAY_STYLES = [
     shareMsg: (n,s,l) => `🌺 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' ne tumhare liye ek special blossom card banaya hai 🌸\n\n':'Someone made you a blossom card 🌸\n\n'}Kholo aur dekho:\n\n👆 Open:\n${l}`
   },
   {
-    id:'sunshine', name:'🌻 Sunshine',
-    desc:'Bright & joyful · Growing sunflower · Garden aesthetic · Warm letter',
-    previewEmoji:'🌻',
-    cardType:'mothers-sunshine',
-    defaultSongTitle:'A sunny song for you 🎵',
-    defaultMemoriesHeading:'Our sunshine moments',
-    receiverUrl: id => `https://wishyou.ai/mothersday/sunshine.html?card=${id}`,
-    shareMsg: (n,s,l) => `🌻 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' ne tumhare liye ek special garden card banaya hai 🌿\n\n':'Someone made you a sunshine card 🌻\n\n'}Kholo aur dekho:\n\n👆 Open:\n${l}`
-  },
-  {
-    id:'saree', name:'🪡 Saree',
-    desc:'Elegant & dramatic · Folded saree reveal · Embroidery hoops · Zari border',
-    previewEmoji:'🪡',
-    cardType:'mothers-saree',
-    defaultSongTitle:'A song woven with love 🎵',
-    defaultMemoriesHeading:'Woven memories',
-    receiverUrl: id => `https://wishyou.ai/mothersday/saree.html?card=${id}`,
-    shareMsg: (n,s,l) => `🪡 *Happy Mother's Day${n?' '+n:''}!*\n\n${s?s+' ne tumhare liye ek special saree card banaya hai ✨\n\n':'Someone made you a saree card ✨\n\n'}Kholo aur dekho:\n\n👆 Open:\n${l}`
-  },
-  {
     id:'recipe', name:'🍱 Recipe Card',
     desc:'Most unique · Handwritten recipe · Photos as cooking steps · Chef note letter',
     previewEmoji:'🍱',
@@ -746,24 +699,6 @@ function buildStylesList() {
         `<div class="sv-lbl">📸 Arch Gallery</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">🌺</div></div><div class="sv-pol"><div class="sv-pol-inner">🌸</div></div><div class="sv-pol"><div class="sv-pol-inner">💐</div></div></div><div class="sv-sub">Photos in a beautiful arched gallery</div>`,
         `<div class="sv-lbl">🎵 Her Song</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Petals falling as her song plays</div>`,
         `<div class="sv-lbl">💌 Letter in Bloom</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:80%"></div><div class="sv-line" style="width:88%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#c2185b;">Words from the heart 🌷</div>`
-      ]
-    },
-    sunshine: {
-      theme:'sv-sunshine',
-      slides:[
-        `<div class="sv-lbl">🌻 Garden Grows</div><span class="sv-emoji">🌻</span><div class="sv-title">A garden that blooms just for her</div>`,
-        `<div class="sv-lbl">📸 Clothespin Photos</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">☀️</div></div><div class="sv-pol"><div class="sv-pol-inner">🌿</div></div><div class="sv-pol"><div class="sv-pol-inner">🌸</div></div></div><div class="sv-sub">Memories hanging on a garden fence</div>`,
-        `<div class="sv-lbl">🎵 Sunshine Song</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Warm and bright like her</div>`,
-        `<div class="sv-lbl">💌 Leaf Letter</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:85%"></div><div class="sv-line" style="width:92%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#5a8a30;">Written with love 🌿</div>`
-      ]
-    },
-    saree: {
-      theme:'sv-saree',
-      slides:[
-        `<div class="sv-lbl">🪡 Saree Unfolds</div><span class="sv-emoji">✨</span><div class="sv-title">An elegant tribute to the most graceful person</div>`,
-        `<div class="sv-lbl">📸 Embroidery Hoops</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">🪡</div></div><div class="sv-pol"><div class="sv-pol-inner">💜</div></div><div class="sv-pol"><div class="sv-pol-inner">✨</div></div></div><div class="sv-sub">Memories stitched with gold thread</div>`,
-        `<div class="sv-lbl">🎵 Zari Song</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">A song woven into the fabric</div>`,
-        `<div class="sv-lbl">💌 Pallu Letter</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:82%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#d4a853;">A letter as beautiful as her 🪡</div>`
       ]
     },
     recipe: {
