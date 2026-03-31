@@ -150,6 +150,30 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .sv-lbl{font-size:0.5rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
 .sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:10px 14px 12px;z-index:5;}
 .sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(26,0,8,0.97) 0%,rgba(26,0,8,0.7) 70%,transparent);}
+/* Rose theme */
+.sv-rose{background:radial-gradient(ellipse at 50% 65%,#1a0008,#0a0004);}
+.sv-rose-bud{font-size:2.6rem;animation:rBudPulse 1.4s ease-in-out infinite;display:block;margin-bottom:2px;}
+@keyframes rBudPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
+.sv-rose .sv-lbl{color:rgba(255,120,120,0.5);}
+.sv-rose .sv-title{color:#ffe0e0;}
+.sv-rose .sv-sub{color:rgba(255,120,120,0.5);}
+.sv-rose .sv-dot{background:rgba(192,0,48,0.25);}
+.sv-rose .sv-dot.sv-dot-active{background:#c00030;}
+.sv-rose .sv-name{color:#ffe0e0;}
+.sv-rose .sv-desc{color:rgba(255,120,120,0.55);}
+.sv-rose .sv-cta{color:#c00030;}
+.sv-rose .sv-overlay-info{background:linear-gradient(to top,rgba(10,0,4,0.97) 0%,rgba(10,0,4,0.7) 70%,transparent);}
+.sv-rose-petals{display:flex;gap:4px;justify-content:center;margin:5px 0;}
+.sv-rpetal{width:14px;height:20px;border-radius:50% 50% 40% 40%;background:radial-gradient(ellipse at 40% 30%,#c8003a,#7a0020);}
+.sv-rpetal:nth-child(1){transform:rotate(-30deg);}
+.sv-rpetal:nth-child(2){transform:rotate(-10deg);}
+.sv-rpetal:nth-child(3){transform:rotate(0deg);}
+.sv-rpetal:nth-child(4){transform:rotate(10deg);}
+.sv-rpetal:nth-child(5){transform:rotate(30deg);}
+.sv-rose-vinyl{box-shadow:0 0 0 3px rgba(192,0,48,0.2);}
+.sv-rose-vc{background:radial-gradient(circle at 38% 32%,#ff4060,#c00030);}
+.sv-rose .sv-lines .sv-line{background:rgba(192,0,48,0.15);}
+.sv-rose .sv-lines .sv-line:first-child{background:rgba(192,0,48,0.4);}
 .sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,0.97) 0%,rgba(22,21,46,0.7) 70%,transparent);}
 .sv-dots{display:flex;gap:5px;justify-content:center;margin-bottom:6px;}
 .sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.3;}
@@ -478,6 +502,16 @@ const BIRTHDAY_STYLES = [
     defaultMemoriesHeading:'Us, always',
     receiverUrl: id => `https://wishyou.ai/valentine/intimate.html?card=${id}`,
     shareMsg: (n,s,l) => `💋 *Happy Valentine's Day${n?' '+n:''}!*\n\n${s?s+' made you something special ❤️\n\n':'Someone made you something special ❤️\n\n'}Open it when you're alone:\n\n👆 Open:\n${l}`
+  },
+  {
+    id:'rose', name:'🌹 Blooming Rose',
+    desc:'Most unique · Rose blooms petal by petal · Photos inside petals · Falling petals letter',
+    previewEmoji:'🌹',
+    cardType:'valentine-rose',
+    defaultSongTitle:'Our song 🌹',
+    defaultMemoriesHeading:'Us, always',
+    receiverUrl: id => `https://wishyou.ai/valentine/rose.html?card=${id}`,
+    shareMsg: (n,s,l) => `🌹 *Happy Valentine's Day${n?' '+n:''}!*\n\n${s?s+' ne tumhare liye ek rose banaya hai 💋\n\n':'Someone left a rose for you 🌹\n\n'}Kholo:\n\n👆 Open:\n${l}`
   }
 ];
 
@@ -559,6 +593,15 @@ function buildStylesList() {
         `<div class="sv-lbl">Your Song</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Your song, spinning just for you 💋</div>`,
         `<div class="sv-lbl">Envelope Reveal</div><div class="sv-env">💌</div><div class="sv-sub">Tap to open the letter...</div>`,
         `<div class="sv-lbl">Love Letter</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:85%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#b00020;">Forever yours ❤️</div>`
+      ]
+    },
+    rose: {
+      theme:'sv-rose',
+      slides:[
+        `<div class="sv-rose-bud">🌹</div><div class="sv-lbl" style="margin-top:6px;">Tap the rose</div><div class="sv-title">It blooms just for you</div>`,
+        `<div class="sv-lbl">Petals open</div><div class="sv-rose-petals"><div class="sv-rpetal"></div><div class="sv-rpetal"></div><div class="sv-rpetal"></div><div class="sv-rpetal"></div><div class="sv-rpetal"></div></div><div class="sv-sub">Each petal holds one of your photos</div>`,
+        `<div class="sv-lbl">♪ Tap the center</div><div class="sv-vinyl sv-rose-vinyl"><div class="sv-vinyl-c sv-rose-vc"></div></div><div class="sv-sub" style="margin-top:6px;">Your song plays from the heart of the rose</div>`,
+        `<div class="sv-lbl">Letter in falling petals</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:80%"></div><div class="sv-line" style="width:88%"></div></div><div class="sv-sub" style="margin-top:4px;font-style:italic;color:#c00030;">Words that fall like rose petals 🌹</div>`
       ]
     }
   };
