@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -488,7 +487,7 @@ const DEFAULT_CONTENT = {
   photoCaptions:['The moment I knew it was you 💫','You, always you ✨','I could look at this forever 😊','My whole world 💋','The one I choose, every time ❤️'],
   songHeading:'Our song 💋',songPlaceholder:'Search your song...',
   letterTone:'emotional and heartfelt',
-  letterPlaceholder:'Dear Priya,\n\nAnother year around the sun...',
+  letterPlaceholder:'Every moment with you feels like the first...',
   signOff: n=>`Forever yours, ${n} ❤️`,
   aiLetterPrompt:(name,sender,tone)=>`Write a short Valentine's Day love letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone||"deeply romantic and personal"}. Return ONLY the letter body — no greeting, no sign off.`
 };
@@ -590,187 +589,109 @@ function getRelationContent(rel) {
   const sender = document.getElementById("cSender")?.value.trim() || '';
   const sign = (n, tag) => n ? `${tag}, ${n}` : tag;
 
-  if (/wife|girlfriend|partner|love/.test(r)) return {
-    photosHeading: "Just You & Me",
-    songTitle: "The one song that says it all",
-    tone: "deeply romantic and personal — written like a real love letter, not a greeting card",
-    signOff: sign(sender, "Yours, always 💕"),
+  if (/girlfriend|gf/.test(r)) return {
+    photosHeading: "Us 💋",
+    songTitle: "Our song — you already know which one",
+    tone: "deeply romantic and passionate — a boyfriend writing to his girlfriend on Valentine's Day, raw and from the heart, not a greeting card",
+    signOff: sign(sender, "Yours, always ❤️"),
+    letterPlaceholder: "Every moment with you feels like the first...",
+    captions: [
+      "The moment I knew it was you 💫",
+      "You, always you ❤️",
+      "I could look at this forever 😍",
+      "My whole world, right here 💋",
+      "The one I choose, every single day ❤️"
+    ]
+  };
+
+  if (/boyfriend|bf/.test(r)) return {
+    photosHeading: "Us 💋",
+    songTitle: "Our song — you already know which one",
+    tone: "deeply romantic and genuine — a girlfriend writing to her boyfriend on Valentine's Day, honest and from the heart, not over the top",
+    signOff: sign(sender, "Yours, always ❤️"),
+    letterPlaceholder: "I never knew it could feel like this...",
+    captions: [
+      "Still can't believe you're mine 💫",
+      "You make everything better ❤️",
+      "This one lives rent-free in my head 😍",
+      "My person. In every way 💋",
+      "Lucky doesn't even cover it ❤️"
+    ]
+  };
+
+  if (/wife/.test(r)) return {
+    photosHeading: "My Everything 💍",
+    songTitle: "Our song — the one from that night",
+    tone: "deeply romantic and intimate — a husband writing to his wife on Valentine's Day, saying what he feels every day but rarely puts into words",
+    signOff: sign(sender, "Forever yours ❤️"),
+    letterPlaceholder: "Loving you is the best decision I ever made...",
     captions: [
       "Every day I choose you. Every single one 💕",
-      "With you is my favourite place to be ✨",
-      "This moment. I want to keep it 🌸",
-      "That smile. It still gets me 💫",
-      "The best thing that ever happened to me 💝"
+      "Home is wherever you are ❤️",
+      "That smile. It still gets me every time 💫",
+      "My favourite chapter, and it's still going 💍",
+      "Everything I didn't know I needed ❤️"
     ]
   };
-  if (/husband|boyfriend/.test(r)) return {
-    photosHeading: "You & Me",
-    songTitle: "The one song that says it all",
-    tone: "romantic and genuine — heartfelt but real, not over the top",
-    signOff: sign(sender, "Yours 💕"),
+
+  if (/husband/.test(r)) return {
+    photosHeading: "My Everything 💍",
+    songTitle: "Our song — the one from that night",
+    tone: "deeply romantic and tender — a wife writing to her husband on Valentine's Day, saying what she feels every single day",
+    signOff: sign(sender, "Forever yours ❤️"),
+    letterPlaceholder: "I fall in love with you a little more every day...",
     captions: [
-      "My person. Always 💕",
-      "Life is just better with you in it ✨",
-      "Still my favourite person in any room 🌟",
-      "I want to remember this moment forever 😊",
-      "Lucky does not even begin to cover it 💫"
+      "Still my favourite person in any room 💕",
+      "Home is wherever you are ❤️",
+      "Life is just better with you in it 💫",
+      "My person. Always 💍",
+      "Grateful for you, every single day ❤️"
     ]
   };
-  if (/mom|mother|mum|mama|aai/.test(r)) return {
-    photosHeading: "The Woman Who Made Me",
-    songTitle: "For the one who gave me everything",
-    tone: "deeply emotional and grateful — a child writing to their mother, saying what they always felt but never said",
-    signOff: sign(sender, "Your child, always 🌸"),
+
+  if (/fianc/.test(r)) return {
+    photosHeading: "Soon Forever 💍",
+    songTitle: "Our song — for always",
+    tone: "romantic and full of anticipation — writing to your fiancé on Valentine's Day, celebrating the love you have and the forever you're stepping into",
+    signOff: sign(sender, "Soon forever yours ❤️"),
+    letterPlaceholder: "I can't wait to spend every Valentine's Day with you...",
     captions: [
-      "Everything good in me comes from you 🌸",
-      "You were my safe place before I knew what that meant ✨",
-      "I see you in everything I do 💕",
-      "Nobody has ever loved me the way you do 🌺",
-      "You are the reason I know how to love 💫"
+      "The beginning of our forever 💍",
+      "I'd say yes a thousand times over ❤️",
+      "You make forever sound easy 💫",
+      "Our best days are still ahead 💕",
+      "Can't wait to call you mine, forever ❤️"
     ]
   };
-  if (/dad|father|papa|baba/.test(r)) return {
-    photosHeading: "The Man Who Showed Me How",
-    songTitle: "For the man who never gave up on me",
-    tone: "emotional and honest — a child saying the things they always meant to tell their father",
-    signOff: sign(sender, "Your kid, always 💪"),
-    captions: [
-      "The strongest person I will ever know 💪",
-      "I learned what it means to show up from watching you ✨",
-      "Still trying to make you proud 🌟",
-      "You gave everything and never once complained 🫶",
-      "I carry you with me everywhere I go 💫"
-    ]
-  };
-  if (/son|beta/.test(r)) return {
-    photosHeading: "My Greatest Chapter",
-    songTitle: "For the one who changed everything",
-    tone: "proud and full of love — a parent writing to their son, honest and from the heart",
-    signOff: sign(sender, "Your biggest fan 🌟"),
-    captions: [
-      "I did not know this kind of love existed 🌟",
-      "Watching you grow up is a privilege ✨",
-      "You push me to be better every single day 💕",
-      "Grateful for every moment I get with you 🫶",
-      "I am so proud of you. More than words can say 💫"
-    ]
-  };
-  if (/daughter|beti/.test(r)) return {
-    photosHeading: "My Whole World",
-    songTitle: "For the one who made life feel complete",
-    tone: "tender, proud and deeply loving — a parent writing to their daughter, from the heart",
-    signOff: sign(sender, "Your biggest fan 🌸"),
-    captions: [
-      "The greatest gift life ever gave me 🌸",
-      "That laugh — I would protect it with everything I have ✨",
-      "You are growing up and I am holding on to every second 💕",
-      "You have no idea how brightly you shine 🌺",
-      "Being your parent is the best part of my life 💫"
-    ]
-  };
-  if (/sister|sis|didi/.test(r)) return {
-    photosHeading: "The One Who Knows Me Best",
+
+  if (/jaan|babe|baby|darling|jaanu|love|partner|sweetheart/.test(r)) return {
+    photosHeading: "Us 💋",
     songTitle: "Our song — you already know which one",
-    tone: "warm, honest and emotional — the way sisters really talk to each other",
-    signOff: sign(sender, "Your sister 💕"),
+    tone: "deeply romantic and personal — a Valentine's Day love letter, intimate and straight from the heart",
+    signOff: sign(sender, "Forever yours ❤️"),
+    letterPlaceholder: "Every moment with you feels like the first...",
     captions: [
-      "My first best friend 💕",
-      "Nobody understands me the way you do ✨",
-      "We have shared everything — the good and the hard 🌸",
-      "You are always the first person I want to call 😊",
-      "Not just my sister. My person 💫"
+      "The moment I knew it was you 💫",
+      "You, always you ❤️",
+      "I could look at this forever 😍",
+      "My whole world 💋",
+      "The one I choose, every time ❤️"
     ]
   };
-  if (/brother|bro|bhai/.test(r)) return {
-    photosHeading: "The One Who Always Showed Up",
-    songTitle: "Our song — you already know which one",
-    tone: "warm and genuine — honest without being too sentimental, the way brothers actually are",
-    signOff: sign(sender, "Your sibling 🤜"),
-    captions: [
-      "My first teammate 🤜",
-      "You have always had my back, no questions asked ✨",
-      "A memory I would not trade for anything 🌟",
-      "We have been through a lot together 😄",
-      "My brother. Genuinely one of a kind 💫"
-    ]
-  };
-  if (/friend|buddy/.test(r)) return {
-    photosHeading: "The Good Ones",
-    songTitle: "The song we both know every word to",
-    tone: "warm, fun and genuine — the way close friends actually speak to each other",
-    signOff: sign(sender, "Your friend 😊"),
-    captions: [
-      "The one who always picks up 💕",
-      "Life is genuinely better because of you ✨",
-      "Some friendships just feel right. This one does 😊",
-      "The memories we share — only we would understand 🌟",
-      "I could not imagine doing this without you 💫"
-    ]
-  };
-  if (/grandma|grandmother|nani|dadi|aaji/.test(r)) return {
-    photosHeading: "A Love That Never Runs Out",
-    songTitle: "For the one whose love I will never outgrow",
-    tone: "warm, deeply grateful and emotional — a grandchild writing to their grandmother",
-    signOff: sign(sender, "Your grandchild, with so much love 🌸"),
-    captions: [
-      "The warmth I carry with me everywhere I go 🌸",
-      "Your love is something I have never had to earn ✨",
-      "Being with you always felt like coming home 💕",
-      "Everything gentle in me I learned from you 🌺",
-      "I think about you more than you will ever know 💫"
-    ]
-  };
-  if (/grandpa|grandfather|nana|dada|ajoba/.test(r)) return {
-    photosHeading: "A Man Like No Other",
-    songTitle: "For the one who showed us how to live",
-    tone: "respectful, emotional and grateful — a grandchild writing to their grandfather with real admiration",
-    signOff: sign(sender, "Your grandchild, with all my love 🌟"),
-    captions: [
-      "The person I admire most in this world 🌟",
-      "Quiet strength. That is exactly what you are ✨",
-      "Your stories are a part of who I am 💕",
-      "The values you lived by are ones I carry forward 🫶",
-      "There is nobody quite like you 💫"
-    ]
-  };
-  if (/colleague|coworker|boss|work/.test(r)) return {
-    photosHeading: "Good People Make Good Work",
-    songTitle: "For a great year and a great person",
-    tone: "warm and genuine — appreciative without sounding like a performance review",
-    signOff: sign(sender, "Grateful to work with you 🎉"),
-    captions: [
-      "You make the work feel worthwhile 🌟",
-      "Genuinely glad to have you around ✨",
-      "The person everyone wants on their team 😊",
-      "What we built together actually matters 💫",
-      "Here is to what comes next 🎉"
-    ]
-  };
-  if (/parents|family/.test(r)) return {
-    photosHeading: "Where It All Begins",
-    songTitle: "For the ones who gave me everything",
-    tone: "emotional, grateful and warm — a child finally putting into words what they have always felt",
-    signOff: sign(sender, "Your child, always 🌸"),
-    captions: [
-      "Everything I am starts with you 🌸",
-      "Home is wherever you are ✨",
-      "I understand now everything you sacrificed for us 💕",
-      "The luckiest part of my life is being yours 🌺",
-      "Thank you. For all of it. Always 💫"
-    ]
-  };
-  const R = rel.charAt(0).toUpperCase() + rel.slice(1);
+
+  // Default fallback
   return {
-    photosHeading: `For My ${R}`,
-    songTitle: "A song picked just for you",
-    tone: "warm, personal and heartfelt",
-    signOff: sign(sender, "With love 💕"),
+    photosHeading: "Us, always",
+    songTitle: "Our song 💋",
+    tone: "deeply romantic and personal — a Valentine's Day love letter from the heart",
+    signOff: sign(sender, "Forever yours ❤️"),
+    letterPlaceholder: "Every moment with you feels like the first...",
     captions: [
-      `So grateful to have you as my ${rel} 💕`,
-      "A moment worth holding on to ✨",
-      "This one always makes me smile 😊",
-      "Grateful for every moment like this 🌟",
-      "Here is to many more 💫"
+      "The moment I knew it was you 💫",
+      "You, always you ❤️",
+      "I could look at this forever 😍",
+      "My whole world 💋",
+      "The one I choose, every time ❤️"
     ]
   };
 }
@@ -786,6 +707,11 @@ function onRelationChange(val) {
   set('songScreenTitle', content.songTitle);
   set('letterToneHeader', content.tone);
   if (!signManuallyEdited) set('cSign', content.signOff);
+  // Update letter placeholder
+  if (content.letterPlaceholder) {
+    const msgEl = document.getElementById('cMsg');
+    if (msgEl && !msgEl.value.trim()) msgEl.placeholder = content.letterPlaceholder;
+  }
   // Update captions
   photoCaptions = [...content.captions];
   content.captions.forEach((cap, i) => {
