@@ -3,1164 +3,670 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Valentine's Day Card — WishYou.ai</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💋</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>WishYou.ai — A Rose For You 🌹</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌹</text></svg>">
+<meta property="og:title" content="Someone left a rose for you 🌹">
+<meta property="og:description" content="Tap to open it.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
-.app{position:fixed;inset:0;overflow:hidden;}
+html,body{height:100%;overflow:hidden;background:#000;}
+.app{position:fixed;inset:0;overflow:hidden;background:#0a0004;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
+    width:430px;height:90vh;max-height:900px;border-radius:40px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.95);}
+}
 
-/* Ambient glows */
-.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;}
-.bg-glow::before{content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(20,160,140,0.09) 0%,transparent 65%);}
-.bg-glow::after{content:'';position:absolute;bottom:-10%;right:-5%;width:500px;height:400px;background:radial-gradient(ellipse,rgba(240,192,64,0.06) 0%,transparent 65%);}
+/* ── SCREENS ── */
+.screen{position:absolute;top:0;left:0;right:0;bottom:0;
+  opacity:0;pointer-events:none;transition:opacity 0.8s ease;visibility:hidden;}
+.screen.active{opacity:1;pointer-events:all;visibility:visible;}
 
-/* Screen system */
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.45s ease,transform 0.45s cubic-bezier(.4,0,.2,1);transform:translateX(60px);z-index:1;}
-.screen.active{opacity:1;pointer-events:all;transform:translateX(0);}
-.screen.slide-out{opacity:0;transform:translateX(-60px);}
+/* ══════════════════════
+   LOADING
+══════════════════════ */
+#rv-loading{background:#0a0004;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;}
+.ld-rose{font-size:3rem;animation:ldPulse 1.4s ease-in-out infinite;}
+@keyframes ldPulse{0%,100%{transform:scale(1);opacity:0.6;}50%{transform:scale(1.15);opacity:1;}}
+.ld-txt{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:rgba(200,80,80,0.4);}
 
-/* Step dots */
-.step-dots{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:center;gap:6px;padding-top:12px;}
-.step-dot{width:6px;height:6px;border-radius:50%;background:rgba(160,220,210,0.15);transition:all 0.4s ease;}
-.step-dot.active{width:20px;border-radius:3px;background:rgba(20,160,140,0.7);}
-.step-dot.done{background:rgba(20,160,140,0.35);}
+/* ══════════════════════
+   ERROR
+══════════════════════ */
+#rv-error{background:#0a0004;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;text-align:center;padding:40px;}
+.err-t{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(200,100,100,0.5);line-height:1.7;}
 
-/* Nav */
-.top-nav{position:absolute;top:0;left:0;right:0;z-index:10;padding:28px 22px 0;display:flex;align-items:center;justify-content:space-between;}
-.back-btn{width:34px;height:34px;border-radius:50%;background:rgba(160,220,210,0.05);border:1px solid rgba(160,220,210,0.1);display:flex;align-items:center;justify-content:center;color:rgba(160,220,210,0.45);font-size:0.95rem;cursor:pointer;touch-action:manipulation;}
-.back-btn:active{background:rgba(160,220,210,0.1);}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:0.82rem;font-weight:400;letter-spacing:0.16em;text-transform:uppercase;color:rgba(160,220,210,0.3);}
-.step-pill{font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(240,192,64,0.4);border:1px solid rgba(240,192,64,0.14);border-radius:50px;padding:4px 11px;}
+/* ══════════════════════
+   WELCOME — dark, bud
+══════════════════════ */
+#rv-welcome{
+  background:radial-gradient(ellipse at 50% 60%,#1a0008 0%,#0a0004 60%,#000 100%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+.welcome-particles{position:absolute;inset:0;pointer-events:none;}
+.wp{position:absolute;width:2px;height:2px;border-radius:50%;background:#c00030;
+  animation:wpFloat linear infinite;opacity:0;}
+@keyframes wpFloat{0%{opacity:0;transform:translateY(0);}20%{opacity:0.4;}80%{opacity:0.1;}100%{opacity:0;transform:translateY(-100vh);}}
 
-/* Relation chips */
-.relation-wrap{margin-bottom:20px;}
-.relation-lbl{font-size:0.56rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(240,192,64,0.45);margin-bottom:10px;}
+.wlc-inner{text-align:center;position:relative;z-index:2;}
+.wlc-tag{font-size:0.55rem;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(200,80,80,0.35);margin-bottom:32px;display:block;}
+.wlc-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,6vw,2.2rem);
+  font-weight:300;color:rgba(255,200,200,0.85);line-height:1.3;margin-bottom:8px;}
+.wlc-sub{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.92rem;color:rgba(200,80,80,0.45);margin-bottom:48px;}
 
+/* The rosebud — pure CSS */
+.rosebud-wrap{position:relative;width:120px;height:120px;margin:0 auto 40px;cursor:pointer;touch-action:manipulation;}
+.rosebud-wrap:active{transform:scale(0.96);}
 
-/* Step wrap */
-.step-wrap{flex:1;display:flex;flex-direction:column;padding:76px 22px 0;overflow:hidden;min-height:0;}
-.step-content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:10px;min-height:0;}
-.step-content::-webkit-scrollbar{display:none;}
-.step-actions{padding-top:10px;flex-shrink:0;padding-bottom:calc(env(safe-area-inset-bottom) + 18px);}
+/* Stem */
+.stem{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);
+  width:3px;height:40px;background:linear-gradient(to bottom,#1a5c1a,#0d3d0d);border-radius:2px;}
+.stem-leaf{position:absolute;width:18px;height:10px;background:#1a5c1a;
+  border-radius:50% 0 50% 0;top:8px;}
+.stem-leaf.left{left:-16px;transform:rotate(-20deg);}
+.stem-leaf.right{right:-16px;transform:rotate(20deg) scaleX(-1);}
 
-/* Eyebrow */
-.eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.eyebrow-line{width:18px;height:1px;background:rgba(240,192,64,0.3);}
-.eyebrow-txt{font-size:0.56rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,192,64,0.4);}
+/* Bud petals — 5 layers */
+.bud{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.bud-petal{position:absolute;border-radius:50% 50% 40% 40%;transform-origin:bottom center;
+  transition:transform 1.2s cubic-bezier(0.34,1.2,0.64,1),opacity 0.8s ease;}
 
-/* Title */
-.page-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,6vw,2.2rem);font-weight:300;line-height:1.15;color:rgba(224,240,238,0.92);margin-bottom:4px;text-align:left;}
-.page-title em{font-style:italic;color:#f0c040;}
-.page-sub{font-size:0.78rem;color:rgba(160,220,210,0.3);line-height:1.7;margin-bottom:20px;text-align:left;}
+/* Outer petals — closed state */
+.bp1{width:50px;height:65px;background:radial-gradient(ellipse at 40% 30%,#c8003a,#8b0020);
+  transform:translateX(-50%) translateY(10px) rotate(-25deg) scaleY(0.7);
+  left:50%;top:10px;z-index:3;}
+.bp2{width:50px;height:65px;background:radial-gradient(ellipse at 60% 30%,#c8003a,#8b0020);
+  transform:translateX(-50%) translateY(10px) rotate(25deg) scaleY(0.7);
+  left:50%;top:10px;z-index:3;}
+.bp3{width:44px;height:60px;background:radial-gradient(ellipse at 50% 25%,#a00028,#6b0018);
+  transform:translateX(-50%) translateY(8px) scaleY(0.65);
+  left:50%;top:14px;z-index:2;}
+/* Inner petal cluster */
+.bp4{width:34px;height:50px;background:radial-gradient(ellipse at 50% 30%,#800020,#500010);
+  transform:translateX(-50%) translateY(6px) scaleY(0.6);
+  left:50%;top:20px;z-index:1;}
+.bp5{width:24px;height:38px;background:radial-gradient(ellipse at 50% 35%,#600018,#300008);
+  transform:translateX(-50%) translateY(4px) scaleY(0.55);
+  left:50%;top:28px;z-index:0;}
 
-/* Section header pill */
-.sec-hdr{display:flex;align-items:center;gap:8px;margin:18px 0 11px;}
-.sec-hdr-line{flex:1;height:1px;background:rgba(160,220,210,0.07);}
-.sec-hdr-txt{font-size:0.9rem;flex-shrink:0;}
-.sec-hdr-pill{display:flex;align-items:center;gap:4px;background:rgba(20,160,140,0.08);border:1px solid rgba(20,160,140,0.22);border-radius:20px;padding:5px 10px;cursor:text;}
-.sec-hdr-pill:focus-within{border-color:rgba(20,160,140,0.5);background:rgba(20,160,140,0.12);}
-.sec-hdr-pencil{font-size:0.65rem;opacity:0.6;flex-shrink:0;pointer-events:none;}
-.sec-hdr-input{background:transparent;border:none;outline:none;font-size:0.76rem;font-weight:600;color:rgba(160,220,210,0.85);min-width:60px;max-width:170px;caret-color:#f0c040;font-family:'DM Sans',sans-serif;letter-spacing:0.03em;}
-.sec-hdr-input::placeholder{color:rgba(160,220,210,0.3);font-weight:400;}
+/* Tap hint pulse ring */
+.tap-ring{position:absolute;inset:-12px;border-radius:50%;border:1.5px solid rgba(200,0,60,0.25);
+  animation:ringPulse 2s ease-in-out infinite;}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.08);opacity:0.15;}}
+.tap-hint{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.82rem;
+  color:rgba(200,80,80,0.4);margin-top:16px;}
 
-/* Inputs */
-.field-label{display:block;font-size:0.58rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.27);margin-bottom:8px;}
-.big-input{width:100%;border:none;border-bottom:1.5px solid rgba(20,160,140,0.18);background:transparent;padding:8px 0;font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:600;outline:none;color:rgba(224,240,238,0.9);transition:border-color 0.3s;caret-color:#f0c040;}
-.big-input::placeholder{color:rgba(160,220,210,0.13);font-style:italic;}
-.big-input:focus{border-color:rgba(20,160,140,0.45);}
-.regular-input{width:100%;border:1px solid rgba(160,220,210,0.09);border-radius:11px;padding:12px 15px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:rgba(255,255,255,0.03);outline:none;color:rgba(224,240,238,0.82);transition:border-color 0.3s,background 0.3s;caret-color:#f0c040;}
-.regular-input::placeholder{color:rgba(160,220,210,0.18);font-style:italic;}
-.regular-input:focus{border-color:rgba(20,160,140,0.3);background:rgba(255,255,255,0.05);}
+/* ══════════════════════
+   BLOOM SCREEN
+══════════════════════ */
+#rv-bloom{
+  background:radial-gradient(ellipse at 50% 45%,#1a0008 0%,#0a0004 55%,#000 100%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  position:relative;overflow:hidden;
+}
 
-/* Photos */
-.photos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:0;align-items:start;}
-.photo-slot{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:none;user-select:none;background:rgba(20,160,140,0.04);border:1.5px dashed rgba(20,160,140,0.15);color:rgba(160,220,210,0.2);font-size:1.1rem;transition:border-color 0.18s,box-shadow 0.18s;}
-.photo-slot.has-photo{border-style:solid;border-color:rgba(20,160,140,0.2);}
-.photo-slot.active{border-color:rgba(20,160,140,0.6);box-shadow:0 0 0 2px rgba(20,160,140,0.18);}
-.photo-slot.active .slot-num{color:#f0c040;}
-.photo-slot.drag-over{border-color:rgba(240,192,64,0.6);box-shadow:0 0 0 2px rgba(240,192,64,0.15);}
-.photo-slot.dragging-src{opacity:0.2;}
-.slot-num{position:absolute;top:3px;left:4px;font-size:0.46rem;font-weight:700;color:rgba(255,255,255,0.25);pointer-events:none;z-index:2;}
-.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;}
-.photo-del{position:absolute;top:2px;right:2px;width:17px;height:17px;background:rgba(240,192,64,0.9);color:#061818;border-radius:50%;border:none;font-size:0.52rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;font-weight:800;}
-.upind{position:absolute;bottom:0;left:0;right:0;height:2px;background:rgba(20,160,140,0.15);overflow:hidden;}
-.upbar{height:100%;background:rgba(20,160,140,0.75);width:0%;transition:width 0.3s;}
-.up-dot{position:absolute;top:3px;left:3px;width:7px;height:7px;border-radius:50%;display:none;}
-.up-dot.uploading{display:block;background:rgba(240,192,64,0.8);animation:dotPulse 0.8s ease-in-out infinite;}
-.up-dot.done{display:block;background:rgba(20,160,140,0.9);}
-@keyframes dotPulse{0%,100%{opacity:0.4;}50%{opacity:1;}}
-.photo-hint{font-size:0.62rem;color:rgba(160,220,210,0.2);margin-bottom:4px;}
-.photo-hint .hl{color:rgba(20,160,140,0.55);font-weight:600;}
-.slot-plus{font-size:1.1rem;color:rgba(160,220,210,0.2);}
-.photo-col{display:flex;flex-direction:column;gap:4px;}
-.cap-input{width:100%;background:transparent;border:none;outline:none;font-size:0.62rem;font-style:italic;font-family:'DM Sans',sans-serif;color:rgba(160,220,210,0.5);padding:3px 2px;caret-color:#f0c040;text-align:center;line-height:1.4;resize:none;display:block;overflow:visible;min-height:0;}
-.cap-input::placeholder{color:rgba(160,220,210,0.15);font-style:italic;}
-.cap-input:focus{color:rgba(160,220,210,0.8);}
+/* The full bloom rose */
+.rose-stage{
+  position:relative;
+  width:300px;height:300px;
+  flex-shrink:0;
+  margin:0 auto;
+}
 
-/* Song */
-.song-search-row{display:flex;gap:7px;margin-bottom:8px;}
-.song-search-row .regular-input{flex:1;margin-bottom:0;}
-.search-btn{padding:12px 14px;border:1px solid rgba(20,160,140,0.16);border-radius:11px;background:rgba(20,160,140,0.06);color:rgba(160,220,210,0.55);font-size:0.88rem;cursor:pointer;touch-action:manipulation;flex-shrink:0;}
-.song-result{display:flex;align-items:center;gap:9px;border-radius:9px;padding:9px 11px;margin-bottom:5px;cursor:pointer;background:rgba(255,255,255,0.025);border:1px solid rgba(160,220,210,0.06);touch-action:manipulation;}
-.song-result img{width:44px;height:33px;border-radius:4px;object-fit:cover;flex-shrink:0;}
-.song-rt{flex:1;min-width:0;}
-.song-rt-title{font-size:0.78rem;font-weight:500;color:rgba(224,240,238,0.78);overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;}
-.song-rt-ch{font-size:0.64rem;color:rgba(160,220,210,0.27);margin-top:1px;}
-.song-use-btn{padding:5px 11px;border:none;border-radius:18px;font-size:0.66rem;font-weight:600;cursor:pointer;background:rgba(20,160,140,0.6);color:rgba(224,240,238,0.88);flex-shrink:0;}
-.song-selected-box{border-radius:10px;padding:10px 13px;margin-bottom:8px;display:none;background:rgba(20,160,140,0.07);border:1px solid rgba(20,160,140,0.16);}
-.song-sel-lbl{font-size:0.55rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(160,220,210,0.27);margin-bottom:3px;}
-.song-sel-name{font-size:0.84rem;font-weight:500;color:rgba(224,240,238,0.76);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+/* Each petal is a photo frame */
+.rose-petal{
+  position:absolute;
+  width:100px;height:120px;
+  /* Petal shape: rounded top, pointed bottom */
+  border-radius:50% 50% 45% 45% / 60% 60% 40% 40%;
+  transform-origin:center bottom;
+  overflow:hidden;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,0.6),inset 0 0 20px rgba(0,0,0,0.3);
+  transition:filter 0.3s ease;
+  /* All petals start at center, collapsed */
+  opacity:0;
+  transform:translate(-50%,-50%) rotate(0deg) scaleY(0.15) scaleX(0.3);
+}
+/* Center anchor point for all petals — heart of the rose */
+.rp0,.rp1,.rp2,.rp3,.rp4{
+  top:50%;left:50%;
+}
+.rose-petal:active{filter:brightness(1.3);}
+.rose-petal img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:center 20%;
+  display:block;opacity:0;transition:opacity 0.6s ease;
+}
+.rose-petal img.loaded{opacity:0.8;}
+.rose-petal::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 40% 25%,rgba(200,0,50,0.3),rgba(80,0,20,0.6));
+  pointer-events:none;z-index:1;
+}
+.rose-petal.bloomed::after{opacity:0.35;}
 
-/* AI / Letter */
-.ai-box{background:rgba(240,192,64,0.03);border:1px solid rgba(240,192,64,0.09);border-radius:11px;padding:11px 13px;margin-bottom:10px;}
-.ai-box-lbl{font-size:0.55rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(240,192,64,0.36);margin-bottom:7px;}
-.ai-row{display:flex;gap:7px;}
-.ai-row .regular-input{flex:1;font-size:0.84rem;padding:10px 12px;margin-bottom:0;}
-.ai-go-btn{padding:10px 13px;border:1px solid rgba(240,192,64,0.16);border-radius:10px;background:rgba(240,192,64,0.06);color:rgba(240,192,64,0.6);font-size:0.72rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
-.ai-loading{display:none;align-items:center;gap:6px;margin-top:7px;font-size:0.68rem;color:rgba(160,220,210,0.32);}
-.ai-loading.show{display:flex;}
-.ai-dot{width:5px;height:5px;border-radius:50%;background:rgba(240,192,64,0.42);animation:aiPulse 1s ease-in-out infinite;}
-.ai-dot:nth-child(2){animation-delay:0.2s;}
-.ai-dot:nth-child(3){animation-delay:0.4s;}
-@keyframes aiPulse{0%,100%{opacity:0.3;transform:scale(0.8);}50%{opacity:1;transform:scale(1.2);}}
-.letter-area{width:100%;border:1px solid rgba(160,220,210,0.08);border-radius:12px;padding:14px;font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.8;background:rgba(255,255,255,0.022);outline:none;resize:none;min-height:120px;color:rgba(224,240,238,0.8);transition:border-color 0.3s;caret-color:#f0c040;word-wrap:break-word;overflow-wrap:break-word;white-space:pre-wrap;}
-.letter-area:focus{border-color:rgba(20,160,140,0.25);}
-.letter-area::placeholder{color:rgba(160,220,210,0.13);font-style:italic;}
-.sign-row{display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:rgba(255,255,255,0.025);border:1px solid rgba(160,220,210,0.08);border-radius:11px;}
-.sign-lbl{font-size:0.57rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(160,220,210,0.4);white-space:nowrap;font-weight:600;}
-.sign-input{flex:1;border:none;background:transparent;padding:4px 0;font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(224,240,238,0.82);outline:none;caret-color:#f0c040;}
-.sign-input::placeholder{color:rgba(160,220,210,0.25);font-style:italic;}
+/* Caption */
+.petal-cap{
+  position:absolute;bottom:6px;left:0;right:0;z-index:2;
+  text-align:center;padding:0 6px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.6rem;color:rgba(255,200,200,0.9);
+  line-height:1.3;opacity:0;transition:opacity 0.5s ease 0.5s;
+  text-shadow:0 1px 6px rgba(0,0,0,0.9);
+}
+.rose-petal.bloomed .petal-cap{opacity:1;}
 
-/* Primary btn */
-.btn-primary{width:100%;padding:15px;border:none;border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;touch-action:manipulation;transition:transform 0.15s;background:linear-gradient(135deg,rgba(20,160,140,0.88),rgba(16,130,115,0.88));color:rgba(224,240,238,0.95);box-shadow:0 8px 28px rgba(20,160,140,0.2);letter-spacing:0.04em;position:relative;overflow:hidden;}
-.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.06),transparent);}
-.btn-primary:active{transform:scale(0.97);}
-.rule{width:100%;height:1px;background:linear-gradient(to right,transparent,rgba(20,160,140,0.12),rgba(240,192,64,0.07),transparent);margin:18px 0 0;}
+/* Petal angles — evenly around 360deg, 72deg apart */
+/* Each petal translates outward along its own axis */
+/* Closed */
+.rp0{transform:translate(-50%,-50%) rotate(0deg)   translateY(0px)   scaleY(0.15) scaleX(0.3);opacity:0;z-index:5;}
+.rp1{transform:translate(-50%,-50%) rotate(72deg)  translateY(0px)   scaleY(0.15) scaleX(0.3);opacity:0;z-index:4;}
+.rp2{transform:translate(-50%,-50%) rotate(144deg) translateY(0px)   scaleY(0.15) scaleX(0.3);opacity:0;z-index:3;}
+.rp3{transform:translate(-50%,-50%) rotate(216deg) translateY(0px)   scaleY(0.15) scaleX(0.3);opacity:0;z-index:2;}
+.rp4{transform:translate(-50%,-50%) rotate(288deg) translateY(0px)   scaleY(0.15) scaleX(0.3);opacity:0;z-index:1;}
 
-/* Card style slideshow */
-.styles-list-v{display:flex;flex-direction:column;gap:16px;}
-.style-card-wrap{border-radius:20px;overflow:hidden;cursor:pointer;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;position:relative;}
-.style-card-wrap:active{transform:scale(0.97);}
-.sv{width:100%;height:220px;position:relative;overflow:hidden;}
-.sv-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 12px 60px;opacity:0;transition:opacity 0.6s ease;text-align:center;}
-.sv-slide.sv-active{opacity:1;}
-.sv-lbl{font-size:0.5rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;opacity:0.4;margin-bottom:6px;}
-.sv-overlay-info{position:absolute;bottom:0;left:0;right:0;padding:10px 14px 12px;z-index:5;}
-.sv-intimate .sv-overlay-info{background:linear-gradient(to top,rgba(26,0,8,0.97) 0%,rgba(26,0,8,0.7) 70%,transparent);}
-/* Rose theme */
-.sv-rose{background:radial-gradient(ellipse at 50% 65%,#1a0008,#0a0004);}
-.sv-rose-bud{font-size:2.6rem;animation:rBudPulse 1.4s ease-in-out infinite;display:block;margin-bottom:2px;}
-@keyframes rBudPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.12);}}
-.sv-rose .sv-lbl{color:rgba(255,120,120,0.5);}
-.sv-rose .sv-title{color:#ffe0e0;}
-.sv-rose .sv-sub{color:rgba(255,120,120,0.5);}
-.sv-rose .sv-dot{background:rgba(192,0,48,0.25);}
-.sv-rose .sv-dot.sv-dot-active{background:#c00030;}
-.sv-rose .sv-name{color:#ffe0e0;}
-.sv-rose .sv-desc{color:rgba(255,120,120,0.55);}
-.sv-rose .sv-cta{color:#c00030;}
-.sv-rose .sv-overlay-info{background:linear-gradient(to top,rgba(10,0,4,0.97) 0%,rgba(10,0,4,0.7) 70%,transparent);}
-.sv-rose-petals{display:flex;gap:4px;justify-content:center;margin:5px 0;}
-.sv-rpetal{width:14px;height:20px;border-radius:50% 50% 40% 40%;background:radial-gradient(ellipse at 40% 30%,#c8003a,#7a0020);}
-.sv-rpetal:nth-child(1){transform:rotate(-30deg);}
-.sv-rpetal:nth-child(2){transform:rotate(-10deg);}
-.sv-rpetal:nth-child(3){transform:rotate(0deg);}
-.sv-rpetal:nth-child(4){transform:rotate(10deg);}
-.sv-rpetal:nth-child(5){transform:rotate(30deg);}
-.sv-rose-vinyl{box-shadow:0 0 0 3px rgba(192,0,48,0.2);}
-.sv-rose-vc{background:radial-gradient(circle at 38% 32%,#ff4060,#c00030);}
-.sv-rose .sv-lines .sv-line{background:rgba(192,0,48,0.15);}
-.sv-rose .sv-lines .sv-line:first-child{background:rgba(192,0,48,0.4);}
-.sv-chat .sv-overlay-info{background:linear-gradient(to top,rgba(22,21,46,0.97) 0%,rgba(22,21,46,0.7) 70%,transparent);}
-.sv-dots{display:flex;gap:5px;justify-content:center;margin-bottom:6px;}
-.sv-dot{width:5px;height:5px;border-radius:50%;transition:all 0.3s;opacity:0.3;}
-.sv-dot.sv-dot-active{width:14px;border-radius:3px;opacity:0.9;}
-.sv-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;margin-bottom:1px;}
-.sv-desc{font-size:0.58rem;opacity:0.6;line-height:1.4;}
-.sv-cta{margin-top:5px;font-size:0.6rem;font-weight:700;letter-spacing:0.05em;opacity:0.75;}
-.sv-emoji{font-size:2.2rem;margin-bottom:6px;display:block;}
-.sv-title{font-size:0.82rem;font-weight:700;margin-bottom:3px;}
-.sv-sub{font-size:0.6rem;opacity:0.55;}
+/* Bloomed — petals push outward */
+.rp0.bloomed{transform:translate(-50%,-100%) rotate(0deg)   translateY(-30px) scaleY(1) scaleX(1);opacity:1;}
+.rp1.bloomed{transform:translate(-50%,-100%) rotate(72deg)  translateY(-30px) scaleY(1) scaleX(1);opacity:1;}
+.rp2.bloomed{transform:translate(-50%,-100%) rotate(144deg) translateY(-30px) scaleY(1) scaleX(1);opacity:1;}
+.rp3.bloomed{transform:translate(-50%,-100%) rotate(216deg) translateY(-30px) scaleY(1) scaleX(1);opacity:1;}
+.rp4.bloomed{transform:translate(-50%,-100%) rotate(288deg) translateY(-30px) scaleY(1) scaleX(1);opacity:1;}
 
-/* Intimate theme */
-.sv-intimate{background:linear-gradient(160deg,#1a0008,#2d000f);}
-.sv-intimate .sv-lbl{color:rgba(255,140,140,0.5);}
-.sv-intimate .sv-title{color:#ffe0e0;}
-.sv-intimate .sv-sub{color:rgba(255,140,140,0.55);}
-.sv-intimate .sv-dot{background:rgba(176,0,32,0.4);}
-.sv-intimate .sv-dot.sv-dot-active{background:#b00020;}
-.sv-intimate .sv-name{color:#ffe0e0;}
-.sv-intimate .sv-desc{color:rgba(255,140,140,0.55);}
-.sv-intimate .sv-cta{color:#b00020;}
-.sv-pols{display:flex;gap:5px;justify-content:center;margin:4px 0;}
-.sv-pol{width:32px;height:40px;background:white;padding:2px 2px 8px;box-shadow:0 3px 8px rgba(74,14,42,0.18);border-radius:1px;}
-.sv-pol:nth-child(odd){transform:rotate(-3deg);}
-.sv-pol:nth-child(even){transform:rotate(2.5deg);}
-.sv-pol-inner{width:100%;height:100%;background:#fce4ec;border-radius:1px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;}
-.sv-vinyl{width:42px;height:42px;border-radius:50%;background:conic-gradient(#1a0812 0deg,#2d1020 30deg,#1a0812 60deg,#2d1020 90deg,#1a0812 120deg,#2d1020 150deg,#1a0812 180deg,#2d1020 210deg,#1a0812 240deg,#2d1020 270deg,#1a0812 300deg,#2d1020 330deg,#1a0812 360deg);display:flex;align-items:center;justify-content:center;animation:vinylSpin 3s linear infinite;box-shadow:0 0 0 3px #2d1020;}
-@keyframes vinylSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.sv-vinyl-c{width:12px;height:12px;border-radius:50%;background:#e91e63;}
-.sv-env{font-size:2.6rem;animation:envWig 2s ease-in-out infinite;}
-@keyframes envWig{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
-.sv-lines{width:80%;margin:4px auto;}
-.sv-line{height:2px;border-radius:2px;background:rgba(74,14,42,0.1);margin-bottom:4px;}
-.sv-line:first-child{width:55%;background:rgba(233,30,99,0.35);}
+/* Staggered bloom transitions */
+.rp0{transition:transform 1.1s cubic-bezier(0.34,1.2,0.64,1) 0.0s,opacity 0.5s ease 0.0s;}
+.rp1{transition:transform 1.1s cubic-bezier(0.34,1.2,0.64,1) 0.2s,opacity 0.5s ease 0.2s;}
+.rp2{transition:transform 1.1s cubic-bezier(0.34,1.2,0.64,1) 0.4s,opacity 0.5s ease 0.4s;}
+.rp3{transition:transform 1.1s cubic-bezier(0.34,1.2,0.64,1) 0.6s,opacity 0.5s ease 0.6s;}
+.rp4{transition:transform 1.1s cubic-bezier(0.34,1.2,0.64,1) 0.8s,opacity 0.5s ease 0.8s;}
 
+/* Rose center — song button, pinned to center of stage */
+.rose-center{
+  position:absolute;width:72px;height:72px;border-radius:50%;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 40% 35%,#ff4060,#c00030 50%,#7a0020);
+  z-index:10;cursor:pointer;touch-action:manipulation;
+  box-shadow:0 0 0 4px rgba(200,0,60,0.2),0 0 30px rgba(200,0,60,0.3);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  opacity:0;transition:opacity 0.8s ease 1.8s,box-shadow 0.3s ease;
+}
+.rose-center.show{opacity:1;}
+.rose-center:active{box-shadow:0 0 0 4px rgba(200,0,60,0.4),0 0 40px rgba(200,0,60,0.5);}
+.center-note{font-size:0.55rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,200,200,0.8);margin-top:2px;}
+.center-spin{
+  width:32px;height:32px;border-radius:50%;
+  background:radial-gradient(circle,#ff8090 0%,#ff8090 20%,#300010 21%,#300010 28%,
+    #500018 29%,#500018 36%,#300010 37%,#300010 44%,#500018 45%,#500018 52%,#300010 53%,#300010 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+.center-spin.spinning{animation:cSpin 3s linear infinite;}
+@keyframes cSpin{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+.center-dot{width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#ff4060,#c00030);}
 
+/* bloom subtext */
+.bloom-sub{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.82rem;color:rgba(200,80,80,0.4);margin-top:20px;text-align:center;
+  opacity:0;transition:opacity 0.8s ease 2s;}
+.bloom-sub.show{opacity:1;}
 
-.sv-news-head{font-size:0.46rem;font-weight:700;color:#111;border-bottom:1.5px double #111;margin-bottom:3px;padding-bottom:2px;}
-.sv-news-hl{background:#d90429;color:white;font-size:0.42rem;font-weight:700;padding:1px 4px;border-radius:1px;margin-bottom:3px;}
-.sv-news-lines{display:flex;flex-direction:column;gap:2px;}
-.sv-news-line{height:2px;background:rgba(0,0,0,0.1);border-radius:1px;}
+/* song name below rose */
+.bloom-song{font-family:'Cormorant Garamond',serif;font-size:0.9rem;
+  color:rgba(255,180,180,0.6);text-align:center;margin-top:8px;
+  opacity:0;transition:opacity 0.6s ease;max-width:240px;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;}
+.bloom-song.show{opacity:1;}
 
+/* YT embed */
+.bloom-yt{width:100%;max-width:280px;border-radius:8px;overflow:hidden;
+  margin-top:10px;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.5);}
+.bloom-yt iframe{width:100%;height:130px;border:none;display:block;}
+.bloom-yt.show{display:block;}
 
+/* ══════════════════════
+   LETTER SCREEN
+   Petals falling, letter reveals
+══════════════════════ */
+#rv-letter{
+  background:linear-gradient(160deg,#0a0004,#120008,#0a0004);
+  display:flex;flex-direction:column;overflow:hidden;position:relative;
+}
 
+/* Falling petals canvas */
+#petalCanvas{position:absolute;inset:0;pointer-events:none;z-index:0;}
 
-.sv-notes{display:flex;gap:6px;justify-content:center;margin:4px 0;}
-.sv-note{width:36px;height:42px;background:#fffde7;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 6px rgba(0,0,0,0.1);transform:rotate(-3deg);}
-.sv-note:nth-child(2){transform:rotate(0deg);}
-.sv-note:nth-child(3){transform:rotate(3deg);}
+.letter-scroll{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  z-index:1;padding:max(48px,env(safe-area-inset-top)) 0 0;
+}
+.letter-scroll::-webkit-scrollbar{display:none;}
 
-/* Fake Chat theme */
-.sv-chat{background:linear-gradient(160deg,#1a1a2e,#16213e);}
-/* Instagram theme */
-.sv-instagram{background:#000;position:relative;overflow:hidden;}
-.sv-instagram .sv-lbl{color:#0095f6;font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;}
-.sv-instagram .sv-title{font-size:0.82rem;font-weight:700;color:#fff;line-height:1.2;}
-.sv-instagram .sv-sub{color:#aaa;font-size:0.6rem;}
-.sv-instagram .sv-dot{background:rgba(255,255,255,0.2);}
-.sv-instagram .sv-dot.sv-dot-active{background:#fff;}
-.sv-instagram .sv-name{color:#fff;}
-.sv-instagram .sv-desc{color:#aaa;}
-.sv-instagram .sv-cta{color:#0095f6;}
-.sv-instagram .sv-overlay-info{background:linear-gradient(to top,rgba(0,0,0,0.95) 0%,rgba(0,0,0,0.6) 70%,transparent);}
-/* Unboxing theme */
-.sv-unboxing{background:linear-gradient(160deg,#2d1a00,#1a0a00);}
-.sv-unboxing .sv-lbl{color:rgba(245,158,11,0.45);}
-.sv-unboxing .sv-title{color:rgba(255,220,120,0.9);font-size:0.78rem;}
-.sv-unboxing .sv-sub{color:rgba(255,200,100,0.45);}
-.sv-unboxing .sv-dot{background:rgba(245,158,11,0.2);}
-.sv-unboxing .sv-dot.sv-dot-active{background:rgba(245,158,11,0.85);}
-.sv-unboxing .sv-name{color:rgba(255,220,120,0.9);}
-.sv-unboxing .sv-desc{color:rgba(255,200,100,0.45);}
-.sv-unboxing .sv-cta{color:rgba(245,158,11,0.7);}
-.sv-unboxing .sv-overlay-info{background:linear-gradient(to top,rgba(26,10,0,0.97) 0%,rgba(26,10,0,0.7) 70%,transparent);}
-.sv-gift-box{width:54px;height:54px;position:relative;margin:4px auto;}
-.sv-gift-body{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:48px;height:34px;background:linear-gradient(145deg,#c2410c,#9a3412);border-radius:3px 3px 5px 5px;}
-.sv-gift-lid{position:absolute;top:0;left:50%;transform:translateX(-50%);width:52px;height:14px;background:linear-gradient(145deg,#dc2626,#b91c1c);border-radius:4px 4px 2px 2px;}
-.sv-gift-ribbon-v{position:absolute;left:50%;transform:translateX(-50%);width:10px;height:100%;background:rgba(245,158,11,0.7);z-index:1;}
-.sv-gift-bow{position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:1.1rem;z-index:2;}
-.sv-gift-open{font-size:2.6rem;animation:giftBounce 1.2s ease-in-out infinite;}
-@keyframes giftBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
-.sv-ig-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;width:100%;}
-.sv-ig-cell{aspect-ratio:1;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
-.sv-ig-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin:0 auto 8px;}
-/* Newspaper theme */
-.sv-newspaper{background:#f5f0e8;position:relative;}
-.sv-newspaper .sv-lbl{color:#cc0000;font-size:0.5rem;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;}
-.sv-newspaper .sv-title{font-family:'Playfair Display',Georgia,serif;font-size:0.85rem;font-weight:900;color:#1a1a1a;line-height:1.2;}
-.sv-newspaper .sv-sub{color:#555;font-size:0.6rem;font-style:italic;}
-.sv-newspaper .sv-dot{background:rgba(26,26,26,0.2);}
-.sv-newspaper .sv-dot.sv-dot-active{background:#cc0000;}
-.sv-newspaper .sv-name{color:#1a1a1a;}
-.sv-newspaper .sv-desc{color:#555;}
-.sv-newspaper .sv-cta{color:#cc0000;}
-.sv-newspaper .sv-overlay-info{background:linear-gradient(to top,rgba(245,240,232,0.97) 0%,rgba(245,240,232,0.7) 70%,transparent);}.sv-news-rule{width:100%;height:2px;background:#1a1a1a;margin:4px 0;}
-/* Constellation theme */
-.sv-constellation{background:#020818;position:relative;overflow:hidden;}
-.sv-constellation .sv-lbl{color:rgba(200,210,255,0.35);}
-.sv-constellation .sv-title{color:rgba(220,230,255,0.85);}
-.sv-constellation .sv-sub{color:rgba(200,210,255,0.4);}
-.sv-constellation .sv-dot{background:rgba(200,210,255,0.2);}
-.sv-constellation .sv-dot.sv-dot-active{background:rgba(200,210,255,0.8);}
-.sv-constellation .sv-name{color:rgba(220,230,255,0.9);}
-.sv-constellation .sv-desc{color:rgba(200,210,255,0.4);}
-.sv-constellation .sv-cta{color:rgba(200,210,255,0.6);}
-.sv-constellation .sv-overlay-info{background:linear-gradient(to top,rgba(2,8,24,0.97) 0%,rgba(2,8,24,0.7) 70%,transparent);}
-.sv-star-field{position:absolute;inset:0;pointer-events:none;}
-.sv-star{position:absolute;border-radius:50%;background:white;}
-.sv-chat .sv-lbl{color:rgba(37,211,102,0.5);}
-.sv-chat .sv-title{color:rgba(255,255,255,0.85);}
-.sv-chat .sv-sub{color:rgba(255,255,255,0.35);}
-.sv-chat .sv-dot{background:rgba(37,211,102,0.4);}
-.sv-chat .sv-dot.sv-dot-active{background:#25d366;}
-.sv-chat .sv-name{color:rgba(255,255,255,0.9);}
-.sv-chat .sv-desc{color:rgba(255,255,255,0.4);}
-.sv-chat .sv-cta{color:#25d366;}
-.sv-bubbles{display:flex;flex-direction:column;gap:5px;width:90%;margin:0 auto;}
-.sv-bub{padding:5px 10px;border-radius:14px;font-size:0.6rem;max-width:80%;}
-.sv-bub.sent{background:#25d366;color:white;align-self:flex-end;border-radius:14px 14px 3px 14px;}
-.sv-bub.recv{background:rgba(255,255,255,0.12);color:white;align-self:flex-start;border-radius:14px 14px 14px 3px;}
-.sv-typing{display:flex;gap:3px;padding:6px 10px;background:rgba(255,255,255,0.1);border-radius:14px;width:fit-content;animation:typingPulse 1.4s ease-in-out infinite;}
-@keyframes typingPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
-.sv-typing-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.6);}
-.sv-reveal{background:linear-gradient(135deg,#e91e63,#f06292);color:white;padding:8px 16px;border-radius:50px;font-size:0.68rem;font-weight:700;margin-top:6px;}
+.letter-paper{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(200,0,60,0.1);
+  border-top:2px solid rgba(200,0,60,0.4);
+  border-radius:2px;margin:0 20px 24px;
+  padding:24px 22px 28px;
+  box-shadow:0 4px 24px rgba(0,0,0,0.3);
+  position:relative;
+}
+.letter-paper::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 31px,rgba(200,0,60,0.04) 31px,rgba(200,0,60,0.04) 32px);
+  pointer-events:none;}
 
-/* Save overlay */
-.save-overlay{position:fixed;inset:0;background:rgba(6,24,24,0.93);backdrop-filter:blur(16px);z-index:500;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px;}
-.save-overlay.show{display:flex;}
-.save-box{text-align:center;width:100%;max-width:280px;}
-.save-spinner{position:relative;width:58px;height:58px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
-.save-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(20,160,140,0.12);border-top-color:rgba(20,160,140,0.75);animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.save-emoji-big{font-size:1.5rem;position:relative;z-index:1;}
-.save-label{font-family:'Cormorant Garamond',serif;font-size:1rem;color:rgba(224,240,238,0.6);margin-bottom:14px;}
-.save-bar-wrap{height:2px;background:rgba(20,160,140,0.1);border-radius:2px;overflow:hidden;width:100%;}
-.save-bar{height:100%;background:linear-gradient(90deg,rgba(20,160,140,0.8),rgba(240,192,64,0.6));width:0%;transition:width 0.4s ease;}
+.letter-from{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.75rem;color:rgba(200,0,60,0.4);margin-bottom:18px;letter-spacing:0.06em;}
+.letter-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;
+  font-size:1.05rem;color:rgba(255,210,210,0.9);line-height:2.1;white-space:pre-wrap;
+  position:relative;z-index:1;}
+.letter-sign{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1.1rem;color:rgba(200,0,60,0.8);margin-top:20px;display:block;
+  opacity:0;transition:opacity 1s ease;position:relative;z-index:1;}
+.letter-sign.vis{opacity:1;}
 
-/* Share modal */
-.share-modal{position:fixed;inset:0;background:rgba(6,24,24,0.91);backdrop-filter:blur(16px);z-index:600;display:none;align-items:center;justify-content:center;padding:22px;}
+.letter-footer{padding:16px 20px max(28px,env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;gap:8px;position:relative;z-index:1;}
+.letter-replay{background:linear-gradient(135deg,#c00030,#800020);color:rgba(255,200,200,0.9);
+  border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;
+  font-size:0.88rem;font-weight:500;cursor:pointer;touch-action:manipulation;
+  box-shadow:0 6px 20px rgba(192,0,48,0.4);}
+.letter-make{background:none;border:1px solid rgba(200,0,60,0.2);color:rgba(200,0,60,0.4);
+  border-radius:50px;padding:12px;font-family:'DM Sans',sans-serif;
+  font-size:0.78rem;cursor:pointer;}
+
+/* ══════════════════════
+   SHARE MODAL
+══════════════════════ */
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(14px);
+  z-index:600;display:none;align-items:center;justify-content:center;padding:20px;}
 .share-modal.show{display:flex;}
-.share-box{background:rgba(255,255,255,0.032);border:1px solid rgba(160,220,210,0.09);border-radius:22px;padding:26px 22px;width:100%;max-width:360px;text-align:center;}
-.share-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:rgba(224,240,238,0.9);margin-bottom:5px;}
-.share-sub{font-size:0.74rem;color:rgba(160,220,210,0.3);margin-bottom:12px;}
-.share-expiry{font-size:0.63rem;color:rgba(160,220,210,0.2);margin-bottom:12px;}
-.share-link-row{background:rgba(255,255,255,0.022);border:1px solid rgba(160,220,210,0.07);border-radius:9px;padding:9px 13px;margin-bottom:12px;display:flex;align-items:center;gap:9px;}
-.share-link-txt{font-size:0.67rem;color:rgba(160,220,210,0.42);flex:1;text-align:left;word-break:break-all;}
-.copy-btn{padding:5px 13px;border:none;border-radius:7px;background:rgba(20,160,140,0.62);color:rgba(224,240,238,0.9);font-size:0.67rem;font-weight:600;cursor:pointer;white-space:nowrap;}
-.btn-wa{width:100%;padding:13px;border:none;border-radius:50px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;cursor:pointer;margin-bottom:8px;touch-action:manipulation;}
-.share-close-btn{width:100%;padding:11px;background:none;border:1px solid rgba(160,220,210,0.08);border-radius:50px;font-family:'DM Sans',sans-serif;font-size:0.78rem;color:rgba(160,220,210,0.28);cursor:pointer;}
+.share-box{background:#1a0008;border:1px solid rgba(200,0,60,0.2);border-radius:16px;
+  padding:26px 22px;width:100%;max-width:360px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);}
+.sh-t{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:rgba(255,200,200,0.9);margin-bottom:4px;}
+.sh-s{font-size:0.78rem;color:rgba(200,80,80,0.4);margin-bottom:14px;}
+.sh-row{background:rgba(200,0,60,0.06);border:1px solid rgba(200,0,60,0.15);
+  border-radius:8px;padding:9px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sh-lnk{font-size:0.67rem;color:rgba(200,80,80,0.4);flex:1;text-align:left;word-break:break-all;}
+.sh-cp{padding:6px 12px;border:none;border-radius:6px;font-size:0.7rem;font-weight:700;
+  cursor:pointer;background:#c00030;color:rgba(255,200,200,0.9);white-space:nowrap;}
+.sh-wa{width:100%;padding:12px;border:none;border-radius:50px;
+  background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;
+  cursor:pointer;margin-bottom:8px;touch-action:manipulation;}
+.sh-cl{width:100%;padding:10px;background:none;border:1px solid rgba(200,0,60,0.15);
+  border-radius:50px;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.88rem;color:rgba(200,0,60,0.4);cursor:pointer;}
+
+.wm{position:absolute;bottom:5px;right:8px;font-size:0.44rem;
+  color:rgba(200,0,60,0.1);pointer-events:none;z-index:1;}
 </style>
 </head>
 <body>
 <div class="app" id="mainApp">
-<div class="bg-glow"></div>
 
-<!-- ════ PAGE 1 — INPUTS ════ -->
-<div class="screen active" id="p-info">
-  <div class="step-dots">
-    <div class="step-dot done"></div>
-    <div class="step-dot active"></div>
-    <div class="step-dot"></div>
-  </div>
-  <div class="top-nav">
-    <button class="back-btn" onclick="window.location.href='../'">←</button>
-    <span class="step-pill">Step 2 of 3</span>
-  </div>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">💋 Valentine's Day</span><span class="eyebrow-line"></span></div>
-      <div class="page-title">Make it<br><em>unforgettable.</em></div>
-      <div class="page-sub">Fill in the details — they'll feel everything.</div>
+<!-- Loading -->
+<div class="screen active" id="rv-loading">
+  <div class="ld-rose">🌹</div>
+  <div class="ld-txt">Someone left something for you…</div>
+</div>
 
-      <!-- Relation row -->
-      <div class="relation-wrap">
-        <div class="relation-lbl">Who is this for?</div>
-        <input class="regular-input" id="relationInput" placeholder="e.g. girlfriend, boyfriend, wife, husband, jaan, love..." maxlength="40" autocomplete="off" oninput="onRelationChange(this.value)">
-      </div>
+<!-- Error -->
+<div class="screen" id="rv-error">
+  <div style="font-size:2.5rem;margin-bottom:14px;">🌹</div>
+  <div class="err-t">This rose has wilted<br>or the link is broken.</div>
+  <button onclick="location.href='/'" style="margin-top:20px;background:#c00030;color:rgba(255,200,200,0.9);border:none;border-radius:50px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;">Back to Home</button>
+</div>
 
-      <label class="field-label" id="nameLabel">To — Their name</label>
-      <input class="big-input" id="cName" placeholder="e.g. Anika" maxlength="30" autocomplete="off" oninput="saveDraft()">
-      <div style="height:18px;"></div>
-      <label class="field-label">From — Your name</label>
-      <input class="regular-input" id="cSender" placeholder="e.g. Aryan" maxlength="30" autocomplete="off" style="margin-top:4px;" oninput="if(!signManuallyEdited){const v=this.value.trim();document.getElementById('cSign').value=v?getSignOff(v):'';}">
-
-      <!-- Photos -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">📸</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="photosHeading" value="Us, always 💋" maxlength="30" autocomplete="off">
-        </div>
-        <span class="sec-hdr-line"></span>
+<!-- Welcome -->
+<div class="screen" id="rv-welcome">
+  <div class="welcome-particles" id="welcomeParticles"></div>
+  <div class="wlc-inner">
+    <span class="wlc-tag">WishYou.ai · Valentine's Day</span>
+    <div class="wlc-title" id="wlcTitle">Someone left<br>something for you</div>
+    <div class="wlc-sub" id="wlcSub">Tap the rose to open it</div>
+    <div class="rosebud-wrap" onclick="startBloom()" id="rosebud">
+      <div class="tap-ring"></div>
+      <div class="bud">
+        <div class="bp5"></div>
+        <div class="bp4"></div>
+        <div class="bp3"></div>
+        <div class="bp1"></div>
+        <div class="bp2"></div>
       </div>
-      <div class="photos-grid" id="photosGrid"></div>
-      <div class="photo-hint" style="margin-top:6px;margin-bottom:2px;">Hold & drag any photo to shuffle order · Captions stay fixed</div>
-      <div class="photo-hint" style="margin-top:4px;">Photos upload instantly — <span class="hl" id="uploadedCount">0</span> / <span id="totalCount">0</span> uploaded ✓</div>
-      <input type="file" accept="image/*" multiple style="display:none;" id="photoFileInput" onchange="handlePhotoUpload(this)">
-
-      <!-- Song -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">🎵</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="songScreenTitle" value="Our song 💋" maxlength="35" autocomplete="off">
-        </div>
-        <span class="sec-hdr-line"></span>
+      <div class="stem">
+        <div class="stem-leaf left"></div>
+        <div class="stem-leaf right"></div>
       </div>
-      <div class="song-selected-box" id="songSelectedBox">
-        <div class="song-sel-lbl">Selected song</div>
-        <div class="song-sel-name" id="songSelectedName">—</div>
-      </div>
-      <div class="song-search-row">
-        <input class="regular-input" id="ytSearchInput" placeholder="Search your song..." maxlength="100" onkeydown="if(event.key==='Enter')searchSong()">
-        <button class="search-btn" onclick="searchSong()">🔍</button>
-      </div>
-      <div id="songResults"></div>
-
-      <!-- Letter -->
-      <div class="sec-hdr">
-        <span class="sec-hdr-line"></span>
-        <span class="sec-hdr-txt">💌</span>
-        <div class="sec-hdr-pill">
-          <span class="sec-hdr-pencil">✏️</span>
-          <input class="sec-hdr-input" id="letterToneHeader" value="deeply romantic and personal" maxlength="50" autocomplete="off" placeholder="e.g. romantic, Hindi, funny...">
-        </div>
-        <span class="sec-hdr-line"></span>
-      </div>
-      <div class="ai-box">
-        <div class="ai-box-lbl">✨ Write with AI using the tone above</div>
-        <button class="ai-go-btn" id="aiLetterBtn" onclick="runAILetter()" style="width:100%;padding:11px;">Write Letter ✨</button>
-        <div class="ai-loading" id="letterAiLoading">
-          <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
-          <span>Writing your letter...</span>
-        </div>
-      </div>
-      <textarea class="letter-area" id="cMsg" oninput="saveDraft()" placeholder="Every moment with you feels like the first..." rows="5"></textarea>
-      <div class="sign-row">
-        <span class="sign-lbl">Sign off</span>
-        <input class="sign-input" id="cSign" placeholder="Forever yours ❤️" maxlength="60" oninput="signManuallyEdited=true">
-      </div>
-      <div class="rule"></div>
     </div>
-    <div class="step-actions">
-      <button class="btn-primary" onclick="goToStylePage()">Continue → Pick Card Style 💋</button>
+    <div class="tap-hint">tap to open 🌹</div>
+  </div>
+</div>
+
+<!-- Bloom -->
+<div class="screen" id="rv-bloom">
+  <div class="rose-stage" id="roseStage">
+    <!-- petals injected by JS -->
+    <div class="rose-center" id="roseCenter" onclick="toggleSong()">
+      <div class="center-spin" id="centerSpin">
+        <div class="center-dot"></div>
+      </div>
+      <div class="center-note">tap ♪</div>
+    </div>
+  </div>
+  <div class="bloom-sub" id="bloomSub" style="position:absolute;top:calc(50% + 155px);left:0;right:0;padding:0 20px;">tap a petal · tap center for song</div>
+  <div class="bloom-song" id="bloomSong" style="position:absolute;top:calc(50% + 178px);left:0;right:0;padding:0 20px;"></div>
+  <div class="bloom-yt" id="bloomYt" style="position:absolute;top:calc(50% + 200px);left:50%;transform:translateX(-50%);"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;padding:12px 20px max(20px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:8px;">
+    <button onclick="openLetter()" id="letterBtn" style="background:linear-gradient(135deg,#c00030,#800020);color:rgba(255,200,200,0.9);border:none;border-radius:50px;padding:13px;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;cursor:pointer;box-shadow:0 6px 20px rgba(192,0,48,0.4);touch-action:manipulation;opacity:0;transition:opacity 0.8s ease 2.2s;">Read the Letter 💌</button>
+    <button onclick="goTo('rv-welcome')" style="background:none;border:1px solid rgba(200,0,60,0.2);color:rgba(200,0,60,0.4);border-radius:50px;padding:10px;font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;">← Back</button>
+  </div>
+</div>
+
+<!-- Letter -->
+<div class="screen" id="rv-letter">
+  <canvas id="petalCanvas"></canvas>
+  <div class="letter-scroll" id="letterScroll">
+    <div class="letter-paper">
+      <div class="letter-from" id="letterFrom">A letter for you 🌹</div>
+      <div class="letter-body" id="letterBody"></div>
+      <span class="letter-sign" id="letterSign"></span>
+    </div>
+    <div class="letter-footer">
+      <button class="letter-replay" onclick="goTo('rv-bloom')">← Back to the Rose</button>
+      <button class="letter-make" onclick="location.href='/'">✨ Create a card like this</button>
     </div>
   </div>
 </div>
 
-<!-- ════ PAGE 2 — STYLE PICKER ════ -->
-<div class="screen" id="p-style">
-  <div class="step-dots">
-    <div class="step-dot done"></div>
-    <div class="step-dot done"></div>
-    <div class="step-dot active"></div>
-  </div>
-  <div class="top-nav">
-    <button class="back-btn" onclick="goTo('p-info')">←</button>
-    <span class="step-pill">Step 3 of 3</span>
-  </div>
-  <div class="step-wrap">
-    <div class="step-content">
-      <div class="eyebrow"><span class="eyebrow-line"></span><span class="eyebrow-txt">💋 Card Style</span><span class="eyebrow-line"></span></div>
-      <div class="page-title">Pick your<br><em>style.</em></div>
-      <div class="page-sub" style="margin-bottom:20px;">Valentine's Day · pick the vibe that feels right</div>
-      <div class="styles-list-v" id="stylesList"></div>
-      <div style="height:16px;"></div>
-      <div class="rule"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Save overlay -->
-<div class="save-overlay" id="saveOverlay">
-  <div class="save-box">
-    <div class="save-spinner"><div class="save-ring"></div><span class="save-emoji-big" id="saveEmoji">💋</span></div>
-    <div class="save-label" id="saveLabel">Creating your card...</div>
-    <div class="save-bar-wrap"><div class="save-bar" id="saveBar"></div></div>
-  </div>
-</div>
-
-<!-- Share modal -->
+<!-- Share -->
 <div class="share-modal" id="shareModal">
   <div class="share-box">
-    <div style="font-size:2rem;margin-bottom:10px;" id="shareEmoji">💋</div>
-    <div class="share-title">Card is ready! 🎉</div>
-    <div class="share-sub">Send this to <span id="shareReceiverName">them</span> 💝</div>
-    <div class="share-expiry">⏳ Link expires in 3 days</div>
-    <div class="share-link-row">
-      <span class="share-link-txt" id="shareLinkTxt"></span>
-      <button class="copy-btn" id="copyBtn" onclick="copyLink()">Copy</button>
-    </div>
-    <button class="btn-wa" onclick="openWhatsApp()">💬 Share on WhatsApp</button>
-    <button class="share-close-btn" onclick="closeShare()">Done ✓</button>
+    <div style="font-size:1.8rem;margin-bottom:8px;">🌹</div>
+    <div class="sh-t">Your rose is ready 💋</div>
+    <div class="sh-s">Send this link to them</div>
+    <div class="sh-row"><span class="sh-lnk" id="shLnk"></span>
+      <button class="sh-cp" id="shCp" onclick="copyLink()">Copy</button></div>
+    <button class="sh-wa" onclick="shareWA()">💬 Share on WhatsApp</button>
+    <button class="sh-cl" onclick="document.getElementById('shareModal').classList.remove('show')">Done ✓</button>
   </div>
 </div>
 
-</div><!-- /app -->
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div>
+
 <script>
-// ── CONFIG ──
-const FIREBASE_URL = 'https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
-const CLOUDINARY_CLOUD = 'dkvbjazfe';
-const CLOUDINARY_PRESET = 'wishyou-uploads';
-const WORKER_URL = 'https://wild-fog-b15e.nilesh53333.workers.dev/';
+const FIREBASE='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+let curScreen='', shareLink='';
+let letterText='', letterSign='', letterTyped=false;
+let songName='', ytId='', songPlaying=false;
+let cardPhotos=[], cardCaptions=[];
 
-// ── STATE ──
-let curScreen = 'p-info';
-let photos = [];
-let uploadedUrls = {};
-let currentSlotIdx = 0;
-let selectedVideoId = '';
-let shareLink = '';
-let shareLinkShort = '';
-let aiLetterCount = 0;
-let signManuallyEdited = false;
-
-// ── BIRTHDAY CARD STYLES ──
-const BIRTHDAY_STYLES = [
-  {
-    id:'intimate', name:'💋 Intimate',
-    desc:'Deep & romantic · Polaroid memories · Vinyl song · Handwritten letter',
-    previewEmoji:'💋',
-    cardType:'valentine-intimate',
-    defaultSongTitle:'Our song 💋',
-    defaultMemoriesHeading:'Us, always',
-    receiverUrl: id => `https://wishyou.ai/valentine/intimate.html?card=${id}`,
-    shareMsg: (n,s,l) => `💋 *Happy Valentine's Day${n?' '+n:''}!*\n\n${s?s+' made you something special ❤️\n\n':'Someone made you something special ❤️\n\n'}Open it when you're alone:\n\n👆 Open:\n${l}`
-  },
-  {
-    id:'rose', name:'🌹 Blooming Rose',
-    desc:'Most unique · Rose blooms petal by petal · Photos inside petals · Falling petals letter',
-    previewEmoji:'🌹',
-    cardType:'valentine-rose',
-    defaultSongTitle:'Our song 🌹',
-    defaultMemoriesHeading:'Us, always',
-    receiverUrl: id => `https://wishyou.ai/valentine/rose.html?card=${id}`,
-    shareMsg: (n,s,l) => `🌹 *Happy Valentine's Day${n?' '+n:''}!*\n\n${s?s+' ne tumhare liye ek rose banaya hai 💋\n\n':'Someone left a rose for you 🌹\n\n'}Kholo:\n\n👆 Open:\n${l}`
-  }
-];
-
-// ── RELATION CONTENT ──
-const DEFAULT_CONTENT = {
-  photosHeading:'Us, always 💋',
-  photoCaptions:['The moment I knew it was you 💫','You, always you ✨','I could look at this forever 😊','My whole world 💋','The one I choose, every time ❤️'],
-  songHeading:'Our song 💋',songPlaceholder:'Search your song...',
-  letterTone:'deeply romantic and personal',
-  letterPlaceholder:'Every moment with you feels like the first...',
-  signOff: n=>`Forever yours, ${n} ❤️`,
-  aiLetterPrompt:(name,sender,tone)=>`Write a short Valentine's Day love letter from ${sender} to ${name} (3-4 sentences). Tone: ${tone||"deeply romantic and personal"}. Return ONLY the letter body — no greeting, no sign off.`
-};
-
-
-function getSignOff(senderName) {
-  const c = DEFAULT_CONTENT;
-  return c ? c.signOff(senderName) : `Forever yours, ${senderName} ❤️`;
-}
-
-
-// ── NAVIGATION ──
-function goTo(id) {
-  const prev = document.getElementById(curScreen);
-  const next = document.getElementById(id);
-  if (!next || curScreen === id) return;
-  if (prev) { prev.classList.remove('active'); prev.classList.add('slide-out'); setTimeout(() => prev.classList.remove('slide-out'), 500); }
-  if (curScreen === 'p-style' && id !== 'p-style') stopAllSlideshows();
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev) prev.classList.remove('active');
   next.classList.add('active');
-  curScreen = id;
-  setTimeout(() => { const sc = next.querySelector('.step-content'); if (sc) sc.scrollTo(0, 0); }, 50);
-  saveDraft();
-}
-
-function goToStylePage() {
-  const name = document.getElementById('cName').value.trim();
-  if (!name) {
-    const inp = document.getElementById('cName');
-    inp.focus();
-    inp.style.borderBottomColor = 'rgba(240,192,64,0.6)';
-    setTimeout(() => inp.style.borderBottomColor = '', 1800);
-    return;
-  }
-  buildStylesList();
-  goTo('p-style');
-}
-
-// ── SLIDESHOWS ──
-const slideshowTimers = {};
-function stopAllSlideshows() {
-  Object.values(slideshowTimers).forEach(t => clearInterval(t));
-  Object.keys(slideshowTimers).forEach(k => delete slideshowTimers[k]);
-}
-function startSlideshow(id, total) {
-  if (slideshowTimers[id]) clearInterval(slideshowTimers[id]);
-  let idx = 0;
-  slideshowTimers[id] = setInterval(() => {
-    const slides = document.querySelectorAll(`#${id} .sv-slide`);
-    const dots = document.querySelectorAll(`#${id} .sv-dot`);
-    slides.forEach(s => s.classList.remove('sv-active'));
-    dots.forEach(d => d.classList.remove('sv-dot-active'));
-    idx = (idx + 1) % total;
-    if (slides[idx]) slides[idx].classList.add('sv-active');
-    if (dots[idx]) dots[idx].classList.add('sv-dot-active');
-  }, 2200);
-}
-
-function buildStylesList() {
-  const list = document.getElementById('stylesList');
-  list.innerHTML = '';
-  stopAllSlideshows();
-
-  const slideshows = {
-    intimate: {
-      theme:'sv-intimate',
-      slides:[
-        `<div class="sv-lbl">Welcome</div><span class="sv-emoji">💋</span><div class="sv-title">Happy Valentine's Day</div><div class="sv-sub">Someone made this just for you ❤️</div>`,
-        `<div class="sv-lbl">Your Memories</div><div class="sv-pols"><div class="sv-pol"><div class="sv-pol-inner">🌹</div></div><div class="sv-pol"><div class="sv-pol-inner">❤️</div></div><div class="sv-pol"><div class="sv-pol-inner">💋</div></div></div><div class="sv-sub">Your photos as beautiful polaroids</div>`,
-        `<div class="sv-lbl">Your Song</div><div class="sv-vinyl"><div class="sv-vinyl-c"></div></div><div class="sv-sub" style="margin-top:6px;">Your song, spinning just for you 💋</div>`,
-        `<div class="sv-lbl">Envelope Reveal</div><div class="sv-env">💌</div><div class="sv-sub">Tap to open the letter...</div>`,
-        `<div class="sv-lbl">Love Letter</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:85%"></div><div class="sv-line" style="width:90%"></div></div><div class="sv-sub" style="margin-top:6px;font-style:italic;color:#b00020;">Forever yours ❤️</div>`
-      ]
-    },
-    rose: {
-      theme:'sv-rose',
-      slides:[
-        `<div class="sv-rose-bud">🌹</div><div class="sv-lbl" style="margin-top:6px;">Tap the rose</div><div class="sv-title">It blooms just for you</div>`,
-        `<div class="sv-lbl">Petals open</div><div class="sv-rose-petals"><div class="sv-rpetal"></div><div class="sv-rpetal"></div><div class="sv-rpetal"></div><div class="sv-rpetal"></div><div class="sv-rpetal"></div></div><div class="sv-sub">Each petal holds one of your photos</div>`,
-        `<div class="sv-lbl">♪ Tap the center</div><div class="sv-vinyl sv-rose-vinyl"><div class="sv-vinyl-c sv-rose-vc"></div></div><div class="sv-sub" style="margin-top:6px;">Your song plays from the heart of the rose</div>`,
-        `<div class="sv-lbl">Letter in falling petals</div><div class="sv-lines"><div class="sv-line" style="width:100%"></div><div class="sv-line" style="width:80%"></div><div class="sv-line" style="width:88%"></div></div><div class="sv-sub" style="margin-top:4px;font-style:italic;color:#c00030;">Words that fall like rose petals 🌹</div>`
-      ]
-    }
-  };
-
-  BIRTHDAY_STYLES.forEach((style, i) => {
-    const sw = slideshows[style.id];
-    if (!sw) { console.warn('Missing slideshow for style:', style.id); return; }
-    const cardId = `sv-card-${style.id}`;
-    const card = document.createElement('div');
-    card.className = 'style-card-wrap';
-    card.id = cardId;
-    const dotsHtml = sw.slides.map((_,j) => `<div class="sv-dot${j===0?' sv-dot-active':''}"></div>`).join('');
-    const slidesHtml = sw.slides.map((content,j) => `<div class="sv-slide${j===0?' sv-active':''}">${content}</div>`).join('');
-    card.innerHTML = `<div class="sv ${sw.theme}">${slidesHtml}<div class="sv-overlay-info"><div class="sv-dots">${dotsHtml}</div><div class="sv-name">${style.name}</div><div class="sv-desc">${style.desc}</div><div class="sv-cta">Tap to create →</div></div></div>`;
-    card.onclick = () => createCard(style);
-    list.appendChild(card);
-    setTimeout(() => startSlideshow(cardId, sw.slides.length), i * 600);
-  });
-}
-
-// ── PHOTOS ──
-const DEFAULT_CAPTIONS = ['The memory I keep coming back to 💫','You, in your element ✨','This one always makes me smile 😊','Look how far you\'ve come 🌟','My favourite version of you 💕'];
-let photoCaptions = ['','','','',''];
-
-// Relation-aware content — updates all fields at once
-function getRelationContent(rel) {
-  const r = (rel||'').toLowerCase().trim();
-  const sender = document.getElementById("cSender")?.value.trim() || '';
-  const sign = (n, tag) => n ? `${tag}, ${n}` : tag;
-
-  if (/girlfriend|gf/.test(r)) return {
-    photosHeading: "Us 💋",
-    songTitle: "Our song — you already know which one",
-    tone: "deeply romantic and passionate — a boyfriend writing to his girlfriend on Valentine's Day, raw and from the heart, not a greeting card",
-    signOff: sign(sender, "Yours, always ❤️"),
-    letterPlaceholder: "Every moment with you feels like the first...",
-    captions: ["The moment I knew it was you 💫","You, always you ❤️","I could look at this forever 😍","My whole world, right here 💋","The one I choose, every single day ❤️"]
-  };
-
-  if (/boyfriend|bf/.test(r)) return {
-    photosHeading: "Us 💋",
-    songTitle: "Our song — you already know which one",
-    tone: "deeply romantic and genuine — a girlfriend writing to her boyfriend on Valentine's Day, honest and from the heart, not over the top",
-    signOff: sign(sender, "Yours, always ❤️"),
-    letterPlaceholder: "I never knew it could feel like this...",
-    captions: ["Still can't believe you're mine 💫","You make everything better ❤️","This one lives rent-free in my head 😍","My person. In every way 💋","Lucky doesn't even cover it ❤️"]
-  };
-
-  if (/wife/.test(r)) return {
-    photosHeading: "My Everything 💍",
-    songTitle: "Our song — the one from that night",
-    tone: "deeply romantic and intimate — a husband writing to his wife on Valentine's Day, saying what he feels every day but rarely puts into words",
-    signOff: sign(sender, "Forever yours ❤️"),
-    letterPlaceholder: "Loving you is the best decision I ever made...",
-    captions: ["Every day I choose you. Every single one 💕","Home is wherever you are ❤️","That smile. It still gets me every time 💫","My favourite chapter, and it's still going 💍","Everything I didn't know I needed ❤️"]
-  };
-
-  if (/husband/.test(r)) return {
-    photosHeading: "My Everything 💍",
-    songTitle: "Our song — the one from that night",
-    tone: "deeply romantic and tender — a wife writing to her husband on Valentine's Day, saying what she feels every single day",
-    signOff: sign(sender, "Forever yours ❤️"),
-    letterPlaceholder: "I fall in love with you a little more every day...",
-    captions: ["Still my favourite person in any room 💕","Home is wherever you are ❤️","Life is just better with you in it 💫","My person. Always 💍","Grateful for you, every single day ❤️"]
-  };
-
-  if (/fianc/.test(r)) return {
-    photosHeading: "Soon Forever 💍",
-    songTitle: "Our song — for always",
-    tone: "romantic and full of anticipation — writing to your fiancé on Valentine's Day, celebrating the love and the forever you're stepping into",
-    signOff: sign(sender, "Soon forever yours ❤️"),
-    letterPlaceholder: "I can't wait to spend every Valentine's Day with you...",
-    captions: ["The beginning of our forever 💍","I'd say yes a thousand times over ❤️","You make forever sound easy 💫","Our best days are still ahead 💕","Can't wait to call you mine, forever ❤️"]
-  };
-
-  if (/jaan|babe|baby|darling|jaanu|love|partner|sweetheart/.test(r)) return {
-    photosHeading: "Us 💋",
-    songTitle: "Our song — you already know which one",
-    tone: "deeply romantic and personal — a Valentine's Day love letter, intimate and straight from the heart",
-    signOff: sign(sender, "Forever yours ❤️"),
-    letterPlaceholder: "Every moment with you feels like the first...",
-    captions: ["The moment I knew it was you 💫","You, always you ❤️","I could look at this forever 😍","My whole world 💋","The one I choose, every time ❤️"]
-  };
-
-  return {
-    photosHeading: "Us, always 💋",
-    songTitle: "Our song 💋",
-    tone: "deeply romantic and personal — a Valentine's Day love letter from the heart",
-    signOff: sign(sender, "Forever yours ❤️"),
-    letterPlaceholder: "Every moment with you feels like the first...",
-    captions: ["The moment I knew it was you 💫","You, always you ❤️","I could look at this forever 😍","My whole world 💋","The one I choose, every time ❤️"]
-  };
-}
-
-
-function onRelationChange(val) {
-  saveDraft();
-  if (!val.trim()) return;
-  const content = getRelationContent(val);
-  // Update all fields
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
-  set('photosHeading', content.photosHeading);
-  set('songScreenTitle', content.songTitle);
-  set('letterToneHeader', content.tone);
-  if (!signManuallyEdited) set('cSign', content.signOff);
-  if (content.letterPlaceholder) {
-    const msgEl = document.getElementById('cMsg');
-    if (msgEl && !msgEl.value.trim()) msgEl.placeholder = content.letterPlaceholder;
-  }
-  // Update captions
-  photoCaptions = [...content.captions];
-  content.captions.forEach((cap, i) => {
-    const el = document.getElementById('cap' + i);
-    if (el) { el.value = cap; autoResize(el); }
-  });
-}
-
-
-function buildPhotoSlots(captions) {
-  captions = captions || photoCaptions;
-  photoCaptions = [...captions];
-  const grid = document.getElementById('photosGrid');
-  grid.innerHTML = '';
-  photos = photos.length === 5 ? photos : new Array(5).fill(null);
-  captions.forEach((cap, i) => {
-    // Wrapper column: photo slot + caption below
-    const col = document.createElement('div');
-    col.className = 'photo-col';
-
-    const slot = document.createElement('div');
-    slot.className = 'photo-slot';
-    slot.id = 'slot' + i;
-    slot.dataset.idx = i;
-    if (photos[i]) {
-      slot.classList.add('has-photo');
-      slot.draggable = true;
-      slot.innerHTML = `<span class="slot-num">${i+1}</span><img src="${photos[i]}"><div class="up-dot ${uploadedUrls[i]?'done':'uploading'}" id="upd${i}"></div><button class="photo-del" onclick="removePhoto(event,${i})">✕</button>`;
-      slot.onclick = null;
-    } else {
-      slot.innerHTML = `<span class="slot-num">${i+1}</span><span class="slot-plus">+</span>`;
-      slot.onclick = () => { currentSlotIdx=i; document.getElementById('photoFileInput').click(); };
-    }
-    slot.addEventListener('dragstart', _onDragStart);
-    slot.addEventListener('dragover', _onDragOver);
-    slot.addEventListener('drop', _onDrop);
-    slot.addEventListener('dragend', _onDragEnd);
-    slot.addEventListener('touchstart', _onTouchStart, {passive:false});
-
-    // Caption textarea directly below slot
-    const ta = document.createElement('textarea');
-    ta.className = 'cap-input';
-    ta.id = 'cap' + i;
-    ta.value = photoCaptions[i] || '';
-    ta.placeholder = 'Caption...';
-    ta.maxLength = 100;
-    ta.rows = 1;
-    ta.addEventListener('input', () => { photoCaptions[i] = ta.value; autoResize(ta); });
-    // Auto-resize on build
-    requestAnimationFrame(() => autoResize(ta));
-
-    col.appendChild(slot);
-    col.appendChild(ta);
-    grid.appendChild(col);
-  });
-  updateUploadCount();
-  requestAnimationFrame(() => requestAnimationFrame(autoResizeAll));
-}
-
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = (el.scrollHeight) + 'px';
-}
-function autoResizeAll() {
-  document.querySelectorAll('.cap-input').forEach(autoResize);
-}
-
-// ── Drag to rearrange ──
-let _dragSrc = -1, _touchClone = null;
-
-function _onDragStart(e) {
-  const i = parseInt(this.dataset.idx);
-  if (!photos[i]) { e.preventDefault(); return; }
-  _dragSrc = i;
-  e.dataTransfer.effectAllowed = 'move';
-  setTimeout(() => this.classList.add('dragging-src'), 0);
-}
-function _onDragOver(e) {
-  e.preventDefault();
-  if (_dragSrc === -1) return;
-  document.querySelectorAll('.photo-slot').forEach(s => s.classList.remove('drag-over'));
-  if (parseInt(this.dataset.idx) !== _dragSrc) this.classList.add('drag-over');
-}
-function _onDrop(e) {
-  e.preventDefault();
-  const dest = parseInt(this.dataset.idx);
-  if (dest !== _dragSrc) _swapPhotos(_dragSrc, dest);
-  document.querySelectorAll('.photo-slot').forEach(s => s.classList.remove('drag-over'));
-}
-function _onDragEnd() {
-  this.classList.remove('dragging-src');
-  document.querySelectorAll('.photo-slot').forEach(s => s.classList.remove('drag-over'));
-  _dragSrc = -1;
-}
-function _onTouchStart(e) {
-  const idx = parseInt(this.dataset.idx);
-  if (!photos[idx]) return;
-  let moved = false;
-  const sx = e.touches[0].clientX, sy = e.touches[0].clientY;
-  let touchSrc = idx;
-  const onMove = mv => {
-    const dx = mv.touches[0].clientX-sx, dy = mv.touches[0].clientY-sy;
-    if (!moved && Math.hypot(dx,dy) > 10) {
-      moved = true;
-      const r = document.getElementById('slot'+touchSrc).getBoundingClientRect();
-      _touchClone = document.createElement('div');
-      _touchClone.style.cssText = `position:fixed;width:${r.width}px;height:${r.height}px;border-radius:10px;opacity:0.9;pointer-events:none;z-index:999;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.5);`;
-      const img = document.getElementById('slot'+touchSrc).querySelector('img');
-      if (img) { const c=img.cloneNode(); c.style.cssText='width:100%;height:100%;object-fit:cover;'; _touchClone.appendChild(c); }
-      document.body.appendChild(_touchClone);
-      document.getElementById('slot'+touchSrc).classList.add('dragging-src');
-    }
-    if (moved && _touchClone) {
-      mv.preventDefault();
-      _touchClone.style.left=(mv.touches[0].clientX-_touchClone.offsetWidth/2)+'px';
-      _touchClone.style.top=(mv.touches[0].clientY-_touchClone.offsetHeight/2)+'px';
-      document.querySelectorAll('.photo-slot').forEach(s=>s.classList.remove('drag-over'));
-      const el=document.elementFromPoint(mv.touches[0].clientX,mv.touches[0].clientY);
-      const slotEl=el?.closest('.photo-slot');
-      if(slotEl&&slotEl!==document.getElementById('slot'+touchSrc)) slotEl.classList.add('drag-over');
-    }
-  };
-  const onEnd = ev => {
-    document.removeEventListener('touchmove',onMove);
-    document.removeEventListener('touchend',onEnd);
-    document.getElementById('slot'+touchSrc)?.classList.remove('dragging-src');
-    if(_touchClone){_touchClone.remove();_touchClone=null;}
-    if(!moved) return;
-    const touch=ev.changedTouches[0];
-    const el=document.elementFromPoint(touch.clientX,touch.clientY);
-    const slotEl=el?.closest('.photo-slot');
-    if(slotEl&&slotEl!==document.getElementById('slot'+touchSrc)) _swapPhotos(touchSrc,parseInt(slotEl.dataset.idx));
-    document.querySelectorAll('.photo-slot').forEach(s=>s.classList.remove('drag-over'));
-  };
-  document.addEventListener('touchmove',onMove,{passive:false});
-  document.addEventListener('touchend',onEnd);
-}
-
-function _swapPhotos(a, b) {
-  [photos[a], photos[b]] = [photos[b], photos[a]];
-  [uploadedUrls[a], uploadedUrls[b]] = [uploadedUrls[b], uploadedUrls[a]];
-  buildPhotoSlots();
-}
-
-function triggerUpload(idx) {
-  currentSlotIdx = idx;
-  document.getElementById('photoFileInput').click();
-}
-
-async function handlePhotoUpload(input) {
-  const files = Array.from(input.files);
-  if (!files.length) return;
-  const startIdx = currentSlotIdx;
-  for (let f = 0; f < files.length && startIdx + f < 5; f++) {
-    const idx = startIdx + f;
-    const file = files[f];
-    const localUrl = URL.createObjectURL(file);
-    photos[idx] = localUrl;
-    const slot = document.getElementById('slot' + idx);
-    slot.innerHTML = `<img src="${localUrl}"><div class="up-dot uploading" id="upd${idx}"></div><div class="upind"><div class="upbar" id="upb${idx}"></div></div><button class="photo-del" onclick="removePhoto(event,${idx})">✕</button>`;
-    slot.classList.add('has-photo');
-    slot.onclick = null;
-    updateUploadCount();
-    uploadPhotoInBackground(file, idx);
-  }
-  input.value = '';
-}
-
-async function uploadPhotoInBackground(file, idx) {
-  try {
-    const fd = new FormData();
-    fd.append('file', file); fd.append('upload_preset', CLOUDINARY_PRESET); fd.append('folder', 'wishyou');
-    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-    const d = await res.json();
-    if (d.secure_url) {
-      uploadedUrls[idx] = d.secure_url;
-      const dot = document.getElementById('upd'+idx);
-      if (dot) { dot.classList.remove('uploading'); dot.classList.add('done'); }
-      const bar = document.getElementById('upb'+idx);
-      if (bar) bar.style.width = '100%';
-      updateUploadCount();
-    }
-  } catch(e) { console.error('Upload failed',e); }
-}
-
-function removePhoto(e, idx) {
-  e.stopPropagation();
-  photos[idx] = null;
-  delete uploadedUrls[idx];
-  // Clear caption for this slot too
-  photoCaptions[idx] = '';
-  const capEl = document.getElementById('cap' + idx);
-  if (capEl) { capEl.value = ''; autoResize(capEl); }
-  const slot = document.getElementById('slot'+idx);
-  slot.className = 'photo-slot';
-  slot.draggable = false;
-  slot.innerHTML = `<span class="slot-num">${idx+1}</span><span class="slot-plus">+</span>`;
-  slot.onclick = () => { currentSlotIdx=idx; document.getElementById('photoFileInput').click(); };
-  updateUploadCount();
-}
-
-function updateUploadCount() {
-  const total = photos.filter(Boolean).length;
-  const done = Object.keys(uploadedUrls).length;
-  document.getElementById('totalCount').textContent = total;
-  document.getElementById('uploadedCount').textContent = done;
-}
-
-
-// ── SONG ──
-async function searchSong() {
-  const q = document.getElementById('ytSearchInput').value.trim(); if (!q) return;
-  const rd = document.getElementById('songResults');
-  rd.innerHTML = `<div style="font-size:0.74rem;color:rgba(160,220,210,0.32);padding:8px 0;">🔍 Searching...</div>`;
-  try {
-    const res = await fetch(WORKER_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({type:'youtube_search',query:q}) });
-    const data = await res.json();
-    if (!data.items || !data.items.length) { rd.innerHTML = '<div style="font-size:0.74rem;opacity:0.32;padding:6px 0;">No results found.</div>'; return; }
-    rd.innerHTML = '';
-    data.items.slice(0,4).forEach(item => {
-      const {videoId} = item.id, {title,channelTitle,thumbnails} = item.snippet;
-      const card = document.createElement('div'); card.className = 'song-result';
-      card.innerHTML = `<img src="${thumbnails.default.url}"><div class="song-rt"><div class="song-rt-title">${title}</div><div class="song-rt-ch">${channelTitle}</div></div><button class="song-use-btn">✓ Use</button>`;
-      card.querySelector('button').onclick = e => { e.stopPropagation(); selectSong(videoId, title, channelTitle); };
-      rd.appendChild(card);
-    });
-  } catch(e) { rd.innerHTML = '<div style="font-size:0.74rem;opacity:0.32;padding:6px 0;">Search failed. Try again.</div>'; }
-}
-
-function selectSong(videoId, title, artist) {
-  selectedVideoId = videoId;
-  document.getElementById('songSelectedName').textContent = title + ' — ' + artist;
-  document.getElementById('songSelectedBox').style.display = 'block';
-  document.getElementById('songResults').innerHTML = `<div style="font-size:0.74rem;color:rgba(20,160,140,0.6);padding:5px 0;">✅ ${title} added!</div>`;
-}
-
-// ── AI LETTER ──
-async function runAILetter() {
-  const name = document.getElementById('cName').value.trim() || 'them';
-  const sender = document.getElementById('cSender').value.trim() || 'someone';
-  const toneInput = document.getElementById('letterToneHeader')?.value.trim() || 'emotional and heartfelt';
-  const btn = document.getElementById('aiLetterBtn');
-  const loading = document.getElementById('letterAiLoading');
-  aiLetterCount++;
-  btn.disabled = true; loading.classList.add('show');
-  const variationHint = aiLetterCount > 1 ? ` Attempt #${aiLetterCount} — write a COMPLETELY DIFFERENT letter.` : '';
-  const langs = ['hindi','marathi','tamil','telugu','bengali','punjabi','gujarati','urdu','kannada'];
-  const detectedLang = langs.find(l => toneInput.toLowerCase().includes(l));
-  let langNote = '';
-  if (detectedLang) { const ln = detectedLang.charAt(0).toUpperCase()+detectedLang.slice(1); langNote = ` CRITICAL: Write ENTIRE letter in ${ln} script only.`; }
-  const c = DEFAULT_CONTENT;
-  const relation = (document.getElementById('relationInput')?.value||'').trim();
-  const relationHint = relation ? ` The recipient is the sender's ${relation}.` : '';
-  const prompt = c.aiLetterPrompt(name, sender, toneInput) + relationHint + langNote + variationHint;
-  const text = await callClaude(prompt);
-  if (text) { const el = document.getElementById('cMsg'); if (el) el.value = stripMarkdown(text); }
-  btn.disabled = false; loading.classList.remove('show');
-  btn.textContent = 'Again ✨';
-}
-
-
-async function callClaude(prompt) {
-  try {
-    const res = await fetch(WORKER_URL, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:800,messages:[{role:'user',content:prompt}]})});
-    const data = await res.json(); if (data.error) return '';
-    return data.content && data.content[0] ? data.content[0].text : '';
-  } catch(e) { return ''; }
-}
-
-function stripMarkdown(t) { return t.replace(/^#+\s.*$/gm,'').replace(/\*\*(.*?)\*\*/g,'$1').replace(/\*(.*?)\*/g,'$1').replace(/^[-*]\s/gm,'').replace(/\n{3,}/g,'\n\n').trim(); }
-
-function clearDraft(){try{localStorage.removeItem(DRAFT_KEY);}catch(e){}}
-
-// ── CREATE CARD ──
-async function createCard(style) {
-  const overlay = document.getElementById('saveOverlay');
-  const bar = document.getElementById('saveBar');
-  const label = document.getElementById('saveLabel');
-  document.getElementById('saveEmoji').textContent = style.previewEmoji;
-  function setP(pct, lbl) { bar.style.width = pct+'%'; if(lbl) label.textContent = lbl; }
-  overlay.classList.add('show'); setP(10,'Preparing your card...');
-
-  let photoUrls = [];
-  const slots = photos.map((p,i) => ({blob:p,idx:i})).filter(s=>s.blob);
-  let uploaded = 0;
-  for (const s of slots) {
-    if (uploadedUrls[s.idx]) {
-      photoUrls.push(uploadedUrls[s.idx]); uploaded++;
-      setP(10+(uploaded/Math.max(slots.length,1)*50),'Photos ready ✓');
-    } else if (typeof s.blob==='string'&&s.blob.startsWith('https://')) {
-      // Already a remote URL (e.g. restored from draft) — use directly
-      photoUrls.push(s.blob); uploadedUrls[s.idx]=s.blob; uploaded++;
-      setP(10+(uploaded/Math.max(slots.length,1)*50),'Photos ready ✓');
-    } else {
-      setP(10+(uploaded/Math.max(slots.length,1)*50),`Uploading photo ${uploaded+1}...`);
-      try {
-        const blob = await fetch(s.blob).then(r=>r.blob());
-        const fd = new FormData(); fd.append('file',blob); fd.append('upload_preset',CLOUDINARY_PRESET); fd.append('folder','wishyou');
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:fd});
-        const d = await res.json(); if(d.secure_url){photoUrls.push(d.secure_url);uploadedUrls[s.idx]=d.secure_url;}
-      } catch(e){console.error('Upload error:',e);}
-      uploaded++;
-    }
-  }
-
-  setP(70,'Saving your card...');
-  // Read caption textareas fresh — only save captions for slots that have a photo
-  for (let i = 0; i < 5; i++) {
-    const el = document.getElementById('cap' + i);
-    if (el) photoCaptions[i] = photos[i] ? el.value.trim() : '';
-  }
-  const now = Date.now();
-  const cardData = {
-    type: style.cardType,
-    name: document.getElementById('cName').value.trim()||'',
-    sender: document.getElementById('cSender').value.trim()||'',
-    msg: document.getElementById('cMsg').value.trim()||'',
-    sign: document.getElementById('cSign').value.trim()||'',
-    spotify: selectedVideoId?`https://www.youtube.com/watch?v=${selectedVideoId}`:'',
-    songName: document.getElementById('songSelectedName').textContent||'',
-    memoriesHeading: document.getElementById('photosHeading').value.trim()||style.defaultMemoriesHeading||'Memories',
-    songScreenTitle: document.getElementById('songScreenTitle').value.trim()||style.defaultSongTitle||'Song for you 🎵',
-    photoCaptions: photoCaptions,
-    photos: photoUrls, created:now, createdAt:now, expiresAt:now+3*24*60*60*1000
-  };
-
-  try {
-    setP(85,'Almost there...');
-    const res = await fetch(FIREBASE_URL+'.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(cardData)});
-    const data = await res.json(); const cardId = data.name;
-    shareLink = style.receiverUrl(cardId);
-    shareLinkShort = `wishyou.ai/b/${cardId}`;
-    fetch(FIREBASE_URL+'/'+cardId+'/views.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:'0'}).catch(()=>{});
-    setP(100,'Card created! 🎉');
-    clearDraft();
-    setTimeout(() => {
-      overlay.classList.remove('show');
-      document.getElementById('shareEmoji').textContent = style.previewEmoji;
-      document.getElementById('shareReceiverName').textContent = cardData.name||'them';
-      document.getElementById('shareLinkTxt').textContent = shareLink;
-      document.getElementById('shareModal').classList.add('show');
-    }, 700);
-  } catch(e) { console.error('Save error:',e); overlay.classList.remove('show'); alert('Could not save card. Please try again. Error: '+e.message); }
-}
-
-// ── SHARE ──
-function copyLink() {
-  navigator.clipboard.writeText(shareLink).then(()=>{const btn=document.getElementById('copyBtn');btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy',2000);});
-}
-function openWhatsApp() {
-  const name = document.getElementById('cName').value.trim()||'';
-  const sender = document.getElementById('cSender').value.trim()||'';
-  const style = BIRTHDAY_STYLES.find(s=>shareLink.includes(s.id));
-  const msg = style ? style.shareMsg(name,sender,shareLink) : shareLink;
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if (navigator.share && isMobile) { navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')); }
-  else { window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank'); }
-}
-function closeShare() { document.getElementById('shareModal').classList.remove('show'); }
-
-// ── DRAFT ──
-const DRAFT_KEY = 'wishyou_valentine_draft';
-function saveDraft() {
-  try {
-    // Read captions fresh from DOM
-    for (let i = 0; i < 5; i++) {
-      const el = document.getElementById('cap' + i);
-      if (el) photoCaptions[i] = el.value;
-    }
-    localStorage.setItem(DRAFT_KEY, JSON.stringify({
-      screen: curScreen,
-      cName: document.getElementById('cName')?.value||'',
-      cSender: document.getElementById('cSender')?.value||'',
-      relationInput: document.getElementById('relationInput')?.value||'',
-      photosHeading: document.getElementById('photosHeading')?.value||'',
-      songScreenTitle: document.getElementById('songScreenTitle')?.value||'',
-      letterToneHeader: document.getElementById('letterToneHeader')?.value||'',
-      cMsg: document.getElementById('cMsg')?.value||'',
-      cSign: document.getElementById('cSign')?.value||'',
-      signManuallyEdited,
-      songSelectedName: document.getElementById('songSelectedName')?.textContent||'—',
-      selectedVideoId,
-      photoCaptions,
-      uploadedUrls,
-    }));
-  } catch(e){}
-}
-
-function restoreDraft() {
-  try {
-    const raw = localStorage.getItem(DRAFT_KEY);
-    if (!raw) return;
-    const d = JSON.parse(raw);
-    if (!d.cName && !d.cSender) return;
-
-    const set = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined && val !== '') el.value = val; };
-    const setText = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
-
-    set('cName', d.cName);
-    set('cSender', d.cSender);
-    set('relationInput', d.relationInput);
-    set('photosHeading', d.photosHeading);
-    set('songScreenTitle', d.songScreenTitle);
-    set('letterToneHeader', d.letterToneHeader);
-    set('cMsg', d.cMsg);
-    set('cSign', d.cSign);
-
-    if (d.signManuallyEdited) signManuallyEdited = true;
-    if (d.selectedVideoId) selectedVideoId = d.selectedVideoId;
-
-    if (d.songSelectedName && d.songSelectedName !== '—') {
-      setText('songSelectedName', d.songSelectedName);
-      const box = document.getElementById('songSelectedBox');
-      if (box) box.style.display = 'block';
-    }
-
-    // Restore captions
-    if (d.photoCaptions) {
-      photoCaptions = d.photoCaptions;
-    }
-
-    // Restore uploaded photo URLs — rebuild slots with Cloudinary URLs as previews
-    if (d.uploadedUrls && Object.keys(d.uploadedUrls).length > 0) {
-      uploadedUrls = d.uploadedUrls;
-      Object.entries(uploadedUrls).forEach(([idx, url]) => {
-        const i = parseInt(idx);
-        photos[i] = url; // use cloudinary URL as preview
-      });
-      buildPhotoSlots(photoCaptions);
-    }
-
-    // Restore screen
-    if (d.screen && d.screen !== 'p-info') {
-      if (d.screen === 'p-style') buildStylesList();
-      const el = document.getElementById(d.screen);
-      if (el) {
-        document.getElementById('p-info').classList.remove('active');
-        el.classList.add('active');
-        curScreen = d.screen;
-      }
-    }
-  } catch(e) { console.warn('restoreDraft:', e); }
+  curScreen=id;
+  if(id==='rv-letter') startLetterScene();
 }
 
 // ── INIT ──
-window.addEventListener('DOMContentLoaded', () => {
-  photos = new Array(5).fill(null);
-  buildPhotoSlots();
-  restoreDraft();
+window.addEventListener('DOMContentLoaded',()=>{
+  spawnParticles();
+  const cardId=new URLSearchParams(location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  goTo('rv-loading');
+  fetch(`${FIREBASE}/${cardId}.json`).then(r=>r.json()).then(d=>{
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE}/${cardId}/views.json`,{method:'PUT',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderCard(d);
+  }).catch(()=>goTo('rv-error'));
 });
+
+function renderCard(d){
+  const name=d.name||'';
+  const sender=d.sender||'';
+  cardPhotos=(d.photos||[]).filter(Boolean);
+  cardCaptions=d.photoCaptions||[];
+  songName=d.songName&&d.songName!=='—'?d.songName:'';
+  const sp=d.spotify||'';
+  const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  ytId=ytM?ytM[1]:'';
+  letterText=d.msg||'';
+  letterSign=d.sign||(sender?`Forever yours, ${sender} ❤️`:'Forever yours ❤️');
+
+  // Welcome
+  document.getElementById('wlcTitle').textContent=
+    name?`Someone left\na rose for you`:'Someone left\na rose for you';
+  document.getElementById('wlcSub').textContent=
+    sender?`From ${sender}, with love`:'Tap the rose to open it';
+
+  // Letter from line
+  document.getElementById('letterFrom').textContent=
+    sender&&name?`For ${name}, from ${sender} 🌹`:
+    name?`For ${name} 🌹`:
+    sender?`From ${sender} 🌹`:'A letter for you 🌹';
+
+  goTo('rv-welcome');
+}
+
+// ── BLOOM ──
+function startBloom(){
+  goTo('rv-bloom');
+  buildRose();
+  // trigger bloom after transition
+  setTimeout(()=>{
+    const petals=document.querySelectorAll('.rose-petal');
+    petals.forEach(p=>p.classList.add('bloomed'));
+    setTimeout(()=>{
+      document.getElementById('roseCenter').classList.add('show');
+      document.getElementById('bloomSub').classList.add('show');
+      const btn=document.getElementById('letterBtn');
+      if(btn)btn.style.opacity='1';
+      // show song name
+      if(songName){
+        const sEl=document.getElementById('bloomSong');
+        sEl.textContent='♪ '+songName;
+        sEl.classList.add('show');
+      }
+    },1400);
+  },100);
+}
+
+function buildRose(){
+  const stage=document.getElementById('roseStage');
+  // Remove existing petals
+  stage.querySelectorAll('.rose-petal').forEach(p=>p.remove());
+
+  const PETAL_POS=[
+    {cls:'rp0',rot:-36},{cls:'rp1',rot:0},{cls:'rp2',rot:36},
+    {cls:'rp3',rot:108},{cls:'rp4',rot:-108}
+  ];
+  const COLORS=[
+    'radial-gradient(ellipse at 40% 30%,#c8003a,#8b0020)',
+    'radial-gradient(ellipse at 60% 30%,#c00030,#7a0018)',
+    'radial-gradient(ellipse at 45% 25%,#d40040,#960025)',
+    'radial-gradient(ellipse at 55% 35%,#b00028,#6e0016)',
+    'radial-gradient(ellipse at 50% 28%,#c80035,#88001e)',
+  ];
+
+  PETAL_POS.forEach((pos,i)=>{
+    const petal=document.createElement('div');
+    petal.className=`rose-petal ${pos.cls}`;
+    petal.style.background=COLORS[i];
+
+    // Photo inside petal
+    if(cardPhotos[i]){
+      const img=document.createElement('img');
+      img.src=cardPhotos[i];
+      img.onload=()=>img.classList.add('loaded');
+      img.onerror=()=>{};
+      petal.appendChild(img);
+    }
+
+    // Caption
+    const cap=document.createElement('div');
+    cap.className='petal-cap';
+    cap.textContent=cardCaptions[i]||'';
+    petal.appendChild(cap);
+
+    // Tap to see full photo
+    petal.addEventListener('click',()=>openPetalPhoto(i));
+
+    // Insert before center
+    stage.insertBefore(petal,document.getElementById('roseCenter'));
+  });
+}
+
+// Full photo view on petal tap
+function openPetalPhoto(i){
+  if(!cardPhotos[i])return;
+  const ov=document.createElement('div');
+  ov.style.cssText='position:absolute;inset:0;background:rgba(0,0,0,0.92);z-index:50;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;';
+  ov.innerHTML=`
+    <img src="${esc(cardPhotos[i])}" style="max-width:100%;max-height:75%;object-fit:contain;border-radius:4px;box-shadow:0 8px 40px rgba(200,0,60,0.2);">
+    <div style="font-family:Cormorant Garamond,serif;font-style:italic;font-size:1rem;color:rgba(255,180,180,0.7);margin-top:16px;text-align:center;">${esc(cardCaptions[i]||'')}</div>
+    <div style="font-size:0.6rem;color:rgba(200,80,80,0.3);margin-top:14px;letter-spacing:0.1em;text-transform:uppercase;">tap to close</div>`;
+  ov.onclick=()=>ov.remove();
+  document.getElementById('mainApp').appendChild(ov);
+}
+
+// ── SONG ──
+function toggleSong(){
+  songPlaying=!songPlaying;
+  const spin=document.getElementById('centerSpin');
+  if(songPlaying){
+    spin.classList.add('spinning');
+    if(ytId){
+      const yt=document.getElementById('bloomYt');
+      yt.innerHTML=`<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay" allowfullscreen></iframe>`;
+      yt.classList.add('show');
+    }
+  } else {
+    spin.classList.remove('spinning');
+    const yt=document.getElementById('bloomYt');
+    yt.classList.remove('show');
+    setTimeout(()=>{yt.innerHTML='';},400);
+  }
+}
+
+// ── LETTER ──
+function openLetter(){
+  goTo('rv-letter');
+}
+
+function startLetterScene(){
+  // Start falling petals
+  startFallingPetals();
+  // Typewrite letter
+  if(letterTyped) return;
+  setTimeout(()=>{
+    const el=document.getElementById('letterBody');
+    const se=document.getElementById('letterSign');
+    if(!el||!letterText)return;
+    if(se)se.style.opacity='0';
+    typewrite(el,letterText,()=>{
+      letterTyped=true;
+      if(se)se.classList.add('vis');
+    });
+  },600);
+}
+
+// ── FALLING PETALS CANVAS ──
+function startFallingPetals(){
+  const canvas=document.getElementById('petalCanvas');
+  const app=document.getElementById('mainApp');
+  canvas.width=app.offsetWidth||430;
+  canvas.height=app.offsetHeight||900;
+  const ctx=canvas.getContext('2d');
+  const petals=[];
+  for(let i=0;i<22;i++){
+    petals.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*-canvas.height,
+      size:6+Math.random()*12,
+      speed:0.6+Math.random()*1.2,
+      drift:0.3+Math.random()*0.8,
+      rot:Math.random()*Math.PI*2,
+      rotSpeed:(Math.random()-0.5)*0.04,
+      alpha:0.3+Math.random()*0.4,
+      hue:340+Math.random()*30,
+    });
+  }
+  let raf;
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    petals.forEach(p=>{
+      ctx.save();
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot);
+      ctx.globalAlpha=p.alpha;
+      // Draw petal shape
+      ctx.beginPath();
+      ctx.ellipse(0,0,p.size/2,p.size,0,0,Math.PI*2);
+      ctx.fillStyle=`hsl(${p.hue},80%,45%)`;
+      ctx.fill();
+      ctx.restore();
+      p.y+=p.speed;
+      p.x+=Math.sin(p.y*0.02)*p.drift;
+      p.rot+=p.rotSpeed;
+      if(p.y>canvas.height+20){
+        p.y=-20;p.x=Math.random()*canvas.width;
+      }
+    });
+    if(curScreen==='rv-letter'){raf=requestAnimationFrame(draw);}
+    else{cancelAnimationFrame(raf);}
+  }
+  draw();
+}
+
+// ── PARTICLES ──
+function spawnParticles(){
+  const wrap=document.getElementById('welcomeParticles');
+  for(let i=0;i<16;i++){
+    const p=document.createElement('div');
+    p.className='wp';
+    p.style.left=Math.random()*100+'%';
+    p.style.bottom=Math.random()*50+'%';
+    p.style.animationDuration=(3+Math.random()*4)+'s';
+    p.style.animationDelay=(Math.random()*4)+'s';
+    p.style.width=p.style.height=(1+Math.random()*2)+'px';
+    wrap.appendChild(p);
+  }
+}
+
+// ── HELPERS ──
+function typewrite(el,text,onDone){
+  el.textContent='';
+  const chars=text.split('');let i=0;
+  function next(){if(i<chars.length){el.textContent+=chars[i++];setTimeout(next,14);}
+    else if(onDone)onDone();}
+  next();
+}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(()=>{
+    const b=document.getElementById('shCp');b.textContent='Copied ✓';
+    setTimeout(()=>b.textContent='Copy',2000);
+  });
+}
+function shareWA(){
+  const msg=`🌹 *Happy Valentine's Day!*\n\nKisine tumhare liye ek special rose banaya hai 💋\n\nKholo:\n${shareLink}`;
+  const mob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&mob)navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));
+  else window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+}
 </script>
 </body>
 </html>
