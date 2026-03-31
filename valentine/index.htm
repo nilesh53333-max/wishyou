@@ -76,7 +76,7 @@ body{font-family:'DM Sans',sans-serif;background:#061818;color:#e0f0ee;}
 .regular-input:focus{border-color:rgba(20,160,140,0.3);background:rgba(255,255,255,0.05);}
 
 /* Photos */
-.photos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:0;align-items:start;}
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0;align-items:start;}
 .photo-slot{aspect-ratio:1;border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;touch-action:none;user-select:none;background:rgba(20,160,140,0.04);border:1.5px dashed rgba(20,160,140,0.15);color:rgba(160,220,210,0.2);font-size:1.1rem;transition:border-color 0.18s,box-shadow 0.18s;}
 .photo-slot.has-photo{border-style:solid;border-color:rgba(20,160,140,0.2);}
 .photo-slot.active{border-color:rgba(20,160,140,0.6);box-shadow:0 0 0 2px rgba(20,160,140,0.18);}
@@ -712,12 +712,20 @@ function onRelationChange(val) {
     const msgEl = document.getElementById('cMsg');
     if (msgEl && !msgEl.value.trim()) msgEl.placeholder = content.letterPlaceholder;
   }
-  // Update captions
+  // Update captions — store in array AND update live elements if they exist
   photoCaptions = [...content.captions];
   content.captions.forEach((cap, i) => {
+    photoCaptions[i] = cap;
     const el = document.getElementById('cap' + i);
     if (el) { el.value = cap; autoResize(el); }
   });
+  // If photos step already rendered, rebuild slots with new captions
+  if (document.getElementById('cap0')) {
+    content.captions.forEach((cap, i) => {
+      const el = document.getElementById('cap' + i);
+      if (el) { el.value = cap; autoResize(el); }
+    });
+  }
 }
 
 
