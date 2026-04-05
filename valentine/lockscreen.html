@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>WishYou.ai — You have a message 💋</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💋</text></svg>">
+<meta property="og:title" content="You have a notification 💋">
+<meta property="og:description" content="Someone sent you something. Slide to open.">
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;600&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:#000;}
+.app{position:fixed;inset:0;overflow:hidden;background:#000;}
+@media(min-width:500px){
+  .app{top:50%;left:50%;right:auto;bottom:auto;transform:translate(-50%,-50%);
+    width:393px;height:852px;border-radius:50px;
+    box-shadow:0 0 0 12px #1a1a1a,0 40px 120px rgba(0,0,0,0.95);}
+}
+.screen{position:absolute;top:0;left:0;right:0;bottom:0;
+  opacity:0;pointer-events:none;transition:opacity 0.5s ease;visibility:hidden;overflow:hidden;}
+.screen.active{opacity:1;pointer-events:all;visibility:visible;}
+
+/* ══════════════════════
+   LOADING
+══════════════════════ */
+#rv-loading{
+  background:linear-gradient(160deg,#1c1c1e,#2c2c2e);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;
+}
+.ld-ico{font-size:2.5rem;animation:ldPulse 1.2s ease-in-out infinite;}
+@keyframes ldPulse{0%,100%{opacity:0.5;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
+.ld-txt{font-family:'DM Sans',sans-serif;font-size:0.82rem;color:rgba(255,255,255,0.3);letter-spacing:0.04em;}
+
+/* ══════════════════════
+   ERROR
+══════════════════════ */
+#rv-error{background:#000;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;text-align:center;padding:40px;}
+.err-t{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:rgba(255,255,255,0.3);line-height:1.7;}
+
+/* ══════════════════════
+   LOCK SCREEN
+   Pixel-perfect iOS lock screen
+══════════════════════ */
+#rv-lock{position:absolute;inset:0;overflow:hidden;}
+
+/* Wallpaper — deep romantic gradient, blurred */
+.lock-wallpaper{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 30% 20%,#3d0020 0%,transparent 50%),
+    radial-gradient(ellipse at 70% 80%,#1a0040 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,#0d0020 0%,#000 100%);
+}
+/* Stars */
+.lock-stars{position:absolute;inset:0;pointer-events:none;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:starTwinkle linear infinite;}
+@keyframes starTwinkle{0%,100%{opacity:0.1;}50%{opacity:0.6;}}
+
+/* Blur overlay when notification appears */
+.lock-blur{position:absolute;inset:0;backdrop-filter:blur(0px);transition:backdrop-filter 1s ease;pointer-events:none;}
+.lock-blur.active{backdrop-filter:blur(20px);}
+
+/* Status bar */
+.status-bar{
+  position:absolute;top:0;left:0;right:0;
+  height:54px;padding:14px 28px 0;
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:10;
+}
+.status-time{font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;color:rgba(255,255,255,0.85);}
+.status-icons{display:flex;align-items:center;gap:6px;}
+.status-signal{display:flex;gap:1.5px;align-items:flex-end;}
+.sig-bar{width:3px;background:rgba(255,255,255,0.85);border-radius:1px;}
+.sig-bar:nth-child(1){height:4px;}
+.sig-bar:nth-child(2){height:6px;}
+.sig-bar:nth-child(3){height:9px;}
+.sig-bar:nth-child(4){height:12px;}
+.status-wifi{width:14px;height:10px;position:relative;}
+.status-wifi::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,0.85);}
+.status-wifi::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+  width:10px;height:6px;border:1.5px solid rgba(255,255,255,0.85);border-bottom:none;border-radius:6px 6px 0 0;}
+.status-batt{width:22px;height:11px;border:1.5px solid rgba(255,255,255,0.6);border-radius:2px;
+  position:relative;display:flex;align-items:center;padding:1.5px;}
+.status-batt::after{content:'';position:absolute;right:-4px;top:50%;transform:translateY(-50%);
+  width:2px;height:5px;background:rgba(255,255,255,0.4);border-radius:0 1px 1px 0;}
+.batt-fill{height:100%;width:65%;background:rgba(255,255,255,0.85);border-radius:1px;}
+
+/* Lock center — time + date */
+.lock-center{
+  position:absolute;top:90px;left:0;right:0;
+  text-align:center;
+}
+.lock-time{
+  font-family:'DM Sans',sans-serif;font-size:4.5rem;font-weight:300;
+  color:#fff;letter-spacing:-2px;line-height:1;margin-bottom:4px;
+}
+.lock-date{font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:400;
+  color:rgba(255,255,255,0.75);}
+
+/* Notification card — iOS style */
+.lock-notif{
+  position:absolute;top:260px;left:20px;right:20px;
+  background:rgba(50,50,55,0.82);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border-radius:16px;
+  padding:12px 14px;
+  border:0.5px solid rgba(255,255,255,0.12);
+  transform:translateY(-30px) scale(0.92);opacity:0;
+  transition:transform 0.6s cubic-bezier(0.34,1.2,0.64,1),opacity 0.4s ease;
+  z-index:20;
+}
+.lock-notif.show{transform:translateY(0) scale(1);opacity:1;}
+.notif-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.notif-app-icon{
+  width:24px;height:24px;border-radius:6px;flex-shrink:0;
+  background:linear-gradient(135deg,#c00030,#ff4060);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;
+}
+.notif-app-name{font-family:'DM Sans',sans-serif;font-size:0.65rem;
+  color:rgba(255,255,255,0.5);font-weight:500;letter-spacing:0.04em;text-transform:uppercase;flex:1;}
+.notif-time{font-family:'DM Sans',sans-serif;font-size:0.6rem;color:rgba(255,255,255,0.35);}
+.notif-title{font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;
+  color:#fff;margin-bottom:2px;}
+.notif-body{font-family:'DM Sans',sans-serif;font-size:0.78rem;
+  color:rgba(255,255,255,0.65);line-height:1.4;}
+
+/* Camera roll preview strip inside notif */
+.notif-photos{display:flex;gap:5px;margin-top:8px;overflow:hidden;border-radius:6px;}
+.notif-photo{width:52px;height:52px;border-radius:5px;object-fit:cover;
+  object-position:center 20%;flex-shrink:0;background:rgba(255,255,255,0.1);}
+.notif-photo-more{width:52px;height:52px;border-radius:5px;flex-shrink:0;
+  background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;
+  font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.6);}
+
+/* Slide to unlock */
+.lock-slide{
+  position:absolute;bottom:max(60px,env(safe-area-inset-bottom));
+  left:0;right:0;padding:0 40px;
+  display:flex;align-items:center;justify-content:center;
+  z-index:20;opacity:0;transition:opacity 0.5s ease 1s;
+}
+.lock-slide.show{opacity:1;}
+.slide-track{
+  width:100%;height:52px;border-radius:50px;
+  background:rgba(255,255,255,0.12);
+  border:0.5px solid rgba(255,255,255,0.18);
+  position:relative;overflow:hidden;cursor:pointer;touch-action:manipulation;
+}
+.slide-thumb{
+  position:absolute;left:4px;top:4px;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#ff4060,#c00030);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+  box-shadow:0 4px 16px rgba(192,0,48,0.5);
+  transition:left 0.15s ease;
+}
+.slide-label{position:absolute;inset:0;display:flex;align-items:center;
+  padding-left:64px;font-family:'DM Sans',sans-serif;font-size:0.82rem;
+  font-weight:500;color:rgba(255,255,255,0.55);letter-spacing:0.04em;}
+/* Shimmer on slide text */
+.slide-label::after{
+  content:'';position:absolute;top:0;left:64px;right:0;bottom:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.15) 50%,transparent 100%);
+  animation:shimmer 2s ease-in-out infinite;
+}
+@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(200%);}
+}
+/* Home indicator */
+.home-indicator{position:absolute;bottom:max(8px,env(safe-area-inset-bottom));
+  left:50%;transform:translateX(-50%);width:120px;height:4px;border-radius:2px;
+  background:rgba(255,255,255,0.3);z-index:30;}
+
+/* ══════════════════════
+   UNLOCKED — Camera Roll
+   iOS Photos aesthetic
+══════════════════════ */
+#rv-photos{background:#000;display:flex;flex-direction:column;}
+
+/* iOS Photos header */
+.photos-header{
+  padding:max(54px,env(safe-area-inset-top)) 16px 12px;
+  background:#000;flex-shrink:0;
+}
+.photos-back{display:flex;align-items:center;gap:4px;margin-bottom:8px;cursor:pointer;
+  touch-action:manipulation;}
+.photos-back-ico{font-size:1rem;color:#c00030;}
+.photos-back-txt{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#c00030;}
+.photos-album-title{font-family:'DM Sans',sans-serif;font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:2px;}
+.photos-album-count{font-family:'DM Sans',sans-serif;font-size:0.72rem;color:rgba(255,255,255,0.35);}
+
+/* Mosaic grid — iOS photos style */
+.photos-mosaic{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.photos-mosaic::-webkit-scrollbar{display:none;}
+.mosaic-grid{display:grid;gap:2px;padding:0;}
+/* Top row: one large */
+.mosaic-big{width:100%;aspect-ratio:1;object-fit:cover;object-position:center 20%;display:block;cursor:pointer;}
+/* Bottom rows: 3 equal */
+.mosaic-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;}
+.mosaic-small{width:100%;aspect-ratio:1;object-fit:cover;object-position:center 20%;display:block;cursor:pointer;}
+.mosaic-small:active,.mosaic-big:active{opacity:0.8;}
+
+/* Fullscreen photo overlay */
+.photo-fullscreen{position:absolute;inset:0;background:#000;z-index:100;
+  display:none;align-items:center;justify-content:center;flex-direction:column;}
+.photo-fullscreen.show{display:flex;}
+.photo-fs-img{max-width:100%;max-height:80%;object-fit:contain;display:block;}
+.photo-fs-cap{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:rgba(255,200,200,0.7);margin-top:16px;text-align:center;padding:0 24px;}
+.photo-fs-close{position:absolute;top:max(54px,env(safe-area-inset-top));right:16px;
+  font-size:0.82rem;color:rgba(255,255,255,0.5);cursor:pointer;
+  font-family:'DM Sans',sans-serif;background:rgba(255,255,255,0.1);
+  padding:6px 14px;border-radius:50px;}
+
+/* Bottom tray */
+.photos-tray{
+  padding:12px 16px max(28px,env(safe-area-inset-bottom));
+  background:#000;border-top:0.5px solid rgba(255,255,255,0.08);flex-shrink:0;
+}
+.tray-btn{width:100%;padding:14px;background:linear-gradient(135deg,#c00030,#800020);
+  border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:0.92rem;
+  font-weight:600;color:rgba(255,200,200,0.95);cursor:pointer;touch-action:manipulation;
+  box-shadow:0 6px 20px rgba(192,0,48,0.4);}
+
+/* ══════════════════════
+   SONG — Ringtone screen
+   iOS Now Playing aesthetic
+══════════════════════ */
+#rv-song{background:linear-gradient(160deg,#1a0008,#0a0004);display:flex;flex-direction:column;overflow:hidden;}
+
+/* Blurred album art bg */
+.song-bg-blur{position:absolute;inset:-20px;filter:blur(40px);opacity:0.4;
+  background:radial-gradient(ellipse at 50% 40%,#c00030,#400010 60%,#000);}
+
+.song-header{padding:max(54px,env(safe-area-inset-top)) 20px 20px;
+  display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;}
+.song-header-back{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#c00030;cursor:pointer;
+  touch-action:manipulation;background:rgba(192,0,48,0.1);padding:6px 14px;border-radius:50px;}
+.song-header-title{font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;
+  letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+
+.song-album-art{
+  width:220px;height:220px;border-radius:20px;
+  background:linear-gradient(135deg,#c00030,#400010);
+  margin:20px auto 28px;position:relative;z-index:1;flex-shrink:0;
+  box-shadow:0 20px 60px rgba(192,0,48,0.4);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.song-album-art-inner{font-size:4rem;}
+.song-album-art-vinyl{
+  position:absolute;inset:0;border-radius:20px;
+  background:radial-gradient(circle,rgba(255,100,120,0.4) 0%,transparent 60%);
+  animation:albumPulse 2s ease-in-out infinite;
+}
+@keyframes albumPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+
+.song-info{text-align:center;padding:0 24px;position:relative;z-index:1;flex-shrink:0;}
+.song-label{font-family:'DM Sans',sans-serif;font-size:0.6rem;letter-spacing:0.16em;
+  text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:6px;}
+.song-name{font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:600;
+  color:#fff;line-height:1.3;margin-bottom:4px;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
+.song-ringtone-tag{font-family:'DM Sans',sans-serif;font-size:0.72rem;
+  color:rgba(192,0,48,0.6);margin-bottom:20px;}
+
+/* iOS-style progress bar */
+.song-progress{padding:0 24px;margin-bottom:16px;position:relative;z-index:1;flex-shrink:0;}
+.progress-bar{height:3px;background:rgba(255,255,255,0.12);border-radius:2px;position:relative;overflow:hidden;}
+.progress-fill{height:100%;background:#c00030;border-radius:2px;width:35%;
+  animation:progFill 3s ease-in-out infinite alternate;}
+@keyframes progFill{0%{width:10%;}100%{width:80%;}}
+.progress-times{display:flex;justify-content:space-between;margin-top:6px;}
+.progress-time{font-family:'DM Sans',sans-serif;font-size:0.6rem;color:rgba(255,255,255,0.25);}
+
+/* Controls */
+.song-controls{display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;position:relative;z-index:1;margin-bottom:20px;flex-shrink:0;}
+.ctrl-btn{font-size:1.6rem;color:rgba(255,255,255,0.5);cursor:pointer;touch-action:manipulation;}
+.ctrl-play{width:60px;height:60px;border-radius:50%;background:#c00030;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation;
+  box-shadow:0 6px 20px rgba(192,0,48,0.5);}
+.ctrl-play-ico{font-size:1.4rem;margin-left:3px;}
+.ctrl-play.playing .ctrl-play-ico::before{content:'⏸';}
+
+/* YT embed */
+.song-yt{width:calc(100% - 40px);margin:0 20px;border-radius:12px;overflow:hidden;
+  display:none;box-shadow:0 8px 24px rgba(0,0,0,0.5);position:relative;z-index:1;}
+.song-yt iframe{width:100%;height:140px;border:none;display:block;}
+.song-yt.show{display:block;}
+
+.song-tray{padding:16px 20px max(28px,env(safe-area-inset-bottom));
+  position:relative;z-index:1;margin-top:auto;}
+.song-next-btn{width:100%;padding:14px;background:linear-gradient(135deg,#c00030,#800020);
+  border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:0.9rem;
+  font-weight:600;color:rgba(255,200,200,0.95);cursor:pointer;touch-action:manipulation;
+  box-shadow:0 6px 20px rgba(192,0,48,0.4);}
+
+/* ══════════════════════
+   LETTER
+   Dark, personal, beautiful
+══════════════════════ */
+#rv-letter{background:linear-gradient(160deg,#0a0004,#120008,#0a0004);
+  display:flex;flex-direction:column;overflow:hidden;}
+
+.letter-header{padding:max(54px,env(safe-area-inset-top)) 20px 16px;
+  display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.letter-header-back{font-family:'DM Sans',sans-serif;font-size:0.88rem;color:#c00030;cursor:pointer;
+  touch-action:manipulation;}
+.letter-header-title{font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;color:rgba(255,200,200,0.5);}
+
+.letter-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 20px 20px;}
+.letter-scroll::-webkit-scrollbar{display:none;}
+
+.letter-paper{background:rgba(255,255,255,0.03);border:0.5px solid rgba(200,0,60,0.15);
+  border-top:2px solid rgba(200,0,60,0.5);border-radius:2px;padding:24px 20px 28px;
+  position:relative;}
+.letter-paper::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 31px,rgba(200,0,60,0.04) 31px,rgba(200,0,60,0.04) 32px);
+  pointer-events:none;}
+.letter-greeting{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;
+  color:rgba(255,210,210,0.9);margin-bottom:16px;position:relative;z-index:1;}
+.letter-body{font-family:'Cormorant Garamond','Noto Sans Devanagari',serif;
+  font-size:1.05rem;color:rgba(255,210,210,0.85);line-height:2.1;white-space:pre-wrap;
+  position:relative;z-index:1;}
+.letter-sign{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;
+  color:rgba(192,0,48,0.8);margin-top:20px;display:block;
+  opacity:0;transition:opacity 1s ease;position:relative;z-index:1;}
+.letter-sign.vis{opacity:1;}
+
+.letter-footer{padding:16px 20px max(28px,env(safe-area-inset-bottom));flex-shrink:0;display:flex;flex-direction:column;gap:8px;}
+.letter-replay{background:linear-gradient(135deg,#c00030,#800020);color:rgba(255,200,200,0.95);
+  border:none;border-radius:14px;padding:13px;font-family:'DM Sans',sans-serif;
+  font-size:0.9rem;font-weight:600;cursor:pointer;touch-action:manipulation;
+  box-shadow:0 6px 20px rgba(192,0,48,0.4);}
+.letter-make{background:none;border:0.5px solid rgba(192,0,48,0.2);color:rgba(192,0,48,0.4);
+  border-radius:14px;padding:12px;font-family:'DM Sans',sans-serif;font-size:0.78rem;cursor:pointer;}
+
+/* SHARE */
+.share-modal{position:absolute;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(14px);
+  z-index:600;display:none;align-items:center;justify-content:center;padding:20px;}
+.share-modal.show{display:flex;}
+.share-box{background:#1a0008;border:0.5px solid rgba(192,0,48,0.2);border-radius:20px;
+  padding:26px 22px;width:100%;max-width:360px;text-align:center;}
+.sh-t{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:rgba(255,200,200,0.9);margin-bottom:4px;}
+.sh-s{font-size:0.78rem;color:rgba(192,0,48,0.4);margin-bottom:14px;}
+.sh-row{background:rgba(192,0,48,0.06);border:0.5px solid rgba(192,0,48,0.15);
+  border-radius:10px;padding:9px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sh-lnk{font-size:0.67rem;color:rgba(192,0,48,0.4);flex:1;text-align:left;word-break:break-all;}
+.sh-cp{padding:6px 12px;border:none;border-radius:8px;font-size:0.7rem;font-weight:700;
+  cursor:pointer;background:#c00030;color:rgba(255,200,200,0.9);white-space:nowrap;}
+.sh-wa{width:100%;padding:12px;border:none;border-radius:14px;
+  background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:600;
+  cursor:pointer;margin-bottom:8px;touch-action:manipulation;}
+.sh-cl{width:100%;padding:10px;background:none;border:0.5px solid rgba(192,0,48,0.15);
+  border-radius:14px;font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:0.88rem;color:rgba(192,0,48,0.4);cursor:pointer;}
+.wm{position:absolute;bottom:5px;right:8px;font-size:0.44rem;color:rgba(255,255,255,0.06);pointer-events:none;z-index:1;}
+</style>
+</head>
+<body>
+<div class="app" id="mainApp">
+
+<!-- Loading -->
+<div class="screen active" id="rv-loading">
+  <div class="ld-ico">💋</div>
+  <div class="ld-txt">Opening your message…</div>
+</div>
+
+<!-- Error -->
+<div class="screen" id="rv-error">
+  <div style="font-size:2.5rem;margin-bottom:14px;">💔</div>
+  <div class="err-t">This message has expired<br>or the link is broken.</div>
+  <button onclick="location.href='/'" style="margin-top:20px;background:#c00030;color:rgba(255,200,200,0.9);border:none;border-radius:14px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;">Back to Home</button>
+</div>
+
+<!-- Lock Screen -->
+<div class="screen" id="rv-lock">
+  <div class="lock-wallpaper"></div>
+  <div class="lock-stars" id="lockStars"></div>
+  <div class="lock-blur" id="lockBlur"></div>
+
+  <div class="status-bar">
+    <div class="status-time" id="lockTime">9:41</div>
+    <div class="status-icons">
+      <div class="status-signal">
+        <div class="sig-bar"></div><div class="sig-bar"></div>
+        <div class="sig-bar"></div><div class="sig-bar"></div>
+      </div>
+      <div class="status-wifi"></div>
+      <div class="status-batt"><div class="batt-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="lock-center">
+    <div class="lock-time" id="lockBigTime">9:41</div>
+    <div class="lock-date" id="lockDateTxt">Sunday, 14 February</div>
+  </div>
+
+  <!-- Notification -->
+  <div class="lock-notif" id="lockNotif">
+    <div class="notif-top">
+      <div class="notif-app-icon">💝</div>
+      <div class="notif-app-name">WishYou.ai</div>
+      <div class="notif-time" id="notifTime">now</div>
+    </div>
+    <div class="notif-title" id="notifTitle">Someone sent you something 💋</div>
+    <div class="notif-body" id="notifBody">Tap to open your Valentine's Day message</div>
+    <div class="notif-photos" id="notifPhotos"></div>
+  </div>
+
+  <!-- Slide to unlock -->
+  <div class="lock-slide" id="lockSlide">
+    <div class="slide-track" id="slideTrack">
+      <div class="slide-thumb" id="slideThumb">💋</div>
+      <div class="slide-label">slide to open</div>
+    </div>
+  </div>
+
+  <div class="home-indicator"></div>
+</div>
+
+<!-- Camera Roll — Photos -->
+<div class="screen" id="rv-photos">
+  <div class="photos-header">
+    <div class="photos-back" onclick="goTo('rv-lock')">
+      <span class="photos-back-ico">‹</span>
+      <span class="photos-back-txt">Lock Screen</span>
+    </div>
+    <div class="photos-album-title" id="photosAlbumTitle">Our Memories</div>
+    <div class="photos-album-count" id="photosAlbumCount">5 photos · For you</div>
+  </div>
+  <div class="photos-mosaic">
+    <div class="mosaic-grid" id="mosaicGrid"></div>
+  </div>
+  <!-- Fullscreen photo overlay -->
+  <div class="photo-fullscreen" id="photoFullscreen">
+    <div class="photo-fs-close" onclick="closeFullscreen()">Done</div>
+    <img class="photo-fs-img" id="photoFsImg" src="">
+    <div class="photo-fs-cap" id="photoFsCap"></div>
+  </div>
+  <div class="photos-tray">
+    <button class="tray-btn" onclick="goTo('rv-song')">Listen to our song 🎵</button>
+  </div>
+</div>
+
+<!-- Song — Ringtone / Now Playing -->
+<div class="screen" id="rv-song">
+  <div class="song-bg-blur"></div>
+  <div class="song-header">
+    <div class="song-header-back" onclick="goTo('rv-photos')">‹ Photos</div>
+    <div class="song-header-title">Now Playing</div>
+    <div style="width:70px;"></div>
+  </div>
+  <div class="song-album-art">
+    <div class="song-album-art-vinyl"></div>
+    <div class="song-album-art-inner">💋</div>
+  </div>
+  <div class="song-info">
+    <div class="song-label">your ringtone 🎵</div>
+    <div class="song-name" id="songName">Loading…</div>
+    <div class="song-ringtone-tag">set as ringtone · forever</div>
+  </div>
+  <div class="song-progress">
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+    <div class="progress-times">
+      <div class="progress-time">1:23</div>
+      <div class="progress-time" id="songDuration">3:47</div>
+    </div>
+  </div>
+  <div class="song-controls">
+    <div class="ctrl-btn">⏮</div>
+    <div class="ctrl-play" id="playBtn" onclick="togglePlay()">
+      <div class="ctrl-play-ico">▶</div>
+    </div>
+    <div class="ctrl-btn">⏭</div>
+  </div>
+  <div class="song-yt" id="songYt"></div>
+  <div class="song-tray">
+    <button class="song-next-btn" onclick="goTo('rv-letter')">Read the letter 💌</button>
+  </div>
+</div>
+
+<!-- Letter -->
+<div class="screen" id="rv-letter">
+  <div class="letter-header">
+    <div class="letter-header-back" onclick="goTo('rv-song')">‹</div>
+    <div class="letter-header-title">A letter for you 💌</div>
+  </div>
+  <div class="letter-scroll" id="letterScroll">
+    <div class="letter-paper">
+      <div class="letter-greeting" id="letterGreeting">Dear you,</div>
+      <div class="letter-body" id="letterBody"></div>
+      <span class="letter-sign" id="letterSign"></span>
+    </div>
+  </div>
+  <div class="letter-footer">
+    <button class="letter-replay" onclick="goTo('rv-lock')">← Back to the beginning</button>
+    <button class="letter-make" onclick="location.href='/'">✨ Create a card like this</button>
+  </div>
+</div>
+
+<!-- Share -->
+<div class="share-modal" id="shareModal">
+  <div class="share-box">
+    <div style="font-size:1.8rem;margin-bottom:8px;">💋</div>
+    <div class="sh-t">Card is ready!</div>
+    <div class="sh-s">Send this to them 🌹</div>
+    <div class="sh-row"><span class="sh-lnk" id="shLnk"></span>
+      <button class="sh-cp" id="shCp" onclick="copyLink()">Copy</button></div>
+    <button class="sh-wa" onclick="shareWA()">💬 Share on WhatsApp</button>
+    <button class="sh-cl" onclick="document.getElementById('shareModal').classList.remove('show')">Done ✓</button>
+  </div>
+</div>
+
+<div class="wm"><a href="https://wishyou.ai/" style="color:inherit;text-decoration:none;">WishYou.ai</a></div>
+</div>
+
+<script>
+const FIREBASE='https://feeltwo-d28b0-default-rtdb.firebaseio.com/wishyou-cards';
+let curScreen='', shareLink='';
+let letterText='', letterSign_='', letterTyped=false;
+let songPlaying=false, ytId='';
+let cardPhotos=[], cardCaptions=[], cardName='', cardSender='';
+
+function goTo(id){
+  const prev=document.getElementById(curScreen);
+  const next=document.getElementById(id);
+  if(!next||curScreen===id)return;
+  if(prev) prev.classList.remove('active');
+  next.classList.add('active');
+  curScreen=id;
+  if(id==='rv-letter'&&!letterTyped) startTypewriter();
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded',()=>{
+  setLockTime();
+  spawnStars();
+  setupSlide();
+  const cardId=new URLSearchParams(location.search).get('card');
+  if(!cardId){goTo('rv-error');return;}
+  goTo('rv-loading');
+  fetch(`${FIREBASE}/${cardId}.json`).then(r=>r.json()).then(d=>{
+    if(!d){goTo('rv-error');return;}
+    if(d.expiresAt&&Date.now()>d.expiresAt){goTo('rv-error');return;}
+    fetch(`${FIREBASE}/${cardId}/views.json`).then(r=>r.json()).then(v=>{
+      fetch(`${FIREBASE}/${cardId}/views.json`,{method:'PUT',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify((v||0)+1)}).catch(()=>{});
+    }).catch(()=>{});
+    renderCard(d);
+  }).catch(()=>goTo('rv-error'));
+});
+
+function renderCard(d){
+  cardName=d.name||'';
+  cardSender=d.sender||'';
+  cardPhotos=(d.photos||[]).filter(Boolean);
+  cardCaptions=d.photoCaptions||[];
+  letterText=d.msg||'';
+  letterSign_=d.sign||(cardSender?`Forever yours, ${cardSender} ❤️`:'Forever yours ❤️');
+  const songName=d.songName&&d.songName!=='—'?d.songName:'';
+  const sp=d.spotify||'';
+  const ytM=sp.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  ytId=ytM?ytM[1]:'';
+
+  // Lock screen notification
+  document.getElementById('notifTitle').textContent=
+    cardSender?`${cardSender} sent you something 💋`:'Someone sent you something 💋';
+  document.getElementById('notifBody').textContent=
+    cardName?`Happy Valentine's Day, ${cardName} ❤️`:"Tap to open your Valentine's Day message";
+
+  // Show photo thumbnails in notification (max 3)
+  const notifPhotos=document.getElementById('notifPhotos');
+  const showPhotos=cardPhotos.slice(0,3);
+  const remaining=cardPhotos.length-3;
+  notifPhotos.innerHTML=showPhotos.map(url=>
+    `<img class="notif-photo" src="${esc(url)}" onerror="this.style.display='none'">`
+  ).join('');
+  if(remaining>0){
+    const more=document.createElement('div');
+    more.className='notif-photo-more';
+    more.textContent=`+${remaining}`;
+    notifPhotos.appendChild(more);
+  }
+
+  // Photos album
+  document.getElementById('photosAlbumTitle').textContent=d.memoriesHeading||'Our Memories';
+  document.getElementById('photosAlbumCount').textContent=`${cardPhotos.length} photo${cardPhotos.length!==1?'s':''} · For you`;
+  buildMosaic();
+
+  // Song
+  if(songName){
+    document.getElementById('songName').textContent=songName;
+    if(ytId){
+      const yt=document.getElementById('songYt');
+      yt.innerHTML=`<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=0" allow="autoplay" allowfullscreen></iframe>`;
+      yt.classList.add('show');
+    }
+  } else {
+    document.getElementById('songName').textContent='A song chosen just for you';
+  }
+
+  // Letter greeting
+  document.getElementById('letterGreeting').textContent=
+    cardName?`Dear ${cardName},`:'Dear you,';
+  document.getElementById('letterSign').textContent=letterSign_;
+
+  // Show lock screen after render
+  goTo('rv-lock');
+
+  // Show notification after 1.2s
+  setTimeout(()=>{
+    document.getElementById('lockNotif').classList.add('show');
+    document.getElementById('lockBlur').classList.add('active');
+    document.getElementById('lockSlide').classList.add('show');
+  },1200);
+}
+
+// ── MOSAIC GRID ──
+function buildMosaic(){
+  const grid=document.getElementById('mosaicGrid');
+  grid.innerHTML='';
+  if(!cardPhotos.length){
+    grid.innerHTML='<div style="padding:40px;text-align:center;color:rgba(255,255,255,0.2);font-family:DM Sans,sans-serif;">No photos added 💕</div>';
+    return;
+  }
+  // First photo — big
+  const big=document.createElement('img');
+  big.className='mosaic-big';
+  big.src=cardPhotos[0];
+  big.onerror=()=>big.style.display='none';
+  big.onclick=()=>openFullscreen(0);
+  grid.appendChild(big);
+
+  // Remaining — rows of 3
+  for(let i=1;i<cardPhotos.length;i+=3){
+    const row=document.createElement('div');
+    row.className='mosaic-row';
+    for(let j=i;j<Math.min(i+3,cardPhotos.length);j++){
+      const img=document.createElement('img');
+      img.className='mosaic-small';
+      img.src=cardPhotos[j];
+      img.onerror=()=>img.style.display='none';
+      img.onclick=(idx=>()=>openFullscreen(idx))(j);
+      row.appendChild(img);
+    }
+    grid.appendChild(row);
+  }
+}
+
+function openFullscreen(i){
+  const fs=document.getElementById('photoFullscreen');
+  document.getElementById('photoFsImg').src=cardPhotos[i]||'';
+  document.getElementById('photoFsCap').textContent=cardCaptions[i]||'';
+  fs.classList.add('show');
+}
+function closeFullscreen(){
+  document.getElementById('photoFullscreen').classList.remove('show');
+}
+
+// ── SLIDE TO UNLOCK ──
+function setupSlide(){
+  const track=document.getElementById('slideTrack');
+  const thumb=document.getElementById('slideThumb');
+  let dragging=false, startX=0, trackW=0, thumbW=44;
+
+  function start(x){
+    dragging=true;
+    startX=x;
+    trackW=track.offsetWidth;
+  }
+  function move(x){
+    if(!dragging)return;
+    const dx=x-startX;
+    const max=trackW-thumbW-8;
+    const pos=Math.max(0,Math.min(dx,max));
+    thumb.style.left=(4+pos)+'px';
+    // Unlock at 80%
+    if(pos>max*0.8) unlock();
+  }
+  function end(){
+    if(!dragging)return;
+    dragging=false;
+    thumb.style.left='4px';
+  }
+  track.addEventListener('touchstart',e=>{start(e.touches[0].clientX);},{passive:true});
+  track.addEventListener('touchmove',e=>{move(e.touches[0].clientX);},{passive:true});
+  track.addEventListener('touchend',end,{passive:true});
+  track.addEventListener('mousedown',e=>{start(e.clientX);});
+  document.addEventListener('mousemove',e=>{move(e.clientX);});
+  document.addEventListener('mouseup',end);
+  // Also tap notification to unlock
+  document.getElementById('lockNotif').addEventListener('click',unlock);
+}
+
+function unlock(){
+  // Flash white then reveal photos
+  const app=document.getElementById('mainApp');
+  app.style.transition='opacity 0.15s ease';
+  app.style.opacity='0';
+  setTimeout(()=>{
+    goTo('rv-photos');
+    app.style.opacity='1';
+  },150);
+}
+
+// ── SONG CONTROLS ──
+function togglePlay(){
+  songPlaying=!songPlaying;
+  const btn=document.getElementById('playBtn');
+  btn.querySelector('.ctrl-play-ico').textContent=songPlaying?'⏸':'▶';
+}
+
+// ── LOCK TIME ──
+function setLockTime(){
+  const now=new Date();
+  const h=now.getHours().toString().padStart(2,'0');
+  const m=now.getMinutes().toString().padStart(2,'0');
+  const timeStr=`${h}:${m}`;
+  document.getElementById('lockTime').textContent=timeStr;
+  document.getElementById('lockBigTime').textContent=timeStr;
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('lockDateTxt').textContent=`${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
+  document.getElementById('notifTime').textContent='now';
+}
+
+// ── STARS ──
+function spawnStars(){
+  const wrap=document.getElementById('lockStars');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const size=0.5+Math.random()*1.5;
+    s.style.cssText=`width:${size}px;height:${size}px;top:${Math.random()*70}%;left:${Math.random()*100}%;
+      animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
+    wrap.appendChild(s);
+  }
+}
+
+// ── LETTER TYPEWRITER ──
+function startTypewriter(){
+  const el=document.getElementById('letterBody');
+  const se=document.getElementById('letterSign');
+  if(!el||!letterText)return;
+  el.textContent='';
+  if(se)se.style.opacity='0';
+  const chars=letterText.split('');let i=0;
+  function next(){
+    if(i<chars.length){el.textContent+=chars[i++];setTimeout(next,14);}
+    else{letterTyped=true;if(se)setTimeout(()=>se.classList.add('vis'),300);}
+  }
+  setTimeout(next,400);
+}
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function copyLink(){
+  navigator.clipboard.writeText(shareLink).then(()=>{
+    const b=document.getElementById('shCp');b.textContent='Copied ✓';
+    setTimeout(()=>b.textContent='Copy',2000);
+  });
+}
+function shareWA(){
+  const msg=`💋 *Happy Valentine's Day!*\n\n${cardSender?cardSender+' ne tumhare liye kuch banaya hai ❤️\n\n':'Kuch tumhare liye hai ❤️\n\n'}Slide to open:\n${shareLink}`;
+  const mob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(navigator.share&&mob)navigator.share({text:msg}).catch(()=>window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank'));
+  else window.open('https://web.whatsapp.com/send?text='+encodeURIComponent(msg),'_blank');
+}
+</script>
+</body>
+</html>
